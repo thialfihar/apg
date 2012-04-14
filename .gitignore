@@ -3,4 +3,6 @@
 .classpath
 .project
 .settings
+*.swp
+local.properties
 
