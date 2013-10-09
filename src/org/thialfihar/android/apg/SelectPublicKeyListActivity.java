@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,6 +47,11 @@ public class SelectPublicKeyListActivity extends BaseActivity {
         mList = (ListView) findViewById(R.id.list);
         // needed in Android 1.5, where the XML attribute gets ignored
         mList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        mList.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mList.setItemChecked(position, mList.isItemChecked(position));
+            }
+        });
 
         Button okButton = (Button) findViewById(R.id.btn_ok);
         okButton.setOnClickListener(new OnClickListener() {
