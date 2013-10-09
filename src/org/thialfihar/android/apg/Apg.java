@@ -90,6 +90,7 @@ import org.thialfihar.android.apg.ui.widget.KeyEditor;
 import org.thialfihar.android.apg.ui.widget.SectionView;
 import org.thialfihar.android.apg.ui.widget.UserIdEditor;
 import org.thialfihar.android.apg.utils.IterableIterator;
+import org.thialfihar.android.apg.utils.PrngFixes;
 
 import android.app.Activity;
 import android.content.Context;
@@ -222,6 +223,7 @@ public class Apg {
         if (mDatabase == null) {
             mDatabase = new Database(context);
         }
+        PrngFixes.apply();
     }
 
     public static Database getDatabase() {
