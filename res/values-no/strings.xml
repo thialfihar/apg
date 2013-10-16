@@ -42,7 +42,6 @@
     <string name="title_sendEmail">"Send Epost..."</string>
     <string name="title_encryptToFile">Krypter Til Fil</string>
     <string name="title_decryptToFile">Dekrypter Til Fil</string>
-    <string name="title_addAccount">Legg Til Konto</string>
     <string name="title_importKeys">Importer Nøkler</string>
     <string name="title_exportKey">Eksporter Nøkkel</string>
     <string name="title_exportKeys">Eksporter Nøkler</string>
@@ -83,8 +82,6 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">Om APG</string>
-    <string name="menu_addAccount">Legg til GMail Konto</string>
-    <string name="menu_deleteAccount">Slett Konto</string>
     <string name="menu_managePublicKeys">Håndter Offentlige Nøkler</string>
     <string name="menu_manageSecretKeys">Håndter Private Nøkler</string>
     <string name="menu_preferences">Instillinger</string>
@@ -202,7 +199,6 @@
     <string name="selectEncryptionOrSignatureKey">Velg minst én krypteringsnøkkel eller signaturnøkkel.</string>
     <string name="specifyFileToEncryptTo">Vennligst angi hvilken fil det skal krypteres til.\nADVARSEL! Filen vil bli overskrevet, hvis den eksisterer.</string>
     <string name="specifyFileToDecryptTo">Vennligst angi hvilken fil det skal dekrypteres til.\nADVARSEL! Filen vil bli overskrevet, hvis den eksisterer.</string>
-    <string name="specifyGoogleMailAccount">Angi hvilken Google Mail konto du vil legge til</string>
     <string name="specifyFileToImportFrom">Vennligst angi hvilken fil  du vil importere fra. (.asc eller .gpg)</string>
     <string name="specifyFileToExportTo">Vennligst angi hvilken fil  du vil eksportere til.\nADVARSEL! Filen vil bli overskrevet, hvis den eksisterer.</string>
     <string name="specifyFileToExportSecretKeysTo">Vennligst angi hvilken fil  du vil eksportere til.\nADVARSEL! Du er på vei til p eksportere HEMMELIGE nøkkler.\nADVARSEL! Filen vil bli overskrevet, hvis den eksisterer.</string>
@@ -228,9 +224,6 @@
     <string name="error_noSecretKeyFound">finner ingen passende hemmelig nøkkel</string>
     <string name="error_noKnownEncryptionFound">ingen kjente krypteringsmåter funnet</string>
     <string name="error_externalStorageNotReady">ekstern lagringsplass ikke klar</string>
-    <string name="error_accountNotFound">finner ikke kontoen - \'%s\'</string>
-    <string name="error_accountReadingNotAllowed">ikke tillatelse til  lese konto</string>
-    <string name="error_addingAccountFailed">kunne ikke legge til konto - \'%s\'</string>
     <string name="error_invalidEmail">ugyldig epost \'%s\'</string>
     <string name="error_keySizeMinimum512bit">størrelsen på nøkkel må være minst 512bit</string>
     <string name="error_masterKeyMustNotBeElGamal">hovednøkkelen kan ikke være en ElGamal nøkkel</string>

@@ -37,7 +37,6 @@
     <string name="title_sendEmail">"Pošlji e-pošto..."</string>
     <string name="title_encryptToFile">Šifriraj v datoteko</string>
     <string name="title_decryptToFile">Dešifriraj v datoteko</string>
-    <string name="title_addAccount">Dodaj račun</string>
     <string name="title_importKeys">Uvozi ključe</string>
     <string name="title_exportKey">Izvozi ključ</string>
     <string name="title_exportKeys">Izvozi ključe</string>
@@ -78,8 +77,6 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">O programu</string>
-    <string name="menu_addAccount">Dodaj GMail račun</string>
-    <string name="menu_deleteAccount">Izbriši račun</string>
     <string name="menu_managePublicKeys">Upravljanje javnih ključev</string>
     <string name="menu_manageSecretKeys">Upravljanje zasebnih ključev</string>
     <string name="menu_preferences">Nastavitve</string>
@@ -193,7 +190,6 @@
     <string name="selectEncryptionOrSignatureKey">Izberite vsaj en šifrirni ključ ali ključ za podpis.</string>
     <string name="specifyFileToEncryptTo">Določite datoteko v katero želite šifrirati.\nPOZOR! Če ta datoteka že obstaja, bo prepisana.</string>
     <string name="specifyFileToDecryptTo">Določite datoteko v katero želite dešifrirati.\nPOZOR! Če ta datoteka že obstaja, bo prepisana.</string>
-    <string name="specifyGoogleMailAccount">Določite Google Mail račun, ki ga želite dodati.</string>
     <string name="specifyFileToImportFrom">Določite iz katere datoteke želite uvoziti ključe. (.asc ali .gpg)</string>
     <string name="specifyFileToExportTo">Določite v katero datoteko želite izvoziti.\nPOZOR! Če ta datoteka že obstaja, bo prepisana.</string>
     <string name="specifyFileToExportSecretKeysTo">Določite v katero datoteko želite izvoziti.\nPOZOR! Izvozili boste ZASEBNI ključ.\nPOZOR! Če ta datoteka že obstaja, bo prepisana.</string>
@@ -219,9 +215,6 @@
     <string name="error_noSecretKeyFound">najden ni bil noben ustrezen zasebni kluč</string>
     <string name="error_noKnownEncryptionFound">najdena ni bila nobena poznana vrsta enkripcije</string>
     <string name="error_externalStorageNotReady">zunanji pomnilnik ni pripravljen</string>
-    <string name="error_accountNotFound">račun \'%s\' ni najden</string>
-    <string name="error_accountReadingNotAllowed">branje računa ni dovoljeno</string>
-    <string name="error_addingAccountFailed">dodajanje računa \'%s\' ni uspelo</string>
     <string name="error_invalidEmail">neveljaven e-naslov \'%s\'</string>
     <string name="error_keySizeMinimum512bit">velikost ključa mora biti vsaj 512bit</string>
     <string name="error_masterKeyMustNotBeElGamal">statični ključ ne more biti ključ ElGamal</string>

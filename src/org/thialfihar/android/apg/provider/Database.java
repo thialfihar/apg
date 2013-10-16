@@ -115,10 +115,6 @@ public class Database extends SQLiteOpenHelper {
                    UserIds.KEY_ID + " " + UserIds.KEY_ID_type + "," +
                    UserIds.USER_ID + " " + UserIds.USER_ID_type + "," +
                    UserIds.RANK + " " + UserIds.RANK_type + ");");
-
-        db.execSQL("CREATE TABLE " + Accounts.TABLE_NAME + " (" +
-                   Accounts._ID + " " + Accounts._ID_type + "," +
-                   Accounts.NAME + " " + Accounts.NAME_type + ");");
     }
 
     @Override

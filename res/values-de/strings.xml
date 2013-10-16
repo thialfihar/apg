@@ -36,7 +36,6 @@
     <string name="title_sendEmail">"Mail senden ..."</string>
     <string name="title_encryptToFile">In eine Datei verschlüsseln</string>
     <string name="title_decryptToFile">In eine Datei entschlüsseln</string>
-    <string name="title_addAccount">Konto hinzufügen</string>
     <string name="title_importKeys">Schlüssel importieren</string>
     <string name="title_exportKey">Einzelnen Schlüssel exportieren</string>
     <string name="title_exportKeys">Mehrere Schlüssel exportieren</string>
@@ -71,8 +70,6 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">Über</string>
-    <string name="menu_addAccount">GMail-Konto hinzufügen</string>
-    <string name="menu_deleteAccount">Konto entfernen</string>
     <string name="menu_managePublicKeys">Öffentliche Schlüssel verwalten</string>
     <string name="menu_manageSecretKeys">Private Schlüssel verwalten</string>
     <string name="menu_preferences">Einstellungen</string>
@@ -178,7 +175,6 @@
     <string name="specifyFileToEncryptTo">Bitte Zieldatei für Verschlüsselung angeben.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
 
     <string name="specifyFileToDecryptTo">Bitte Zieldatei für Entschlüsselung angeben.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
-    <string name="specifyGoogleMailAccount">Bitte Google-Mail-Konto angeben, das hinzugefügt werden soll.</string>
     <string name="specifyFileToImportFrom">Bitte Datei angeben, aus der Schlüssel importiert werden sollen. (.asc oder .gpg)</string>
     <string name="specifyFileToExportTo">Bitte Zieldatei zum Export angeben.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
     <string name="specifyFileToExportSecretKeysTo">Bitte Zieldatei zum Export angeben.\nACHTUNG! Es sollen private Schlüssel exportiert werden.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
@@ -204,8 +200,6 @@
     <string name="error_noSecretKeyFound">Kein geeigneter privater Schlüssel gefunden</string>
     <string name="error_noKnownEncryptionFound">Keine bekannte Verschlüsselungsmethode gefunden</string>
     <string name="error_externalStorageNotReady">Externer Speicher nicht bereit</string>
-    <string name="error_accountNotFound">Konto \'%s\' nicht gefunden</string>
-    <string name="error_addingAccountFailed">Hinzufügen von Konto \'%s\' fehlgeschlagen</string>
 
     <string name="error_invalidEmail">Ungültige E-Mail \'%s\'</string>
     <string name="error_keySizeMinimum512bit">Schlüssellänge von mindestens 512bit erforderlich</string>

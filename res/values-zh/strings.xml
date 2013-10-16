@@ -37,7 +37,6 @@
     <string name="title_sendEmail">\"发送邮件...\"</string>
     <string name="title_encryptToFile">加密至文件</string>
     <string name="title_decryptToFile">解密至文件</string>
-    <string name="title_addAccount">添加账户</string>
     <string name="title_importKeys">导入密钥</string>
     <string name="title_exportKey">导出密钥</string>
     <string name="title_exportKeys">导出密钥</string>
@@ -79,8 +78,6 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">关于</string>
-    <string name="menu_addAccount">添加GMail账户</string>
-    <string name="menu_deleteAccount">删除账户</string>
     <string name="menu_managePublicKeys">管理公钥</string>
     <string name="menu_manageSecretKeys">管理私钥</string>
     <string name="menu_preferences">设置</string>
@@ -195,7 +192,6 @@
     <string name="selectEncryptionOrSignatureKey">至少选择一个加密密钥或一个签名密钥.</string>
     <string name="specifyFileToEncryptTo">请指定加密生成的文件.\n警告! 文件如存在会被覆盖.</string>
     <string name="specifyFileToDecryptTo">请指定解密生成的文件.\n警告! 文件如存在会被覆盖.</string>
-    <string name="specifyGoogleMailAccount">指定你想添加的Google Mail帐号.</string>
     <string name="specifyFileToImportFrom">请指定导入密钥的文件. (.asc or .gpg)</string>
     <string name="specifyFileToExportTo">请指定导出文件.\n警告! 文件如存在会被覆盖.</string>
     <string name="specifyFileToExportSecretKeysTo">请指定导出文件.\n警告! 你正准备导出私钥.\n警告! 文件如存在会被覆盖.</string>
@@ -223,9 +219,6 @@
     <string name="error_noSecretKeyFound">未发现合适的私钥</string>
     <string name="error_noKnownEncryptionFound">未知加密方式</string>
     <string name="error_externalStorageNotReady">外部存储设备未准备就绪</string>
-    <string name="error_accountNotFound">账户 \'%s\' 未发现</string>
-    <string name="error_accountReadingNotAllowed">无读取账户权限</string>
-    <string name="error_addingAccountFailed">添加账户 \'%s\' 失败</string>
     <string name="error_invalidEmail">无效电子邮件 \'%s\'</string>
     <string name="error_keySizeMinimum512bit">文件尺寸至少需512比特</string>
     <string name="error_masterKeyMustNotBeElGamal">主密钥不可以是ElGamal</string>

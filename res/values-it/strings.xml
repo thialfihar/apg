@@ -37,7 +37,6 @@
     <string name="title_sendEmail">"Invia mail..."</string>
     <string name="title_encryptToFile">Critta su File</string>
     <string name="title_decryptToFile">Decritta su File</string>
-    <string name="title_addAccount">Aggiungi Acconto</string>
     <string name="title_importKeys">Importa Chiavi</string>
     <string name="title_exportKey">Esporta Chiave</string>
     <string name="title_exportKeys">Esporta Chiavi</string>
@@ -79,8 +78,6 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">Informazioni</string>
-    <string name="menu_addAccount">Aggiungi Acconto GMail</string>
-    <string name="menu_deleteAccount">Rimuovi Acconto</string>
     <string name="menu_managePublicKeys">Gestisci Chiavi Pubbliche</string>
     <string name="menu_manageSecretKeys">Gestisci Chiavi Private</string>
     <string name="menu_preferences">Impostazioni</string>
@@ -199,7 +196,6 @@
     <string name="selectEncryptionOrSignatureKey">Selezionare almeno una chiave oppure una firma.</string>
     <string name="specifyFileToEncryptTo">Specificare il file che si desidera crittare.\nATTENZIONE! Se il file esiste, sarà sovrascritto.</string>
     <string name="specifyFileToDecryptTo">Specificare il file che si desidera decrittare.\nATTENZIONE! Se il file esiste, sarà sovrascritto.</string>
-    <string name="specifyGoogleMailAccount">Specificare l\'acconto Google Mail che si vuole aggiungere.</string>
     <string name="specifyFileToImportFrom">Specificare il file da cui importare le chiavi (.asc or .gpg).</string>
     <string name="specifyFileToExportTo">Specificare il file per l\'esportazione.\nATTENZIONE! Se il file esiste, sarà sovrascritto.</string>
     <string name="specifyFileToExportSecretKeysTo">Specificare il file per l\'esportazione.\nATTENZIONE! Stai esportando la chiave privata.\nATTENZIONE! Se il file esiste, sarà sovrascritto.</string>
@@ -227,9 +223,6 @@
     <string name="error_noSecretKeyFound">non è stata trovata nessuna chiave privata utilizzabile</string>
     <string name="error_noKnownEncryptionFound">non è stato trovato nessun tipo di crittazione valido</string>
     <string name="error_externalStorageNotReady">la scheda di memoria non è pronta o non è utilizzabile</string>
-    <string name="error_accountNotFound">acconto \'%s\' non trovato</string>
-    <string name="error_accountReadingNotAllowed">accesso in lettura all\'account negato</string>
-    <string name="error_addingAccountFailed">non è stato possibile aggiungere l\'acconto \'%s\'</string>
     <string name="error_invalidEmail">mail non valida \'%s\'</string>
     <string name="error_keySizeMinimum512bit">la dimensione della chiave deve essere almeno di 512bit</string>
     <string name="error_masterKeyMustNotBeElGamal">la chiave master non può essere una chiave ElGamal</string>
@@ -311,7 +304,6 @@
     <string name="text_help">Per una migliore integrazione, si consiglia di installare K-9 Mail; questo applicativo supporta infatti APG e consente di crittare/decrittare direttamente le mail.
 \n\nPer poter utilizzare il bottone \"sfoglia\" per la selezione dei file su APG, si consiglia di installare OI File Manager oppure ASTRO.
 \n\nCome prima cosa, è necessario disporre di una o più chiavi. E\' possibile importare chiavi esistenti tramite l\'opzione \"Manage Public Keys\" e \"Manage Secret Keys\", oppure crearne una nuova tramite l\'opzione \"Manage Secret Keys\".
-\n\nE\' possibile aggiungere un account GMail tramite l\'opzione \"Aggiungi Acconto GMail\"; questo semplifica il processo di decrittaggio delle mail ricevute sulla propria casella di posta su GMail.
 \n\nProva e controlla le opzioni dei vari menù per esplorare e conoscere tutte le funzionalità di APG.
     </string>
 

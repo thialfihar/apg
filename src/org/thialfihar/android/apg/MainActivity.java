@@ -19,8 +19,6 @@ package org.thialfihar.android.apg;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.thialfihar.android.apg.provider.Accounts;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -51,9 +49,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
-    private ListView mAccounts = null;
-    private AccountListAdapter mListAdapter = null;
-    private Cursor mAccountCursor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +59,6 @@ public class MainActivity extends BaseActivity {
         Button decryptMessageButton = (Button) findViewById(R.id.btn_decryptMessage);
         Button encryptFileButton = (Button) findViewById(R.id.btn_encryptFile);
         Button decryptFileButton = (Button) findViewById(R.id.btn_decryptFile);
-        mAccounts = (ListView) findViewById(R.id.accounts);
 
         encryptMessageButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -98,25 +92,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mAccountCursor =
-                Apg.getDatabase().db().query(Accounts.TABLE_NAME,
-                                             new String[] {
-                                                 Accounts._ID,
-                                                 Accounts.NAME,
-                                             }, null, null, null, null, Accounts.NAME + " ASC");
-        startManagingCursor(mAccountCursor);
-
-        mListAdapter = new AccountListAdapter(this, mAccountCursor);
-        mAccounts.setAdapter(mListAdapter);
-        mAccounts.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> arg0, View view, int index, long id) {
-                String accountName = (String) mAccounts.getItemAtPosition(index);
-                startActivity(new Intent(MainActivity.this, MailListActivity.class)
-                                        .putExtra(MailListActivity.EXTRA_ACCOUNT, accountName));
-            }
-        });
-        registerForContextMenu(mAccounts);
-
         if (!mPreferences.hasSeenHelp()) {
             showDialog(Id.dialog.help);
         }
@@ -129,73 +104,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case Id.dialog.new_account: {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-                alert.setTitle(R.string.title_addAccount);
-                alert.setMessage(R.string.specifyGoogleMailAccount);
-
-                LayoutInflater inflater =
-                        (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.add_account_dialog, null);
-
-                final EditText input = (EditText) view.findViewById(R.id.input);
-                alert.setView(view);
-
-                alert.setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                MainActivity.this.removeDialog(Id.dialog.new_account);
-                                String accountName = "" + input.getText();
-
-                                try {
-                                    Cursor testCursor =
-                                            managedQuery(Uri.parse("content://gmail-ls/conversations/" +
-                                                                   accountName),
-                                                         null, null, null, null);
-                                    if (testCursor == null) {
-                                        Toast.makeText(MainActivity.this,
-                                                       getString(R.string.errorMessage,
-                                                                 getString(R.string.error_accountNotFound,
-                                                                           accountName)),
-                                                       Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                } catch (SecurityException e) {
-                                    Toast.makeText(MainActivity.this,
-                                                   getString(R.string.errorMessage,
-                                                             getString(R.string.error_accountReadingNotAllowed)),
-                                                   Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-
-                                ContentValues values = new ContentValues();
-                                values.put(Accounts.NAME, accountName);
-                                try {
-                                    Apg.getDatabase().db().insert(Accounts.TABLE_NAME,
-                                                                  Accounts.NAME, values);
-                                    mAccountCursor.requery();
-                                    mListAdapter.notifyDataSetChanged();
-                                } catch (SQLException e) {
-                                    Toast.makeText(MainActivity.this,
-                                                   getString(R.string.errorMessage,
-                                                             getString(R.string.error_addingAccountFailed,
-                                                                       accountName)),
-                                                   Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                alert.setNegativeButton(android.R.string.cancel,
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                MainActivity.this.removeDialog(Id.dialog.new_account);
-                                            }
-                                        });
-
-                return alert.create();
-            }
-
             case Id.dialog.change_log: {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -286,8 +194,6 @@ public class MainActivity extends BaseActivity {
                 .setIcon(android.R.drawable.ic_menu_manage);
         menu.add(0, Id.menu.option.manage_secret_keys, 1, R.string.menu_manageSecretKeys)
                 .setIcon(android.R.drawable.ic_menu_manage);
-        menu.add(1, Id.menu.option.create, 2, R.string.menu_addAccount)
-                .setIcon(android.R.drawable.ic_menu_add);
         menu.add(2, Id.menu.option.preferences, 3, R.string.menu_preferences)
                 .setIcon(android.R.drawable.ic_menu_preferences);
         menu.add(2, Id.menu.option.key_server, 4, R.string.menu_keyServer)
@@ -302,11 +208,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case Id.menu.option.create: {
-                showDialog(Id.dialog.new_account);
-                return true;
-            }
-
             case Id.menu.option.manage_public_keys: {
                 startActivity(new Intent(this, PublicKeyListActivity.class));
                 return true;
@@ -330,78 +231,6 @@ public class MainActivity extends BaseActivity {
             default: {
                 return super.onOptionsItemSelected(item);
             }
-        }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        TextView nameTextView = (TextView) v.findViewById(R.id.accountName);
-        if (nameTextView != null) {
-            menu.setHeaderTitle(nameTextView.getText());
-            menu.add(0, Id.menu.delete, 0, R.string.menu_deleteAccount);
-        }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem menuItem) {
-        AdapterView.AdapterContextMenuInfo info =
-                (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-
-        switch (menuItem.getItemId()) {
-            case Id.menu.delete: {
-                Apg.getDatabase().db().delete(Accounts.TABLE_NAME,
-                                              Accounts._ID + " = ?",
-                                              new String[] { "" + info.id });
-                mAccountCursor.requery();
-                mListAdapter.notifyDataSetChanged();
-                return true;
-            }
-
-            default: {
-                return super.onContextItemSelected(menuItem);
-            }
-        }
-    }
-
-
-    private static class AccountListAdapter extends CursorAdapter {
-        private LayoutInflater mInflater;
-
-        public AccountListAdapter(Context context, Cursor cursor) {
-            super(context, cursor);
-            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public Object getItem(int position) {
-            Cursor c = getCursor();
-            c.moveToPosition(position);
-            return c.getString(c.getColumnIndex(Accounts.NAME));
-        }
-
-        @Override
-        public int getCount() {
-            return super.getCount();
-        }
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return mInflater.inflate(R.layout.account_item, null);
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            TextView nameTextView = (TextView) view.findViewById(R.id.accountName);
-            int nameIndex = cursor.getColumnIndex(Accounts.NAME);
-            final String account = cursor.getString(nameIndex);
-            nameTextView.setText(account);
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            return true;
         }
     }
 }

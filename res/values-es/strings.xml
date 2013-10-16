@@ -35,7 +35,6 @@
     <string name="title_sendEmail">"Enviar Correo..."</string>
     <string name="title_encryptToFile">Cifrar en Fichero</string>
     <string name="title_decryptToFile">Descifrar en Fichero</string>
-    <string name="title_addAccount">Añadir Cuenta</string>
     <string name="title_importKeys">Importar Llaves</string>
     <string name="title_exportKey">Exportar Llave</string>
     <string name="title_exportKeys">Exportar Llaves</string>
@@ -76,8 +75,6 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">Acerca De</string>
-    <string name="menu_addAccount">Añadir Cuenta de Gmail</string>
-    <string name="menu_deleteAccount">Borrar Cuenta</string>
     <string name="menu_managePublicKeys">Administrar Llaves Publicas</string>
     <string name="menu_manageSecretKeys">Administrar Llaves Privadas</string>
     <string name="menu_preferences">Preferencias</string>
@@ -191,7 +188,6 @@
     <string name="selectEncryptionOrSignatureKey">Selecciona al menos una llave de cifrado o de firma.</string>
     <string name="specifyFileToEncryptTo">Por favor, indica el nombre del fichero a cifrar.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
     <string name="specifyFileToDecryptTo">Por favor, indica el nombre del fichero a descifrar.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
-    <string name="specifyGoogleMailAccount">Indica la cuenta de Google Mail que quieres añadir.</string>
     <string name="specifyFileToImportFrom">Por favor, indica el fichero desde el cual importar las llaves. (.asc o .gpg)</string>
     <string name="specifyFileToExportTo">Por favor, indica el fichero al que exportar.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
     <string name="specifyFileToExportSecretKeysTo">Por favor, indica el fichero al que exportar.\nADVERTENCIA! Estás a punto de exportar las llaves PRIVADAS.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
@@ -217,9 +213,6 @@
     <string name="error_noSecretKeyFound">no se encontró la llave secreta adecuada</string>
     <string name="error_noKnownEncryptionFound">no se encontró un medio de cifrado</string>
     <string name="error_externalStorageNotReady">el sistema de almacenamiento externo no está preparado</string>
-    <string name="error_accountNotFound">la cuenta \'%s\' no se encontró</string>
-    <string name="error_accountReadingNotAllowed">no tienes permisos para leer esta cuenta</string>
-    <string name="error_addingAccountFailed">la creación de la cuenta \'%s\' ha fallado</string>
     <string name="error_invalidEmail">dirección de correo inválida \'%s\'</string>
     <string name="error_keySizeMinimum512bit">el tamaño mínimo debe ser de 512bits</string>
     <string name="error_masterKeyMustNotBeElGamal">la llave maestra no puede ser ElGamal</string>

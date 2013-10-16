@@ -38,7 +38,6 @@
 
     <string name="title_encryptToFile">Cifrar Para Arquivo</string>
     <string name="title_decryptToFile">Descifrar Para Arquivo</string>
-    <string name="title_addAccount">Adicionar Conta</string>
     <string name="title_importKeys">Importar Chaves</string>
     <string name="title_exportKey">Exportar Chave</string>
     <string name="title_exportKeys">Exportar Chaves</string>
@@ -86,9 +85,7 @@
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
     <string name="menu_about">Sobre</string>
-    <string name="menu_addAccount">Adicionar Conta GMail</string>
 
-    <string name="menu_deleteAccount">Apagar Conta</string>
     <string name="menu_managePublicKeys">Gerir Chaves Públicas</string>
     <string name="menu_manageSecretKeys">Gerir Chaves Privadas</string>
     <string name="menu_preferences">Configurações</string>
@@ -223,7 +220,6 @@
     <string name="selectEncryptionOrSignatureKey">Selecione pelo menos uma chave de cifragem ou uma chave de assinatura.</string>
     <string name="specifyFileToEncryptTo">Especifique o arquivo a cifrar sobre.\nATENÇÃO! O arquivo, se existir, será sobrescrito!</string>
     <string name="specifyFileToDecryptTo">Especifique o arquivo a decifrar sobre.\nATENÇÃO! O arquivo, se existir, será sobrescrito!</string>
-    <string name="specifyGoogleMailAccount">Especifique a conta de Email do Google que deseja adicionar.</string>
 
     <string name="specifyFileToImportFrom">Especifique o arquivo para importação de chaves. (.asc or .gpg)</string>
 
@@ -258,9 +254,6 @@
 
     <string name="error_noKnownEncryptionFound">não foi encontrado tipo de cifragem conhecido</string>
     <string name="error_externalStorageNotReady">armazenamento externo não disponível</string>
-    <string name="error_accountNotFound">conta \'%s\' não encontrada</string>
-    <string name="error_accountReadingNotAllowed">sem permissões para ler a conta</string>
-    <string name="error_addingAccountFailed">falha ao adicionar a conta \'%s\'</string>
     <string name="error_invalidEmail">email inválido \'%s\'</string>
 
     <string name="error_keySizeMinimum512bit">o tamanho da chave deve ser pelo menos 512bit</string>
