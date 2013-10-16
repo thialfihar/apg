@@ -266,14 +266,16 @@ public class DecryptActivity extends BaseActivity {
             mMessage.getText().length() == 0) {
             ClipboardManager clip = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             String data = "";
-            Matcher matcher = Apg.PGP_MESSAGE.matcher(clip.getText());
-            if (!matcher.matches()) {
-                matcher = Apg.PGP_SIGNED_MESSAGE.matcher(clip.getText());
-            }
-            if (matcher.matches()) {
-                data = matcher.group(1);
-                mMessage.setText(data);
-                Toast.makeText(this, R.string.usingClipboardContent, Toast.LENGTH_SHORT).show();
+            if (clip.getText() != null) {
+                Matcher matcher = Apg.PGP_MESSAGE.matcher(clip.getText());
+                if (!matcher.matches()) {
+                    matcher = Apg.PGP_SIGNED_MESSAGE.matcher(clip.getText());
+                }
+                if (matcher.matches()) {
+                    data = matcher.group(1);
+                    mMessage.setText(data);
+                    Toast.makeText(this, R.string.usingClipboardContent, Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
