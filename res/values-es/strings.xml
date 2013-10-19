@@ -191,7 +191,7 @@
     <string name="selectEncryptionOrSignatureKey">Selecciona al menos una llave de cifrado o de firma.</string>
     <string name="specifyFileToEncryptTo">Por favor, indica el nombre del fichero a cifrar.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
     <string name="specifyFileToDecryptTo">Por favor, indica el nombre del fichero a descifrar.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
-    <string name="specifyGoogleMailAccount">Indica la cuenta de Google Mail que quieres añadir.</string>
+    <string name="specifyGoogleMailAccount">Indica la cuenta de Gmail que quieres añadir.</string>
     <string name="specifyFileToImportFrom">Por favor, indica el fichero desde el cual importar las llaves. (.asc o .gpg)</string>
     <string name="specifyFileToExportTo">Por favor, indica el fichero al que exportar.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
     <string name="specifyFileToExportSecretKeysTo">Por favor, indica el fichero al que exportar.\n¡ADVERTENCIA! Estás a punto de exportar las llaves PRIVADAS.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
@@ -220,8 +220,8 @@
     <string name="error_accountNotFound">la cuenta \'%s\' no se encontró</string>
     <string name="error_accountReadingNotAllowed">no tienes permisos para leer esta cuenta</string>
     <string name="error_addingAccountFailed">la creación de la cuenta \'%s\' ha fallado</string>
-    <string name="error_invalidEmail">dirección de correo inválida \'%s\'</string>
-    <string name="error_keySizeMinimum512bit">el tamaño mínimo debe ser de 512bits</string>
+    <string name="error_invalidEmail">dirección de correo no válida \'%s\'</string>
+    <string name="error_keySizeMinimum512bit">el tamaño mínimo debe ser de 512 bits</string>
     <string name="error_masterKeyMustNotBeElGamal">la llave maestra no puede ser ElGamal</string>
     <string name="error_unknownAlgorithmChoice">algoritmo desconocido</string>
     <string name="error_userIdNeedsAName">necesitas especificar un nombre</string>
@@ -300,9 +300,8 @@
     <string name="text_help">Puedes instalar K-9 Mail para una mejor integración, soporta APG para PGP de forma nativa y permite difrar/descifrar mensajes directamente.
 \n\nSe recomienda instalar OI File Manager o ASTRO para poder usar el botón de navegación para seleccioar ficheros en APG.
 \n\nPrimero necesitarás algunas llaves. Puedes importarlas mediante los menús de opciones en \"Administrar llaves públicas\" y \"Administrar llaves privadas\" o crearlas mediante \"Administrar llaves privadas\".
-\n\nTambién puedes añadir una cuenta GMail como actividad principal mediante \"Añadir cuenta\", lo que simplifica el descifrado de mensajes recibidos en esa cuenta.
+\n\nTambién puedes añadir una cuenta Gmail como actividad principal mediante \"Añadir cuenta\", lo que simplifica el descifrado de mensajes recibidos en esa cuenta.
 \n\nDale un vistazo a los menús de opciones para encontrar más funciones.
     </string>
 
 </resources>
-
