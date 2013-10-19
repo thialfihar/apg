@@ -19,7 +19,7 @@
 
     <!-- title_lowerCase: capitalized words, no punctuation -->
     <string name="title_mailInbox">Bandeja de Entrada</string>
-    <string name="title_managePublicKeys">Administrar Llaves Publicas</string>
+    <string name="title_managePublicKeys">Administrar Llaves Públicas</string>
     <string name="title_manageSecretKeys">Administrar Llaves Privadas</string>
     <string name="title_selectRecipients">Seleccionar Destinatarios</string>
     <string name="title_selectSignature">Seleccionar Firma</string>
@@ -78,7 +78,7 @@
     <string name="menu_about">Acerca De</string>
     <string name="menu_addAccount">Añadir Cuenta de Gmail</string>
     <string name="menu_deleteAccount">Borrar Cuenta</string>
-    <string name="menu_managePublicKeys">Administrar Llaves Publicas</string>
+    <string name="menu_managePublicKeys">Administrar Llaves Públicas</string>
     <string name="menu_manageSecretKeys">Administrar Llaves Privadas</string>
     <string name="menu_preferences">Preferencias</string>
     <string name="menu_importKeys">Importar Llaves</string>
@@ -100,7 +100,7 @@
     <string name="label_passPhraseAgain">Otra Vez</string>
     <string name="label_algorithm">Algoritmo</string>
     <string name="label_asciiArmour">Armadura ASCII</string>
-    <string name="label_selectPublicKeys">Llave(s) Publica(s)</string>
+    <string name="label_selectPublicKeys">Llave(s) Pública(s)</string>
     <string name="label_deleteAfterEncryption">Borrar Una Vez Cifrado</string>
     <string name="label_deleteAfterDecryption">Borrar Una Vez Descifrado</string>
     <string name="label_deleteAfterImport">Borrar Tras Importar</string>
@@ -136,7 +136,7 @@
     <string name="canEncrypt">puede cifrar</string>
     <string name="canSign">puede firmar</string>
     <string name="expired">expirada</string>
-    <string name="notValid">no valida</string>
+    <string name="notValid">no válida</string>
     <string name="nKeyServers">%s servidor de llave(s)</string>
 
     <!-- choice_lowerCase: capitalized first word, no punctuation -->
@@ -178,7 +178,7 @@
     <string name="noFilemanagerInstalled">Administrador de ficheros instalado no compatible.</string>
     <string name="passPhrasesDoNotMatch">La frase de paso no concuerda.</string>
     <string name="passPhraseMustNotBeEmpty">No se permiten palabras de paso vacías.</string>
-    <string name="passPhraseForSymmetricEncryption">Cifrado simetrico.</string>
+    <string name="passPhraseForSymmetricEncryption">Cifrado simétrico.</string>
     <string name="passPhraseFor">%s</string>
     <string name="fileDeleteConfirmation">¿Seguro que quieres borrar\n%s?</string>
     <string name="fileDeleteSuccessful">Borrado completo.</string>
@@ -189,14 +189,14 @@
     <string name="enterPassPhraseTwice">Introduce la frase de paso dos veces.</string>
     <string name="selectEncryptionKey">Selecciona al menos una llave de cifrado.</string>
     <string name="selectEncryptionOrSignatureKey">Selecciona al menos una llave de cifrado o de firma.</string>
-    <string name="specifyFileToEncryptTo">Por favor, indica el nombre del fichero a cifrar.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
-    <string name="specifyFileToDecryptTo">Por favor, indica el nombre del fichero a descifrar.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
+    <string name="specifyFileToEncryptTo">Por favor, indica el nombre del fichero a cifrar.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
+    <string name="specifyFileToDecryptTo">Por favor, indica el nombre del fichero a descifrar.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
     <string name="specifyGoogleMailAccount">Indica la cuenta de Google Mail que quieres añadir.</string>
     <string name="specifyFileToImportFrom">Por favor, indica el fichero desde el cual importar las llaves. (.asc o .gpg)</string>
-    <string name="specifyFileToExportTo">Por favor, indica el fichero al que exportar.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
-    <string name="specifyFileToExportSecretKeysTo">Por favor, indica el fichero al que exportar.\nADVERTENCIA! Estás a punto de exportar las llaves PRIVADAS.\nADVERTENCIA! El fichero se sobre-escribirá si ya existe.</string>
-    <string name="keyDeletionConfirmation">¿Realmente quieres borrar la llave \'%s\'?\nNo puede deshacerse!</string>
-    <string name="secretKeyDeletionConfirmation">¿Realmente quieres borrar la llave SECRETA \'%s\'?\nNo puede deshacerse!</string>
+    <string name="specifyFileToExportTo">Por favor, indica el fichero al que exportar.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
+    <string name="specifyFileToExportSecretKeysTo">Por favor, indica el fichero al que exportar.\n¡ADVERTENCIA! Estás a punto de exportar las llaves PRIVADAS.\n¡ADVERTENCIA! El fichero se sobrescribirá si ya existe.</string>
+    <string name="keyDeletionConfirmation">¿Realmente quieres borrar la llave \'%s\'?\n¡No puede deshacerse!</string>
+    <string name="secretKeyDeletionConfirmation">¿Realmente quieres borrar la llave SECRETA \'%s\'?\n¡No puede deshacerse!</string>
     <string name="keysAddedAndUpdated">Se han añadido %1$s llave(s) y actualizado %2$s llave(s) de forma correcta."</string>
     <string name="keysAdded">Se ha(n) añadido %s llave(s) de forma correcta.</string>
     <string name="keysUpdated">Se ha(n) actualizado %s llave(s) de forma correcta.</string>
@@ -225,10 +225,10 @@
     <string name="error_masterKeyMustNotBeElGamal">la llave maestra no puede ser ElGamal</string>
     <string name="error_unknownAlgorithmChoice">algoritmo desconocido</string>
     <string name="error_userIdNeedsAName">necesitas especificar un nombre</string>
-    <string name="error_userIdNeedsAnEmailAddress">necesitas indicat una dirección de correo</string>
+    <string name="error_userIdNeedsAnEmailAddress">necesitas indicar una dirección de correo</string>
     <string name="error_keyNeedsAUserId">necesitas al menos una identidad de usuario</string>
     <string name="error_mainUserIdMustNotBeEmpty">el usuario principal no puede estar vacío</string>
-    <string name="error_keyNeedsMasterKey">necesitas al menos una llae maestra</string>
+    <string name="error_keyNeedsMasterKey">necesitas al menos una llave maestra</string>
     <string name="error_expiryMustComeAfterCreation">la fecha de expiración debe ser posterior a la fecha de creación</string>
     <string name="error_noEncryptionKeysOrPassPhrase">no se ha(n) indicado llave(s) de cifrado o frase de paso</string>
     <string name="error_signatureFailed">el proceso de firma ha fallado</string>
@@ -255,7 +255,7 @@
     <string name="progress_savingKeyRing">guardando anillo de llaves...</string>
     <string name="progress_importingSecretKeys">importando llaves privadas...</string>
     <string name="progress_importingPublicKeys">importando llaves públicas...</string>
-    <string name="progress_reloadingKeys">re-cargando llaves...</string>
+    <string name="progress_reloadingKeys">recargando llaves...</string>
     <string name="progress_exportingKey">exportando llave...</string>
     <string name="progress_exportingKeys">exportando llaves...</string>
     <string name="progress_extractingSignatureKey">extrayendo llave de firma...</string>
@@ -265,7 +265,7 @@
     <string name="progress_decrypting">descifrando datos...</string>
     <string name="progress_preparingSignature">preparando firma...</string>
     <string name="progress_generatingSignature">generando firma...</string>
-    <string name="progress_processingSignature">procesanto firma...</string>
+    <string name="progress_processingSignature">procesando firma...</string>
     <string name="progress_verifyingSignature">verificando firma...</string>
     <string name="progress_signing">firmando...</string>
     <string name="progress_readingData">leyendo datos...</string>
@@ -278,7 +278,7 @@
 
     <!-- permission strings -->
     <string name="permission_read_key_details_label">Leer detalles de llave desde APG.</string>
-    <string name="permission_read_key_details_description">Leer detalles de llaves pública y privada almacenados en APG, como identidades de llave y usuario. Las llaves en si NO se pueden leer.</string>
+    <string name="permission_read_key_details_description">Leer detalles de llaves pública y privada almacenados en APG, como identidades de llave y usuario. Las llaves en sí NO se pueden leer.</string>
 
     <!-- action strings -->
     <string name="action_encrypt">Cifrar</string>
