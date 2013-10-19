@@ -18,114 +18,114 @@
     <string name="app_name">APG</string>
 
     <!-- title_lowerCase: capitalized words, no punctuation -->
-    <string name="title_mailInbox">Bandeja de Entrada</string>
-    <string name="title_managePublicKeys">Administrar Llaves Públicas</string>
-    <string name="title_manageSecretKeys">Administrar Llaves Privadas</string>
-    <string name="title_selectRecipients">Seleccionar Destinatarios</string>
-    <string name="title_selectSignature">Seleccionar Firma</string>
+    <string name="title_mailInbox">Bandeja de entrada</string>
+    <string name="title_managePublicKeys">Administrar llaves públicas</string>
+    <string name="title_manageSecretKeys">Administrar llaves privadas</string>
+    <string name="title_selectRecipients">Seleccionar destinatarios</string>
+    <string name="title_selectSignature">Seleccionar firma</string>
     <string name="title_encrypt">Cifrar</string>
     <string name="title_decrypt">Descifrar</string>
-    <string name="title_authentication">Frase de Paso</string>
-    <string name="title_createKey">Crear Llave</string>
-    <string name="title_editKey">Editar Llave</string>
+    <string name="title_authentication">Frase de paso</string>
+    <string name="title_createKey">Crear llave</string>
+    <string name="title_editKey">Editar llave</string>
     <string name="title_preferences">Preferencias</string>
-    <string name="title_keyServerPreference">Preferencias del Servidor de Llaves</string>
-    <string name="title_changePassPhrase">Cambiar Frase de Paso</string>
-    <string name="title_setPassPhrase">Establecer Frase de Paso</string>
-    <string name="title_sendEmail">"Enviar Correo..."</string>
-    <string name="title_encryptToFile">Cifrar en Fichero</string>
-    <string name="title_decryptToFile">Descifrar en Fichero</string>
-    <string name="title_addAccount">Añadir Cuenta</string>
-    <string name="title_importKeys">Importar Llaves</string>
-    <string name="title_exportKey">Exportar Llave</string>
-    <string name="title_exportKeys">Exportar Llaves</string>
-    <string name="title_keyNotFound">Llave no Encontrada</string>
+    <string name="title_keyServerPreference">Preferencias del servidor de llaves</string>
+    <string name="title_changePassPhrase">Cambiar frase de paso</string>
+    <string name="title_setPassPhrase">Establecer frase de paso</string>
+    <string name="title_sendEmail">"Enviar correo..."</string>
+    <string name="title_encryptToFile">Cifrar en fichero</string>
+    <string name="title_decryptToFile">Descifrar en fichero</string>
+    <string name="title_addAccount">Añadir cuenta</string>
+    <string name="title_importKeys">Importar llaves</string>
+    <string name="title_exportKey">Exportar llave</string>
+    <string name="title_exportKeys">Exportar llaves</string>
+    <string name="title_keyNotFound">Llave no encontrada</string>
     <string name="title_help">Empezando</string>
-    <string name="title_keyServerQuery">Petición al Servidor de Llaves</string>
+    <string name="title_keyServerQuery">Petición al servidor de llaves</string>
 
     <!-- section_lowerCase: capitalized words, no punctuation -->
-    <string name="section_userIds">Identidades de Usuario</string>
+    <string name="section_userIds">Identidades de usuario</string>
     <string name="section_keys">Llaves</string>
     <string name="section_general">General</string>
-    <string name="section_defaults">Valores por Defecto</string>
+    <string name="section_defaults">Valores por defecto</string>
     <string name="section_advanced">Avanzado</string>
 
     <!-- btn_lowerCase: capitalized words, no punctuation -->
-    <string name="btn_signToClipboard">Firmar En Portapapeles</string>
-    <string name="btn_encryptToClipboard">Cifrar En Portapapeles</string>
-    <string name="btn_encryptAndEmail">Cifrar y Enviar</string>
-    <string name="btn_signAndEmail">Firmar y Enviar</string>
+    <string name="btn_signToClipboard">Firmar en portapapeles</string>
+    <string name="btn_encryptToClipboard">Cifrar en portapapeles</string>
+    <string name="btn_encryptAndEmail">Cifrar y enviar</string>
+    <string name="btn_signAndEmail">Firmar y enviar</string>
     <string name="btn_encrypt">Cifrar</string>
     <string name="btn_sign">Firmar</string>
     <string name="btn_decrypt">Descifrar</string>
     <string name="btn_verify">Verificar</string>
-    <string name="btn_selectEncryptKeys">Seleccionar Destinatarios</string>
+    <string name="btn_selectEncryptKeys">Seleccionar destinatarios</string>
     <string name="btn_reply">Contestar</string>
-    <string name="btn_encryptMessage">Cifrar Mensaje</string>
-    <string name="btn_decryptMessage">Descifrar Mensaje</string>
-    <string name="btn_encryptFile">Cifrar Fichero</string>
-    <string name="btn_decryptFile">Descifrar Mensaje</string>
+    <string name="btn_encryptMessage">Cifrar mensaje</string>
+    <string name="btn_decryptMessage">Descifrar mensaje</string>
+    <string name="btn_encryptFile">Cifrar fichero</string>
+    <string name="btn_decryptFile">Descifrar mensaje</string>
     <string name="btn_save">Guardar</string>
     <string name="btn_doNotSave">Cancelar</string>
     <string name="btn_delete">Borrar</string>
     <string name="btn_noDate">Ninguno</string>
-    <string name="btn_clearFilter">Limpiar Filtro</string>
-    <string name="btn_changePassPhrase">Cambiar Frase de Paso</string>
-    <string name="btn_setPassPhrase">Establecer Frase de Paso</string>
+    <string name="btn_clearFilter">Limpiar filtro</string>
+    <string name="btn_changePassPhrase">Cambiar frase de paso</string>
+    <string name="btn_setPassPhrase">Establecer frase de paso</string>
     <string name="btn_search">Buscar</string>
 
     <!-- menu_lowerCase: capitalized words, no punctuation -->
-    <string name="menu_about">Acerca De</string>
-    <string name="menu_addAccount">Añadir Cuenta de Gmail</string>
-    <string name="menu_deleteAccount">Borrar Cuenta</string>
-    <string name="menu_managePublicKeys">Administrar Llaves Públicas</string>
-    <string name="menu_manageSecretKeys">Administrar Llaves Privadas</string>
+    <string name="menu_about">Acerca de</string>
+    <string name="menu_addAccount">Añadir cuenta de Gmail</string>
+    <string name="menu_deleteAccount">Borrar cuenta</string>
+    <string name="menu_managePublicKeys">Administrar llaves públicas</string>
+    <string name="menu_manageSecretKeys">Administrar llaves privadas</string>
     <string name="menu_preferences">Preferencias</string>
-    <string name="menu_importKeys">Importar Llaves</string>
-    <string name="menu_exportKeys">Exportar Llaves</string>
-    <string name="menu_exportKey">Exportar Llave</string>
-    <string name="menu_deleteKey">Borrar Llave</string>
-    <string name="menu_createKey">Crear Llave</string>
-    <string name="menu_editKey">Editar Llave</string>
+    <string name="menu_importKeys">Importar llaves</string>
+    <string name="menu_exportKeys">Exportar llaves</string>
+    <string name="menu_exportKey">Exportar llave</string>
+    <string name="menu_deleteKey">Borrar llave</string>
+    <string name="menu_createKey">Crear llave</string>
+    <string name="menu_editKey">Editar llave</string>
     <string name="menu_search">Buscar</string>
     <string name="menu_help">Ayuda</string>
-    <string name="menu_keyServer">Servidor de Llaves</string>
+    <string name="menu_keyServer">Servidor de llaves</string>
     <string name="menu_updateKey">Actualizar</string>
 
     <!-- label_lowerCase: capitalized words, no punctuation -->
     <string name="label_sign">Firmar</string>
     <string name="label_message">Mensaje</string>
     <string name="label_file">Fichero</string>
-    <string name="label_passPhrase">Frase de Paso</string>
-    <string name="label_passPhraseAgain">Otra Vez</string>
+    <string name="label_passPhrase">Frase de paso</string>
+    <string name="label_passPhraseAgain">Otra vez</string>
     <string name="label_algorithm">Algoritmo</string>
     <string name="label_asciiArmour">Armadura ASCII</string>
-    <string name="label_selectPublicKeys">Llave(s) Pública(s)</string>
-    <string name="label_deleteAfterEncryption">Borrar Una Vez Cifrado</string>
-    <string name="label_deleteAfterDecryption">Borrar Una Vez Descifrado</string>
-    <string name="label_deleteAfterImport">Borrar Tras Importar</string>
-    <string name="label_encryptionAlgorithm">Algoritmo De Cifrado</string>
-    <string name="label_hashAlgorithm">Algoritmo Hash</string>
-    <string name="label_asymmetric">Llave Pública</string>
-    <string name="label_symmetric">Frase de Paso</string>
-    <string name="label_passPhraseCacheTtl">Caché De La Frase de Paso</string>
-    <string name="label_messageCompression">Compresión de Mensaje</string>
-    <string name="label_fileCompression">Compresión de Fichero</string>
+    <string name="label_selectPublicKeys">Llave(s) pública(s)</string>
+    <string name="label_deleteAfterEncryption">Borrar una vez cifrado</string>
+    <string name="label_deleteAfterDecryption">Borrar una vez descifrado</string>
+    <string name="label_deleteAfterImport">Borrar tras importar</string>
+    <string name="label_encryptionAlgorithm">Algoritmo de cifrado</string>
+    <string name="label_hashAlgorithm">Algoritmo hash</string>
+    <string name="label_asymmetric">Llave pública</string>
+    <string name="label_symmetric">Frase de paso</string>
+    <string name="label_passPhraseCacheTtl">Caché de la frase de paso</string>
+    <string name="label_messageCompression">Compresión de mensaje</string>
+    <string name="label_fileCompression">Compresión de fichero</string>
     <string name="label_language">Idioma</string>
-    <string name="label_forceV3Signature">Forzar Firmas V3</string>
-    <string name="label_keyServers">Servidores De Llaves</string>
-    <string name="label_keyId">Identidad de Llave</string>
+    <string name="label_forceV3Signature">Forzar firmas V3</string>
+    <string name="label_keyServers">Servidores de llaves</string>
+    <string name="label_keyId">Identidad de llave</string>
     <string name="label_creation">Creación</string>
     <string name="label_expiry">Expira</string>
     <string name="label_usage">Uso</string>
-    <string name="label_keySize">Tamaño De La Llave</string>
-    <string name="label_mainUserId">Identidad Principal Del Usuario</string>
+    <string name="label_keySize">Tamaño de la llave</string>
+    <string name="label_mainUserId">Identidad principal del usuario</string>
     <string name="label_name">Nombre</string>
     <string name="label_comment">Comentario</string>
     <string name="label_email">Email</string>
 
     <string name="noKeysSelected">Seleccionar</string>
-    <string name="oneKeySelected">1 Seleccionada</string>
+    <string name="oneKeySelected">1 seleccionada</string>
     <string name="nKeysSelected">Seleccionada</string>
     <string name="unknownUserId">&lt;desconocido&gt;</string>
     <string name="none">&lt;ninguno&gt;</string>
@@ -143,7 +143,7 @@
     <string name="choice_none">Ninguno</string>
     <string name="choice_signOnly">Sólo firmar</string>
     <string name="choice_encryptOnly">Sólo cifrar</string>
-    <string name="choice_signAndEncrypt">Firmar y Cifrar</string>
+    <string name="choice_signAndEncrypt">Firmar y cifrar</string>
     <string name="choice_15secs">15 segs</string>
     <string name="choice_1min">1 min</string>
     <string name="choice_3mins">3 mins</string>
@@ -159,9 +159,9 @@
     <string name="rsa">RSA</string>
 
     <string name="filemanager_titleOpen">Abrir...</string>
-    <string name="filemanager_titleSave">Guardar Como...</string>
-    <string name="filemanager_titleEncrypt">Seleccionar Fichero Para Cifrar...</string>
-    <string name="filemanager_titleDecrypt">Seleccionar Fichero Para Descifrar...</string>
+    <string name="filemanager_titleSave">Guardar como...</string>
+    <string name="filemanager_titleEncrypt">Seleccionar fichero para cifrar...</string>
+    <string name="filemanager_titleDecrypt">Seleccionar fichero para descifrar...</string>
     <string name="filemanager_btnOpen">Abrir</string>
     <string name="filemanager_btnSave">Guardar</string>
 
@@ -283,11 +283,11 @@
     <!-- action strings -->
     <string name="action_encrypt">Cifrar</string>
     <string name="action_decrypt">Descifrar</string>
-    <string name="action_importPublic">Importar Llaves Públicas</string>
-    <string name="action_importSecret">Importar Llaves Privadas</string>
+    <string name="action_importPublic">Importar llaves públicas</string>
+    <string name="action_importSecret">Importar llaves privadas</string>
 
-    <string name="hint_publicKeys">Buscar Llaves Públicas</string>
-    <string name="hint_secretKeys">Buscar Llaves Privadas</string>
+    <string name="hint_publicKeys">Buscar llaves públicas</string>
+    <string name="hint_secretKeys">Buscar llaves privadas</string>
     <string name="filterInfo">Filtro: \"%s\"</string>
 
     <!-- misc -->
@@ -299,8 +299,8 @@
     <!-- "OI File Manager", "ASTRO", and "K-9 Mail" must not be translated in order for the links to the market to work. -->
     <string name="text_help">Puedes instalar K-9 Mail para una mejor integración, soporta APG para PGP de forma nativa y permite difrar/descifrar mensajes directamente.
 \n\nSe recomienda instalar OI File Manager o ASTRO para poder usar el botón de navegación para seleccioar ficheros en APG.
-\n\nPrimero necesitarás algunas llaves. Puedes importarlas mediante los menús de opciones en \"Administrar Llaves Públicas\" y \"Administrar Llaves Privadas\" o crearlas mediante \"Administrar Llaves Privadas\".
-\n\nTambién puedes añadir una cuenta GMail como actividad principal mediante \"Añadir Cuenta\", lo que simplifica el descifrado de mensajes recibidos en esa cuenta.
+\n\nPrimero necesitarás algunas llaves. Puedes importarlas mediante los menús de opciones en \"Administrar llaves públicas\" y \"Administrar llaves privadas\" o crearlas mediante \"Administrar llaves privadas\".
+\n\nTambién puedes añadir una cuenta GMail como actividad principal mediante \"Añadir cuenta\", lo que simplifica el descifrado de mensajes recibidos en esa cuenta.
 \n\nDale un vistazo a los menús de opciones para encontrar más funciones.
     </string>
 
