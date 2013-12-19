@@ -46,6 +46,6 @@ public class Keys implements BaseColumns {
     public static final String KEY_RING_ID_type = "INTEGER";
     public static final String KEY_DATA = "c_key_data";
     public static final String KEY_DATA_type = "BLOB";
-    public static final String RANK = "c_key_data";
+    public static final String RANK = "c_key_rank";
     public static final String RANK_type = "INTEGER";
 }

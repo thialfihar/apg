@@ -107,7 +107,7 @@ public class Database extends SQLiteOpenHelper {
                    Keys.CREATION + " " + Keys.CREATION_type + ", " +
                    Keys.EXPIRY + " " + Keys.EXPIRY_type + ", " +
                    Keys.KEY_RING_ID + " " + Keys.KEY_RING_ID_type + ", " +
-                   Keys.KEY_DATA + " " + Keys.KEY_DATA_type +
+                   Keys.KEY_DATA + " " + Keys.KEY_DATA_type + ", " +
                    Keys.RANK + " " + Keys.RANK_type + ");");
 
         db.execSQL("CREATE TABLE " + UserIds.TABLE_NAME + " (" +
@@ -151,7 +151,7 @@ public class Database extends SQLiteOpenHelper {
                                Keys.CREATION + " " + Keys.CREATION_type + ", " +
                                Keys.EXPIRY + " " + Keys.EXPIRY_type + ", " +
                                Keys.KEY_RING_ID + " " + Keys.KEY_RING_ID_type + ", " +
-                               Keys.KEY_DATA + " " + Keys.KEY_DATA_type +
+                               Keys.KEY_DATA + " " + Keys.KEY_DATA_type + ", " +
                                Keys.RANK + " " + Keys.RANK_type + ");");
 
                     db.execSQL("CREATE TABLE " + UserIds.TABLE_NAME + " (" +
