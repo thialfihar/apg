@@ -64,7 +64,7 @@
     <string name="btn_encryptMessage">Cifrar Mensaje</string>
     <string name="btn_decryptMessage">Descifrar Mensaje</string>
     <string name="btn_encryptFile">Cifrar Fichero</string>
-    <string name="btn_decryptFile">Descifrar Mensaje</string>
+    <string name="btn_decryptFile">Descifrar Fichero</string>
     <string name="btn_save">Guardar</string>
     <string name="btn_doNotSave">Cancelar</string>
     <string name="btn_delete">Borrar</string>
