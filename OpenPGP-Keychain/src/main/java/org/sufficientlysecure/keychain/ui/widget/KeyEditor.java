@@ -27,9 +27,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
@@ -75,6 +78,10 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     BootstrapButton mExpiryDateButton;
     GregorianCalendar mCreatedDate;
     GregorianCalendar mExpiryDate;
+    CheckBox mChkCertify;
+    CheckBox mChkSign;
+    CheckBox mChkEncrypt;
+    CheckBox mChkAuthenticate;
 
     private int mDatePickerResultCount = 0;
     private DatePickerDialog.OnDateSetListener mExpiryDateSetListener =
@@ -106,21 +113,13 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         mKeyId = (TextView) findViewById(R.id.keyId);
         mCreationDate = (TextView) findViewById(R.id.creation);
         mExpiryDateButton = (BootstrapButton) findViewById(R.id.expiry);
-        //mUsage = (Spinner) findViewById(R.id.usage);
-        //Choice choices[] = {
-        //       new Choice(Id.choice.usage.sign_only, getResources().getString(
-        //                R.string.choice_sign_only)),
-        //       new Choice(Id.choice.usage.encrypt_only, getResources().getString(
-        //                R.string.choice_encrypt_only)),
-        //       new Choice(Id.choice.usage.sign_and_encrypt, getResources().getString(
-        //                R.string.choice_sign_and_encrypt)), };
-        //ArrayAdapter<Choice> adapter = new ArrayAdapter<Choice>(getContext(),
-        //        android.R.layout.simple_spinner_item, choices);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //mUsage.setAdapter(adapter);
 
         mDeleteButton = (BootstrapButton) findViewById(R.id.delete);
         mDeleteButton.setOnClickListener(this);
+        mChkCertify =  (CheckBox) findViewById(R.id.chkCertify);
+        mChkSign =  (CheckBox) findViewById(R.id.chkSign);
+        mChkEncrypt =  (CheckBox) findViewById(R.id.chkEncrypt);
+        mChkAuthenticate =  (CheckBox) findViewById(R.id.chkAuthenticate);
 
         setExpiryDate(null);
 
@@ -179,8 +178,10 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     public void setCanBeEdited(boolean canBeEdited) {
         if (!canBeEdited) {
             mDeleteButton.setVisibility(View.INVISIBLE);
-            //mUsage.setEnabled(false);
             mExpiryDateButton.setEnabled(false);
+            mChkSign.setEnabled(false); //certify is always disabled
+            mChkEncrypt.setEnabled(false);
+            mChkAuthenticate.setEnabled(false);
         }
     }
 
@@ -198,17 +199,26 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         Vector<Choice> choices = new Vector<Choice>();
         boolean isElGamalKey = (key.getAlgorithm() == Key.ELGAMAL_ENCRYPT);
         boolean isDSAKey = (key.getAlgorithm() == Key.DSA);
-        if (!isElGamalKey) {
-            //choices.add(new Choice(Id.choice.usage.sign_only, getResources().getString(
-            //        R.string.choice_sign_only)));
+        if (isElGamalKey) {
+            mChkSign.setVisibility(View.INVISIBLE);
+            TableLayout table = (TableLayout)findViewById(R.id.table_keylayout);
+            TableRow row = (TableRow)findViewById(R.id.row_sign);
+            table.removeView(row);
         }
-        if (!mIsMasterKey && !isDSAKey) {
-            //choices.add(new Choice(Id.choice.usage.encrypt_only, getResources().getString(
-            //        R.string.choice_encrypt_only)));
+        if (isDSAKey) {
+            mChkEncrypt.setVisibility(View.INVISIBLE);
+            TableLayout table = (TableLayout)findViewById(R.id.table_keylayout);
+            TableRow row = (TableRow)findViewById(R.id.row_encrypt);
+            table.removeView(row);
         }
-        if (!isElGamalKey && !isDSAKey) {
-            //choices.add(new Choice(Id.choice.usage.sign_and_encrypt, getResources().getString(
-            //        R.string.choice_sign_and_encrypt)));
+        if (!mIsMasterKey) {
+            mChkCertify.setVisibility(View.INVISIBLE);
+            TableLayout table = (TableLayout)findViewById(R.id.table_keylayout);
+            TableRow row = (TableRow)findViewById(R.id.row_certify);
+            table.removeView(row);
+        } else {
+            TextView mLabelUsage2= (TextView) findViewById(R.id.label_usage2);
+            mLabelUsage2.setVisibility(View.INVISIBLE);
         }
 
         ArrayAdapter<Choice> adapter = new ArrayAdapter<Choice>(getContext(),
@@ -218,21 +228,11 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
 
         // Set value in choice dropdown to key
         int selectId = 0;
-        if (key.isEncryptionKey()) {
-            if (key.isSigningKey()) {
-                selectId = Id.choice.usage.sign_and_encrypt;
-            } else {
-                selectId = Id.choice.usage.encrypt_only;
-            }
-        } else {
-            // set usage if it is predefined
-            if (usage != -1) {
-                selectId = usage;
-            } else {
-                selectId = Id.choice.usage.sign_only;
-            }
-
-        }
+        if (key.isMasterKey())
+            mChkCertify.setChecked(PgpKeyHelper.isCertificationKey(key));
+        mChkSign.setChecked(PgpKeyHelper.isSigningKey(key));
+        mChkEncrypt.setChecked(PgpKeyHelper.isEncryptionKey(key));
+        // TODO: use usage argument?
 
         for (int i = 0; i < choices.size(); ++i) {
             if (choices.get(i).getId() == selectId) {
