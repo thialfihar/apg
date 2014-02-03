@@ -244,70 +244,46 @@ public class PgpKeyOperation {
 
         updateProgress(R.string.progress_preparing_master_key, 10, 100);
 
-        // prepare keyring generator with given master public and secret key
-        PGPKeyRingGenerator keyGen;
-        PGPPublicKey masterPublicKey; {
+        int usageId = keysUsages.get(0);
+        boolean canSign = (usageId & KeyFlags.SIGN_DATA) > 0;
+        boolean canEncrypt = (usageId & (KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE)) > 0;
 
-            String mainUserId = userIds.get(0);
+        String mainUserId = userIds.get(0);
 
-            // prepare the master key pair
-            PGPKeyPair masterKeyPair; {
+        PGPSecretKey masterKey = keys.get(0);
 
-                Key masterKey = keys.get(0);
+        // this removes all userIds and certifications previously attached to the masterPublicKey
+        PGPPublicKey tmpKey = masterKey.getPublicKey();
+        PGPPublicKey masterPublicKey = new PGPPublicKey(tmpKey.getAlgorithm(),
+                tmpKey.getKey(new BouncyCastleProvider()), tmpKey.getCreationTime());
 
-                // this removes all userIds and certifications previously attached to the masterPublicKey
-                PGPPublicKey tmpKey = masterKey.getPublicKey();
-                masterPublicKey = new PGPPublicKey(tmpKey.getAlgorithm(),
-                        tmpKey.getKey(new BouncyCastleProvider()), tmpKey.getCreationTime());
+        // already done by code above:
+        // PGPPublicKey masterPublicKey = masterKey.getPublicKey();
+        // // Somehow, the PGPPublicKey already has an empty certification attached to it when the
+        // // keyRing is generated the first time, we remove that when it exists, before adding the
+        // new
+        // // ones
+        // PGPPublicKey masterPublicKeyRmCert = PGPPublicKey.removeCertification(masterPublicKey,
+        // "");
+        // if (masterPublicKeyRmCert != null) {
+        // masterPublicKey = masterPublicKeyRmCert;
+        // }
 
-                PGPPrivateKey masterPrivateKey = masterKey.extractPrivateKey(oldPassphrase);
+        PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
+                Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(oldPassPhrase.toCharArray());
+        PGPPrivateKey masterPrivateKey = masterKey.extractPrivateKey(keyDecryptor);
 
-                updateProgress(R.string.progress_certifying_master_key, 20, 100);
+        updateProgress(R.string.progress_certifying_master_key, 20, 100);
 
-                // re-add old certificates, or create new ones for new uids
-                for (String userId : userIds) {
-                    // re-add certs for this uid, take a note if self-signed cert is in there
-                    boolean foundSelfSign = false;
-                    Iterator<PGPSignature> it = tmpKey.getSignaturesForID(userId);
-                    if (it != null) {
-                        for (PGPSignature sig : new IterableIterator<PGPSignature>(it)) {
-                            if (sig.getKeyID() == masterPublicKey.getKeyID()) {
-                                // already have a self sign? skip this other one, then.
-                                // note: PGPKeyRingGenerator adds one cert for the main user id, which
-                                // will lead to duplicates. unfortunately, if we add any other here
-                                // first, that will change the main user id order...
-                                if (foundSelfSign) {
-                                    continue;
-                                }
-                                foundSelfSign = true;
-                            }
-                            Log.d(Constants.TAG, "adding old sig for " + userId + " from "
-                                    + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()));
-                            masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, sig);
-                        }
-                    }
+        // TODO: if we are editing a key, keep old certs, don't remake certs we don't have to.
 
-                    // there was an old self-signed certificate for this uid
-                    if (foundSelfSign) {
-                        continue;
-                    }
+        for (String userId : userIds) {
+            PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
+                    masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
+                    .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
+            PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
 
-                    Log.d(Constants.TAG, "generating self-signed cert for " + userId);
-
-                    PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
-                            masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
-                            .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
-                    PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
-
-                    sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
-
-                    PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
-
-                    masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, certification);
-                }
-
-                masterKeyPair = new PGPKeyPair(masterPublicKey, masterPrivateKey);
-            }
+            sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
 
             PGPSignatureSubpacketGenerator hashedPacketsGen;
             PGPSignatureSubpacketGenerator unhashedPacketsGen; {
@@ -364,10 +340,27 @@ public class PgpKeyOperation {
                     PGPEncryptedData.CAST5, sha1Calc)
                     .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(
                             newPassphrase.toCharArray());
+        }
 
-            keyGen = new PGPKeyRingGenerator(PGPSignature.POSITIVE_CERTIFICATION,
-                    masterKeyPair, mainUserId, sha1Calc, hashedPacketsGen.generate(),
-                    unhashedPacketsGen.generate(), certificationSignerBuilder, keyEncryptor);
+        hashedPacketsGen.setKeyFlags(true, usageId);
+
+        hashedPacketsGen.setPreferredSymmetricAlgorithms(true, PREFERRED_SYMMETRIC_ALGORITHMS);
+        hashedPacketsGen.setPreferredHashAlgorithms(true, PREFERRED_HASH_ALGORITHMS);
+        hashedPacketsGen.setPreferredCompressionAlgorithms(true, PREFERRED_COMPRESSION_ALGORITHMS);
+
+        if (keysExpiryDates.get(0) != null) {
+            GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+            creationDate.setTime(masterPublicKey.getCreationTime());
+            GregorianCalendar expiryDate = keysExpiryDates.get(0);
+            //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
+            //here we purposefully ignore partial days in each date - long type has no fractional part!
+            long numDays = (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
+            if (numDays <= 0)
+                throw new PgpGeneralException(mContext.getString(R.string.error_expiry_must_come_after_creation));
+            hashedPacketsGen.setKeyExpirationTime(false, numDays * 86400);
+        } else {
+            hashedPacketsGen.setKeyExpirationTime(false, 0); //do this explicitly, although since we're rebuilding,
+                                                             //this happens anyway
         }
 
         updateProgress(R.string.progress_adding_sub_keys, 40, 100);
@@ -387,16 +380,11 @@ public class PgpKeyOperation {
             PGPSignatureSubpacketGenerator hashedPacketsGen = new PGPSignatureSubpacketGenerator();
             PGPSignatureSubpacketGenerator unhashedPacketsGen = new PGPSignatureSubpacketGenerator();
 
-            int keyFlags = 0;
-
-            int usageId = keysUsages.get(i);
-            boolean canSign = (usageId == Id.choice.usage.sign_only ||
-                               usageId == Id.choice.usage.sign_and_encrypt);
-            boolean canEncrypt = (usageId == Id.choice.usage.encrypt_only ||
-                                  usageId == Id.choice.usage.sign_and_encrypt);
+            usageId = keysUsages.get(i);
+            canSign = (usageId & KeyFlags.SIGN_DATA) > 0; //todo - separate function for this
+            canEncrypt = (usageId & (KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE)) > 0;
             if (canSign) {
                 Date todayDate = new Date(); //both sig times the same
-                keyFlags |= KeyFlags.SIGN_DATA;
                 // cross-certify signing keys
                 hashedPacketsGen.setSignatureCreationTime(false, todayDate); //set outer creation time
                 PGPSignatureSubpacketGenerator subHashedPacketsGen = new PGPSignatureSubpacketGenerator();
@@ -411,10 +399,7 @@ public class PgpKeyOperation {
                         subPublicKey);
                 unhashedPacketsGen.setEmbeddedSignature(false, certification);
             }
-            if (canEncrypt) {
-                keyFlags |= KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE;
-            }
-            hashedPacketsGen.setKeyFlags(false, keyFlags);
+            hashedPacketsGen.setKeyFlags(false, usageId);
 
             if (keysExpiryDates.get(i) != null) {
                 GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
