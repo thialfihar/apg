@@ -88,7 +88,6 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     BootstrapButton mDeleteButton;
     TextView mAlgorithm;
     TextView mKeyId;
-    Spinner mUsage;
     TextView mCreationDate;
     BootstrapButton mExpiryDateButton;
     GregorianCalendar mCreatedDate;

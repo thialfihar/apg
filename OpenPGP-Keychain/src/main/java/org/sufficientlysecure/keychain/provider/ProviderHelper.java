@@ -17,6 +17,30 @@
 
 package org.thialfihar.android.apg.provider;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.spongycastle.bcpg.ArmoredOutputStream;
+import org.spongycastle.openpgp.PGPKeyRing;
+import org.spongycastle.openpgp.PGPPublicKey;
+import org.spongycastle.openpgp.PGPPublicKeyRing;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.PGPSecretKeyRing;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.pgp.PgpConversionHelper;
+import org.sufficientlysecure.keychain.pgp.PgpHelper;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.provider.KeychainContract.ApiApps;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
+import org.sufficientlysecure.keychain.provider.KeychainContract.Keys;
+import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
+import org.sufficientlysecure.keychain.provider.KeychainDatabase.Tables;
+import org.sufficientlysecure.keychain.service.remote.AppSettings;
+import org.sufficientlysecure.keychain.util.IterableIterator;
+import org.sufficientlysecure.keychain.util.Log;
+
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -679,23 +703,22 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Get empty status of master key of keyring by its row id
      */
-    public static boolean getSecretMasterKeyCanSign(Context context, long keyRingRowId) {
+    public static boolean getSecretMasterKeyCanCertify(Context context, long keyRingRowId) {
         Uri queryUri = KeyRings.buildSecretKeyRingsUri(String.valueOf(keyRingRowId));
-        return getMasterKeyCanSign(context, queryUri);
+        return getMasterKeyCanCertify(context, queryUri, keyRingRowId);
     }
 
     /**
      * Private helper method to get master key private empty status of keyring by its row id
      */
-    public static boolean getMasterKeyCanSign(Context context, Uri queryUri) {
-        String[] projection = new String[] {
+    private static boolean getMasterKeyCanCertify(Context context, Uri queryUri, long keyRingRowId) {
+        String[] projection = new String[]{
                 KeyRings.MASTER_KEY_ID,
                 "(SELECT COUNT(sign_keys." + Keys._ID + ") FROM " + Tables.KEYS
                         + " AS sign_keys WHERE sign_keys." + Keys.KEY_RING_ROW_ID + " = "
                         + KeychainDatabase.Tables.KEY_RINGS + "." + KeyRings._ID
-                        + " AND sign_keys." + Keys.CAN_SIGN + " = '1' AND " + Keys.IS_MASTER_KEY
-                        + " = 1) AS sign",
-        };
+                        + " AND sign_keys." + Keys.CAN_CERTIFY + " = '1' AND " + Keys.IS_MASTER_KEY
+                        + " = 1) AS sign",};
 
         ContentResolver cr = context.getContentResolver();
         Cursor cursor = cr.query(queryUri, projection, null, null, null);

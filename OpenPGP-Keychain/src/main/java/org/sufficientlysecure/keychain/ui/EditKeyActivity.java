@@ -268,8 +268,8 @@ public class EditKeyActivity extends ActionBarActivity {
             KeyRing keyRing = mProvider.getKeyRing(mDataUri);
             Key masterKey = keyRing.getMasterKey();
             long masterKeyId = masterKey.getKeyId();
-            mMasterCanSign = masterKey.isSigningKey();
 
+            mMasterCanSign = ProviderHelper.getSecretMasterKeyCanCertify(this, keyRingRowId);
             finallyEdit(masterKeyId, mMasterCanSign);
         }
     }
