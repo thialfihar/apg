@@ -203,7 +203,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                     false);
             view.setEditorListener(this);
             boolean isMasterKey = (mEditors.getChildCount() == 0);
-            view.setValue(list.get(i), isMasterKey, usages.get(i));
+            view.setValue(list.get(i), isMasterKey, usages.get(i), false);
             view.setCanBeEdited(mCanBeEdited);
             mEditors.addView(view);
         }
@@ -281,7 +281,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                 mEditors, false);
         view.setEditorListener(SectionView.this);
         boolean isMasterKey = (mEditors.getChildCount() == 0);
-        view.setValue(newKey, isMasterKey, -1);
+        view.setValue(newKey, isMasterKey, -1, true);
         mEditors.addView(view);
         SectionView.this.updateEditorsVisible();
     }
