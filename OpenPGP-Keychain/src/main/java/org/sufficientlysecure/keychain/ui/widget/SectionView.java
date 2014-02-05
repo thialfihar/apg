@@ -206,7 +206,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             UserIdEditor view = (UserIdEditor) mInflater.inflate(R.layout.edit_key_user_id_item,
                     mEditors, false);
             view.setEditorListener(this);
-            view.setValue(userId);
+            view.setValue(userId, mEditors.getChildCount() == 0);
             view.setCanBeEdited(mCanBeEdited);
             mEditors.addView(view);
         }

@@ -44,7 +44,11 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     private BootstrapButton mDeleteButton;
     private EditText mName;
     private AutoCompleteTextView mEmail;
+    private String mOriginalName;
+    private String mOriginalEmail;
     private EditText mComment;
+    private String mOriginalComment;
+    private boolean mOriginallyMainUserID;
 
     // see http://www.regular-expressions.info/email.html
     // RFC 2822 if we omit the syntax using double quotes and square brackets
@@ -135,17 +139,37 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         super.onFinishInflate();
     }
 
-    public void setValue(String userId) {
+    public void setValue(String userId, boolean isMainID) {
         mName.setText("");
         mComment.setText("");
         mEmail.setText("");
 
-        String[] chunks = Utils.splitUserId(userId);
-        if (chunks[0] != null) {
-            mName.setText(chunks[0]);
-            mEmail.setText(chunks[1]);
-            mComment.setText(chunks[2]);
+        //TODO: update this file for blank email/name?
+
+        Pattern withComment = Pattern.compile("^(.*) [(](.*)[)] <(.*)>$");
+        Matcher matcher = withComment.matcher(userId);
+        if (matcher.matches()) {
+            mName.setText(matcher.group(1));
+            mOriginalName = matcher.group(1);
+            mComment.setText(matcher.group(2));
+            mOriginalComment = matcher.group(2);
+            mEmail.setText(matcher.group(3));
+            mOriginalEmail = matcher.group(3);
+            return;
         }
+
+        Pattern withoutComment = Pattern.compile("^(.*) <(.*)>$");
+        matcher = withoutComment.matcher(userId);
+        if (matcher.matches()) {
+            mName.setText(matcher.group(1));
+            mOriginalName = matcher.group(1);
+            mEmail.setText(matcher.group(2));
+            mOriginalEmail = matcher.group(2);
+            mOriginalComment = "";
+            return;
+        }
+        mOriginallyMainUserID = isMainID;
+        setIsMainUserId(isMainID);
     }
 
     public String getValue() throws NoNameException {
@@ -190,6 +214,10 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
 
     @Override
     public boolean needsSaving() {
-        return false;
+        boolean retval = (mOriginallyMainUserID != isMainUserId());
+        retval |= (mOriginalName.equals( ("" + mName.getText()).trim() ) );
+        retval |= (mOriginalEmail.equals( ("" + mEmail.getText()).trim() ) );
+        retval |= (mOriginalComment.equals( ("" + mComment.getText()).trim() ) );
+        return retval;
     }
 }
