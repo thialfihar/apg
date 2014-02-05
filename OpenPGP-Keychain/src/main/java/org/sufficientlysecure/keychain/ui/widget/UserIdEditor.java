@@ -43,7 +43,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
 
     private BootstrapButton mDeleteButton;
     private EditText mName;
-    private AutoCompleteTextView mEmail;
+    private EditText mEmail;
     private String mOriginalName;
     private String mOriginalEmail;
     private EditText mComment;
@@ -100,7 +100,24 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mDeleteButton.setOnClickListener(this);
 
         mName = (EditText) findViewById(R.id.name);
-        mEmail = (AutoCompleteTextView) findViewById(R.id.email);
+        mName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                if (mEditorListener != null) {
+                    mEditorListener.onEdited();
+                }
+            }
+        });
+        mEmail = (EditText) findViewById(R.id.email);
         mComment = (EditText) findViewById(R.id.comment);
 
 
@@ -203,7 +220,23 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         if (v == mDeleteButton) {
             parent.removeView(this);
             if (mEditorListener != null) {
-                mEditorListener.onDeleted(this, false);
+                mEditorListener.onDeleted(this, false); //TODO: WAS THIS A NEW ITEM
+            }
+            if (wasMainUserId && parent.getChildCount() > 0) {
+                UserIdEditor editor = (UserIdEditor) parent.getChildAt(0);
+                editor.setIsMainUserId(true);
+            }
+        } else if (v == mIsMainUserId) {
+            for (int i = 0; i < parent.getChildCount(); ++i) {
+                UserIdEditor editor = (UserIdEditor) parent.getChildAt(i);
+                if (editor == this) {
+                    editor.setIsMainUserId(true);
+                } else {
+                    editor.setIsMainUserId(false);
+                }
+            }
+            if (mEditorListener != null) {
+                mEditorListener.onEdited();
             }
         }
     }
