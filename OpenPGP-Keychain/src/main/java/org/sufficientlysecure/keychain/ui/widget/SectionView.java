@@ -47,20 +47,26 @@ import org.thialfihar.android.apg.util.Choice;
 
 import java.util.Vector;
 
-public class SectionView extends LinearLayout implements OnClickListener, EditorListener {
+public class SectionView extends LinearLayout implements OnClickListener, EditorListener, Editor {
     private LayoutInflater mInflater;
     private BootstrapButton mPlusButton;
     private ViewGroup mEditors;
     private TextView mTitle;
     private int mType = 0;
+    private EditorListener mEditorListener = null;
 
     private Choice mNewKeyAlgorithmChoice;
     private int mNewKeySize;
     private boolean mCanBeEdited = true;
+    private boolean oldItemDeleted = false;
 
     private ActionBarActivity mActivity;
 
     private ProgressDialogFragment mGeneratingDialog;
+
+    public void setEditorListener(EditorListener listener) {
+        mEditorListener = listener;
+    }
 
     public SectionView(Context context) {
         super(context);
@@ -122,11 +128,17 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         super.onFinishInflate();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void onDeleted(Editor editor) {
+    /** {@inheritDoc} */
+    public void onDeleted(Editor editor, boolean wasNewItem) {
+        oldItemDeleted |= !wasNewItem;
         this.updateEditorsVisible();
+    }
+
+    @Override
+    public void onEdited() {
+        if (mEditorListener != null) {
+            mEditorListener.onEdited();
+        }
     }
 
     protected void updateEditorsVisible() {
@@ -137,6 +149,18 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     /**
      * {@inheritDoc}
      */
+    public boolean needsSaving()
+    {
+        //check each view for needs saving, take account of deleted items
+        boolean ret = oldItemDeleted;
+        for (int i = 0; i < mEditors.getChildCount(); ++i) {
+            Editor editor = (Editor) mEditors.getChildAt(i);
+            ret |= editor.needsSaving();
+        }
+        return ret;
+    }
+
+    /** {@inheritDoc} */
     public void onClick(View v) {
         if (mCanBeEdited) {
             switch (mType) {

@@ -67,7 +67,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-public class EditKeyActivity extends ActionBarActivity {
+public class EditKeyActivity extends ActionBarActivity implements EditorListener {
 
     // Actions for internal use only:
     public static final String ACTION_CREATE_KEY = Constants.INTENT_PREFIX + "CREATE_KEY";
@@ -107,6 +107,15 @@ public class EditKeyActivity extends ActionBarActivity {
     private boolean mMasterCanSign;
 
     private ExportHelper mExportHelper;
+
+    public void onDeleted(Editor e, boolean wasNewItem)
+    {
+    }
+
+    public void onEdited()
+    {
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -179,12 +179,17 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         if (v == mDeleteButton) {
             parent.removeView(this);
             if (mEditorListener != null) {
-                mEditorListener.onDeleted(this);
+                mEditorListener.onDeleted(this, false);
             }
         }
     }
 
     public void setEditorListener(EditorListener listener) {
         mEditorListener = listener;
+    }
+
+    @Override
+    public boolean needsSaving() {
+        return false;
     }
 }
