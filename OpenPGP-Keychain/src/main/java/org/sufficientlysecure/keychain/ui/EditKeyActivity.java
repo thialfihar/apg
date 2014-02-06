@@ -18,6 +18,7 @@
 package org.thialfihar.android.apg.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -615,8 +616,35 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     }
 
     private void cancelClicked() {
-        setResult(RESULT_CANCELED);
-        finish();
+        if (mNeedsSaving && masterCanSign) { //ask if we want to save
+            AlertDialog.Builder alert = new AlertDialog.Builder(
+                    EditKeyActivity.this);
+
+            alert.setIcon(android.R.drawable.ic_dialog_alert);
+            alert.setTitle(R.string.warning);
+            alert.setMessage(EditKeyActivity.this.getString(R.string.ask_save_changed_key));
+
+            alert.setPositiveButton(EditKeyActivity.this.getString(android.R.string.yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            saveClicked();
+                        }
+                    });
+            alert.setNegativeButton(this.getString(android.R.string.no),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    });
+            alert.setCancelable(false);
+            alert.create().show();
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
     }
 
     /**
