@@ -96,6 +96,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     private String mNewPassphrase = null;
     private String mSavedNewPassphrase = null;
     private boolean mIsPassphraseSet;
+    private boolean mNeedsSaving;
 
     private BootstrapButton mChangePassphrase;
 
@@ -114,7 +115,9 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
     public void onEdited()
     {
-
+        mNeedsSaving = mUserIdsView.needsSaving();
+        mNeedsSaving |= mKeysView.needsSaving();
+        Toast.makeText(this, "Needs saving: " + Boolean.toString(mNeedsSaving), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -457,11 +460,13 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         mUserIdsView.setType(Id.type.user_id);
         mUserIdsView.setCanBeEdited(mMasterCanSign);
         mUserIdsView.setUserIds(mUserIds);
+        mUserIdsView.setEditorListener(this);
         container.addView(mUserIdsView);
         mKeysView = (SectionView) inflater.inflate(R.layout.edit_key_section, container, false);
         mKeysView.setType(Id.type.key);
         mKeysView.setCanBeEdited(mMasterCanSign);
         mKeysView.setKeys(mKeys, mKeysUsages);
+        mKeysView.setEditorListener(this);
         container.addView(mKeysView);
 
         updatePassphraseButtonText();
@@ -612,11 +617,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         for (int i = 0; i < userIdEditors.getChildCount(); ++i) {
             UserIdEditor editor = (UserIdEditor) userIdEditors.getChildAt(i);
             String userId = null;
-            try {
-                userId = editor.getValue();
-            } catch (UserIdEditor.NoNameException e) {
-                throw new PgpGeneralException(this.getString(R.string.error_user_id_needs_a_name));
-            }
+            userId = editor.getValue();
 
             if (userId.equals("")) {
                 continue;
