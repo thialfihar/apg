@@ -109,15 +109,22 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
     private ExportHelper mExportHelper;
 
+    public void somethingChanged()
+    {
+        mNeedsSaving = mUserIdsView.needsSaving();
+        mNeedsSaving |= mKeysView.needsSaving();
+        mNeedsSaving |= hasPassphraseChanged();
+        Toast.makeText(this, "Needs saving: " + Boolean.toString(mNeedsSaving) + "(" + Boolean.toString(mUserIdsView.needsSaving()) + ", " + Boolean.toString(mKeysView.needsSaving()) + ")", Toast.LENGTH_LONG).show();
+    }
+
     public void onDeleted(Editor e, boolean wasNewItem)
     {
+        somethingChanged();
     }
 
     public void onEdited()
     {
-        mNeedsSaving = mUserIdsView.needsSaving();
-        mNeedsSaving |= mKeysView.needsSaving();
-        Toast.makeText(this, "Needs saving: " + Boolean.toString(mNeedsSaving), Toast.LENGTH_LONG).show();
+        somethingChanged();
     }
 
     @Override
@@ -417,6 +424,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                             .getString(SetPassphraseDialogFragment.MESSAGE_NEW_PASSPHRASE);
 
                     updatePassphraseButtonText();
+                    somethingChanged();
                 }
             }
         };
@@ -491,6 +499,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                     mNewPassphrase = mSavedNewPassphrase;
                     mChangePassphrase.setVisibility(View.VISIBLE);
                 }
+                somethingChanged();
             }
         });
     }
@@ -510,6 +519,15 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             return true;
         } else {
             return false;
+        }
+    }
+
+    public boolean hasPassphraseChanged()
+    {
+        if (mNoPassphrase.isChecked()) {
+            return mIsPassPhraseSet;
+        } else {
+            return (mNewPassPhrase != null && !mNewPassPhrase.equals(""));
         }
     }
 
