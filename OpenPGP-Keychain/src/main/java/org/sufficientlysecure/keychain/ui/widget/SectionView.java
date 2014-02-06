@@ -164,13 +164,17 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     public void onClick(View v) {
         if (mCanBeEdited) {
             switch (mType) {
-                case Id.type.user_id: {
-                    UserIdEditor view = (UserIdEditor) mInflater.inflate(
-                            R.layout.edit_key_user_id_item, mEditors, false);
-                    view.setEditorListener(this);
-                    mEditors.addView(view);
-                    break;
-                }
+            case Id.type.user_id: {
+                UserIdEditor view = (UserIdEditor) mInflater.inflate(
+                        R.layout.edit_key_user_id_item, mEditors, false);
+                view.setEditorListener(this);
+                view.setValue("", mEditors.getChildCount() == 0, true);
+                mEditors.addView(view);
+                break;
+            }
+
+            case Id.type.key: {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
 
                 case Id.type.key: {
                     CreateKeyDialogFragment mCreateKeyDialogFragment =
@@ -206,7 +210,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             UserIdEditor view = (UserIdEditor) mInflater.inflate(R.layout.edit_key_user_id_item,
                     mEditors, false);
             view.setEditorListener(this);
-            view.setValue(userId, mEditors.getChildCount() == 0);
+            view.setValue(userId, mEditors.getChildCount() == 0, false);
             view.setCanBeEdited(mCanBeEdited);
             mEditors.addView(view);
         }
