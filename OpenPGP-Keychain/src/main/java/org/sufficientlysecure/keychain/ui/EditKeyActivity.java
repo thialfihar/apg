@@ -235,15 +235,17 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                                 Key masterKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY);
                                 Key subKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY2);
 
+                                //We must set the key flags here as they are not set when we make the
+                                //key pair. Because we are not generating hashed packets there...
                                 // add master key
                                 mKeys.add(masterKey);
-                                mKeysUsages.add(Id.choice.usage.sign_only); //TODO: get from key flags
+                                mKeysUsages.add(KeyFlags.CERTIFY_OTHER);
 
                                 // add sub key
                                 mKeys.add(subKey);
-                                mKeysUsages.add(Id.choice.usage.encrypt_only); //TODO: get from key flags
+                                mKeysUsages.add(KeyFlags.ENCRYPT_COMMS + KeyFlags.ENCRYPT_STORAGE);
 
-                                buildLayout();
+                                buildLayout(true);
                             }
                         }
                     };
@@ -259,7 +261,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 }
             }
         } else {
-            buildLayout();
+            buildLayout(false);
         }
     }
 
@@ -400,8 +402,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
         mCurrentPassphrase = "";
 
+        buildLayout(false);
         mIsPassphraseSet = PassphraseCacheService.hasPassphrase(this, masterKeyId);
-        buildLayout();
         if (!mIsPassphraseSet) {
             // check "no passphrase" checkbox and remove button
             mNoPassphrase.setChecked(true);
@@ -450,8 +452,9 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     /**
      * Build layout based on mUserId, mKeys and mKeysUsages Vectors. It creates Views for every user
      * id and key.
+     * @param newKeys
      */
-    private void buildLayout() {
+    private void buildLayout(boolean newKeys) {
         setContentView(R.layout.edit_key_activity);
 
         // find views
@@ -474,7 +477,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         mKeysView = (SectionView) inflater.inflate(R.layout.edit_key_section, container, false);
         mKeysView.setType(Id.type.key);
         mKeysView.setCanBeEdited(mMasterCanSign);
-        mKeysView.setKeys(mKeys, mKeysUsages);
+        mKeysView.setKeys(mKeys, mKeysUsages, newKeys);
         mKeysView.setEditorListener(this);
         container.addView(mKeysView);
 
@@ -672,10 +675,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             UserIdEditor editor = (UserIdEditor) userIdEditors.getChildAt(i);
             String userId = null;
             userId = editor.getValue();
-
-            if (userId.equals("")) {
-                continue;
-            }
 
             userIds.add(userId);
         }

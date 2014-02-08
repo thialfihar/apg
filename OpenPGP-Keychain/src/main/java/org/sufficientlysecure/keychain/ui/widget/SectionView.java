@@ -16,6 +16,7 @@
 
 package org.thialfihar.android.apg.ui.widget;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -224,7 +225,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         this.updateEditorsVisible();
     }
 
-    public void setKeys(Vector<Key> list, Vector<Integer> usages) {
+    public void setKeys(Vector<Key> list, Vector<Integer> usages, boolean newKeys) {
         if (mType != Id.type.key) {
             return;
         }
@@ -237,7 +238,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                     false);
             view.setEditorListener(this);
             boolean isMasterKey = (mEditors.getChildCount() == 0);
-            view.setValue(list.get(i), isMasterKey, usages.get(i), false);
+            view.setValue(list.get(i), isMasterKey, usages.get(i), newKeys);
             view.setCanBeEdited(mCanBeEdited);
             mEditors.addView(view);
         }
@@ -315,7 +316,11 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                 mEditors, false);
         view.setEditorListener(SectionView.this);
         boolean isMasterKey = (mEditors.getChildCount() == 0);
-        view.setValue(newKey, isMasterKey, -1, true);
+        int usage = 0;
+        if (mEditors.getChildCount() == 0)
+            usage = PGPKeyFlags.CAN_CERTIFY;
+        view.setValue(newKey, isMasterKey, usage, true);
+        view.setValue(newKey, newKey.isMasterKey(), usage, true);
         mEditors.addView(view);
         SectionView.this.updateEditorsVisible();
         if (mEditorListener != null) {
