@@ -45,6 +45,7 @@ import org.spongycastle.openpgp.operator.PGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.PGPDigestCalculator;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPDigestCalculatorProviderBuilder;
+import org.spongycastle.openpgp.operator.jcajce.JcaPGPKeyConverter;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPKeyPair;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
@@ -74,8 +75,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class PgpKeyOperation {
-    private Context mContext;
-    private Progressable mProgress;
+    private final Context mContext;
+    private final ProgressDialogUpdater mProgress;
 
     private static final int[] PREFERRED_SYMMETRIC_ALGORITHMS = new int[] {
             SymmetricKeyAlgorithmTags.AES_256, SymmetricKeyAlgorithmTags.AES_192,
@@ -93,32 +94,17 @@ public class PgpKeyOperation {
         this.mProgress = progress;
     }
 
-    public void updateProgress(int message, int current, int total) {
+    void updateProgress(int message, int current, int total) {
         if (mProgress != null) {
             mProgress.setProgress(message, current, total);
         }
     }
 
-    public void updateProgress(int current, int total) {
+    void updateProgress(int current, int total) {
         if (mProgress != null) {
             mProgress.setProgress(current, total);
         }
     }
-
-    /**
-     * Creates new secret key.
-     *
-     * @param algorithmChoice
-     * @param keySize
-     * @param passphrase
-     * @param isMasterKey
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws PGPException
-     * @throws NoSuchProviderException
-     * @throws PgpGeneralException
-     * @throws InvalidAlgorithmParameterException
-     */
 
     // TODO: key flags?
     public Key createKey(int algorithmChoice, int keySize, String passphrase,
@@ -133,8 +119,8 @@ public class PgpKeyOperation {
             passphrase = "";
         }
 
-        int algorithm = 0;
-        KeyPairGenerator keyGen = null;
+        int algorithm;
+        KeyPairGenerator keyGen;
 
         switch (algorithmChoice) {
         case Id.choice.algorithm.dsa: {
@@ -245,17 +231,16 @@ public class PgpKeyOperation {
         updateProgress(R.string.progress_preparing_master_key, 10, 100);
 
         int usageId = keysUsages.get(0);
-        boolean canSign = (usageId & KeyFlags.SIGN_DATA) > 0;
-        boolean canEncrypt = (usageId & (KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE)) > 0;
-
+        boolean canSign;
         String mainUserId = userIds.get(0);
 
         PGPSecretKey masterKey = keys.get(0);
 
         // this removes all userIds and certifications previously attached to the masterPublicKey
         PGPPublicKey tmpKey = masterKey.getPublicKey();
-        PGPPublicKey masterPublicKey = new PGPPublicKey(tmpKey.getAlgorithm(),
-                tmpKey.getKey(new BouncyCastleProvider()), tmpKey.getCreationTime());
+        PublicKey tmpPuK = new JcaPGPKeyConverter().setProvider(new BouncyCastleProvider()).getPublicKey(tmpKey);
+        PGPPublicKey masterPublicKey = new JcaPGPKeyConverter().getPGPPublicKey(tmpKey.getAlgorithm(),
+                tmpPuK, tmpKey.getCreationTime());
 
         // already done by code above:
         // PGPPublicKey masterPublicKey = masterKey.getPublicKey();
@@ -382,7 +367,6 @@ public class PgpKeyOperation {
 
             usageId = keysUsages.get(i);
             canSign = (usageId & KeyFlags.SIGN_DATA) > 0; //todo - separate function for this
-            canEncrypt = (usageId & (KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE)) > 0;
             if (canSign) {
                 Date todayDate = new Date(); //both sig times the same
                 // cross-certify signing keys
