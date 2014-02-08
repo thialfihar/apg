@@ -336,7 +336,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-            cancelClicked();
+            cancelClicked(); //TODO: why isn't this triggered on my tablet - one of many ui problems I've had with this device. A code compatibility issue or a Samsung fail?
             return true;
         case R.id.menu_key_edit_cancel:
             cancelClicked();
@@ -532,22 +532,26 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
     private void saveClicked() {
         long masterKeyId = getMasterKeyId();
-        if (!isPassphraseSet()) {
-            Log.e(Constants.TAG, "No passphrase has been set");
-            Toast.makeText(this, R.string.set_a_passphrase, Toast.LENGTH_LONG).show();
-        } else {
-            String passphrase = null;
-            if (mIsPassphraseSet) {
-                passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
-            } else {
-                passphrase = "";
-            }
+        if (needsSaving()) { //make sure, as some versions don't support invalidateOptionsMenu
+            try {
+                if (!isPassphraseSet()) {
+                    throw new PgpGeneralException(this.getString(R.string.set_a_passphrase));
+                }
 
-            if (passphrase == null) {
-                showPassphraseDialog(masterKeyId, mMasterCanSign);
-            } else {
-                mCurrentPassphrase = passphrase;
-                finallySaveClicked();
+                String passphrase = null;
+                if (mIsPassPhraseSet)
+                    passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
+                else
+                    passphrase = "";
+                if (passphrase == null) {
+                    showPassphraseDialog(masterKeyId, masterCanSign);
+                } else {
+                    mCurrentPassPhrase = passphrase;
+                    finallySaveClicked();
+                }
+            } catch (PgpGeneralException e) {
+                Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
