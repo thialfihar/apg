@@ -273,7 +273,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         if (mDataUri == null) {
             Log.e(Constants.TAG, "Intent data missing. Should be Uri of key!");
             finish();
-            return;
         } else {
             Log.d(Constants.TAG, "uri: " + mDataUri);
 
@@ -283,19 +282,18 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             long masterKeyId = masterKey.getKeyId();
 
             mMasterCanSign = ProviderHelper.getSecretMasterKeyCanCertify(this, keyRingRowId);
-            finallyEdit(masterKeyId, mMasterCanSign);
+            finallyEdit(masterKeyId);
         }
     }
 
-    private void showPassphraseDialog(final long masterKeyId, final boolean mMasterCanSign) {
+    private void showPassphraseDialog(final long masterKeyId) {
         // Message is received after passphrase is cached
         Handler returnHandler = new Handler() {
             @Override
             public void handleMessage(Message message) {
                 if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
-                    String passphrase = PassphraseCacheService.getCachedPassphrase(
+                    mCurrentPassPhrase = PassphraseCacheService.getCachedPassphrase(
                             EditKeyActivity.this, masterKeyId);
-                    mCurrentPassphrase = passphrase;
                     finallySaveClicked();
                 }
             }
@@ -320,13 +318,13 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.key_edit, menu);
-        mSaveButton = (MenuItem) menu.findItem(R.id.menu_key_edit_save);
+        mSaveButton = menu.findItem(R.id.menu_key_edit_save);
         mSaveButton.setEnabled(needsSaving());
         //totally get rid of some actions for new keys
         if (mDataUri == null) {
-            MenuItem mButton = (MenuItem) menu.findItem(R.id.menu_key_edit_export_file);
+            MenuItem mButton = menu.findItem(R.id.menu_key_edit_export_file);
             mButton.setVisible(false);
-            mButton = (MenuItem) menu.findItem(R.id.menu_key_edit_delete);
+            mButton = menu.findItem(R.id.menu_key_edit_delete);
             mButton.setVisible(false);
         }
         return true;
@@ -371,7 +369,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     }
 
     @SuppressWarnings("unchecked")
-    private void finallyEdit(final long masterKeyId, final boolean mMasterCanSign) {
+    private void finallyEdit(final long masterKeyId) {
         if (masterKeyId != 0) {
             Key masterKey = null;
             mKeyRing = mProvider.getSecretKeyRingByMasterKeyId(masterKeyId);
@@ -436,7 +434,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         Messenger messenger = new Messenger(returnHandler);
 
         // set title based on isPassphraseSet()
-        int title = -1;
+        int title;
         if (isPassphraseSet()) {
             title = R.string.title_change_passphrase;
         } else {
@@ -546,13 +544,13 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                     throw new PgpGeneralException(this.getString(R.string.set_a_passphrase));
                 }
 
-                String passphrase = null;
+                String passphrase;
                 if (mIsPassPhraseSet)
                     passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
                 else
                     passphrase = "";
                 if (passphrase == null) {
-                    showPassphraseDialog(masterKeyId, masterCanSign);
+                    showPassphraseDialog(masterKeyId);
                 } else {
                     mCurrentPassPhrase = passphrase;
                     finallySaveClicked();
