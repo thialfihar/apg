@@ -143,6 +143,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String SAVE_KEYRING_DELETED_IDS = "deleted_ids";
     public static final String SAVE_KEYRING_MODDED_KEYS = "modified_keys";
     public static final String SAVE_KEYRING_DELETED_KEYS = "deleted_keys";
+    public static final String SAVE_KEYRING_NEW_KEYS = "new_keys";
 
     // generate key
     public static final String GENERATE_KEY_ALGORITHM = "algorithm";
@@ -567,6 +568,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 ArrayList<String> original_ids = data.getStringArrayList(SAVE_KEYRING_ORIGINAL_IDS);
                 ArrayList<String> deleted_ids = data.getStringArrayList(SAVE_KEYRING_DELETED_IDS);
                 boolean[] modded_keys = data.getBooleanArray(SAVE_KEYRING_MODDED_KEYS);
+                boolean[] new_keys = data.getBooleanArray(SAVE_KEYRING_NEW_KEYS);
                 ArrayList<PGPSecretKey> deletedKeys = PgpConversionHelper.BytesToPGPSecretKeyList(data
                         .getByteArray(SAVE_KEYRING_DELETED_KEYS));
                 boolean primaryChanged = data.getBoolean(SAVE_KEYRING_PRIMARY_ID_CHANGED);
@@ -590,7 +592,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     }
                     keyOperations.buildSecretKey(userIds, original_ids, deleted_ids, primaryChanged,
                             modded_keys, deletedKeys, keysExpiryDates, keysUsages, newPassPhrase,
-                            oldPassPhrase, keys);
+                            oldPassPhrase, new_keys, keys);
                 }
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);
 

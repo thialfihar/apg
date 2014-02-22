@@ -355,7 +355,7 @@ public class PgpKeyOperation {
         updateProgress(R.string.progress_done, 100, 100);
     }
 
-    public void buildSecretKey(ArrayList<String> userIds, ArrayList<String> OriginalIDs, ArrayList<String> deletedIDs, boolean primaryIDChanged, boolean[] modded_keys, ArrayList<PGPSecretKey> deleted_keys, ArrayList<GregorianCalendar> keysExpiryDates, ArrayList<Integer> keysUsages, String newPassPhrase, String oldPassPhrase, ArrayList<PGPSecretKey> keys) throws PgpGeneralException,
+    public void buildSecretKey(ArrayList<String> userIds, ArrayList<String> OriginalIDs, ArrayList<String> deletedIDs, boolean primaryIDChanged, boolean[] modded_keys, ArrayList<PGPSecretKey> deleted_keys, ArrayList<GregorianCalendar> keysExpiryDates, ArrayList<Integer> keysUsages, String newPassPhrase, String oldPassPhrase, boolean[] new_keys, ArrayList<PGPSecretKey> keys) throws PgpGeneralException,
             PGPException, SignatureException, IOException {
 
         updateProgress(R.string.progress_building_key, 0, 100);
@@ -490,6 +490,29 @@ public class PgpKeyOperation {
                                                              //this happens anyway
         }
 
+        updateProgress(R.string.progress_building_master_key, 30, 100);
+
+        // define hashing and signing algos
+        PGPDigestCalculator sha1Calc = new JcaPGPDigestCalculatorProviderBuilder().build().get(
+                HashAlgorithmTags.SHA1);
+        PGPContentSignerBuilder certificationSignerBuilder = new JcaPGPContentSignerBuilder(
+                masterKeyPair.getPublicKey().getAlgorithm(), HashAlgorithmTags.SHA1);
+
+        // Build key encrypter based on passphrase
+        PBESecretKeyEncryptor keyEncryptor = new JcePBESecretKeyEncryptorBuilder(
+                PGPEncryptedData.CAST5, sha1Calc)
+                .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(
+                        newPassPhrase.toCharArray());
+
+        PGPKeyRingGenerator keyGen = new PGPKeyRingGenerator(PGPSignature.POSITIVE_CERTIFICATION,
+                masterKeyPair, mainUserId, sha1Calc, hashedPacketsGen.generate(),
+                unhashedPacketsGen.generate(), certificationSignerBuilder, keyEncryptor);
+
+        //updating master is slightly different to updating the others
+        if (modded_keys[0]) {
+
+        }
+
         updateProgress(R.string.progress_adding_sub_keys, 40, 100);
 
         for (int i = 1; i < keys.size(); ++i) {
@@ -550,23 +573,6 @@ public class PgpKeyOperation {
 
         PGPSecretKeyRing secretKeyRing = keyGen.generateSecretKeyRing();
         PGPPublicKeyRing publicKeyRing = keyGen.generatePublicKeyRing();
-
-        updateProgress(R.string.progress_re_adding_certs, 80, 100);
-
-        // re-add certificates from old public key
-        // TODO: this only takes care of user id certificates, what about others?
-        PGPPublicKey pubkey = publicKeyRing.getPublicKey();
-        for (String uid : new IterableIterator<String>(pubkey.getUserIDs())) {
-            for (PGPSignature sig : new IterableIterator<PGPSignature>(
-                    oldPublicKey.getPublicKey().getSignaturesForID(uid), true)) {
-                // but skip self certificates
-                if (sig.getKeyID() == pubkey.getKeyID()) {
-                    continue;
-                }
-                pubkey = PGPPublicKey.addCertification(pubkey, uid, sig);
-            }
-        }
-        publicKeyRing = PGPPublicKeyRing.insertPublicKey(publicKeyRing, pubkey);
 
         updateProgress(R.string.progress_saving_key_ring, 90, 100);
 
