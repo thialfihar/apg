@@ -18,6 +18,7 @@
 package org.thialfihar.android.apg.pgp;
 
 import android.content.Context;
+import android.util.Pair;
 
 import org.spongycastle.bcpg.CompressionAlgorithmTags;
 import org.spongycastle.bcpg.HashAlgorithmTags;
@@ -372,6 +373,21 @@ public class PgpKeyOperation {
         if (mKR == null)
             buildNewSecretKey(userIds, keys, keysExpiryDates, keysUsages, newPassPhrase, oldPassPhrase); //new Keyring
 
+        /*
+        IDs -
+            remove deleted ids
+            if the primary ID changed we need to:
+                remove all of the IDs from the keyring, saving their certifications
+                add them all in again, updating certs of IDs which have changed
+            else
+                remove changed IDs and add in with new certs
+
+        Keys
+            remove deleted keys
+            if a key is modified, re-sign it
+                do we need to remove and add in?
+         */
+
         masterKey = mKR.getSecretKey();
         PGPPublicKey masterPublicKey = masterKey.getPublicKey();
 
@@ -385,22 +401,55 @@ public class PgpKeyOperation {
 
         updateProgress(R.string.progress_certifying_master_key, 20, 100);
 
+        for (String delID : deletedIDs) {
+            masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, delID);
+        }
+
         int user_id_index = 0;
-        for (String userId : userIds) {
-            if (!OriginalIDs.get(user_id_index).equals(userIds.get(user_id_index))) {
-                PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
-                        masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
-                        .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
-                PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
+        if (primaryIDChanged) {
+            ArrayList<Pair<String, PGPSignature>> sigList = new ArrayList<Pair<String, PGPSignature>>();
+            for (String userId : userIds) {
+                String orig_id = OriginalIDs.get(user_id_index);
+                if (orig_id.equals(userId)) {
+                    Iterator<PGPSignature> orig_sigs = masterPublicKey.getSignaturesForID(orig_id); //TODO: make sure this iterator only has signatures we are interested in
+                    while (orig_sigs.hasNext()) {
+                        PGPSignature orig_sig = orig_sigs.next();
+                        sigList.add(new Pair<String, PGPSignature>(orig_id, orig_sig));
+                    }
+                } else {
+                    PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
+                            masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
+                            .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
+                    PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
 
-                sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
+                    sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
 
-                PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
-
-                //masterPublicKey = PGPPublicKey.removeCertification();
-                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, certification);
+                    PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
+                    sigList.add(new Pair<String, PGPSignature>(userId, certification));
+                }
+                masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, orig_id);
+                user_id_index++;
             }
-            user_id_index++;
+            for (Pair<String, PGPSignature> to_add : sigList) {
+                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, to_add.first, to_add.second);
+            }
+        } else {
+            for (String userId : userIds) {
+                String orig_id = OriginalIDs.get(user_id_index);
+                if (!orig_id.equals(userId)) {
+                    PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
+                            masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
+                            .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
+                    PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
+
+                    sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
+
+                    PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
+                    masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, orig_id);
+                    masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, certification);
+                }
+                user_id_index++;
+            }
         }
 
             // define hashing and signing algos
