@@ -1,0 +1,4 @@
+include ':apg'
+include ':libs:bc:core'
+include ':libs:bc:pg'
+include ':libs:bc:prov'

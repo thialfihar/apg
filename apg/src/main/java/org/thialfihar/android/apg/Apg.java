@@ -1131,11 +1131,7 @@ public class Apg {
         if (keyRing == null) {
             return null;
         }
-        try {
-            return keyRing.getPublicKey(keyId);
-        } catch (PGPException e) {
-            return null;
-        }
+        return keyRing.getPublicKey(keyId);
     }
 
     public static Vector<Integer> getKeyRingIds(int type) {

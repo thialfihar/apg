@@ -6,3 +6,6 @@
 *.swp
 local.properties
 bouncycastle
+apg.sublime-*
+apg/build
+.gradle
