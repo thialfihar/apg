@@ -13,3 +13,8 @@ allprojects {
         mavenCentral()
     }
 }
+
+task runDebug(type:Exec) {
+    workingDir '.'
+    commandLine './run_debug'
+}
