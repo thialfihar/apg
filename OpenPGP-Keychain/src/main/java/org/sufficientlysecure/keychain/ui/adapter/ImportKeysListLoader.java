@@ -34,8 +34,11 @@ import java.util.ArrayList;
 
 public class ImportKeysListLoader
     extends AsyncTaskLoader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {
-    private Context mContext;
 
+    public static class FileHasNoContent extends Exception {
+    }
+
+    private Context mContext;
     private InputData mInputData;
 
     private ArrayList<ImportKeysListEntry> mData = new ArrayList<ImportKeysListEntry>();
@@ -91,7 +94,9 @@ public class ImportKeysListLoader
      * @return
      */
     private void generateListOfKeyrings(InputData inputData) {
-        PositionAwareInputStream progressIn = new PositionAwareInputStream(inputData.getInputStream());
+        boolean isEmpty = true;
+        PositionAwareInputStream progressIn = new PositionAwareInputStream(
+                inputData.getInputStream());
 
         // need to have access to the bufferedInput, so we can reuse it for the possible
         // PGPObject chunks after the first one, e.g. files with several consecutive ASCII
@@ -101,6 +106,7 @@ public class ImportKeysListLoader
 
             // read all available blocks... (asc files can contain many blocks with BEGIN END)
             while (bufferedInput.available() > 0) {
+                isEmpty = false;
                 InputStream in = PGPUtil.getDecoderStream(bufferedInput);
                 PGPObjectFactory objectFactory = new PGPObjectFactory(in);
 
@@ -118,7 +124,12 @@ public class ImportKeysListLoader
                 }
             }
         } catch (Exception e) {
-            Log.e(Constants.TAG, "Exception on parsing key file!", e);
+
+        }
+
+        if(isEmpty) {
+            Log.e(Constants.TAG, "File has no content!", new FileHasNoContent());
+            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(data, new FileHasNoContent());
         }
     }
 
