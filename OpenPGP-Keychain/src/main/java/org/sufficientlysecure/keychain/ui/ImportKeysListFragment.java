@@ -220,14 +220,20 @@ public class ImportKeysListFragment extends ListFragment implements
         } else {
             setListShownNoAnimation(true);
         }
+
+        Exception error = data.getError();
+
         switch (loader.getId()) {
             case LOADER_ID_BYTES:
+                error = data.getError();
+
+                if(error instanceof ImportKeysListLoader.FileHasNoContent) {
+                    AppMsg.makeText(getActivity(), R.string.error_import_file_no_content,
+                            AppMsg.STYLE_ALERT).show();
+                }
                 break;
 
             case LOADER_ID_SERVER_QUERY:
-
-                Exception error = data.getError();
-
                 if (error == null) {
                     AppMsg.makeText(
                             getActivity(), getResources().getQuantityString(R.plurals.keys_found,
