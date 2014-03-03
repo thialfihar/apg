@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">APG</string>
+
+    <!-- title_lowerCase: capitalized words, no punctuation -->
+    <string name="title_mailInbox">Sarrera ontzia</string>
+    <string name="title_managePublicKeys">Gako publikoak kudeatu</string>
+    <string name="title_manageSecretKeys">Gako pribatuak kudeatu</string>
+    <string name="title_selectRecipients">Jasotzaileak hautatu</string>
+    <string name="title_selectSignature">Sinadura hautatu</string>
+    <string name="title_encrypt">Enkriptatu</string>
+    <string name="title_decrypt">Desenkriptatu</string>
+    <string name="title_authentication">Pasaesaldia</string>
+    <string name="title_createKey">Gakoa sortu</string>
+    <string name="title_editKey">Gakoa editatu</string>
+    <string name="title_preferences">Hobespenak</string>
+    <string name="title_keyServerPreference">Gako-zerbitzariaren hobespenak</string>
+    <string name="title_changePassPhrase">Pasaesaldia aldatu</string>
+    <string name="title_setPassPhrase">Pasaesaldia ezarri</string>
+    <string name="title_sendEmail">"Posta bidaltzen..."</string>
+    <string name="title_encryptToFile">Fitxategian enkriptatu</string>
+    <string name="title_decryptToFile">Fitxategian Desenkriptatu</string>
+    <string name="title_addAccount">Kontua gehitu</string>
+    <string name="title_importKeys">Gakoak inportatu</string>
+    <string name="title_exportKey">Gakoa esportatu</string>
+    <string name="title_exportKeys">Gakoak esportatu</string>
+    <string name="title_keyNotFound">Ez da gakorik topatu</string>
+    <string name="title_help">Hasten</string>
+    <string name="title_keyServerQuery">Gako zerbitzariari eskaera</string>
+
+    <!-- section_lowerCase: capitalized words, no punctuation -->
+    <string name="section_userIds">Erabiltzailearen identitateak</string>
+    <string name="section_keys">Gakoak</string>
+    <string name="section_general">Orokorra</string>
+    <string name="section_defaults">Defektuzko balioak</string>
+    <string name="section_advanced">Aurreratua</string>
+
+    <!-- btn_lowerCase: capitalized words, no punctuation -->
+    <string name="btn_signToClipboard">Arbelean sinatu</string>
+    <string name="btn_encryptToClipboard">Arbelean enkriptatu</string>
+    <string name="btn_encryptAndEmail">Enkriptatu eta bidali</string>
+    <string name="btn_signAndEmail">Sinatu eta bidali</string>
+    <string name="btn_encrypt">Enkriptatu</string>
+    <string name="btn_sign">Sinatu</string>
+    <string name="btn_decrypt">Desenkriptatu</string>
+    <string name="btn_verify">Ziurtatu</string>
+    <string name="btn_selectEncryptKeys">Jasotzaileak hautatu</string>
+    <string name="btn_reply">Erantzun</string>
+    <string name="btn_encryptMessage">Mezua enkriptatu</string>
+    <string name="btn_decryptMessage">Mezua desenkriptatu</string>
+    <string name="btn_encryptFile">Fitxategia enkriptatu</string>
+    <string name="btn_decryptFile">Mezua desenkriptatu</string>
+    <string name="btn_save">Gorde</string>
+    <string name="btn_doNotSave">Ezeztatu</string>
+    <string name="btn_delete">Borratu</string>
+    <string name="btn_noDate">Bat ere ez</string>
+    <string name="btn_clearFilter">Iragazkia garbitu</string>
+    <string name="btn_changePassPhrase">Pasaesaldia aldatu</string>
+    <string name="btn_setPassPhrase">Pasaesaldia ezarri</string>
+    <string name="btn_search">Bilatu</string>
+
+    <!-- menu_lowerCase: capitalized words, no punctuation -->
+    <string name="menu_about">Honi buruz</string>
+    <string name="menu_addAccount">Gmail kontua gehitu</string>
+    <string name="menu_deleteAccount">Kontua borratu</string>
+    <string name="menu_managePublicKeys">Gako publikoak kudeatu</string>
+    <string name="menu_manageSecretKeys">Gako pribatuak kudeatu</string>
+    <string name="menu_preferences">Hobespenak</string>
+    <string name="menu_importKeys">Gakoak inportatu</string>
+    <string name="menu_exportKeys">Gakoak esportatu</string>
+    <string name="menu_exportKey">Gakoa esportatu</string>
+    <string name="menu_deleteKey">Gakoa borratu</string>
+    <string name="menu_createKey">Gakoa sortu</string>
+    <string name="menu_editKey">Gakoa editatu</string>
+    <string name="menu_search">Bilatu</string>
+    <string name="menu_help">Laguntza</string>
+    <string name="menu_keyServer">Gako zerbitzaria</string>
+    <string name="menu_updateKey">Eguneratu</string>
+
+    <!-- label_lowerCase: capitalized words, no punctuation -->
+    <string name="label_sign">Sinatu</string>
+    <string name="label_message">Mezua</string>
+    <string name="label_file">Fitxategia</string>
+    <string name="label_passPhrase">Pasaesaldia</string>
+    <string name="label_passPhraseAgain">Berriz</string>
+    <string name="label_algorithm">Algoritmoa</string>
+    <string name="label_asciiArmour">ASCII blindajea</string>
+    <string name="label_selectPublicKeys">Gako publikoa(k)</string>
+    <string name="label_deleteAfterEncryption">Borratu Enkriptatu ondoren</string>
+    <string name="label_deleteAfterDecryption">Borratu Desenkriptatu ondoren</string>
+    <string name="label_deleteAfterImport">Inportazioaren ondoren borratu</string>
+    <string name="label_encryptionAlgorithm">Enkriptatze algoritmoa</string>
+    <string name="label_hashAlgorithm">Hash algoritmoa </string>
+    <string name="label_asymmetric">Gako publikoa</string>
+    <string name="label_symmetric">Pasaesaldia</string>
+    <string name="label_passPhraseCacheTtl">Pasaesaldiaren katxea</string>
+    <string name="label_messageCompression">Mezuaren konpresioa </string>
+    <string name="label_fileCompression">Fitxategiaren konpresioa</string>
+    <string name="label_language">Hizkuntza</string>
+    <string name="label_forceV3Signature">V3 sinadurak behartu</string>
+    <string name="label_keyServers">Gako zerbitzariak</string>
+    <string name="label_keyId">Gako Identitatea</string>
+    <string name="label_creation">Sormena</string>
+    <string name="label_expiry">Iraungi</string>
+    <string name="label_usage">Erabilera</string>
+    <string name="label_keySize">Gakoaren tamaina</string>
+    <string name="label_mainUserId">Erabiltzailearen identitate nagusia</string>
+    <string name="label_name">Izena</string>
+    <string name="label_comment">Iruzkina</string>
+    <string name="label_email">Email</string>
+
+    <string name="noKeysSelected">Hautatu</string>
+    <string name="oneKeySelected">1 hautatuta</string>
+    <string name="nKeysSelected">hautatuta</string>
+    <string name="unknownUserId">&lt;ezezaguna&gt;</string>
+    <string name="none">&lt;bat ere ez&gt;</string>
+    <string name="noKey">&lt;gakorik gabe&gt;</string>
+    <string name="noDate">-</string>
+    <string name="noExpiry">&lt;ez du iraungiten&gt;</string>
+    <string name="unknownStatus"/>
+    <string name="canEncrypt">enkripta daiteke</string>
+    <string name="canSign">sina daiteke</string>
+    <string name="expired">iraungita</string>
+    <string name="notValid">baliorik ez</string>
+    <string name="nKeyServers">%s gako zerbitzaria</string>
+
+    <!-- choice_lowerCase: capitalized first word, no punctuation -->
+    <string name="choice_none">Bat ere ez</string>
+    <string name="choice_signOnly">Sinatu bakarrik</string>
+    <string name="choice_encryptOnly">Enkriptatu bakarrik</string>
+    <string name="choice_signAndEncrypt">Sinatu eta enkriptatu</string>
+    <string name="choice_15secs">15 seg</string>
+    <string name="choice_1min">1 min</string>
+    <string name="choice_3mins">3 min</string>
+    <string name="choice_5mins">5 min</string>
+    <string name="choice_10mins">10 min</string>
+    <string name="choice_20mins">20 min</string>
+    <string name="choice_40mins">40 min</string>
+    <string name="choice_untilQuit">Irten arte</string>
+    <string name="choice_language_system">Defektuzko sistema</string>
+
+    <string name="dsa">DSA</string>
+    <string name="elgamal">ElGamal</string>
+    <string name="rsa">RSA</string>
+
+    <string name="filemanager_titleOpen">Ireki...</string>
+    <string name="filemanager_titleSave">Gorde honela...</string>
+    <string name="filemanager_titleEncrypt">Sinatzeko fitxategia hautatu...</string>
+    <string name="filemanager_titleDecrypt">Desenkriptatzeko fitxategia hautatu...</string>
+    <string name="filemanager_btnOpen">Ireki</string>
+    <string name="filemanager_btnSave">Gorde</string>
+
+    <string name="warning">Abisua</string>
+    <string name="error">Errorea</string>
+    <string name="warningMessage">Abisua: %s</string>
+    <string name="errorMessage">Errorea: %s</string>
+
+    <!-- sentences -->
+    <string name="wrongPassPhrase">Pasaesaldi ezegokia.</string>
+    <string name="usingClipboardContent">Arbelaren edukia erabiltzen.</string>
+    <string name="keySaved">Gakoa gordeta.</string>
+    <string name="setAPassPhrase">Pasaesaldia ezarri.</string>
+    <string name="noFilemanagerInstalled">Instalatutako fitxategi sistema ez da bateragarria.</string>
+    <string name="passPhrasesDoNotMatch">Pasaesaldia ez dator bat.</string>
+    <string name="passPhraseMustNotBeEmpty">Pasaesaldi hutsak ez dira onartzen.</string>
+    <string name="passPhraseForSymmetricEncryption">Zifratze simetrikoa.</string>
+    <string name="passPhraseFor">%s</string>
+    <string name="fileDeleteConfirmation">¿Ziur hau borratu nahi duzula\n%s?</string>
+    <string name="fileDeleteSuccessful">Borratzea osatua.</string>
+    <string name="noFileSelected">Fitxategi bat hautatu.</string>
+    <string name="decryptionSuccessful">Desenkriptatze egokia.</string>
+    <string name="encryptionSuccessful">Enkriptatze egokia.</string>
+    <string name="encryptionToClipboardSuccessful">Arbeleko enkriptatze egokia.</string>
+    <string name="enterPassPhraseTwice">Pasaesaldia birritan sar ezazu.</string>
+    <string name="selectEncryptionKey">Enkriptatze gako bat hautatu, behintzat.</string>
+    <string name="selectEncryptionOrSignatureKey">Enkriptatze edo sinatze gako bat hautatu mesedez.</string>
+    <string name="specifyFileToEncryptTo">Enkriptatuko den fitxategiaren izena adierazi mesedez.\nABISUA! Fitxategia existitzen bada, berridatziko da.</string>
+    <string name="specifyFileToDecryptTo">Desenkriptatuko den fitxategiaren izena adierazi mesedez.\nABISUA! Fitxategia existitzen bada, berridatziko da.</string>
+    <string name="specifyGoogleMailAccount">Gehitu nahi duzun Google Maileko kontua sartu</string>
+    <string name="specifyFileToImportFrom">Gakoak inportatuko diren fitxategia sartu, mesedez.(.asc o .gpg)</string>
+    <string name="specifyFileToExportTo">Esportatuko den fitxategiaren izena adierazi mesedez.\nABISUA! Fitxategia existitzen bada, berridatziko da.</string>
+    <string name="specifyFileToExportSecretKeysTo">Esportatuko den fitxategiaren izena adierazi mesedez.\nABISUA! gako PRIBATUAK esportatzera zoaz.</string>
+    <string name="keyDeletionConfirmation">¿Benetan giltz hau borratu nahi duzu? \'%s\'?\nezin da desegin!</string>
+    <string name="secretKeyDeletionConfirmation">¿Benetan giltz PRIBATU hau borratu nahi duzu? \'%s\'?\nezin da desegin!</string>
+    <string name="keysAddedAndUpdated">%1$s gako gehituta eta %2$s gako eguneratuta."</string>
+    <string name="keysAdded">%s gako ondo gehitu dira.</string>
+    <string name="keysUpdated"> %s gako ondo eguneratu dira.</string>
+    <string name="noKeysAddedOrUpdated">Ez da gakorik gehitu ez eguneratu.</string>
+    <string name="keyExported">Gako bat ondo esportatu da.</string>
+    <string name="keysExported">%s gako ondo esportatu dira.</string>
+    <string name="noKeysExported">Ez da gakorik esportatu.</string>
+    <string name="keyCreationElGamalInfo">Oharra: azpigakoek bakarrik onartzen dute ElGamal, eta erabiltzeko 1536, 2048, 3072, 4096, edo 8192ko gakoak erabili behar dira.</string>
+    <string name="keyNotFound">%08X gakoa ezin da topatu.</string>
+    <string name="keysFound">%s gako topatu dira.</string>
+    <string name="unknownSignatureKeyTouchToLookUp">Sinadura ezezaguna, klik egin bilatzeko.</string>
+    <string name="keyEditingIsBeta">Gakoen edizioa betan dago oraindik.</string>
+
+    <!-- error_lowerCase: phrases, no punctuation, all lowercase,
+         they will be put after "errorMessage", e.g. "Error: file not found" -->
+    <string name="error_fileDeleteFailed">\'%s\' ezabatzean errorea</string>
+    <string name="error_fileNotFound">Ez da fitxategia topatu</string>
+    <string name="error_noSecretKeyFound">Ez da gako sekretu ona topatu</string>
+    <string name="error_noKnownEncryptionFound">Ez da enkriptatzeko ezer topatu</string>
+    <string name="error_externalStorageNotReady">Kanpo biltegiratzea ez dago prest.</string>
+    <string name="error_accountNotFound">\'%s\' kontua ez da topatu</string>
+    <string name="error_accountReadingNotAllowed">Ez duzu kontu hau irakurtzeko baimenik.</string>
+    <string name="error_addingAccountFailed">\'%s\' kontuaren sorketak errorea eman du.</string>
+    <string name="error_invalidEmail">Posta helbide ezegokia \'%s\'</string>
+    <string name="error_keySizeMinimum512bit">Tamaina minimoa 512bit da</string>
+    <string name="error_masterKeyMustNotBeElGamal">Gako nagusia ezin da ElGamal izan</string>
+    <string name="error_unknownAlgorithmChoice">algoritmo ezezaguna</string>
+    <string name="error_userIdNeedsAName">Izen bat adierazi behar duzu</string>
+    <string name="error_userIdNeedsAnEmailAddress">posta helbide bat adierazi behar duzu.</string>
+    <string name="error_keyNeedsAUserId">Erabiltzaile identitate bat behar duzu.</string>
+    <string name="error_mainUserIdMustNotBeEmpty">Erabiltzaile nagusia ezin da hutsik egon.</string>
+    <string name="error_keyNeedsMasterKey">gako nagusi bat behar duzu behintzat.</string>
+    <string name="error_expiryMustComeAfterCreation">Iraungitze data sortze dataren ostekoa izan behar du</string>
+    <string name="error_noEncryptionKeysOrPassPhrase">Ez da ez pasaesaldirik ez enkriptatze gakorik adierazi</string>
+    <string name="error_signatureFailed">Sinatze prozesuak errorea eman du</string>
+    <string name="error_noSignaturePassPhrase">ez da pasaesaldirik adierazi</string>
+    <string name="error_noSignatureKey">sinatzeko giltzarik ez da adierazi</string>
+    <string name="error_invalidData">enkriptatze gako ez baliagarriak</string>
+    <string name="error_corruptData">datuak hondatuta</string>
+    <string name="error_noSymmetricEncryptionPacket">Enkriptatze simetrikorik duen paketerik ez da topatu</string>
+    <string name="error_wrongPassPhrase">pasaesaldi ezegokia</string>
+    <string name="error_savingKeys">Gako batzuk gordetzean errorea egon da</string>
+
+    <!-- progress_lowerCase: lowercase, phrases, usually ending in '...' -->
+    <string name="progress_done">egina.</string>
+    <string name="progress_initializing">hasten...</string>
+    <string name="progress_saving">gordetzen...</string>
+    <string name="progress_importing">inportatzen...</string>
+    <string name="progress_exporting">esportatzen...</string>
+    <string name="progress_generating">gakoa sortzen, denboratxo bat iraun dezake...</string>
+    <string name="progress_buildingKey">gakoa sortzen...</string>
+    <string name="progress_preparingMasterKey">gako nagusia prestatzen...</string>
+    <string name="progress_certifyingMasterKey">gako nagusia zertifikatzen...</string>
+    <string name="progress_buildingMasterKeyRing">gakoen eraztun nagusia sortzen...</string>
+    <string name="progress_addingSubKeys">azpigakoak gehitzen...</string>
+    <string name="progress_savingKeyRing">gakoen eraztuna gordetzen...</string>
+    <string name="progress_importingSecretKeys">gako pribatuak inportatzen...</string>
+    <string name="progress_importingPublicKeys">gako publikoak inportatzen...</string>
+    <string name="progress_reloadingKeys">gakoak birkargatzen...</string>
+    <string name="progress_exportingKey">gakoa esportatzen...</string>
+    <string name="progress_exportingKeys">gakoak esportatzen...</string>
+    <string name="progress_extractingSignatureKey">Sinatze gakoa ateratzen...</string>
+    <string name="progress_extractingKey">gakoa ateratzen...</string>
+    <string name="progress_preparingStreams">fluxuak prestatzen...</string>
+    <string name="progress_encrypting">datuak enkriptatzen...</string>
+    <string name="progress_decrypting">datuak desenkriptatzen...</string>
+    <string name="progress_preparingSignature">sinadura prestatzen...</string>
+    <string name="progress_generatingSignature">sinadura sortzen...</string>
+    <string name="progress_processingSignature">sinadura prozesatzen...</string>
+    <string name="progress_verifyingSignature">sinadura egiaztatzen...</string>
+    <string name="progress_signing">sinatzen...</string>
+    <string name="progress_readingData">datuak irakurtzen...</string>
+    <string name="progress_findingKey">gakoa bilatzen...</string>
+    <string name="progress_decompressingData">datuak deskonprimitzen...</string>
+    <string name="progress_verifyingIntegrity">Integritatea egiaztatzen...</string>
+    <string name="progress_deletingSecurely"> \'%s\' modu seguruan borratzen...</string>
+    <string name="progress_querying">eskaera egiten...</string>
+    <string name="progress_queryingServer">%s eskaera egiten...</string>
+
+    <!-- permission strings -->
+    <string name="permission_read_key_details_label">Gakoen zehaztasunak APGtik irakurtzen.</string>
+    <string name="permission_read_key_details_description">Gako publiko eta pribatuaren datuak APGtik irakurri, gakoen identitateak adibidez. Gakoak berez ezin dira irakurri.</string>
+
+    <!-- action strings -->
+    <string name="action_encrypt">Enkriptatu</string>
+    <string name="action_decrypt">Desenkriptatu</string>
+    <string name="action_importPublic">Gako publikoak inportatu</string>
+    <string name="action_importSecret">Gako pribatuak inportatu</string>
+
+    <string name="hint_publicKeys">Gako publikoak bilatu</string>
+    <string name="hint_secretKeys">Gako pribatuak bilatu</string>
+    <string name="filterInfo">Iragazkia: \"%s\"</string>
+
+    <!-- misc -->
+    <string name="fast">azkarra</string>
+    <string name="slow">geldoa</string>
+    <string name="very_slow">oso geldoa</string>
+
+    <!-- texts -->
+    <!-- "OI File Manager", "ASTRO", and "K-9 Mail" must not be translated in order for the links to the market to work. -->
+    <string name="text_help">Integrazio hobeagoa izateko K-9 erabil dezakezu, PGPko APG natiboki baitu, eta mezuak zuzenean enkriptatu/desenkriptatzen dira.
+\n\nOI File Manager edo ASTRO  instalatzea gomendatzen da APGko fitxategiak nabigaziotik hautatu ahal izateko.
+\n\nHasteko gako batzuk behar dituzu. \"Gako publikoak kudeatu\" eta \"Gako pribatuak kudeatu\" inporta ditzakezu, edo bestela\"Gako pribatuak kudeatu\" bidez sortu.
+\n\nEkintza nagusi bezala GMail kontu bat gehi dezakezu, \"Kontua gehitu\" erabiliz, kontu horretako emailen desenkriptatzea erraztuz.
+\n\nHobespenen menuetatik begirada bat bota funtzio gehiago topatu ahal izateko.
+    </string>
+
+</resources>
