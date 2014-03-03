@@ -23,6 +23,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPUtil;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
@@ -36,6 +37,18 @@ public class ImportKeysListLoader
     extends AsyncTaskLoader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {
 
     public static class FileHasNoContent extends Exception {
+    }
+
+    public static class NonPgpPartException extends Exception {
+        private int mCount;
+
+        public NonPgpPartException(int count) {
+            mCount = count;
+        }
+
+        public int getCount() {
+            return mCount;
+        }
     }
 
     private Context mContext;
@@ -95,6 +108,8 @@ public class ImportKeysListLoader
      */
     private void generateListOfKeyrings(InputData inputData) {
         boolean isEmpty = true;
+        int nonPgpCounter = 0;
+
         PositionAwareInputStream progressIn = new PositionAwareInputStream(
                 inputData.getInputStream());
 
@@ -120,16 +135,25 @@ public class ImportKeysListLoader
                         addToData(newKeyring);
                     } else {
                         Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!", new Exception());
+                        nonPgpCounter++;
                     }
                 }
             }
         } catch (Exception e) {
             Log.e(Constants.TAG, "Exception on parsing key file!", e);
+            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(data, e);
+            nonPgpCounter = 0;
         }
 
         if(isEmpty) {
             Log.e(Constants.TAG, "File has no content!", new FileHasNoContent());
-            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(data, new FileHasNoContent());
+            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
+                    (data, new FileHasNoContent());
+        }
+
+        if(nonPgpCounter > 0) {
+            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
+                    (data, new NonPgpPartException(nonPgpCounter));
         }
     }
 
