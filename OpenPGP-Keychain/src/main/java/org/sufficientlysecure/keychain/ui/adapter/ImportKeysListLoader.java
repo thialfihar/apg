@@ -124,7 +124,7 @@ public class ImportKeysListLoader
                 }
             }
         } catch (Exception e) {
-
+            Log.e(Constants.TAG, "Exception on parsing key file!", e);
         }
 
         if(isEmpty) {
