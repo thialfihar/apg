@@ -145,13 +145,13 @@ public class ImportKeysListLoader
             nonPgpCounter = 0;
         }
 
-        if(isEmpty) {
+        if (isEmpty) {
             Log.e(Constants.TAG, "File has no content!", new FileHasNoContent());
             entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
                     (data, new FileHasNoContent());
         }
 
-        if(nonPgpCounter > 0) {
+        if (nonPgpCounter > 0) {
             entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
                     (data, new NonPgpPartException(nonPgpCounter));
         }
