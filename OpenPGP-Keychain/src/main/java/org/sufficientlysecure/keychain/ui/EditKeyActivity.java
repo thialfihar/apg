@@ -581,38 +581,24 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
             intent.setAction(ApgIntentService.ACTION_SAVE_KEYRING);
 
+            SaveKeyringParcel saveParams = new SaveKeyringParcel();
+            saveParams.userIDs = getUserIds(mUserIdsView);
+            saveParams.originalIDs = mUserIdsView.getOriginalIDs();
+            saveParams.deletedIDs = mUserIdsView.getDeletedIDs();
+            saveParams.primaryIDChanged = mUserIdsView.primaryChanged();
+            saveParams.moddedKeys = toPrimitiveArray(mKeysView.getNeedsSavingArray());
+            saveParams.deletedKeys = mKeysView.getDeletedKeys();
+            saveParams.keysExpiryDates = getKeysExpiryDates(mKeysView);
+            saveParams.keysUsages = getKeysUsages(mKeysView);
+            saveParams.newPassPhrase = mNewPassPhrase;
+            saveParams.oldPassPhrase = mCurrentPassPhrase;
+            saveParams.newKeys = toPrimitiveArray(mKeysView.getNewKeysArray());
+            saveParams.keys = getKeys(mKeysView);
+
             // fill values for this action
             Bundle data = new Bundle();
-            data.putString(ApgIntentService.SAVE_KEYRING_CURRENT_PASSPHRASE,
-                    mCurrentPassphrase);
-            data.putString(ApgIntentService.SAVE_KEYRING_NEW_PASSPHRASE, mNewPassphrase);
-            data.putStringArrayList(ApgIntentService.SAVE_KEYRING_USER_IDS,
-                    getUserIds(mUserIdsView));
-            ArrayList<Key> keys = getKeys(mKeysView);
-            data.putSerializable(ApgIntentService.SAVE_KEYRING_KEYS, keys);
-            data.putIntegerArrayList(ApgIntentService.SAVE_KEYRING_KEYS_USAGES,
-            ArrayList<PGPSecretKey> dKeys = mKeysView.getDeletedKeys();
-            byte[] tmp = null;
-            if (dKeys.size() != 0)
-                tmp = PgpConversionHelper.PGPSecretKeyArrayListToBytes(dKeys);
-            data.putByteArray(KeychainIntentService.SAVE_KEYRING_DELETED_KEYS,
-                    tmp);
-            data.putIntegerArrayList(KeychainIntentService.SAVE_KEYRING_KEYS_USAGES,
-                    getKeysUsages(mKeysView));
-            data.putSerializable(ApgIntentService.SAVE_KEYRING_KEYS_EXPIRY_DATES,
-                    getKeysExpiryDates(mKeysView));
-            data.putLong(ApgIntentService.SAVE_KEYRING_MASTER_KEY_ID, getMasterKeyId());
-            data.putBoolean(ApgIntentService.SAVE_KEYRING_CAN_SIGN, mMasterCanSign);
-            data.putStringArrayList(KeychainIntentService.SAVE_KEYRING_DELETED_IDS,
-                    mUserIdsView.getDeletedIDs());
-            data.putStringArrayList(KeychainIntentService.SAVE_KEYRING_ORIGINAL_IDS,
-                    mUserIdsView.getOriginalIDs());
-            data.putBooleanArray(KeychainIntentService.SAVE_KEYRING_MODDED_KEYS,
-                    toPrimitiveArray(mKeysView.getNeedsSavingArray()));
-            data.putBoolean(KeychainIntentService.SAVE_KEYRING_PRIMARY_ID_CHANGED,
-                    mUserIdsView.primaryChanged());
-            data.putBooleanArray(KeychainIntentService.SAVE_KEYRING_NEW_KEYS,
-                    toPrimitiveArray(mKeysView.getNewKeysArray()));
+            data.putBoolean(KeychainIntentService.SAVE_KEYRING_CAN_SIGN, masterCanSign);
+            data.putParcelable(KeychainIntentService.SAVE_KEYRING_PARCEL, saveParams);
 
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 

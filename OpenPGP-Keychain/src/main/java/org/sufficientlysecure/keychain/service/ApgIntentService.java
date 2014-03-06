@@ -129,21 +129,10 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String DECRYPT_CIPHERTEXT_BYTES = "ciphertext_bytes";
     public static final String DECRYPT_ASSUME_SYMMETRIC = "assume_symmetric";
 
-    // save key ring
-    public static final String SAVE_KEYRING_NEW_PASSPHRASE = "new_passphrase";
-    public static final String SAVE_KEYRING_CURRENT_PASSPHRASE = "current_passphrase";
-    public static final String SAVE_KEYRING_USER_IDS = "user_ids";
-    public static final String SAVE_KEYRING_PRIMARY_ID_CHANGED = "primary_id_changed";
-    public static final String SAVE_KEYRING_KEYS = "keys";
-    public static final String SAVE_KEYRING_KEYS_USAGES = "keys_usages";
-    public static final String SAVE_KEYRING_KEYS_EXPIRY_DATES = "keys_expiry_dates";
-    public static final String SAVE_KEYRING_MASTER_KEY_ID = "master_key_id";
+    // save keyring
+    public static final String SAVE_KEYRING_PARCEL = "save_parcel";
     public static final String SAVE_KEYRING_CAN_SIGN = "can_sign";
-    public static final String SAVE_KEYRING_ORIGINAL_IDS = "original_ids";
-    public static final String SAVE_KEYRING_DELETED_IDS = "deleted_ids";
-    public static final String SAVE_KEYRING_MODDED_KEYS = "modified_keys";
-    public static final String SAVE_KEYRING_DELETED_KEYS = "deleted_keys";
-    public static final String SAVE_KEYRING_NEW_KEYS = "new_keys";
+
 
     // generate key
     public static final String GENERATE_KEY_ALGORITHM = "algorithm";
@@ -549,8 +538,9 @@ public class ApgIntentService extends IntentService implements Progressable, Key
         } else if (ACTION_SAVE_KEYRING.equals(action)) {
             try {
                 /* Input */
-                String oldPassphrase = data.getString(SAVE_KEYRING_CURRENT_PASSPHRASE);
-                String newPassphrase = data.getString(SAVE_KEYRING_NEW_PASSPHRASE);
+                SaveKeyringParcel saveParams = data.getParcelable(SAVE_KEYRING_PARCEL);
+                String oldPassPhrase = saveParams.oldPassPhrase;
+                String newPassPhrase = saveParams.newPassPhrase;
                 boolean canSign = true;
 
                 if (data.containsKey(SAVE_KEYRING_CAN_SIGN)) {
@@ -560,25 +550,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 if (newPassphrase == null) {
                     newPassphrase = oldPassphrase;
                 }
-                ArrayList<String> userIds = data.getStringArrayList(SAVE_KEYRING_USER_IDS);
-                ArrayList<Key> keys = (ArrayList<Key>) data.getSerializable(SAVE_KEYRING_KEYS);
-                ArrayList<Integer> keysUsages = data.getIntegerArrayList(SAVE_KEYRING_KEYS_USAGES);
-                ArrayList<GregorianCalendar> keysExpiryDates =
-                    (ArrayList<GregorianCalendar>) data.getSerializable(SAVE_KEYRING_KEYS_EXPIRY_DATES);
-                ArrayList<String> original_ids = data.getStringArrayList(SAVE_KEYRING_ORIGINAL_IDS);
-                ArrayList<String> deleted_ids = data.getStringArrayList(SAVE_KEYRING_DELETED_IDS);
-                boolean[] modded_keys = data.getBooleanArray(SAVE_KEYRING_MODDED_KEYS);
-                boolean[] new_keys = data.getBooleanArray(SAVE_KEYRING_NEW_KEYS);
-                byte[] tmp = data.getByteArray(SAVE_KEYRING_DELETED_KEYS);
-                ArrayList<PGPSecretKey> deletedKeys;
-                if (tmp != null)
-                deletedKeys = PgpConversionHelper.BytesToPGPSecretKeyList(data
-                        .getByteArray(SAVE_KEYRING_DELETED_KEYS));
-                else
-                deletedKeys = new ArrayList<PGPSecretKey>();
-                boolean primaryChanged = data.getBoolean(SAVE_KEYRING_PRIMARY_ID_CHANGED);
 
-                long masterKeyId = data.getLong(SAVE_KEYRING_MASTER_KEY_ID);
+                long masterKeyId = saveParams.keys.get(0).getKeyID();
 
                 PgpKeyOperation keyOperations = new PgpKeyOperation(this, this);
                 /* Operation */
@@ -595,9 +568,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                             break;
                         }
                     }
-                    keyOperations.buildSecretKey(userIds, original_ids, deleted_ids, primaryChanged,
-                            modded_keys, deletedKeys, keysExpiryDates, keysUsages, newPassPhrase,
-                            oldPassPhrase, new_keys, keys);
+                    keyOperations.buildSecretKey(saveParams);
                 }
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);
 
