@@ -11,8 +11,8 @@ APG definitely has some catching up to do. :)
 
 ### Requirements
 
- * Android SDK 19.0.2
- * Gradle 1.10
+* Android SDK 19.0.2
+* Gradle 1.10
 
 ### Command line
 ```

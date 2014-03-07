@@ -4,7 +4,11 @@ buildscript {
     }
 
     dependencies {
+<<<<<<< HEAD
         classpath 'com.android.tools.build:gradle:0.8.3'
+=======
+        classpath 'com.android.tools.build:gradle:0.9.0'
+>>>>>>> openkeychain/master
     }
 }
 
@@ -14,7 +18,12 @@ allprojects {
     }
 }
 
+<<<<<<< HEAD
 task runDebug(type:Exec) {
     workingDir '.'
     commandLine './run_debug'
+=======
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+>>>>>>> openkeychain/master
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="passphrase_cache_ttl_entries" translatable="false">
+        <item>@string/choice_15secs</item>
+        <item>@string/choice_1min</item>
+        <item>@string/choice_3mins</item>
+        <item>@string/choice_5mins</item>
+        <item>@string/choice_10mins</item>
+        <item>@string/choice_20mins</item>
+        <item>@string/choice_40mins</item>
+        <item>@string/choice_1hour</item>
+        <item>@string/choice_2hours</item>
+        <item>@string/choice_4hours</item>
+        <item>@string/choice_8hours</item>
+        <item>@string/choice_forever</item>
+    </string-array>
+    <string-array name="passphrase_cache_ttl_values" translatable="false">
+        <item>15</item>
+        <item>60</item>
+        <item>180</item>
+        <item>300</item>
+        <item>600</item>
+        <item>1200</item>
+        <item>2400</item>
+        <item>3600</item>
+        <item>7200</item>
+        <item>14400</item>
+        <item>28800</item>
+        <item>-1</item>
+    </string-array>
+    <string-array name="key_size_spinner_values" translatable="false">
+        <item>@string/key_size_512</item>
+        <item>@string/key_size_1024</item>
+        <item>@string/key_size_2048</item>
+        <item>@string/key_size_4096</item>
+    </string-array>
+    <string-array name="import_action_list" translatable="false">
+        <item>@string/menu_key_server</item>
+        <item>@string/menu_import_from_file</item>
+        <item>@string/menu_import_from_qr_code</item>
+        <item>@string/import_from_clipboard</item>
+        <item>@string/menu_import_from_nfc</item>
+    </string-array>
+
+</resources>
