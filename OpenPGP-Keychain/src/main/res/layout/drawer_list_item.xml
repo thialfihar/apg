@@ -26,7 +26,7 @@
         android:paddingRight="16dp"
         android:paddingTop="16dp"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="#111"
+        android:textColor="#eee"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/drawer_item_icon" />
 
