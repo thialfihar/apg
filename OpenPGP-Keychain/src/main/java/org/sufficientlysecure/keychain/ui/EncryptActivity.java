@@ -436,7 +436,7 @@ public class EncryptActivity extends DrawerActivity {
 
         // symmetric encryption
         if (mMode.getCurrentView().getId() == R.id.modeSymmetric) {
-            boolean gotPassPhrase = false;
+            boolean gotPassphrase = false;
             String passphrase = mPassphrase.getText().toString();
             String passphraseAgain = mPassphraseAgain.getText().toString();
             if (!passphrase.equals(passphraseAgain)) {
@@ -444,8 +444,8 @@ public class EncryptActivity extends DrawerActivity {
                 return;
             }
 
-            gotPassPhrase = (passphrase.length() != 0);
-            if (!gotPassPhrase) {
+            gotPassphrase = (passphrase.length() != 0);
+            if (!gotPassphrase) {
                 AppMsg.makeText(this, R.string.passphrase_must_not_be_empty, AppMsg.STYLE_ALERT)
                         .show();
                 return;
@@ -821,8 +821,8 @@ public class EncryptActivity extends DrawerActivity {
         mDeleteAfter = (CheckBox) findViewById(R.id.deleteAfterEncryption);
         mShareAfter = (CheckBox) findViewById(R.id.shareAfterEncryption);
 
-        mAsciiArmor = (CheckBox) findViewById(R.id.asciiArmour);
-        mAsciiArmor.setChecked(Preferences.getPreferences(this).getDefaultAsciiArmour());
+        mAsciiArmor = (CheckBox) findViewById(R.id.asciiArmor);
+        mAsciiArmor.setChecked(Preferences.getPreferences(this).getDefaultAsciiArmor());
 
         mSelectKeysButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

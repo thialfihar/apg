@@ -189,25 +189,25 @@ public class PgpKeyOperation {
         return secKey;
     }
 
-    public void changeSecretKeyPassphrase(PGPSecretKeyRing keyRing, String oldPassPhrase,
-            String newPassPhrase) throws IOException, PGPException, PGPException,
+    public void changeSecretKeyPassphrase(PGPSecretKeyRing keyRing, String oldPassphrase,
+            String newPassphrase) throws IOException, PGPException, PGPException,
             NoSuchProviderException {
 
         updateProgress(R.string.progress_building_key, 0, 100);
-        if (oldPassPhrase == null) {
-            oldPassPhrase = "";
+        if (oldPassphrase == null) {
+            oldPassphrase = "";
         }
-        if (newPassPhrase == null) {
-            newPassPhrase = "";
+        if (newPassphrase == null) {
+            newPassphrase = "";
         }
 
         PGPSecretKeyRing newKeyRing = PGPSecretKeyRing.copyWithNewPassword(
                 keyRing,
                 new JcePBESecretKeyDecryptorBuilder(new JcaPGPDigestCalculatorProviderBuilder()
                         .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build()).setProvider(
-                        Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(oldPassPhrase.toCharArray()),
+                        Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(oldPassphrase.toCharArray()),
                 new JcePBESecretKeyEncryptorBuilder(keyRing.getSecretKey()
-                        .getKeyEncryptionAlgorithm()).build(newPassPhrase.toCharArray()));
+                        .getKeyEncryptionAlgorithm()).build(newPassphrase.toCharArray()));
 
         updateProgress(R.string.progress_saving_key_ring, 50, 100);
 
@@ -219,19 +219,19 @@ public class PgpKeyOperation {
 
     public void buildSecretKey(ArrayList<String> userIds, ArrayList<PGPSecretKey> keys,
             ArrayList<Integer> keysUsages, ArrayList<GregorianCalendar> keysExpiryDates,
-            long masterKeyId, String oldPassPhrase,
-            String newPassPhrase) throws PgpGeneralException, NoSuchProviderException,
+            long masterKeyId, String oldPassphrase,
+            String newPassphrase) throws PgpGeneralException, NoSuchProviderException,
             PGPException, NoSuchAlgorithmException, SignatureException, IOException {
 
         Log.d(Constants.TAG, "userIds: " + userIds.toString());
 
         updateProgress(R.string.progress_building_key, 0, 100);
 
-        if (oldPassPhrase == null) {
-            oldPassPhrase = "";
+        if (oldPassphrase == null) {
+            oldPassphrase = "";
         }
-        if (newPassPhrase == null) {
-            newPassPhrase = "";
+        if (newPassphrase == null) {
+            newPassphrase = "";
         }
 
         updateProgress(R.string.progress_preparing_master_key, 10, 100);
@@ -262,7 +262,7 @@ public class PgpKeyOperation {
         // }
 
         PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
-                Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(oldPassPhrase.toCharArray());
+                Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(oldPassphrase.toCharArray());
         PGPPrivateKey masterPrivateKey = masterKey.extractPrivateKey(keyDecryptor);
 
         updateProgress(R.string.progress_certifying_master_key, 20, 100);
@@ -324,7 +324,7 @@ public class PgpKeyOperation {
         PBESecretKeyEncryptor keyEncryptor = new JcePBESecretKeyEncryptorBuilder(
                 PGPEncryptedData.CAST5, sha1Calc)
                 .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(
-                        newPassPhrase.toCharArray());
+                        newPassphrase.toCharArray());
 
         PGPKeyRingGenerator keyGen = new PGPKeyRingGenerator(PGPSignature.POSITIVE_CERTIFICATION,
                 masterKeyPair, mainUserId, sha1Calc, hashedPacketsGen.generate(),
@@ -340,7 +340,7 @@ public class PgpKeyOperation {
 
             PBESecretKeyDecryptor keyDecryptor2 = new JcePBESecretKeyDecryptorBuilder()
                     .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(
-                            oldPassPhrase.toCharArray());
+                            oldPassphrase.toCharArray());
             PGPPrivateKey subPrivateKey = subKey.extractPrivateKey(keyDecryptor2);
 
             // TODO: now used without algorithm and creation time?! (APG 1)
