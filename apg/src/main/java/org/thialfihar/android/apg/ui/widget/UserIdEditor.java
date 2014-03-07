@@ -27,28 +27,43 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 public class UserIdEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;
 
-    private ImageButton mDeleteButton;
+    private BootstrapButton mDeleteButton;
     private RadioButton mIsMainUserId;
     private EditText mName;
     private EditText mEmail;
     private EditText mComment;
 
-    private static final Pattern EMAIL_PATTERN =
-            Pattern.compile("^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+[.]([a-zA-Z])+([a-zA-Z])+",
-                            Pattern.CASE_INSENSITIVE);
+    // see http://www.regular-expressions.info/email.html
+    // RFC 2822 if we omit the syntax using double quotes and square brackets
+    // android.util.Patterns.EMAIL_ADDRESS is only available as of Android 2.2+
+    private static final Pattern EMAIL_PATTERN = Pattern
+            .compile(
+                    "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+                    Pattern.CASE_INSENSITIVE);
 
     public static class NoNameException extends Exception {
         static final long serialVersionUID = 0xf812773343L;
 
         public NoNameException(String message) {
             super(message);
+        }
+    }
+
+    public void setCanEdit(boolean bCanEdit) {
+        if (!bCanEdit) {
+            mDeleteButton.setVisibility(View.INVISIBLE);
+            mName.setEnabled(false);
+            mIsMainUserId.setEnabled(false);
+            mEmail.setEnabled(false);
+            mComment.setEnabled(false);
         }
     }
 
@@ -81,7 +96,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         setDrawingCacheEnabled(true);
         setAlwaysDrawnWithCacheEnabled(true);
 
-        mDeleteButton = (ImageButton) findViewById(R.id.delete);
+        mDeleteButton = (BootstrapButton) findViewById(R.id.delete);
         mDeleteButton.setOnClickListener(this);
         mIsMainUserId = (RadioButton) findViewById(R.id.isMainUserId);
         mIsMainUserId.setOnClickListener(this);
@@ -124,8 +139,8 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         if (email.length() > 0) {
             Matcher emailMatcher = EMAIL_PATTERN.matcher(email);
             if (!emailMatcher.matches()) {
-                throw new InvalidEmailException(
-                        getContext().getString(R.string.error_invalidEmail, email));
+                throw new InvalidEmailException(getContext().getString(R.string.error_invalid_email,
+                        email));
             }
         }
 
@@ -155,7 +170,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     }
 
     public void onClick(View v) {
-        final ViewGroup parent = (ViewGroup)getParent();
+        final ViewGroup parent = (ViewGroup) getParent();
         if (v == mDeleteButton) {
             boolean wasMainUserId = mIsMainUserId.isChecked();
             parent.removeView(this);

@@ -16,36 +16,49 @@
 
 package org.thialfihar.android.apg;
 
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+
 import android.os.Environment;
 
 public final class Constants {
+
+    public static final boolean DEBUG = BuildConfig.DEBUG;
+
+    public static final String TAG = "Keychain";
+
+    public static final String PACKAGE_NAME = "org.thialfihar.android.apg";
+
+    // as defined in http://tools.ietf.org/html/rfc3156, section 7
+    public static final String NFC_MIME = "application/pgp-keys";
+
+    // used by QR Codes (Guardian Project, Monkeysphere compatiblity)
+    public static final String FINGERPRINT_SCHEME = "openpgp4fpr";
+
+    // Not BC due to the use of Spongy Castle for Android
+    public static final String SC = BouncyCastleProvider.PROVIDER_NAME;
+    public static final String BOUNCY_CASTLE_PROVIDER_NAME = SC;
+
+    public static final String INTENT_PREFIX = PACKAGE_NAME + ".action.";
+
     public static final class path {
-        public static final String app_dir = Environment.getExternalStorageDirectory() + "/APG";
+        public static final String APP_DIR = Environment.getExternalStorageDirectory()
+                + "/OpenPGP-Keychain";
     }
 
     public static final class pref {
-        public static final String has_seen_help = "seenHelp";
-        public static final String has_seen_change_log = "seenChangeLogDialog";
-        public static final String default_encryption_algorithm = "defaultEncryptionAlgorithm";
-        public static final String default_hash_algorithm = "defaultHashAlgorithm";
-        public static final String default_ascii_armour = "defaultAsciiArmour";
-        public static final String default_message_compression = "defaultMessageCompression";
-        public static final String default_file_compression = "defaultFileCompression";
-        public static final String pass_phrase_cache_ttl = "passPhraseCacheTtl";
-        public static final String language = "language";
-        public static final String force_v3_signatures = "forceV3Signatures";
-        public static final String key_servers = "keyServers";
+        public static final String DEFAULT_ENCRYPTION_ALGORITHM = "defaultEncryptionAlgorithm";
+        public static final String DEFAULT_HASH_ALGORITHM = "defaultHashAlgorithm";
+        public static final String DEFAULT_ASCII_ARMOUR = "defaultAsciiArmour";
+        public static final String DEFAULT_MESSAGE_COMPRESSION = "defaultMessageCompression";
+        public static final String DEFAULT_FILE_COMPRESSION = "defaultFileCompression";
+        public static final String PASS_PHRASE_CACHE_TTL = "passphraseCacheTtl";
+        public static final String LANGUAGE = "language";
+        public static final String FORCE_V3_SIGNATURES = "forceV3Signatures";
+        public static final String KEY_SERVERS = "keyServers";
     }
 
     public static final class defaults {
-        public static final String key_servers = "pool.sks-keyservers.net, subkeys.pgp.net, pgp.mit.edu";
+        public static final String KEY_SERVERS = "pool.sks-keyservers.net, subkeys.pgp.net, pgp.mit.edu";
     }
 
-    public static final class extras {
-        public static final String progress = "progress";
-        public static final String progress_max = "max";
-        public static final String status = "status";
-        public static final String message = "message";
-        public static final String key_id = "keyId";
-    }
 }

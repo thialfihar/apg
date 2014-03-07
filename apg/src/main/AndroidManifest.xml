@@ -1,218 +1,440 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.thialfihar.android.apg"
-    android:versionCode="11000" android:versionName="1.1.0 beta 00"
-    android:installLocation="auto">
+    android:installLocation="auto"
+    android:versionCode="23103"
+    android:versionName="2.3.1 beta3">
 
+    <!--
+        General remarks
+        ===============
+        - Last APG 1 version was 10900 (1.0.9 beta 00)
+        - Keychain starting with versionCode 20000!
+
+        Association of file types to Keychain
+        =====================================
+        General remarks about file ending conventions:
+        - *.gpg for binary files
+        - *.asc for ascii armored files The actual content can be anything.
+
+        The file ending only shows if it is binary or ascii encoded.
+
+        Remarks about the ugly android:pathPattern:
+        - We are matching all files with a specific file ending.
+        This is done in an ugly way because of Android limitations.
+        Read http://stackoverflow.com/questions/1733195/android-intent-filter-for-a-particular-file-extension
+        and http://stackoverflow.com/questions/3400072/pathpattern-to-match-file-extension-does-not-work-if-a-period-exists-elsewhere-i/8599921
+        for more information.
+        - Do _not_ set mimeType for gpg!
+        Cyanogenmod's file manager will only show Keychain for gpg files if no mimeType is set!
+        For OI Filemanager it makes no difference, gpg files can't be associated
+    -->
+
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="19" />
+
+    <uses-feature
+        android:name="android.hardware.wifi"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <!-- android:allowBackup="false": Don't allow backup over adb backup or other apps! -->
     <application
+        android:name=".KeychainApplication"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
+        android:theme="@style/KeychainTheme"
         android:label="@string/app_name">
-
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.KeyListPublicActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/app_name"
-            android:configChanges="keyboardHidden|orientation|keyboard">
-
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
-            android:name=".PublicKeyListActivity"
-            android:label="@string/title_managePublicKeys"
-            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:name=".ui.KeyListSecretActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_manage_secret_keys"
             android:launchMode="singleTop">
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable_public_keys"/>
-
         </activity>
-
         <activity
-            android:name=".SecretKeyListActivity"
-            android:label="@string/title_manageSecretKeys"
-            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:name=".ui.EditKeyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_edit_key"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.ViewKeyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_key_details"
+            android:parentActivityName=".ui.KeyListPublicActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.KeyListPublicActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ViewKeyActivityJB"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_key_details"
+            android:parentActivityName=".ui.KeyListPublicActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.KeyListPublicActivity" />
+        </activity>
+        <activity
+            android:name=".ui.SelectPublicKeyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_select_recipients"
             android:launchMode="singleTop">
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable_secret_keys"/>
-
         </activity>
-
         <activity
-            android:name=".EditKeyActivity"
-            android:label="@string/title_editKey"
-            android:configChanges="keyboardHidden|orientation|keyboard"/>
-
-        <activity
-            android:name=".SelectPublicKeyListActivity"
-            android:label="@string/title_selectRecipients"
-            android:configChanges="keyboardHidden|orientation|keyboard"
+            android:name=".ui.SelectSecretKeyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_select_secret_key"
             android:launchMode="singleTop">
-
-            <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.SELECT_PUBLIC_KEYS" />
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable_public_keys"/>
-
         </activity>
-
         <activity
-            android:name=".SelectSecretKeyListActivity"
-            android:label="@string/title_selectSignature"
-            android:configChanges="keyboardHidden|orientation|keyboard"
-            android:launchMode="singleTop">
-
-            <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.SELECT_SECRET_KEY" />
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable_secret_keys"/>
-
-        </activity>
-
-        <activity
-            android:name=".EncryptActivity"
+            android:name=".ui.EncryptActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_encrypt"
-            android:configChanges="keyboardHidden|orientation|keyboard">
+            android:windowSoftInputMode="stateHidden">
 
+            <!-- Keychain's own Actions -->
+            <!-- ENCRYPT with text as extra -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.ENCRYPT" />
-                <action android:name="org.thialfihar.android.apg.intent.ENCRYPT_FILE" />
-                <action android:name="org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN" />
-                <action android:name="org.thialfihar.android.apg.intent.GENERATE_SIGNATURE" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="*/*"/>
+                <action android:name="org.thialfihar.android.apg.action.ENCRYPT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <!-- ENCRYPT with data Uri -->
+            <intent-filter>
+                <action android:name="org.thialfihar.android.apg.action.ENCRYPT" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- TODO: accept other schemes! -->
+                <data android:scheme="file" />
+            </intent-filter>
+            <!-- Android's Send Action -->
+            <intent-filter android:label="@string/intent_send_encrypt">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
         </activity>
-
         <activity
-            android:name=".DecryptActivity"
+            android:name=".ui.DecryptActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_decrypt"
-            android:configChanges="keyboardHidden|orientation|keyboard">
+            android:windowSoftInputMode="stateHidden">
 
+            <!--&lt;!&ndash; VIEW with mimeType: TODO (from email app)  &ndash;&gt;-->
+            <!--<intent-filter android:label="@string/intent_import_key">-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+
+                <!--&lt;!&ndash; mime type as defined in http://tools.ietf.org/html/rfc3156 &ndash;&gt;-->
+                <!--<data android:mimeType="application/pgp-signature" />-->
+            <!--</intent-filter>-->
+            <!--&lt;!&ndash; VIEW with mimeType: TODO (from email app)  &ndash;&gt;-->
+            <!--<intent-filter android:label="@string/intent_import_key">-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+
+                <!--<category android:name="android.intent.category.BROWSABLE" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+
+                <!--&lt;!&ndash; mime type as defined in http://tools.ietf.org/html/rfc3156 &ndash;&gt;-->
+                <!--<data android:mimeType="application/pgp-encrypted" />-->
+            <!--</intent-filter>-->
+            <!-- Keychain's own Actions -->
+            <!-- DECRYPT with text as extra -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.DECRYPT" />
-                <action android:name="org.thialfihar.android.apg.intent.DECRYPT_FILE" />
-                <action android:name="org.thialfihar.android.apg.intent.DECRYPT_AND_RETURN" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="*/*"/>
-            </intent-filter>
+                <action android:name="org.thialfihar.android.apg.action.DECRYPT" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <!-- DECRYPT with data Uri -->
+            <intent-filter>
+                <action android:name="org.thialfihar.android.apg.action.DECRYPT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- TODO: accept other schemes! -->
+                <data android:scheme="file" />
+            </intent-filter>
+            <!-- Android's Send Action -->
+            <intent-filter android:label="@string/intent_send_decrypt">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <!-- Linking "Decrypt" to file types -->
+            <intent-filter android:label="@string/intent_decrypt_file">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <!-- Workaround to match files in pathes with dots in them, like /cdcard/my.folder/test.gpg -->
+                <data android:pathPattern=".*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+            </intent-filter>
+            <intent-filter android:label="@string/intent_decrypt_file">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.asc" />
+                <data android:pathPattern=".*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+            </intent-filter>
         </activity>
-
         <activity
-            android:name=".GeneralActivity"
-            android:label="@string/app_name"
-            android:configChanges="keyboardHidden|orientation|keyboard"
-            android:theme="@android:style/Theme.Dialog">
-
+            android:name=".ui.UploadKeyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_send_key" />
+        <activity
+            android:name=".ui.PreferencesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_preferences" >
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="*/*" android:scheme="file"/>
+                <action android:name="org.thialfihar.android.apg.ui.PREFS_GEN" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="org.thialfihar.android.apg.ui.PREFS_ADV" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/*" android:scheme=""/>
-            </intent-filter>
-
         </activity>
-
         <activity
-            android:name=".MailListActivity"
-            android:label="@string/title_mailInbox"
-            android:configChanges="keyboardHidden|orientation|keyboard"/>
-
+            android:name=".ui.PreferencesKeyServerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_key_server_preference"
+            android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".KeyServerQueryActivity"
-            android:label="@string/title_keyServerQuery"
-            android:configChanges="keyboardHidden|orientation|keyboard"/>
-
+            android:name=".ui.CertifyKeyActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_certify_key" />
         <activity
-            android:name=".PreferencesActivity"
-            android:label="@string/title_preferences"
-            android:configChanges="keyboardHidden|orientation|keyboard"/>
+            android:name=".ui.ImportKeysActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_import_keys"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
 
+            <!-- VIEW with fingerprint scheme:
+                      Handle URIs with fingerprints when scanning directly from Barcode Scanner -->
+            <intent-filter android:label="@string/intent_import_key">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!-- Android's scheme matcher is case-sensitive, so include most likely variations -->
+                <data android:scheme="openpgp4fpr" />
+                <data android:scheme="OPENPGP4FPR" />
+                <data android:scheme="OpenPGP4FPR" />
+                <data android:scheme="OpenPGP4Fpr" />
+                <data android:scheme="OpenPGP4fpr" />
+            </intent-filter>
+            <!-- VIEW with mimeType: Allows to import keys (attached to emails) from email apps  -->
+            <intent-filter android:label="@string/intent_import_key">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <!-- mime type as defined in http://tools.ietf.org/html/rfc3156 -->
+                <data android:mimeType="application/pgp-keys" />
+            </intent-filter>
+            <!-- NFC: Handle NFC tags detected from outside our application -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- mime type as defined in http://tools.ietf.org/html/rfc3156 -->
+                <data android:mimeType="application/pgp-keys" />
+            </intent-filter>
+            <!-- VIEW with file endings: *.gpg (e.g. to import from OI File Manager) -->
+            <intent-filter android:label="@string/intent_import_key">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:pathPattern=".*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.gpg" />
+            </intent-filter>
+            <!-- VIEW with file endings: *.asc -->
+            <intent-filter android:label="@string/intent_import_key">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="*" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.asc" />
+                <data android:pathPattern=".*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
+            </intent-filter>
+            <!-- Keychain's own Actions -->
+            <!-- IMPORT_KEY with files TODO: does this work? -->
+            <intent-filter android:label="@string/intent_import_key">
+                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <!-- IMPORT_KEY with mimeType 'application/pgp-keys' -->
+            <intent-filter>
+                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- mime type as defined in http://tools.ietf.org/html/rfc3156, section 7 -->
+                <data android:mimeType="application/pgp-keys" />
+            </intent-filter>
+            <!-- IMPORT_KEY without mimeType to allow import with extras Bundle -->
+            <intent-filter android:label="@string/intent_import_key">
+                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY" />
+                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY_FROM_QR_CODE" />
+                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY_FROM_KEYSERVER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
-            android:name=".KeyServerPreferenceActivity"
-            android:label="@string/title_keyServerPreference"
-            android:configChanges="keyboardHidden|orientation|keyboard"/>
+            android:name=".ui.HelpActivity"
+            android:label="@string/title_help" />
 
-        <service android:name=".Service" />
+        <!-- Internal services/content providers (not exported) -->
+        <service
+            android:name=".service.PassphraseCacheService"
+            android:exported="false"
+            android:process=":passphrase_cache" />
+        <service
+            android:name="org.thialfihar.android.apg.service.KeychainIntentService"
+            android:exported="false" />
 
         <provider
-            android:readPermission="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"
-            android:name="org.thialfihar.android.apg.provider.DataProvider"
-            android:authorities="org.thialfihar.android.apg.provider"/>
+            android:name="org.thialfihar.android.apg.provider.KeychainProvider"
+            android:authorities="org.thialfihar.android.apg.provider"
+            android:exported="false" />
 
+        <!-- Internal classes of the remote APIs (not exported) -->
+        <activity
+            android:name="org.thialfihar.android.apg.service.remote.RemoteServiceActivity"
+            android:exported="false"
+            android:label="@string/app_name" />
+        <!--android:launchMode="singleTop"-->
+        <!--android:process=":remote_api"-->
+        <activity
+            android:name="org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:exported="false"
+            android:label="@string/title_api_registered_apps" />
+        <activity
+            android:name="org.thialfihar.android.apg.service.remote.AppSettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:exported="false" />
+
+        <!-- OpenPGP Remote API -->
+        <service
+            android:name="org.thialfihar.android.apg.service.remote.OpenPgpService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote_api">
+            <intent-filter>
+                <action android:name="org.openintents.openpgp.IOpenPgpService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="api_version"
+                android:value="1" />
+        </service>
+
+        <!-- Extended Remote API -->
+        <!--<service-->
+        <!--android:name="org.thialfihar.android.apg.service.remote.ExtendedApiService"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="true"-->
+        <!--android:process=":remote_api">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="org.thialfihar.android.apg.service.remote.IExtendedApiService" />-->
+        <!--</intent-filter>-->
+        <!--</service>-->
+
+        <!-- TODO: authority! Make this API with content provider uris -->
+        <!-- <provider -->
+        <!-- android:name="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
+        <!-- android:authorities="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
+        <!-- android:permission="org.thialfihar.android.apg.permission.ACCESS_API" /> -->
     </application>
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="5" />
-
-    <permission android:name="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"
-                android:protectionLevel="dangerous"
-                android:label="@string/permission_read_key_details_label"
-                android:description="@string/permission_read_key_details_description"/>
-
-    <uses-permission android:name="com.google.android.providers.gmail.permission.READ_GMAIL" />
-    <uses-permission android:name="com.google.android.gm.permission.READ_GMAIL" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.fsck.k9.permission.READ_ATTACHMENT" />
-    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

@@ -23,14 +23,15 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 public class KeyServerEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;
 
-    ImageButton mDeleteButton;
+    BootstrapButton mDeleteButton;
     TextView mServer;
 
     public KeyServerEditor(Context context) {
@@ -48,7 +49,7 @@ public class KeyServerEditor extends LinearLayout implements Editor, OnClickList
 
         mServer = (TextView) findViewById(R.id.server);
 
-        mDeleteButton = (ImageButton) findViewById(R.id.delete);
+        mDeleteButton = (BootstrapButton) findViewById(R.id.delete);
         mDeleteButton.setOnClickListener(this);
 
         super.onFinishInflate();
@@ -63,7 +64,7 @@ public class KeyServerEditor extends LinearLayout implements Editor, OnClickList
     }
 
     public void onClick(View v) {
-        final ViewGroup parent = (ViewGroup)getParent();
+        final ViewGroup parent = (ViewGroup) getParent();
         if (v == mDeleteButton) {
             parent.removeView(this);
             if (mEditorListener != null) {

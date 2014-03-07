@@ -20,30 +20,32 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import java.util.Vector;
 
-import org.bouncycastle2.openpgp.PGPPublicKey;
-import org.bouncycastle2.openpgp.PGPSecretKey;
-import org.thialfihar.android.apg.Apg;
+import org.spongycastle.openpgp.PGPPublicKey;
+import org.spongycastle.openpgp.PGPSecretKey;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.utils.Choice;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.util.Choice;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     private PGPSecretKey mKey;
@@ -51,21 +53,26 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;
 
     private boolean mIsMasterKey;
-    ImageButton mDeleteButton;
+    BootstrapButton mDeleteButton;
     TextView mAlgorithm;
     TextView mKeyId;
     Spinner mUsage;
     TextView mCreationDate;
-    Button mExpiryDateButton;
+    BootstrapButton mExpiryDateButton;
+    GregorianCalendar mCreatedDate;
     GregorianCalendar mExpiryDate;
 
-    private DatePickerDialog.OnDateSetListener mExpiryDateSetListener =
-            new DatePickerDialog.OnDateSetListener() {
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    GregorianCalendar date = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-                    setExpiryDate(date);
-                }
-            };
+    private int mDatePickerResultCount = 0;
+    private DatePickerDialog.OnDateSetListener mExpiryDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            // Note: Ignore results after the first one - android sends multiples.
+            if (mDatePickerResultCount++ == 0) {
+                GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+                date.set(year, monthOfYear, dayOfMonth);
+                setExpiryDate(date);
+            }
+        }
+    };
 
     public KeyEditor(Context context) {
         super(context);
@@ -83,23 +90,21 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         mAlgorithm = (TextView) findViewById(R.id.algorithm);
         mKeyId = (TextView) findViewById(R.id.keyId);
         mCreationDate = (TextView) findViewById(R.id.creation);
-        mExpiryDateButton = (Button) findViewById(R.id.expiry);
+        mExpiryDateButton = (BootstrapButton) findViewById(R.id.expiry);
         mUsage = (Spinner) findViewById(R.id.usage);
         Choice choices[] = {
-                new Choice(Id.choice.usage.sign_only,
-                           getResources().getString(R.string.choice_signOnly)),
-                new Choice(Id.choice.usage.encrypt_only,
-                           getResources().getString(R.string.choice_encryptOnly)),
-                new Choice(Id.choice.usage.sign_and_encrypt,
-                           getResources().getString(R.string.choice_signAndEncrypt)),
-        };
-        ArrayAdapter<Choice> adapter =
-                new ArrayAdapter<Choice>(getContext(),
-                                         android.R.layout.simple_spinner_item, choices);
+                new Choice(Id.choice.usage.sign_only, getResources().getString(
+                        R.string.choice_sign_only)),
+                new Choice(Id.choice.usage.encrypt_only, getResources().getString(
+                        R.string.choice_encrypt_only)),
+                new Choice(Id.choice.usage.sign_and_encrypt, getResources().getString(
+                        R.string.choice_sign_and_encrypt)), };
+        ArrayAdapter<Choice> adapter = new ArrayAdapter<Choice>(getContext(),
+                android.R.layout.simple_spinner_item, choices);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mUsage.setAdapter(adapter);
 
-        mDeleteButton = (ImageButton) findViewById(R.id.delete);
+        mDeleteButton = (BootstrapButton) findViewById(R.id.delete);
         mDeleteButton.setOnClickListener(this);
 
         setExpiryDate(null);
@@ -108,22 +113,43 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
             public void onClick(View v) {
                 GregorianCalendar date = mExpiryDate;
                 if (date == null) {
-                    date = new GregorianCalendar();
+                    date = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
                 }
-
-                DatePickerDialog dialog =
-                        new DatePickerDialog(getContext(), mExpiryDateSetListener,
-                                             date.get(Calendar.YEAR),
-                                             date.get(Calendar.MONTH),
-                                             date.get(Calendar.DAY_OF_MONTH));
+                /*
+                 * Using custom DatePickerDialog which overrides the setTitle because
+                 * the DatePickerDialog title is buggy (unix warparound bug).
+                 * See: https://code.google.com/p/android/issues/detail?id=49066
+                 */
+                DatePickerDialog dialog = new ExpiryDatePickerDialog(getContext(),
+                        mExpiryDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH),
+                        date.get(Calendar.DAY_OF_MONTH));
+                mDatePickerResultCount = 0;
                 dialog.setCancelable(true);
                 dialog.setButton(Dialog.BUTTON_NEGATIVE,
-                                 getContext().getString(R.string.btn_noDate),
-                                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        setExpiryDate(null);
+                        getContext().getString(R.string.btn_no_date),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Note: Ignore results after the first one - android sends multiples.
+                                if (mDatePickerResultCount++ == 0) {
+                                    setExpiryDate(null);
+                                }
+                            }
+                        });
+
+                // setCalendarViewShown() is supported from API 11 onwards.
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB)
+                    // Hide calendarView in tablets because of the unix warparound bug.
+                    dialog.getDatePicker().setCalendarViewShown(false);
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                    if ( dialog != null && mCreatedDate != null ) {
+                        dialog.getDatePicker().setMinDate(mCreatedDate.getTime().getTime()+ DateUtils.DAY_IN_MILLIS);
+                    } else {
+                        //When created date isn't available
+                        dialog.getDatePicker().setMinDate(date.getTime().getTime()+ DateUtils.DAY_IN_MILLIS);
                     }
-                });
+                }
+
                 dialog.show();
             }
         });
@@ -131,7 +157,15 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         super.onFinishInflate();
     }
 
-    public void setValue(PGPSecretKey key, boolean isMasterKey) {
+    public void setCanEdit(boolean bCanEdit) {
+        if (!bCanEdit) {
+            mDeleteButton.setVisibility(View.INVISIBLE);
+            mUsage.setEnabled(false);
+            mExpiryDateButton.setEnabled(false);
+        }
+    }
+
+    public void setValue(PGPSecretKey key, boolean isMasterKey, int usage) {
         mKey = key;
 
         mIsMasterKey = isMasterKey;
@@ -139,41 +173,48 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
             mDeleteButton.setVisibility(View.INVISIBLE);
         }
 
-        mAlgorithm.setText(Apg.getAlgorithmInfo(key));
-        String keyId1Str = Apg.getSmallFingerPrint(key.getKeyID());
-        String keyId2Str = Apg.getSmallFingerPrint(key.getKeyID() >> 32);
+        mAlgorithm.setText(PgpKeyHelper.getAlgorithmInfo(key));
+        String keyId1Str = PgpKeyHelper.convertKeyIdToHex(key.getKeyID());
+        String keyId2Str = PgpKeyHelper.convertKeyIdToHex(key.getKeyID() >> 32);
         mKeyId.setText(keyId1Str + " " + keyId2Str);
 
         Vector<Choice> choices = new Vector<Choice>();
         boolean isElGamalKey = (key.getPublicKey().getAlgorithm() == PGPPublicKey.ELGAMAL_ENCRYPT);
+        boolean isDSAKey = (key.getPublicKey().getAlgorithm() == PGPPublicKey.DSA);
         if (!isElGamalKey) {
-            choices.add(new Choice(Id.choice.usage.sign_only,
-                                   getResources().getString(R.string.choice_signOnly)));
+            choices.add(new Choice(Id.choice.usage.sign_only, getResources().getString(
+                    R.string.choice_sign_only)));
         }
-        if (!mIsMasterKey) {
-            choices.add(new Choice(Id.choice.usage.encrypt_only,
-                                   getResources().getString(R.string.choice_encryptOnly)));
+        if (!mIsMasterKey && !isDSAKey) {
+            choices.add(new Choice(Id.choice.usage.encrypt_only, getResources().getString(
+                    R.string.choice_encrypt_only)));
         }
-        if (!isElGamalKey) {
-            choices.add(new Choice(Id.choice.usage.sign_and_encrypt,
-                                   getResources().getString(R.string.choice_signAndEncrypt)));
+        if (!isElGamalKey && !isDSAKey) {
+            choices.add(new Choice(Id.choice.usage.sign_and_encrypt, getResources().getString(
+                    R.string.choice_sign_and_encrypt)));
         }
 
-        ArrayAdapter<Choice> adapter =
-                new ArrayAdapter<Choice>(getContext(),
-                                         android.R.layout.simple_spinner_item, choices);
+        ArrayAdapter<Choice> adapter = new ArrayAdapter<Choice>(getContext(),
+                android.R.layout.simple_spinner_item, choices);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mUsage.setAdapter(adapter);
 
+        // Set value in choice dropdown to key
         int selectId = 0;
-        if (Apg.isEncryptionKey(key)) {
-            if (Apg.isSigningKey(key)) {
+        if (PgpKeyHelper.isEncryptionKey(key)) {
+            if (PgpKeyHelper.isSigningKey(key)) {
                 selectId = Id.choice.usage.sign_and_encrypt;
             } else {
                 selectId = Id.choice.usage.encrypt_only;
             }
         } else {
-            selectId = Id.choice.usage.sign_only;
+            // set usage if it is predefined
+            if (usage != -1) {
+                selectId = usage;
+            } else {
+                selectId = Id.choice.usage.sign_only;
+            }
+
         }
 
         for (int i = 0; i < choices.size(); ++i) {
@@ -183,17 +224,18 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
             }
         }
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(Apg.getCreationDate(key));
-        mCreationDate.setText(DateFormat.getDateInstance().format(cal.getTime()));
-        cal = new GregorianCalendar();
-        Date date = Apg.getExpiryDate(key);
-        if (date == null) {
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        cal.setTime(PgpKeyHelper.getCreationDate(key));
+        setCreatedDate(cal);
+        cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        Date expiryDate = PgpKeyHelper.getExpiryDate(key);
+        if (expiryDate == null) {
             setExpiryDate(null);
         } else {
-            cal.setTime(Apg.getExpiryDate(key));
+            cal.setTime(PgpKeyHelper.getExpiryDate(key));
             setExpiryDate(cal);
         }
+
     }
 
     public PGPSecretKey getValue() {
@@ -201,7 +243,7 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     }
 
     public void onClick(View v) {
-        final ViewGroup parent = (ViewGroup)getParent();
+        final ViewGroup parent = (ViewGroup) getParent();
         if (v == mDeleteButton) {
             parent.removeView(this);
             if (mEditorListener != null) {
@@ -214,10 +256,19 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         mEditorListener = listener;
     }
 
+    private void setCreatedDate(GregorianCalendar date) {
+        mCreatedDate = date;
+        if (date == null) {
+            mCreationDate.setText(getContext().getString(R.string.none));
+        } else {
+            mCreationDate.setText(DateFormat.getDateInstance().format(date.getTime()));
+        }
+    }
+
     private void setExpiryDate(GregorianCalendar date) {
         mExpiryDate = date;
         if (date == null) {
-            mExpiryDateButton.setText(R.string.none);
+            mExpiryDateButton.setText(getContext().getString(R.string.none));
         } else {
             mExpiryDateButton.setText(DateFormat.getDateInstance().format(date.getTime()));
         }
@@ -229,5 +280,17 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
 
     public int getUsage() {
         return ((Choice) mUsage.getSelectedItem()).getId();
+    }
+
+}
+
+class ExpiryDatePickerDialog extends DatePickerDialog {
+
+    public ExpiryDatePickerDialog(Context context, OnDateSetListener callBack, int year, int monthOfYear, int dayOfMonth) {
+        super(context, callBack, year, monthOfYear, dayOfMonth);
+    }
+    //Set permanent title.
+    public void setTitle(CharSequence title) {
+        super.setTitle(getContext().getString(R.string.expiry_date_dialog_title));
     }
 }

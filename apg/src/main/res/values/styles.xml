@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-
 <resources>
-    <style name="MinusButton">
-        <item name="android:background">@drawable/btn_circle</item>
-        <item name="android:src">@drawable/ic_btn_round_minus</item>
+    <!-- Used in Android < 4 -->
+
+
+    <style name="KeychainTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:alertDialogStyle">@style/CustomDialogTheme</item>
     </style>
 
-    <style name="PlusButton">
-        <item name="android:background">@drawable/btn_circle</item>
-        <item name="android:src">@drawable/ic_btn_round_plus</item>
+    <!-- Ugly fix to make content background of Dialogs on Android < 4 white not black! -->
+    <style name="CustomDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:fullDark">@drawable/popup_full_bright</item>
+        <!--<item name="android:topDark">@android:drawable/popup_full_dark</item>-->
+        <item name="android:centerDark">@drawable/popup_center_bright</item>
+        <!--<item name="android:bottomDark">@android:drawable/popup_bottom_dark</item>-->
+        <!--<item name="fullBright">@android:drawable/popup_full_bright</item>-->
+        <!--<item name="topBright">@android:drawable/popup_top_bright</item>-->
+        <!--<item name="centerBright">@android:drawable/popup_center_bright</item>-->
+        <!--<item name="bottomBright">@android:drawable/popup_bottom_bright</item>-->
+        <!--<item name="bottomMedium">@android:drawable/popup_bottom_medium</item>-->
+        <!--<item name="centerMedium">@android:drawable/popup_center_medium</item>-->
     </style>
+
+    <style name="SectionHeader">
+        <item name="android:drawableBottom">@drawable/section_header</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:textColor">@color/emphasis</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+
 </resources>

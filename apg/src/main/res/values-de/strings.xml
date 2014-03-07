@@ -1,284 +1,390 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
-
-     Author: Christian Woehrl <chw@wort-und-satz.de>
--->
-
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">APG</string>
-
-    <!-- title_lowerCase: capitalized words, no punctuation -->
-    <string name="title_mailInbox">Posteingang</string>
-    <string name="title_managePublicKeys">Öffentliche Schlüssel verwalten</string>
-    <string name="title_manageSecretKeys">Private Schlüssel verwalten</string>
-    <string name="title_selectRecipients">Empfänger auswählen</string>
-    <string name="title_selectSignature">Signatur auswählen</string>
-    <string name="title_encrypt">Verschlüsseln</string>
-    <string name="title_decrypt">Entschlüsseln</string>
-    <string name="title_authentication">Passwort</string>
-    <string name="title_createKey">Schlüssel erzeugen</string>
-    <string name="title_editKey">Schlüssel bearbeiten</string>
-    <string name="title_preferences">Einstellungen</string>
-    <string name="title_changePassPhrase">Passwort ändern</string>
-    <string name="title_setPassPhrase">Passwort wählen</string>
-    <string name="title_sendEmail">"Mail senden ..."</string>
-    <string name="title_encryptToFile">In eine Datei verschlüsseln</string>
-    <string name="title_decryptToFile">In eine Datei entschlüsseln</string>
-    <string name="title_importKeys">Schlüssel importieren</string>
-    <string name="title_exportKey">Einzelnen Schlüssel exportieren</string>
-    <string name="title_exportKeys">Mehrere Schlüssel exportieren</string>
-    <string name="title_keyNotFound">Kein Schlüssel gefunden</string>
-
-    <!-- section_lowerCase: capitalized words, no punctuation -->
-    <string name="section_userIds">Benutzer-IDs</string>
-    <string name="section_keys">Schlüssel</string>
-    <string name="section_general">Allgemein</string>
-    <string name="section_defaults">Voreinstellungen</string>
-
-    <!-- btn_lowerCase: capitalized words, no punctuation -->
-
-    <string name="btn_encryptToClipboard">In die Zwischenablage verschlüsseln</string>
-    <string name="btn_encryptAndEmail">Verschlüsseln und per Mail senden</string>
-    <string name="btn_encrypt">Verschlüsseln</string>
-    <string name="btn_decrypt">Entschlüsseln</string>
-    <string name="btn_verify">Verifizieren</string>
-    <string name="btn_selectEncryptKeys">Empfänger auswählen</string>
-    <string name="btn_reply">Antworten</string>
-    <string name="btn_encryptMessage">Nachricht verschlüsseln</string>
-    <string name="btn_decryptMessage">Nachricht entschlüsseln</string>
-    <string name="btn_encryptFile">Datei verschlüsseln</string>
-    <string name="btn_decryptFile">Datei entschlüsseln</string>
-    <string name="btn_save">Speichern</string>
-    <string name="btn_doNotSave">Abbrechen</string>
-    <string name="btn_delete">Löschen</string>
-    <string name="btn_noDate">Niemals</string>
-    <string name="btn_clearFilter">Filter zurücksetzen</string>
-    <string name="btn_changePassPhrase">Passwort ändern</string>
-    <string name="btn_setPassPhrase">Passwort wählen</string>
-
-    <!-- menu_lowerCase: capitalized words, no punctuation -->
-    <string name="menu_about">Über</string>
-    <string name="menu_managePublicKeys">Öffentliche Schlüssel verwalten</string>
-    <string name="menu_manageSecretKeys">Private Schlüssel verwalten</string>
-    <string name="menu_preferences">Einstellungen</string>
-    <string name="menu_importKeys">Schlüssel importieren</string>
-    <string name="menu_exportKeys">Mehrere Schlüssel exportieren</string>
-    <string name="menu_exportKey">Einzelnen Schlüssel exportieren</string>
-    <string name="menu_deleteKey">Einzelnen Schlüssel löschen</string>
-    <string name="menu_createKey">Schlüssel erzeugen</string>
-    <string name="menu_editKey">Schlüssel bearbeiten</string>
-    <string name="menu_search">Suche</string>
-
-    <!-- label_lowerCase: capitalized words, no punctuation -->
-    <string name="label_sign">Signieren</string>
-    <string name="label_message">Nachricht</string>
-    <string name="label_file">Datei</string>
-    <string name="label_passPhrase">Passwort</string>
-    <string name="label_passPhraseAgain">Wiederholen</string>
-    <string name="label_algorithm">Algorithmus</string>
-    <string name="label_asciiArmour">ASCII Armor</string>
-    <string name="label_selectPublicKeys">Öffentliche(r) Schlüssel</string>
-    <string name="label_deleteAfterEncryption">Nach Verschlüsselung löschen</string>
-    <string name="label_deleteAfterDecryption">Nach Entschlüsselung löschen</string>
-    <string name="label_encryptionAlgorithm">Verschlüsselungs-Algorithmus</string>
-    <string name="label_hashAlgorithm">Hash-Algorithmus</string>
-    <string name="label_asymmetric">Öffentlicher Schlüssel</string>
-    <string name="label_symmetric">Passwort</string>
-    <string name="label_passPhraseCacheTtl">Passwort-Cache</string>
-    <string name="label_messageCompression">Nachrichten-Kompression</string>
-    <string name="label_fileCompression">Datei-Kompression</string>
-
-    <string name="noKeysSelected">Auswählen</string>
-    <string name="oneKeySelected">1 ausgewählt</string>
-    <string name="nKeysSelected">Ausgewählt</string>
-    <string name="unknownUserId">&lt;Unbekannt&gt;</string>
-
-    <string name="none">&lt;Kein&gt;</string>
-    <string name="noKey">&lt;Kein Schlüssel&gt;</string>
-    <string name="noDate">-</string>
-    <string name="noExpiry">&lt;Kein Verfallsdatum&gt;</string>
-    <string name="unknownStatus"></string>
-    <string name="canEncrypt">Kann verschlüsseln</string>
-
-    <string name="canSign">Kann signieren</string>
-    <string name="expired">Verfallen</string>
-    <string name="notValid">Ungültig</string>
-
-    <!-- choice_lowerCase: capitalized first word, no punctuation -->
-    <string name="choice_none">Keine Auswahl</string>
-    <string name="choice_signOnly">Nur signieren</string>
-
-    <string name="choice_encryptOnly">Nur verschlüsseln</string>
-    <string name="choice_signAndEncrypt">Signieren und verschlüsseln</string>
-    <string name="choice_15secs">15 Sek.</string>
-    <string name="choice_1min">1 Min.</string>
-    <string name="choice_3mins">3 Min.</string>
-    <string name="choice_5mins">5 Min.</string>
-    <string name="choice_10mins">10 Min.</string>
-    <string name="choice_20mins">20 Min.</string>
-    <string name="choice_40mins">40 Min.</string>
-    <string name="choice_1hour">1 Std.</string>
-    <string name="choice_2hours">2 Std.</string>
-    <string name="choice_4hours">4 Std.</string>
-    <string name="choice_8hours">8 Std.</string>
-    <string name="choice_untilQuit">Bis Programmende</string>
-
-    <string name="dsa">DSA</string>
-    <string name="elgamal">ElGamal</string>
-    <string name="rsa">RSA</string>
-
-    <string name="filemanager_titleOpen">Öffnen ...</string>
-    <string name="filemanager_titleSave">Speichern unter ...</string>
-    <string name="filemanager_titleEncrypt">Zu entschlüsselnde Datei wählen ...</string>
-    <string name="filemanager_titleDecrypt">Zu verschlüsselnde Datei wählen ...</string>
-    <string name="filemanager_btnOpen">Öffnen</string>
-    <string name="filemanager_btnSave">Speichern</string>
-
-    <string name="warning">Achtung</string>
-    <string name="error">Fehler</string>
-    <string name="warningMessage">Achtung: %s</string>
-    <string name="errorMessage">Fehler: %s</string>
-
-    <!-- sentences -->
-    <string name="wrongPassPhrase">Falsches Passwort.</string>
-
-    <string name="usingClipboardContent">Zwischenablage wird verwendet.</string>
-    <string name="keySaved">Schlüssel gespeichert.</string>
-    <string name="setAPassPhrase">Zuerst Passwort festlegen.</string>
-    <string name="noFilemanagerInstalled">Kein kompatibler Dateimanager installiert.</string>
-    <string name="passPhrasesDoNotMatch">Passwörter stimmen nicht überein.</string>
-    <string name="passPhraseMustNotBeEmpty">Leere Passwörter sind unzulässig.</string>
-    <string name="passPhraseForSymmetricEncryption">Symmetrische Verschlüsselung.</string>
-    <string name="passPhraseFor">%s</string>
-    <string name="fileDeleteConfirmation">Soll\n%s wirklich gelöscht werden?</string>
-    <string name="fileDeleteSuccessful">Erfolgreich gelöscht.</string>
-    <string name="noFileSelected">Zuerst eine Datei auswählen.</string>
-    <string name="decryptionSuccessful">Entschlüsselung erfolgreich.</string>
-
-    <string name="encryptionSuccessful">Verschlüsselung erfolgreich.</string>
-    <string name="encryptionToClipboardSuccessful">Verschlüsselung in die Zwischenablage erfolgreich.</string>
-    <string name="enterPassPhraseTwice">Passwort bitte zwei Mal eingeben.</string>
-    <string name="selectEncryptionKey">Bitte mindestens einen Schlüssel zur Verschlüsselung auswählen.</string>
-    <string name="selectEncryptionOrSignatureKey">Bitte mindestens einen Schlüssel zur Verschlüsselung oder zum Signieren auswählen.</string>
-    <string name="specifyFileToEncryptTo">Bitte Zieldatei für Verschlüsselung angeben.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
-
-    <string name="specifyFileToDecryptTo">Bitte Zieldatei für Entschlüsselung angeben.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
-    <string name="specifyFileToImportFrom">Bitte Datei angeben, aus der Schlüssel importiert werden sollen. (.asc oder .gpg)</string>
-    <string name="specifyFileToExportTo">Bitte Zieldatei zum Export angeben.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
-    <string name="specifyFileToExportSecretKeysTo">Bitte Zieldatei zum Export angeben.\nACHTUNG! Es sollen private Schlüssel exportiert werden.\nACHTUNG! Vorhandene Datei gleichen Namens wird überschrieben.</string>
-    <string name="keyDeletionConfirmation">Soll der Schlüssel \'%s\' wirklich gelöscht werden?\nDiese Aktion lässt sich nicht rückgängig machen!</string>
-
-    <string name="secretKeyDeletionConfirmation">Soll der PRIVATE Schlüssel \'%s\' wirklich gelöscht werden?\nDiese Aktion lässt sich nicht rückgängig machen!</string>
-    <string name="keysAddedAndUpdated">Erfolgreich %1$s Schlüssel hinzugefügt und %2$s Schlüssel aktualisiert.</string>
-    <string name="keysAdded">Erfolgreich %s Schlüssel hinzugefügt.</string>
-    <string name="keysUpdated">Erfolgreich %s Schlüssel aktualisiert.</string>
-    <string name="noKeysAddedOrUpdated">Keine Schlüssel hinzugefügt oder aktualisiert.</string>
-    <string name="keyExported">Erfolgreich 1 Schlüssel exportiert.</string>
-
-    <string name="keysExported"> Erfolgreich %s Schlüssel exportiert.</string>
-    <string name="noKeysExported">Kein Schlüssel exportiert.</string>
-    <string name="keyCreationElGamalInfo">Hinweis: Nur Subschlüssel unterstützen ElGamal, und für ElGamal wird die nächstmögliche Schlüssellänge 1536, 2048, 3072, 4096 oder 8192 genutzt.</string>
-    <string name="keyNotFound">Es konnte kein Schlüssel %08X gefunden werden.</string>
-
-    <!-- error_lowerCase: phrases, no punctuation, all lowercase,
-         they will be put after "errorMessage", e.g. "Error: file not found" -->
-    <string name="error_fileDeleteFailed">Löschen von \'%s\' fehlgeschlagen</string>
-
-    <string name="error_fileNotFound">Datei nicht gefunden</string>
-    <string name="error_noSecretKeyFound">Kein geeigneter privater Schlüssel gefunden</string>
-    <string name="error_noKnownEncryptionFound">Keine bekannte Verschlüsselungsmethode gefunden</string>
-    <string name="error_externalStorageNotReady">Externer Speicher nicht bereit</string>
-
-    <string name="error_invalidEmail">Ungültige E-Mail \'%s\'</string>
-    <string name="error_keySizeMinimum512bit">Schlüssellänge von mindestens 512bit erforderlich</string>
-    <string name="error_masterKeyMustNotBeElGamal">Primärschlüssel darf kein ElGamal-Schlüssel sein</string>
-    <string name="error_unknownAlgorithmChoice">Unbekannter Algorithmus ausgewählt</string>
-    <string name="error_userIdNeedsAName">Angabe eines Namens erforderlich</string>
-    <string name="error_userIdNeedsAnEmailAddress">Angabe einer E-Mail-Adresse erforderlich</string>
-
-    <string name="error_keyNeedsAUserId">Mindestens eine Benutzer-ID erforderlich</string>
-    <string name="error_mainUserIdMustNotBeEmpty">Haupt-Benutzer-ID darf nicht leer bleiben</string>
-    <string name="error_keyNeedsMasterKey">Mindestens ein Primärschlüssel erforderlich</string>
-    <string name="error_expiryMustComeAfterCreation">Verfallsdatum muss später als Erstellungsdatum liegen</string>
-    <string name="error_noEncryptionKeysOrPassPhrase">Kein(e) Schlüssel oder Passwort zur Verschlüsselung angegeben</string>
-    <string name="error_signatureFailed">Signieren fehlgeschlagen</string>
-
-    <string name="error_noSignaturePassPhrase">Kein Passwort angegeben</string>
-    <string name="error_noSignatureKey">Kein Schlüssel zum Signieren angegeben</string>
-    <string name="error_invalidData">Keine gültigen Verschlüsselungsdaten</string>
-    <string name="error_corruptData">Daten nicht lesbar</string>
-    <string name="error_noSymmetricEncryptionPacket">Kein Paket mit symmetrischer Verschlüsselung gefunden</string>
-    <string name="error_wrongPassPhrase">Falsches Passwort</string>
-
-    <string name="error_savingKeys">Fehler beim Abspeichern eines oder mehrerer Schlüssel</string>
-
-    <!-- progress_lowerCase: lowercase, phrases, usually ending in '...' -->
-    <string name="progress_done">Abgeschlossen.</string>
-    <string name="progress_initializing">Initialisierung ...</string>
-    <string name="progress_saving">Speicherung ...</string>
-    <string name="progress_importing">Import ...</string>
-
-    <string name="progress_exporting">Export ...</string>
-    <string name="progress_generating">Schlüssel wird erzeugt, dies kann eine Weile dauern ...</string>
-    <string name="progress_buildingKey">Schlüssel wird erstellt ...</string>
-    <string name="progress_preparingMasterKey">Primärschlüssel wird vorbereitet ...</string>
-    <string name="progress_certifyingMasterKey">Primärschlüssel wird zertifiziert ...</string>
-    <string name="progress_buildingMasterKeyRing">Primärschlüsselbund wird erstellt ...</string>
-
-    <string name="progress_addingSubKeys">Unterschlüssel werden hinzugefügt ...</string>
-    <string name="progress_savingKeyRing">Schlüsselbund wird gespeichert ...</string>
-    <string name="progress_importingSecretKeys">Private Schlüssel werden importiert ...</string>
-    <string name="progress_importingPublicKeys">Öffentliche Schlüssel werden importiert ...</string>
-    <string name="progress_reloadingKeys">Schlüssel werden neu geladen ...</string>
-    <string name="progress_exportingKey">Schlüssel wird exportiert ...</string>
-
-    <string name="progress_exportingKeys">Schlüssel werden exportiert ...</string>
-    <string name="progress_extractingSignatureKey">Signaturschlüssel wird extrahiert ...</string>
-    <string name="progress_extractingKey">Schlüssel wird extrahiert ...</string>
-    <string name="progress_preparingStreams">Daten werden vorbereitet ...</string>
-    <string name="progress_encrypting">Daten werden verschlüsselt ...</string>
-    <string name="progress_decrypting">Daten werden entschlüsselt ...</string>
-
-    <string name="progress_preparingSignature">Signatur wird vorbereitet ...</string>
-    <string name="progress_generatingSignature">Signatur wird erzeugt ...</string>
-    <string name="progress_processingSignature">Signatur wird verarbeitet...</string>
-    <string name="progress_verifyingSignature">Signatur wird verifiziert ...</string>
-    <string name="progress_signing">Signieren ...</string>
-    <string name="progress_readingData">Daten werden gelesen ...</string>
-
-    <string name="progress_findingKey">Schlüssel wird gesucht ...</string>
-    <string name="progress_decompressingData">Daten werden dekomprimiert ...</string>
-    <string name="progress_verifyingIntegrity">Integrität wird verifiziert ...</string>
-
-    <!-- permission strings -->
-    <string name="permission_read_key_details_label">Schlüsseldetails von APG auslesen.</string>
-    <string name="permission_read_key_details_description">Details der öffentlichen und privaten Schlüssel können von APG ausgelesen werden, etwa Schlüssel-ID und Benutzer-IDs. Die Schlüssel selbst können NICHT gelesen werden.</string>
-
-    <!-- action strings -->
-    <string name="action_encrypt">Verschlüsseln</string>
-    <string name="action_decrypt">Entschlüsseln</string>
-    <string name="action_importPublic">Öffentliche Schlüssel importieren</string>
-    <string name="action_importSecret">Private Schlüssel importieren</string>
-    <string name="hint_publicKeys">Öffentliche Schlüssel suchen</string>
-
-    <string name="hint_secretKeys">Private Schlüssel suchen</string>
-    <string name="filterInfo">Filter: \"%s\"</string>
-
-    <!-- misc -->
-    <string name="fast">schnell</string>
-    <string name="slow">langsam</string>
-    <string name="very_slow">sehr langsam</string>
-
+  <!--title-->
+  <string name="title_manage_public_keys">Kontakte</string>
+  <string name="title_manage_secret_keys">Private Schlüssel</string>
+  <string name="title_select_recipients">Öffentlichen Schlüssel auswählen</string>
+  <string name="title_select_secret_key">Privaten Schlüssel auswählen</string>
+  <string name="title_encrypt">Verschlüsseln</string>
+  <string name="title_decrypt">Entschlüsseln</string>
+  <string name="title_authentication">Passwort</string>
+  <string name="title_create_key">Schlüssel erstellen</string>
+  <string name="title_edit_key">Schlüssel bearbeiten</string>
+  <string name="title_preferences">Einstellungen</string>
+  <string name="title_api_registered_apps">Registrierte Anwendungen</string>
+  <string name="title_key_server_preference">Schlüsselserver</string>
+  <string name="title_change_passphrase">Passwort ändern</string>
+  <string name="title_set_passphrase">Passwort setzen</string>
+  <string name="title_send_email">E-Mail senden…</string>
+  <string name="title_encrypt_to_file">In eine Datei verschlüsseln</string>
+  <string name="title_decrypt_to_file">In eine Datei entschlüsseln</string>
+  <string name="title_import_keys">Schlüssel importieren</string>
+  <string name="title_export_key">Schlüssel exportieren</string>
+  <string name="title_export_keys">Schlüssel exportieren</string>
+  <string name="title_key_not_found">Schlüssel nicht gefunden</string>
+  <string name="title_key_server_query">Schlüsselserver abfragen</string>
+  <string name="title_send_key">Auf Schlüsselserver hochladen</string>
+  <string name="title_unknown_signature_key">Unbekannter Signaturschlüssel</string>
+  <string name="title_certify_key">Schlüssel beglaubigen</string>
+  <string name="title_key_details">Schlüsseldetails</string>
+  <string name="title_help">Hilfe</string>
+  <!--section-->
+  <string name="section_user_ids">Benutzer-IDs</string>
+  <string name="section_keys">Schlüssel</string>
+  <string name="section_general">Allgemein</string>
+  <string name="section_defaults">Standardwerte</string>
+  <string name="section_advanced">Fortgeschrittene Einstellungen</string>
+  <string name="section_master_key">Hauptschlüssel</string>
+  <string name="section_master_user_id">Hauptbenutzer-ID</string>
+  <string name="section_actions">Aktionen</string>
+  <string name="section_certification_key">Mit diesem Schlüssel beglaubigen</string>
+  <string name="section_upload_key">Schlüssel hochladen</string>
+  <string name="section_key_server">Schlüsselserver</string>
+  <string name="section_encrypt_and_or_sign">Verschlüsseln und/oder Signieren</string>
+  <string name="section_decrypt_verify">Entschlüsseln und Verifizieren</string>
+  <!--button-->
+  <string name="btn_sign">Signieren</string>
+  <string name="btn_certify">Beglaubigen</string>
+  <string name="btn_decrypt">Entschlüsseln</string>
+  <string name="btn_decrypt_verify">Entschlüsseln und Verifizieren</string>
+  <string name="btn_select_encrypt_keys">Empfänger auswählen</string>
+  <string name="btn_encrypt_file">Datei verschlüsseln</string>
+  <string name="btn_save">Speichern</string>
+  <string name="btn_do_not_save">Abbrechen</string>
+  <string name="btn_delete">Löschen</string>
+  <string name="btn_no_date">Keine</string>
+  <string name="btn_okay">Okay</string>
+  <string name="btn_change_passphrase">Passwort ändern</string>
+  <string name="btn_set_passphrase">Passwort setzen</string>
+  <string name="btn_search">Suchen</string>
+  <string name="btn_export_to_server">Auf Schlüsselserver hochladen</string>
+  <string name="btn_next">Weiter</string>
+  <string name="btn_back">Zurück</string>
+  <string name="btn_clipboard">Zwischenablage</string>
+  <string name="btn_share">Teilen mit…</string>
+  <string name="btn_lookup_key">Schlüssel nachschlagen</string>
+  <!--menu-->
+  <string name="menu_preferences">Einstellungen</string>
+  <string name="menu_help">Hilfe</string>
+  <string name="menu_import_from_file">Datei</string>
+  <string name="menu_import_from_qr_code">QR-Code</string>
+  <string name="menu_import">Importieren</string>
+  <string name="menu_import_from_nfc">NFC</string>
+  <string name="menu_export_keys">Alle Schlüssel exportieren</string>
+  <string name="menu_export_key">In Datei exportieren</string>
+  <string name="menu_delete_key">Schlüssel löschen</string>
+  <string name="menu_create_key">Schlüssel erstellen</string>
+  <string name="menu_create_key_expert">Schlüssel erstellen (Experte)</string>
+  <string name="menu_search">Suchen</string>
+  <string name="menu_key_server">Schlüsselserver</string>
+  <string name="menu_update_key">Von einem Schlüsselserver aktualisieren</string>
+  <string name="menu_export_key_to_server">Auf Schlüsselserver hochladen</string>
+  <string name="menu_share">Teilen</string>
+  <string name="menu_share_title_fingerprint">Teile Fingerabdruck…</string>
+  <string name="menu_share_title">Teile gesamten Schlüssel…</string>
+  <string name="menu_share_default_fingerprint">mit…</string>
+  <string name="menu_share_default">mit…</string>
+  <string name="menu_share_qr_code">mit QR-Code</string>
+  <string name="menu_share_qr_code_fingerprint">mit QR-Code</string>
+  <string name="menu_share_nfc">mit NFC</string>
+  <string name="menu_copy_to_clipboard">In die Zwischenablage kopieren</string>
+  <string name="menu_sign_key">Schlüssel signieren</string>
+  <string name="menu_beam_preferences">Beam-Einstellungen</string>
+  <string name="menu_key_edit_cancel">Abbrechen</string>
+  <string name="menu_encrypt_to">Verschlüsseln nach…</string>
+  <!--label-->
+  <string name="label_sign">Signieren</string>
+  <string name="label_message">Nachricht</string>
+  <string name="label_file">Datei</string>
+  <string name="label_no_passphrase">Kein Passwort</string>
+  <string name="label_passphrase">Passwort</string>
+  <string name="label_passphrase_again">Wiederholen</string>
+  <string name="label_algorithm">Algorithmus</string>
+  <string name="label_ascii_armor">ASCII-Armor</string>
+  <string name="label_select_public_keys">Empfänger</string>
+  <string name="label_delete_after_encryption">Nach Verschlüsselung löschen</string>
+  <string name="label_delete_after_decryption">Nach Entschlüsselung löschen</string>
+  <string name="label_encryption_algorithm">Verschlüsselungsalgorithmus</string>
+  <string name="label_hash_algorithm">Hash-Algorithmus</string>
+  <string name="label_asymmetric">Öffentlicher Schlüssel</string>
+  <string name="label_symmetric">Passwort</string>
+  <string name="label_passphrase_cache_ttl">Passwort-Cache</string>
+  <string name="label_message_compression">Nachrichten-Komprimierung</string>
+  <string name="label_file_compression">Datei-Komprimierung</string>
+  <string name="label_force_v3_signature">Alte OpenPGPv3 Unterschriften erzwingen</string>
+  <string name="label_key_servers">Schlüsselserver</string>
+  <string name="label_key_id">Schlüssel-ID</string>
+  <string name="label_creation">Erstellungsdatum</string>
+  <string name="label_expiry">Ablaufdatum</string>
+  <string name="label_usage">Verwendungszweck</string>
+  <string name="label_key_size">Schlüssellänge</string>
+  <string name="label_main_user_id">Hauptbenutzer-ID</string>
+  <string name="label_name">Name</string>
+  <string name="label_comment">Kommentar</string>
+  <string name="label_email">E-Mail</string>
+  <string name="label_send_key">Schlüssel nach Beglaubigung auf ausgewählten Schlüsselserver hochladen</string>
+  <string name="label_fingerprint">Fingerabdruck</string>
+  <string name="select_keys_button_default">Auswählen</string>
+  <plurals name="select_keys_button">
+    <item quantity="one">%d ausgewählt</item>
+    <item quantity="other">%d ausgewählt</item>
+  </plurals>
+  <string name="user_id_no_name">&lt;kein Name&gt;</string>
+  <string name="none">&lt;keine&gt;</string>
+  <string name="no_key">&lt;kein Schlüssel&gt;</string>
+  <string name="unknown_status"></string>
+  <string name="can_encrypt">kann verschlüsseln</string>
+  <string name="can_sign">kann signieren</string>
+  <string name="expired">abgelaufen</string>
+  <string name="revoked">zurückgezogen</string>
+  <plurals name="n_key_servers">
+    <item quantity="one">%d Schlüsselserver</item>
+    <item quantity="other">%d Schlüsselserver</item>
+  </plurals>
+  <string name="fingerprint">Fingerabdruck:</string>
+  <string name="secret_key">Privater Schlüssel:</string>
+  <!--choice-->
+  <string name="choice_none">Keine</string>
+  <string name="choice_sign_only">Nur Signieren</string>
+  <string name="choice_encrypt_only">Nur Verschlüsseln</string>
+  <string name="choice_sign_and_encrypt">Signieren und Verschlüsseln</string>
+  <string name="choice_15secs">15 s</string>
+  <string name="choice_1min">1 min</string>
+  <string name="choice_3mins">3 min</string>
+  <string name="choice_5mins">5 min</string>
+  <string name="choice_10mins">10 min</string>
+  <string name="choice_20mins">20 min</string>
+  <string name="choice_40mins">40 min</string>
+  <string name="choice_1hour">1 Stunde</string>
+  <string name="choice_2hours">2 Stunden</string>
+  <string name="choice_4hours">4 Stunden</string>
+  <string name="choice_8hours">8 Stunden</string>
+  <string name="choice_forever">für immer</string>
+  <string name="dsa">DSA</string>
+  <string name="elgamal">ElGamal</string>
+  <string name="rsa">RSA</string>
+  <string name="filemanager_title_open">Öffnen…</string>
+  <string name="warning">Warnung</string>
+  <string name="error">Fehler</string>
+  <string name="error_message">Fehler: %s</string>
+  <!--sentences-->
+  <string name="wrong_passphrase">Falsches Passwort.</string>
+  <string name="using_clipboard_content">Verwende Inhalt der Zwischenablage.</string>
+  <string name="set_a_passphrase">Zuerst ein Passwort setzen.</string>
+  <string name="no_filemanager_installed">Kein passender Dateimanager installiert.</string>
+  <string name="passphrases_do_not_match">Die Passwörter stimmten nicht überein.</string>
+  <string name="passphrase_must_not_be_empty">Leere Passwörter sind nicht erlaubt.</string>
+  <string name="passphrase_for_symmetric_encryption">Symmetrische Verschlüsselung.</string>
+  <string name="passphrase_for">Passwort für \'%s\' eingeben</string>
+  <string name="file_delete_confirmation">%s\nwirklich löschen?</string>
+  <string name="file_delete_successful">Erfolgreich gelöscht.</string>
+  <string name="no_file_selected">Zuerst eine Datei auswählen.</string>
+  <string name="decryption_successful">Erfolgreich entschlüsselt.</string>
+  <string name="encryption_successful">Erfolgreich verschlüsselt.</string>
+  <string name="encryption_to_clipboard_successful">Erfolgreich in die Zwischenablage verschlüsselt.</string>
+  <string name="enter_passphrase_twice">Passwort zweimal eingeben.</string>
+  <string name="select_encryption_key">Mindestens einen Schlüssel zum verschlüsseln auswählen.</string>
+  <string name="select_encryption_or_signature_key">Mindestens einen Schlüssel zum Verschlüsseln oder einen zum Signieren auswählen.</string>
+  <string name="specify_file_to_encrypt_to">Bitte angeben, in welche Datei verschlüsselt werden soll.\nWARNUNG: Datei wird überschrieben, wenn sie bereits existiert. </string>
+  <string name="specify_file_to_decrypt_to">Bitte angeben, in welche Datei entschlüsselt werden soll.\nWARNUNG: Datei wird überschrieben, wenn sie bereits existiert. </string>
+  <string name="specify_file_to_export_to">Bitte angeben, in welche Datei exportiert werden soll.\nWARNUNG: Datei wird überschrieben, wenn sie bereits existiert. </string>
+  <string name="specify_file_to_export_secret_keys_to">Bitte angeben, in welche Datei exportiert werden soll.\nWARNUNG! Sie exportieren GEHEIME Schlüssel.\nWARNUNG! Datei wird überschrieben, wenn sie bereits existiert. </string>
+  <string name="key_deletion_confirmation">Soll der Schlüssel \'%s\' wirklich gelöscht werden?\nDies kann nicht rückgängig gemacht werden! </string>
+  <string name="key_deletion_confirmation_multi">Möchtest du wirklich alle ausgewählten Schlüssel löschen?\nDies kann nicht rückgängig gemacht werden!</string>
+  <string name="secret_key_deletion_confirmation">Soll der PRIVATE Schlüssel \'%s\' wirklich gelöscht werden?\nDies kann nicht rückgängig gemacht werden!</string>
+  <plurals name="keys_added_and_updated_1">
+    <item quantity="one">%d Schlüssel erfolgreich hinzugefügt</item>
+    <item quantity="other">%d Schlüssel erfolgreich hinzugefügt</item>
+  </plurals>
+  <plurals name="keys_added_and_updated_2">
+    <item quantity="one">und %d Schlüssel erfolgreich aktualisiert.</item>
+    <item quantity="other">und %d Schlüssel erfolgreich aktualisiert.</item>
+  </plurals>
+  <plurals name="keys_added">
+    <item quantity="one">%d Schlüssel erfolgreich hinzugefügt.</item>
+    <item quantity="other">%d Schlüssel erfolgreich hinzugefügt.</item>
+  </plurals>
+  <plurals name="keys_updated">
+    <item quantity="one">%d Schlüssel erfolgreich aktualisiert.</item>
+    <item quantity="other">%d Schlüssel erfolgreich aktualisiert.</item>
+  </plurals>
+  <string name="no_keys_added_or_updated">Keine Schlüssel hinzugefügt oder aktualisiert.</string>
+  <string name="key_exported">1 Schlüssel erfolgreich exportiert.</string>
+  <string name="keys_exported">%d Schlüssel erfolgreich exportiert.</string>
+  <string name="no_keys_exported">Keine Schlüssel exportiert.</string>
+  <string name="key_creation_el_gamal_info">Beachte: nur Unterschlüssel unterstützen ElGamal. Für ElGamal wird die am nächsten liegende Schlüssellänge von 1536, 2048, 3072, 4096 oder 8192 verwendet.</string>
+  <string name="key_not_found">Schlüssel %08X konnte nicht gefunden werden.</string>
+  <plurals name="keys_found">
+    <item quantity="one">%d Schlüssel gefunden.</item>
+    <item quantity="other">%d Schlüssel gefunden.</item>
+  </plurals>
+  <string name="unknown_signature">Unbekannte Signatur. Benutze den Button um den fehlenden Schlüssel nachzuschlagen.</string>
+  <plurals name="bad_keys_encountered">
+    <item quantity="one">%d schlechter privater Schlüssel ignoriert. Evtl. wurde er mit folgender Option exportiert:\n --export-secret-subkeys\nUnbedingt mit der Option \n --export-secret-keys\nexportieren.</item>
+    <item quantity="other">%d schlechte private Schlüssel ignoriert. Evtl. wurden sie mit folgender Option exportiert:\n --export-secret-subkeys\nUnbedingt mit der Option \n --export-secret-keys\nexportieren.</item>
+  </plurals>
+  <string name="key_send_success">Schlüssel wurde erfolgreich hochgeladen.</string>
+  <string name="key_sign_success">Schlüssel erfolgreich signiert</string>
+  <string name="list_empty">Diese Liste ist leer!</string>
+  <string name="nfc_successfull">Schlüssel erfolgreich mit NFC Beam gesendet!</string>
+  <string name="key_copied_to_clipboard">Schlüssel wurde in die Zwischenablage kopiert!</string>
+  <string name="key_has_already_been_signed">Dieser Schlüssel wurde schon signiert!</string>
+  <string name="select_key_to_sign">Bitte wähle einen Signaturschlüssel!</string>
+  <string name="key_too_big_for_sharing">Schlüssel ist zu groß um so geteilt zu werden!</string>
+  <!--errors
+         no punctuation, all lowercase,
+         they will be put after "error_message", e.g. "Error: file not found"-->
+  <string name="error_file_delete_failed">Löschen von \'%s\' ist fehlgeschlagen</string>
+  <string name="error_file_not_found">Datei nicht gefunden</string>
+  <string name="error_no_secret_key_found">kein geeigneter privater Schlüssel gefunden</string>
+  <string name="error_no_known_encryption_found">keine bekannte Art von Verschlüsselung gefunden</string>
+  <string name="error_external_storage_not_ready">Externes Laufwerk ist nicht bereit</string>
+  <string name="error_invalid_email">ungültige Email \'%s\'</string>
+  <string name="error_key_size_minimum512bit">Schlüssel muss mindestens 512 Bit lang sein</string>
+  <string name="error_master_key_must_not_be_el_gamal">Der Hauptschlüssel kann kein ElGamal Schlüssel sein</string>
+  <string name="error_unknown_algorithm_choice">Unbekannte Auswahl für Algorithmus</string>
+  <string name="error_user_id_needs_a_name">ein Name muss angegeben werden</string>
+  <string name="error_user_id_needs_an_email_address">eine E-Mail-Adresse muss angegeben werden</string>
+  <string name="error_key_needs_a_user_id">Mindestens eine Benutzer-ID wird benötigt</string>
+  <string name="error_main_user_id_must_not_be_empty">Hauptbenutzer-ID darf nicht leer sein</string>
+  <string name="error_key_needs_master_key">Mindestens ein Hauptschlüssel wird benötigt</string>
+  <string name="error_no_encryption_keys_or_passphrase">Keine Schlüssel zur Verschlüsselung gegeben bzw. kein symmetrisches Passwort festgelegt</string>
+  <string name="error_signature_failed">Signieren fehlgeschlagen</string>
+  <string name="error_no_signature_passphrase">kein Passwort angegeben</string>
+  <string name="error_no_signature_key">kein Signaturschlüssel angegeben</string>
+  <string name="error_invalid_data">Verschlüsselte Daten nicht gültig</string>
+  <string name="error_corrupt_data">beschädigte Daten</string>
+  <string name="error_integrity_check_failed">Integritätscheck fehlgeschlagen! Die Daten wurden modifiziert!</string>
+  <string name="error_no_symmetric_encryption_packet">Paket mit symmetrischer Verschlüsselung konnte nicht gefunden werden</string>
+  <string name="error_wrong_passphrase">falsches Passwort</string>
+  <string name="error_saving_keys">Es trat ein Fehler beim Speichern einiger Schlüssel auf</string>
+  <string name="error_could_not_extract_private_key">Privater Schlüssel konnte nicht extrahiert werden</string>
+  <string name="error_only_files_are_supported">Binäre Daten ohne Datei im Dateisystem werden nicht unterstützt. Dies wird nur durch ACTION_ENCRYPT_STREAM_AND_RETURN unterstützt.</string>
+  <string name="error_jelly_bean_needed">Android 4.1 alias Jelly Bean wird benötigt um Androids NFC-Beam nutzen zu können!</string>
+  <string name="error_nfc_needed">NFC steht auf diesem Gerät nicht zur Verfügung!</string>
+  <string name="error_nothing_import">Nichts zu importieren!</string>
+  <string name="error_expiry_must_come_after_creation">Ablaufdatum muss später sein als das Erstellungsdatum</string>
+  <string name="error_can_not_delete_contact">Sie können diesen Kontakt nicht löschen, denn es ist ihr eigener.</string>
+  <string name="error_can_not_delete_contacts">Sie können folgende Kontakte nicht löschen, denn sie gehören Ihnen selbst:\n%s</string>
+  <string name="error_keyserver_query">Keyserveranfrage fehlgeschlagen</string>
+  <plurals name="error_can_not_delete_info">
+    <item quantity="one">Bitte lösche ihn unter \'Meine Schlüssel\'!</item>
+    <item quantity="other">Bitte lösche sie unter \'Meine Schlüssel\'!</item>
+  </plurals>
+  <!--progress dialogs, usually ending in '…'-->
+  <string name="progress_done">fertig.</string>
+  <string name="progress_saving">speichern…</string>
+  <string name="progress_importing">importieren…</string>
+  <string name="progress_exporting">exportieren…</string>
+  <string name="progress_generating">erstelle Schlüssel, dies kann bis zu 3 Minuten dauern…</string>
+  <string name="progress_building_key">erstelle Schlüssel…</string>
+  <string name="progress_preparing_master_key">Hauptschlüssel wird vorbereitet…</string>
+  <string name="progress_certifying_master_key">Hauptschlüssel wird beglaubigt…</string>
+  <string name="progress_building_master_key">erstelle Hauptring…</string>
+  <string name="progress_adding_sub_keys">füge Unterschlüssel hinzu…</string>
+  <string name="progress_saving_key_ring">Schlüssel wird gespeichert…</string>
+  <plurals name="progress_exporting_key">
+    <item quantity="one">Schlüssel wird exportiert…</item>
+    <item quantity="other">Schlüssel werden exportiert…</item>
+  </plurals>
+  <string name="progress_extracting_signature_key">extrahiere Signaturschlüssel…</string>
+  <string name="progress_extracting_key">extrahiere Schlüssel…</string>
+  <string name="progress_preparing_streams">Datenstrom wird vorbereitet…</string>
+  <string name="progress_encrypting">Daten werden verschlüsselt…</string>
+  <string name="progress_decrypting">Daten werden entschlüsselt…</string>
+  <string name="progress_preparing_signature">Signatur wird vorbereitet…</string>
+  <string name="progress_generating_signature">Signatur wird erstellt…</string>
+  <string name="progress_processing_signature">Signatur wird verarbeitet…</string>
+  <string name="progress_verifying_signature">Signatur wird verifiziert…</string>
+  <string name="progress_signing">signiere…</string>
+  <string name="progress_reading_data">Daten werden gelesen…</string>
+  <string name="progress_finding_key">Schlüssel wird gesucht…</string>
+  <string name="progress_decompressing_data">Daten werden entpackt…</string>
+  <string name="progress_verifying_integrity">Integrität wird überprüft…</string>
+  <string name="progress_deleting_securely">\'%s\' wird sicher gelöscht…</string>
+  <string name="progress_querying">Anfrage wird gestellt…</string>
+  <!--action strings-->
+  <string name="hint_public_keys">Öffentliche Schlüssel suchen</string>
+  <string name="hint_secret_keys">Private Schlüssel suchen</string>
+  <string name="action_share_key_with">Teile Schlüssel über…</string>
+  <!--key bit length selections-->
+  <string name="key_size_512">512</string>
+  <string name="key_size_1024">1024</string>
+  <string name="key_size_2048">2048</string>
+  <string name="key_size_4096">4096</string>
+  <!--compression-->
+  <string name="compression_fast">schnell</string>
+  <string name="compression_very_slow">sehr langsam</string>
+  <!--Help-->
+  <string name="help_tab_start">Start</string>
+  <string name="help_tab_nfc_beam">NFC-Beam</string>
+  <string name="help_tab_changelog">Changelog</string>
+  <string name="help_tab_about">Über</string>
+  <string name="help_about_version">Version:</string>
+  <!--Import-->
+  <string name="import_import">Ausgewählte Schlüssel importieren</string>
+  <string name="import_sign_and_upload">Ausgewählte Schlüssel importieren, signieren und hochladen</string>
+  <string name="import_from_clipboard">Zwischenablage</string>
+  <plurals name="import_qr_code_missing">
+    <item quantity="one">QR-Codes mit folgender ID fehlt: %s</item>
+    <item quantity="other">QR-Codes mit folgenden IDs fehlen: %s</item>
+  </plurals>
+  <string name="import_qr_code_start_with_one">Bitte fange mit QR-Code der ID 1 an</string>
+  <string name="import_qr_code_wrong">Falsch formatierter QR-Code! Bitte erneut versuchen!</string>
+  <string name="import_qr_code_finished">QR-Code wurde erfolgreich eingescannt!</string>
+  <string name="import_qr_code_too_short_fingerprint">Der Fingerabdruck in diesem QR-Code ist zu kurz (&lt; 16 Zeichen)</string>
+  <string name="import_qr_scan_button">Qr-Code mittels \'Barcode Scanner\' einscannen</string>
+  <string name="import_nfc_text">Um Schlüssel über NFC zu erhalten muss das Gerät entsperrt sein.</string>
+  <string name="import_nfc_help_button">Hilfe</string>
+  <string name="import_clipboard_button">Füge den Schlüssel aus der Zwischenablage ein</string>
+  <!--Intent labels-->
+  <!--Remote API-->
+  <string name="api_no_apps">Keine registrierten Anwendungen vorhanden!\n\nAnwendungen von Dritten können Zugriff auf OpenKeychain erbitten. Nachdem Zugriff gewährt wurde, werden diese hier aufgelistet.</string>
+  <string name="api_settings_show_advanced">Erweiterte Einstellungen anzeigen</string>
+  <string name="api_settings_hide_advanced">Erweiterte Einstellungen ausblenden</string>
+  <string name="api_settings_no_key">Kein Schlüssel ausgewählt</string>
+  <string name="api_settings_select_key">Schlüssel auswählen</string>
+  <string name="api_settings_save">Speichern</string>
+  <string name="api_settings_cancel">Abbrechen</string>
+  <string name="api_settings_revoke">Zugriff widerufen</string>
+  <string name="api_settings_package_name">Paketname</string>
+  <string name="api_settings_package_signature">SHA-256 der Paketsignatur</string>
+  <string name="api_register_text">Folgende Anwendung beantragt Zugriff zur API von OpenKeychain.\nZugriff erlauben?\n\nVORSICHT: Sollten Sie nicht wissen, warum dieses Fenster erscheint, sollten Sie den Zugriff nicht gewähren! Sie können Zugriffe später über das Menü \'Registrierte Anwendungen\' widerrufen.</string>
+  <string name="api_register_allow">Zugriff erlauben</string>
+  <string name="api_register_disallow">Zugriff verbieten</string>
+  <string name="api_register_error_select_key">Bitte einen Schlüssel auswählen!</string>
+  <string name="api_select_pub_keys_missing_text">Für diese Benutzer-IDs wurden keine öffentlichen Schlüssel gefunden:</string>
+  <string name="api_select_pub_keys_dublicates_text">Für diese Benutzer-IDs existieren mehrere öffentliche Schlüssel:</string>
+  <string name="api_select_pub_keys_text">Bitte die Liste der Empfänger überprüfen!</string>
+  <string name="api_error_wrong_signature">Signaturüberprüfung fehlgeschlagen! Haben Sie diese App von einer anderen Quelle installiert? Wenn Sie eine Attacke ausschliessen können, sollten Sie die Registrierung der App in OpenKeychain widerrufen und die App erneut registrieren.</string>
+  <!--Share-->
+  <string name="share_qr_code_dialog_title">Über QR Code teilen</string>
+  <string name="share_qr_code_dialog_start">Mit \'Weiter\' durch alle QR-Codes gehen und diese nacheinander scannen.</string>
+  <string name="share_qr_code_dialog_fingerprint_text">Fingerabdruck:</string>
+  <string name="share_qr_code_dialog_progress">QR-Code mit ID %1$d von %2$d</string>
+  <string name="share_nfc_dialog">Über NFC teilen</string>
+  <!--Key list-->
+  <plurals name="key_list_selected_keys">
+    <item quantity="one">1 Schlüssel ausgewählt.</item>
+    <item quantity="other">%d Schlüssel ausgewählt.</item>
+  </plurals>
+  <string name="key_list_empty_text1">Keine Schlüssel verfügbar…</string>
+  <string name="key_list_empty_text2">Du kannst anfangen OpenPGP Keychain zu benutzen indem du</string>
+  <string name="key_list_empty_text3">oder</string>
+  <string name="key_list_empty_button_create">deinen eigenen Schlüssel erstellst</string>
+  <string name="key_list_empty_button_import">existierende Schlüssel importierst.</string>
+  <!--Key view-->
+  <string name="key_view_action_encrypt">Für diesen Kontakt verschlüsseln</string>
+  <string name="key_view_action_certify">Schlüssel dieses Kontakts beglaubigen</string>
+  <string name="key_view_tab_main">Info</string>
+  <string name="key_view_tab_certs">Zertifikationen</string>
+  <!--Navigation Drawer-->
+  <string name="nav_contacts">Kontakte</string>
+  <string name="nav_encrypt">Verschlüsseln</string>
+  <string name="nav_decrypt">Entschlüsseln</string>
+  <string name="nav_import">Schlüssel Importieren</string>
+  <string name="nav_secret_keys">Meine Schlüssel</string>
+  <string name="nav_apps">Registrierte Anwendungen</string>
+  <string name="drawer_open">Menu öffnen</string>
+  <string name="drawer_close">Menu schließen</string>
 </resources>
