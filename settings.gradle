@@ -4,5 +4,5 @@ include ':libs:bc:core'
 include ':libs:bc:pg'
 include ':libs:bc:prov'
 include ':libs:HtmlTextView'
-include ':OpenPGP-Keychain-API:libraries:keychain-api-library'
-
+include ':OpenPGP-Keychain-API:libraries:openpgp-api-library'
+include ':OpenPGP-Keychain-API:libraries:openkeychain-api-library'
