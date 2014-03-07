@@ -1,0 +1,1 @@
+adb shell am start -a android.intent.action.MAIN -n org.thialfihar.android.apg/.ui.KeyListPublicActivity
