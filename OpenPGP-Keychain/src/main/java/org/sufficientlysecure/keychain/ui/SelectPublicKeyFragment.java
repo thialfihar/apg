@@ -173,7 +173,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
 
         // These are the rows that we will retrieve.
         long now = new Date().getTime() / 1000;
-        String[] projection = new String[] {
+        String[] projection = new String[]{
                 KeyRings._ID,
                 KeyRings.MASTER_KEY_ID,
                 UserIds.USER_ID,
@@ -190,7 +190,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
                         + Keys.CAN_ENCRYPT + " = '1' AND valid_keys." + Keys.CREATION + " <= '"
                         + now + "' AND " + "(valid_keys." + Keys.EXPIRY + " IS NULL OR valid_keys."
                         + Keys.EXPIRY + " >= '" + now + "')) AS "
-                        + SelectKeyCursorAdapter.PROJECTION_ROW_VALID, };
+                        + SelectKeyCursorAdapter.PROJECTION_ROW_VALID,};
 
         String inMasterKeyList = null;
         if (mSelectedMasterKeyIds != null && mSelectedMasterKeyIds.length > 0) {
@@ -204,22 +204,6 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
             inMasterKeyList += ")";
         }
 
-        // if (searchString != null && searchString.trim().length() > 0) {
-        // String[] chunks = searchString.trim().split(" +");
-        // qb.appendWhere("(EXISTS (SELECT tmp." + UserIds._ID + " FROM " + UserIds.TABLE_NAME
-        // + " AS tmp WHERE " + "tmp." + UserIds.KEY_ID + " = " + Keys.TABLE_NAME + "."
-        // + Keys._ID);
-        // for (int i = 0; i < chunks.length; ++i) {
-        // qb.appendWhere(" AND tmp." + UserIds.USER_ID + " LIKE ");
-        // qb.appendWhereEscapeString("%" + chunks[i] + "%");
-        // }
-        // qb.appendWhere("))");
-        //
-        // if (inIdList != null) {
-        // qb.appendWhere(" OR (" + inIdList + ")");
-        // }
-        // }
-
         String orderBy = UserIds.USER_ID + " ASC";
         if (inMasterKeyList != null) {
             // sort by selected master keys
@@ -229,7 +213,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
         String whereArgs[] = null;
         if (mCurQuery != null) {
             where = UserIds.USER_ID + " LIKE ?";
-            whereArgs = new String[] {mCurQuery + "%"};
+            whereArgs = new String[] {"%" + mCurQuery + "%"};
         }
 
         // Now create and return a CursorLoader that will take care of
@@ -274,8 +258,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
 
     @Override
     public void afterTextChanged(Editable editable) {
-        String newQuery = !TextUtils.isEmpty(editable.toString()) ? editable.toString() : null;
-        mCurQuery = newQuery;
+        mCurQuery = !TextUtils.isEmpty(editable.toString()) ? editable.toString() : null;
         getLoaderManager().restartLoader(0, null, this);
     }
 }
