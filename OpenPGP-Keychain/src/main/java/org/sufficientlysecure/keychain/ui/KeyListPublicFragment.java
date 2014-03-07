@@ -228,7 +228,7 @@ public class KeyListPublicFragment extends Fragment
         // We have a menu item to show in action bar.
         setHasOptionsMenu(true);
 
-        // NOTE: Not supported by StickyListHeader, thus no indicator is shown while loading
+        // NOTE: Not supported by StickyListHeader, but reimplemented here
         // Start out with a progress indicator.
         setListShown(false);
 
@@ -277,7 +277,7 @@ public class KeyListPublicFragment extends Fragment
 
         mStickyList.setAdapter(mAdapter);
 
-        // NOTE: Not supported by StickyListHeader, thus no indicator is shown while loading
+        // NOTE: Not supported by StickyListHeader, but reimplemented here
         // The list should now be shown.
         if (isResumed()) {
             setListShown(true);
