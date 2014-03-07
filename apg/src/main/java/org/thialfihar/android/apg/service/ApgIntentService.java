@@ -529,16 +529,16 @@ public class ApgIntentService extends IntentService implements ProgressDialogUpd
         } else if (ACTION_SAVE_KEYRING.equals(action)) {
             try {
                 /* Input */
-                String oldPassPhrase = data.getString(SAVE_KEYRING_CURRENT_PASSPHRASE);
-                String newPassPhrase = data.getString(SAVE_KEYRING_NEW_PASSPHRASE);
+                String oldPassphrase = data.getString(SAVE_KEYRING_CURRENT_PASSPHRASE);
+                String newPassphrase = data.getString(SAVE_KEYRING_NEW_PASSPHRASE);
                 boolean canSign = true;
 
                 if (data.containsKey(SAVE_KEYRING_CAN_SIGN)) {
                     canSign = data.getBoolean(SAVE_KEYRING_CAN_SIGN);
                 }
 
-                if (newPassPhrase == null) {
-                    newPassPhrase = oldPassPhrase;
+                if (newPassphrase == null) {
+                    newPassphrase = oldPassphrase;
                 }
                 ArrayList<String> userIds = data.getStringArrayList(SAVE_KEYRING_USER_IDS);
                 ArrayList<PGPSecretKey> keys = PgpConversionHelper.BytesToPGPSecretKeyList(data
@@ -553,12 +553,12 @@ public class ApgIntentService extends IntentService implements ProgressDialogUpd
                 if (!canSign) {
                     keyOperations.changeSecretKeyPassphrase(
                             ProviderHelper.getPGPSecretKeyRingByKeyId(this, masterKeyId),
-                            oldPassPhrase, newPassPhrase);
+                            oldPassphrase, newPassphrase);
                 } else {
                     keyOperations.buildSecretKey(userIds, keys, keysUsages, keysExpiryDates, masterKeyId,
-                            oldPassPhrase, newPassPhrase);
+                            oldPassphrase, newPassphrase);
                 }
-                PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassPhrase);
+                PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);
 
                 /* Output */
                 sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
@@ -798,12 +798,12 @@ public class ApgIntentService extends IntentService implements ProgressDialogUpd
                 long pubKeyId = data.getLong(CERTIFY_KEY_PUB_KEY_ID);
 
                 /* Operation */
-                String signaturePassPhrase = PassphraseCacheService.getCachedPassphrase(this,
+                String signaturePassphrase = PassphraseCacheService.getCachedPassphrase(this,
                         masterKeyId);
 
                 PgpKeyOperation keyOperation = new PgpKeyOperation(this, this);
                 PGPPublicKeyRing signedPubKeyRing = keyOperation.certifyKey(masterKeyId, pubKeyId,
-                        signaturePassPhrase);
+                        signaturePassphrase);
 
                 // store the signed key in our local cache
                 PgpImportExport pgpImportExport = new PgpImportExport(this, null);
