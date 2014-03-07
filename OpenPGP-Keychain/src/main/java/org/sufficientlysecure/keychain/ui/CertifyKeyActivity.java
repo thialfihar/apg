@@ -250,7 +250,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                         finish();
                     }
                 }
-            };
+            }
         };
 
         // Create a new Messenger for the communication back
@@ -296,7 +296,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                     setResult(RESULT_OK);
                     finish();
                 }
-            };
+            }
         };
 
         // Create a new Messenger for the communication back

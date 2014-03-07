@@ -160,7 +160,7 @@ public class ExportHelper {
                     Toast.makeText(mActivity, toastMessage, Toast.LENGTH_SHORT).show();
 
                 }
-            };
+            }
         };
 
         // Create a new Messenger for the communication back

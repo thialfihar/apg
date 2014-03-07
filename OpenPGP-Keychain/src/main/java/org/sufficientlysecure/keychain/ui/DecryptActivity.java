@@ -747,8 +747,6 @@ public class DecryptActivity extends DrawerActivity {
                     }
                 }
             }
-
-            ;
         };
 
         // Create a new Messenger for the communication back

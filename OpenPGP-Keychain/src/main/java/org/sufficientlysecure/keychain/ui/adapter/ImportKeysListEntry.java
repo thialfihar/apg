@@ -152,9 +152,7 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         // selected is default
         mSelected = true;
 
-        if (pgpKeyRing instanceof PGPSecretKeyRing) {
-            secretKey = true;
-        } else {
+        if ( !(pgpKeyRing instanceof PGPSecretKeyRing) ) {
             secretKey = false;
         }
 

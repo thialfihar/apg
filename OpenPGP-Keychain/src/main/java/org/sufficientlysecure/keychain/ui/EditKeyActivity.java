@@ -222,7 +222,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
                                 buildLayout();
                             }
-                        };
+                        }
                     };
 
                     // Create a new Messenger for the communication back
@@ -562,7 +562,7 @@ public class EditKeyActivity extends ActionBarActivity {
                         setResult(RESULT_OK, data);
                         finish();
                     }
-                };
+                }
             };
 
             // Create a new Messenger for the communication back
