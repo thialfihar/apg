@@ -26,6 +26,8 @@ import android.support.v7.app.ActionBarActivity;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 
+import java.util.ArrayList;
+
 public class HelpActivity extends ActionBarActivity {
     public static final String EXTRA_SELECTED_TAB = "selectedTab";
 

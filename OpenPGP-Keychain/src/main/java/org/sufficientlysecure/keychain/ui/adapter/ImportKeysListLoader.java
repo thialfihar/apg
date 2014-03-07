@@ -103,7 +103,7 @@ public class ImportKeysListLoader
     /**
      * Reads all PGPKeyRing objects from input
      *
-     * @param keyringBytes
+     * @param inputData
      * @return
      */
     private void generateListOfKeyrings(InputData inputData) {

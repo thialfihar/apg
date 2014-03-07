@@ -56,7 +56,6 @@ public class PreferencesActivity extends PreferenceActivity {
 //        actionBar.setDisplayHomeAsUpEnabled(false);
 //        actionBar.setHomeButtonEnabled(false);
 
-        //addPreferencesFromResource(R.xml.preferences);
         String action = getIntent().getAction();
 
         if (action != null && action.equals(ACTION_PREFS_GEN)) {
