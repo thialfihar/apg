@@ -38,8 +38,8 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.CreateKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
@@ -212,9 +212,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     private void createKey() {
         // Send all information needed to service to edit key in other thread
-        final Intent intent = new Intent(mActivity, KeychainIntentService.class);
+        final Intent intent = new Intent(mActivity, ApgIntentService.class);
 
-        intent.setAction(KeychainIntentService.ACTION_GENERATE_KEY);
+        intent.setAction(ApgIntentService.ACTION_GENERATE_KEY);
 
         // fill values for this action
         Bundle data = new Bundle();
@@ -230,12 +230,12 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             passphrase = "";
             isMasterKey = true;
         }
-        data.putBoolean(KeychainIntentService.GENERATE_KEY_MASTER_KEY, isMasterKey);
-        data.putString(KeychainIntentService.GENERATE_KEY_SYMMETRIC_PASSPHRASE, passphrase);
-        data.putInt(KeychainIntentService.GENERATE_KEY_ALGORITHM, mNewKeyAlgorithmChoice.getId());
-        data.putInt(KeychainIntentService.GENERATE_KEY_KEY_SIZE, mNewKeySize);
+        data.putBoolean(ApgIntentService.GENERATE_KEY_MASTER_KEY, isMasterKey);
+        data.putString(ApgIntentService.GENERATE_KEY_SYMMETRIC_PASSPHRASE, passphrase);
+        data.putInt(ApgIntentService.GENERATE_KEY_ALGORITHM, mNewKeyAlgorithmChoice.getId());
+        data.putInt(ApgIntentService.GENERATE_KEY_KEY_SIZE, mNewKeySize);
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // show progress dialog
         mGeneratingDialog = ProgressDialogFragment.newInstance(R.string.progress_generating,
@@ -247,18 +247,18 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         });
 
         // Message is received after generating is done in ApgService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(mActivity,
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(mActivity,
                 mGeneratingDialog) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get new key from data bundle returned from service
                     Bundle data = message.getData();
                     PGPSecretKey newKey = (PGPSecretKey) PgpConversionHelper
                             .BytesToPGPSecretKey(data
-                                    .getByteArray(KeychainIntentService.RESULT_NEW_KEY));
+                                    .getByteArray(ApgIntentService.RESULT_NEW_KEY));
                     addGeneratedKeyToView(newKey);
                 }
             };
@@ -266,7 +266,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(saveHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         mGeneratingDialog.show(mActivity.getSupportFragmentManager(), "dialog");
 

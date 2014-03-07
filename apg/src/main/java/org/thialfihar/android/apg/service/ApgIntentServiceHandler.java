@@ -30,7 +30,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
 
-public class KeychainIntentServiceHandler extends Handler {
+public class ApgIntentServiceHandler extends Handler {
 
     // possible messages send from this service to handler on ui
     public static final int MESSAGE_OKAY = 1;
@@ -47,20 +47,20 @@ public class KeychainIntentServiceHandler extends Handler {
     Activity mActivity;
     ProgressDialogFragment mProgressDialogFragment;
 
-    public KeychainIntentServiceHandler(Activity activity) {
+    public ApgIntentServiceHandler(Activity activity) {
         this.mActivity = activity;
     }
 
-    public KeychainIntentServiceHandler(Activity activity, ProgressDialogFragment progressDialogFragment) {
+    public ApgIntentServiceHandler(Activity activity, ProgressDialogFragment progressDialogFragment) {
         this.mActivity = activity;
         this.mProgressDialogFragment = progressDialogFragment;
     }
 
-    public KeychainIntentServiceHandler(Activity activity, int progressDialogMessageId, int progressDialogStyle) {
+    public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId, int progressDialogStyle) {
         this(activity, progressDialogMessageId, progressDialogStyle, false, null);
     }
 
-    public KeychainIntentServiceHandler(Activity activity, int progressDialogMessageId,
+    public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId,
                                         int progressDialogStyle, boolean cancelable,
                                         OnCancelListener onCancelListener) {
         this.mActivity = activity;

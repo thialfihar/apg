@@ -28,7 +28,7 @@ import org.thialfihar.android.apg.util.PRNGFixes;
 import android.app.Application;
 import android.os.Environment;
 
-public class KeychainApplication extends Application {
+public class ApgApplication extends Application {
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects

@@ -53,7 +53,7 @@
 
     <!-- android:allowBackup="false": Don't allow backup over adb backup or other apps! -->
     <application
-        android:name=".KeychainApplication"
+        android:name=".ApgApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/icon"
@@ -379,7 +379,7 @@
             android:exported="false"
             android:process=":passphrase_cache" />
         <service
-            android:name="org.thialfihar.android.apg.service.KeychainIntentService"
+            android:name="org.thialfihar.android.apg.service.ApgIntentService"
             android:exported="false" />
 
         <provider

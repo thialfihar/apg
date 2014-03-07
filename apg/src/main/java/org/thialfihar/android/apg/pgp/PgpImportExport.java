@@ -41,7 +41,7 @@ import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
@@ -154,9 +154,9 @@ public class PgpImportExport {
             Log.e(Constants.TAG, "Exception on parsing key file!", e);
         }
 
-        returnData.putInt(KeychainIntentService.RESULT_IMPORT_ADDED, newKeys);
-        returnData.putInt(KeychainIntentService.RESULT_IMPORT_UPDATED, oldKeys);
-        returnData.putInt(KeychainIntentService.RESULT_IMPORT_BAD, badKeys);
+        returnData.putInt(ApgIntentService.RESULT_IMPORT_ADDED, newKeys);
+        returnData.putInt(ApgIntentService.RESULT_IMPORT_UPDATED, oldKeys);
+        returnData.putInt(ApgIntentService.RESULT_IMPORT_BAD, badKeys);
 
         return returnData;
     }
@@ -213,7 +213,7 @@ public class PgpImportExport {
             outPub.close();
         }
 
-        returnData.putInt(KeychainIntentService.RESULT_EXPORT, keyRingMasterKeyIds.size());
+        returnData.putInt(ApgIntentService.RESULT_EXPORT, keyRingMasterKeyIds.size());
 
         updateProgress(R.string.progress_done, 100, 100);
 

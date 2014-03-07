@@ -72,7 +72,7 @@ import android.os.RemoteException;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class KeychainIntentService extends IntentService implements ProgressDialogUpdater {
+public class ApgIntentService extends IntentService implements ProgressDialogUpdater {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";
@@ -200,8 +200,8 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
     private boolean mIsCanceled;
 
-    public KeychainIntentService() {
-        super("KeychainIntentService");
+    public ApgIntentService() {
+        super("ApgIntentService");
     }
 
     @Override
@@ -396,7 +396,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -522,7 +522,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -561,7 +561,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassPhrase);
 
                 /* Output */
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -585,7 +585,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -616,7 +616,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -637,7 +637,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                 }
 
                 /* Output */
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -650,7 +650,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                 PgpImportExport pgpImportExport = new PgpImportExport(this, this);
                 resultData = pgpImportExport.importKeyRings(entries);
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -700,7 +700,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                 resultData = pgpImportExport
                         .exportKeyRings(keyRingMasterKeyIds, keyType, outStream);
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -725,7 +725,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                     }
                 }
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -776,7 +776,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                     }
                 }
 
-                Intent importIntent = new Intent(this, KeychainIntentService.class);
+                Intent importIntent = new Intent(this, ApgIntentService.class);
                 importIntent.setAction(ACTION_IMPORT_KEYRING);
                 Bundle importData = new Bundle();
                 importData.putParcelableArrayList(IMPORT_KEY_LIST, entries);
@@ -812,7 +812,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                     throw new PgpGeneralException("Failed to store signed key in local cache");
                 }
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -828,8 +828,8 @@ public class KeychainIntentService extends IntentService implements ProgressDial
         e.printStackTrace();
 
         Bundle data = new Bundle();
-        data.putString(KeychainIntentServiceHandler.DATA_ERROR, e.getMessage());
-        sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_EXCEPTION, null, data);
+        data.putString(ApgIntentServiceHandler.DATA_ERROR, e.getMessage());
+        sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_EXCEPTION, null, data);
     }
 
     private void sendMessageToHandler(Integer arg1, Integer arg2, Bundle data) {
@@ -872,12 +872,12 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
         Bundle data = new Bundle();
         if (message != null) {
-            data.putString(KeychainIntentServiceHandler.DATA_MESSAGE, message);
+            data.putString(ApgIntentServiceHandler.DATA_MESSAGE, message);
         }
-        data.putInt(KeychainIntentServiceHandler.DATA_PROGRESS, progress);
-        data.putInt(KeychainIntentServiceHandler.DATA_PROGRESS_MAX, max);
+        data.putInt(ApgIntentServiceHandler.DATA_PROGRESS, progress);
+        data.putInt(ApgIntentServiceHandler.DATA_PROGRESS_MAX, max);
 
-        sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_UPDATE_PROGRESS, null, data);
+        sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_UPDATE_PROGRESS, null, data);
     }
 
     public void setProgress(int resourceId, int progress, int max) {

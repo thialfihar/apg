@@ -18,8 +18,8 @@
 package org.thialfihar.android.apg.ui.dialog;
 
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -73,25 +73,25 @@ public class DeleteFileDialogFragment extends DialogFragment {
                 dismiss();
 
                 // Send all information needed to service to edit key in other thread
-                Intent intent = new Intent(activity, KeychainIntentService.class);
+                Intent intent = new Intent(activity, ApgIntentService.class);
 
                 // fill values for this action
                 Bundle data = new Bundle();
 
-                intent.setAction(KeychainIntentService.ACTION_DELETE_FILE_SECURELY);
-                data.putString(KeychainIntentService.DELETE_FILE, deleteFile);
-                intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+                intent.setAction(ApgIntentService.ACTION_DELETE_FILE_SECURELY);
+                data.putString(ApgIntentService.DELETE_FILE, deleteFile);
+                intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
                 ProgressDialogFragment deletingDialog = ProgressDialogFragment.newInstance(
                         R.string.progress_deleting_securely, ProgressDialog.STYLE_HORIZONTAL, false, null);
 
                 // Message is received after deleting is done in ApgService
-                KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(activity, deletingDialog) {
+                ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(activity, deletingDialog) {
                     public void handleMessage(Message message) {
                         // handle messages by standard ApgHandler first
                         super.handleMessage(message);
 
-                        if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                        if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                             Toast.makeText(activity, R.string.file_delete_successful,
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -100,7 +100,7 @@ public class DeleteFileDialogFragment extends DialogFragment {
 
                 // Create a new Messenger for the communication back
                 Messenger messenger = new Messenger(saveHandler);
-                intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+                intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
                 // show progress dialog
                 deletingDialog.show(activity.getSupportFragmentManager(), "deletingDialog");

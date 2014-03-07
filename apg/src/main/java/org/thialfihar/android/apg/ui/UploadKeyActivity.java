@@ -20,8 +20,8 @@ package org.thialfihar.android.apg.ui;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.util.Log;
 
 import android.app.ProgressDialog;
@@ -85,9 +85,9 @@ public class UploadKeyActivity extends ActionBarActivity {
 
     private void uploadKey() {
         // Send all information needed to service to upload key in other thread
-        Intent intent = new Intent(this, KeychainIntentService.class);
+        Intent intent = new Intent(this, ApgIntentService.class);
 
-        intent.setAction(KeychainIntentService.ACTION_UPLOAD_KEYRING);
+        intent.setAction(ApgIntentService.ACTION_UPLOAD_KEYRING);
 
         // set data uri as path to keyring
         intent.setData(mDataUri);
@@ -96,18 +96,18 @@ public class UploadKeyActivity extends ActionBarActivity {
         Bundle data = new Bundle();
 
         String server = (String) mKeyServerSpinner.getSelectedItem();
-        data.putString(KeychainIntentService.UPLOAD_KEY_SERVER, server);
+        data.putString(ApgIntentService.UPLOAD_KEY_SERVER, server);
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // Message is received after uploading is done in ApgService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(this,
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
                 R.string.progress_exporting, ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
 
                     Toast.makeText(UploadKeyActivity.this, R.string.key_send_success,
                             Toast.LENGTH_SHORT).show();
@@ -118,7 +118,7 @@ public class UploadKeyActivity extends ActionBarActivity {
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(saveHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
         saveHandler.showProgressDialog(this);
