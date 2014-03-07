@@ -73,7 +73,7 @@ public class PgpHelper {
     }
 
     public static String getFullVersion(Context context) {
-        return "OpenPGP Keychain v" + getVersion(context);
+        return "APG v" + getVersion(context);
     }
 
     public static long getDecryptionKeyId(Context context, InputStream inputStream)

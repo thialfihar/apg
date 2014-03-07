@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="14dp"
-            android:text="Display of existing certifications is a planned feature for a later release of OpenPGP Keychain. Stay tuned for updates!" />
+            android:text="Display of existing certifications is a planned feature for a later release of APG. Stay tuned for updates!" />
 
         <TextView
             style="@style/SectionHeader"
