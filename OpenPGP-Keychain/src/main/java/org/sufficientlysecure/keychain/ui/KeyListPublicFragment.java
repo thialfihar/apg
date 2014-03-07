@@ -42,6 +42,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -74,6 +75,12 @@ public class KeyListPublicFragment extends Fragment
 
     private KeyListPublicAdapter mAdapter;
     private StickyListHeadersListView mStickyList;
+
+    // rebuild functionality of ListFragment, http://stackoverflow.com/a/12504097
+    boolean mListShown;
+    View mProgressContainer;
+    View mListContainer;
+
     private String mCurQuery;
     private SearchView mSearchView;
     // empty list layout
@@ -86,9 +93,14 @@ public class KeyListPublicFragment extends Fragment
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.key_list_public_fragment, container, false);
-        setHasOptionsMenu(true);
-        mButtonEmptyCreate = (BootstrapButton) view.findViewById(R.id.key_list_empty_button_create);
+        View root = inflater.inflate(R.layout.key_list_public_fragment, container, false);
+
+        mStickyList = (StickyListHeadersListView) root.findViewById(R.id.key_list_public_list);
+        mStickyList.setOnItemClickListener(this);
+
+
+        // empty view
+        mButtonEmptyCreate = (BootstrapButton) root.findViewById(R.id.key_list_empty_button_create);
         mButtonEmptyCreate.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -100,8 +112,7 @@ public class KeyListPublicFragment extends Fragment
                 startActivityForResult(intent, 0);
             }
         });
-
-        mButtonEmptyImport = (BootstrapButton) view.findViewById(R.id.key_list_empty_button_import);
+        mButtonEmptyImport = (BootstrapButton) root.findViewById(R.id.key_list_empty_button_import);
         mButtonEmptyImport.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -112,7 +123,12 @@ public class KeyListPublicFragment extends Fragment
             }
         });
 
-        return view;
+        // rebuild functionality of ListFragment, http://stackoverflow.com/a/12504097
+        mListContainer = root.findViewById(R.id.key_list_public_list_container);
+        mProgressContainer = root.findViewById(R.id.key_list_public_progress_container);
+        mListShown = true;
+
+        return root;
     }
 
     /**
@@ -123,9 +139,6 @@ public class KeyListPublicFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mStickyList = (StickyListHeadersListView) getActivity().findViewById(R.id.list);
-
-        mStickyList.setOnItemClickListener(this);
         mStickyList.setAreHeadersSticky(true);
         mStickyList.setDrawingListUnderStickyHeader(false);
         mStickyList.setFastScrollEnabled(true);
@@ -135,7 +148,7 @@ public class KeyListPublicFragment extends Fragment
         }
 
         // this view is made visible if no data is available
-        mStickyList.setEmptyView(getActivity().findViewById(R.id.empty));
+        mStickyList.setEmptyView(getActivity().findViewById(R.id.key_list_public_empty));
 
         /*
          * ActionBarSherlock does not support MultiChoiceModeListener. Thus multi-selection is only
@@ -212,9 +225,12 @@ public class KeyListPublicFragment extends Fragment
             });
         }
 
+        // We have a menu item to show in action bar.
+        setHasOptionsMenu(true);
+
         // NOTE: Not supported by StickyListHeader, thus no indicator is shown while loading
         // Start out with a progress indicator.
-        // setListShown(false);
+        setListShown(false);
 
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new KeyListPublicAdapter(getActivity(), null, Id.type.public_key, USER_ID_INDEX);
@@ -263,11 +279,11 @@ public class KeyListPublicFragment extends Fragment
 
         // NOTE: Not supported by StickyListHeader, thus no indicator is shown while loading
         // The list should now be shown.
-        // if (isResumed()) {
-        // setListShown(true);
-        // } else {
-        // setListShownNoAnimation(true);
-        // }
+        if (isResumed()) {
+            setListShown(true);
+        } else {
+            setListShownNoAnimation(true);
+        }
     }
 
     @Override
@@ -378,5 +394,42 @@ public class KeyListPublicFragment extends Fragment
         mCurQuery = !TextUtils.isEmpty(s) ? s : null;
         getLoaderManager().restartLoader(0, null, this);
         return true;
+    }
+
+    // rebuild functionality of ListFragment, http://stackoverflow.com/a/12504097
+    public void setListShown(boolean shown, boolean animate) {
+        if (mListShown == shown) {
+            return;
+        }
+        mListShown = shown;
+        if (shown) {
+            if (animate) {
+                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                        getActivity(), android.R.anim.fade_out));
+                mListContainer.startAnimation(AnimationUtils.loadAnimation(
+                        getActivity(), android.R.anim.fade_in));
+            }
+            mProgressContainer.setVisibility(View.GONE);
+            mListContainer.setVisibility(View.VISIBLE);
+        } else {
+            if (animate) {
+                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                        getActivity(), android.R.anim.fade_in));
+                mListContainer.startAnimation(AnimationUtils.loadAnimation(
+                        getActivity(), android.R.anim.fade_out));
+            }
+            mProgressContainer.setVisibility(View.VISIBLE);
+            mListContainer.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    // rebuild functionality of ListFragment, http://stackoverflow.com/a/12504097
+    public void setListShown(boolean shown) {
+        setListShown(shown, true);
+    }
+
+    // rebuild functionality of ListFragment, http://stackoverflow.com/a/12504097
+    public void setListShownNoAnimation(boolean shown) {
+        setListShown(shown, false);
     }
 }
