@@ -30,7 +30,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 public class KeychainDatabase extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "apg.db";
+    private static final String DATABASE_NAME = "apg";
     private static final int DATABASE_VERSION = 7;
 
     public interface Tables {
@@ -115,6 +115,9 @@ public class KeychainDatabase extends SQLiteOpenHelper {
             Log.w(Constants.TAG, "Upgrading database to version " + version);
 
             switch (version) {
+                case 2:
+                    db.execSQL("ALTER TABLE " + Tables.KEYS + " ADD COLUMN " + KeysColumns.CAN_CERTIFY
+                            + " INTEGER DEFAULT 0;");
                 case 3:
                     db.execSQL("ALTER TABLE " + Tables.KEYS + " ADD COLUMN " + KeysColumns.CAN_CERTIFY
                             + " INTEGER DEFAULT 0;");
