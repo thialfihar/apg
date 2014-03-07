@@ -190,7 +190,6 @@ public class EditKeyActivity extends ActionBarActivity {
                     // Message is received after generating is done in ApgService
                     ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(
                             this, R.string.progress_generating, ProgressDialog.STYLE_SPINNER, true,
-
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {

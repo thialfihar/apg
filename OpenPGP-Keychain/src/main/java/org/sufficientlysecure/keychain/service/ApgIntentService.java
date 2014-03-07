@@ -604,13 +604,20 @@ public class ApgIntentService extends IntentService implements Progressable {
                 String passphrase = data.getString(GENERATE_KEY_SYMMETRIC_PASSPHRASE);
 
                 /* Operation */
+                int keysTotal = 2;
+                int keysCreated =0;
+                this.setProgress(keysCreated, keysTotal);
                 PgpKeyOperation keyOperations = new PgpKeyOperation(this, this);
 
                 Key masterKey = keyOperations.createKey(Id.choice.algorithm.rsa,
                         4096, passphrase, true);
+                keysCreated++;
+                setProgress(keysCreated, keysTotal);
 
                 Key subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
                         4096, passphrase, false);
+                keysCreated++;
+                setProgress(keysCreated, keysTotal );
 
                 // TODO: default to one master for cert, one sub for encrypt and one sub
                 //       for sign
