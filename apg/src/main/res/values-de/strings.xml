@@ -369,7 +369,7 @@
     <item quantity="other">%d Schlüssel ausgewählt.</item>
   </plurals>
   <string name="key_list_empty_text1">Keine Schlüssel verfügbar…</string>
-  <string name="key_list_empty_text2">Du kannst anfangen OpenPGP Keychain zu benutzen indem du</string>
+  <string name="key_list_empty_text2">Du kannst anfangen APG zu benutzen indem du</string>
   <string name="key_list_empty_text3">oder</string>
   <string name="key_list_empty_button_create">deinen eigenen Schlüssel erstellst</string>
   <string name="key_list_empty_button_import">existierende Schlüssel importierst.</string>

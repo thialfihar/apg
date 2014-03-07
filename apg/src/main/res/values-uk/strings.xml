@@ -356,7 +356,7 @@
   <string name="intent_send_encrypt">Зашифрувати з OpenKeychain</string>
   <string name="intent_send_decrypt">Розшифрувати з OpenKeychain</string>
   <!--Remote API-->
-  <string name="api_no_apps">Нема зареєстрованих програм!\n\nСтороні програми можуть вимагати доступ до OpenPGP Keychain. Після надання доступу вони будуть наведені тут.</string>
+  <string name="api_no_apps">Нема зареєстрованих програм!\n\nСтороні програми можуть вимагати доступ до APG. Після надання доступу вони будуть наведені тут.</string>
   <string name="api_settings_show_advanced">Показати додаткові налаштування</string>
   <string name="api_settings_hide_advanced">Приховати додаткові налаштування</string>
   <string name="api_settings_no_key">Не вибрано ключа</string>
@@ -366,7 +366,7 @@
   <string name="api_settings_revoke">Відкликати доступ</string>
   <string name="api_settings_package_name">Назва пакунку</string>
   <string name="api_settings_package_signature">SHA-256 підписку пакунку</string>
-  <string name="api_register_text">Показана програма запитує доступ до OpenPGP Keychain.\nДозволити доступ?\n\nУВАГА: якщо ви не знаєте, чому цей екран появився, не дозволяйте доступ! Ви можете відкликати доступ пізніше, використовуючи екран \'Зареєстровані програми\'.</string>
+  <string name="api_register_text">Показана програма запитує доступ до APG.\nДозволити доступ?\n\nУВАГА: якщо ви не знаєте, чому цей екран появився, не дозволяйте доступ! Ви можете відкликати доступ пізніше, використовуючи екран \'Зареєстровані програми\'.</string>
   <string name="api_register_allow">Дозволити доступ</string>
   <string name="api_register_disallow">Не дозволити доступ</string>
   <string name="api_register_error_select_key">Будь ласка, виберіть ключ!</string>

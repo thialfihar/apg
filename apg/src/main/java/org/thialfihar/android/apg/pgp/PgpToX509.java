@@ -40,7 +40,7 @@ import org.thialfihar.android.apg.util.Log;
 
 public class PgpToX509 {
     public final static String DN_COMMON_PART_O = "OpenPGP to X.509 Bridge";
-    public final static String DN_COMMON_PART_OU = "OpenPGP Keychain cert";
+    public final static String DN_COMMON_PART_OU = "APG cert";
 
     /**
      * Creates a self-signed certificate from a public and private key. The (critical) key-usage
