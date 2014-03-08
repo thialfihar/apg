@@ -36,6 +36,8 @@ import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
@@ -54,6 +56,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ProviderHelper {
+
+    public static KeyRing getKeyRing(Context context, Uri queryUri) {
+        return new KeyRing(getPGPKeyRing(context, queryUri));
+    }
 
     /**
      * Private helper method to get PGPKeyRing from database
