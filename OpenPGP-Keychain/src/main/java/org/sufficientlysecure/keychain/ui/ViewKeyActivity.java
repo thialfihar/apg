@@ -86,7 +86,13 @@ public class ViewKeyActivity extends ActionBarActivity {
             selectedTab = intent.getExtras().getInt(EXTRA_SELECTED_TAB);
         }
 
-        mDataUri = getIntent().getData();
+        {
+            // normalize mDataUri to a "by row id" query, to ensure it works with any
+            // given valid /public/ query
+            long rowId = ProviderHelper.getRowId(this, getIntent().getData());
+            // TODO: handle (rowId == 0) with something else than a crash
+            mDataUri = KeychainContract.KeyRings.buildPublicKeyRingsUri(Long.toString(rowId)) ;
+        }
 
         Bundle mainBundle = new Bundle();
         mainBundle.putParcelable(ViewKeyMainFragment.ARG_DATA_URI, mDataUri);
