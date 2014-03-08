@@ -152,6 +152,11 @@
     <string name="revoked">revoked</string>
     <string name="user_id">User ID</string>
 
+    <plurals name="n_contacts">
+        <item quantity="one">1 contact</item>
+        <item quantity="other">%d contacts</item>
+    </plurals>
+
     <plurals name="n_key_servers">
         <item quantity="one">%d keyserver</item>
         <item quantity="other">%d keyservers</item>
