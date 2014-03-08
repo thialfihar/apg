@@ -13,7 +13,9 @@
         fontawesometext:fa_icon="fa-github"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="#c93"
+        />
 
     <TextView
         android:id="@+id/drawer_item_text"
@@ -26,7 +28,7 @@
         android:paddingRight="16dp"
         android:paddingTop="16dp"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="#eee"
+        android:textColor="#ccc"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/drawer_item_icon" />
 
