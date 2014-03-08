@@ -17,11 +17,7 @@
 
 package org.thialfihar.android.apg.service;
 
-import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
-import org.thialfihar.android.apg.R;
-
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +25,9 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
 
 public class ApgIntentServiceHandler extends Handler {
 

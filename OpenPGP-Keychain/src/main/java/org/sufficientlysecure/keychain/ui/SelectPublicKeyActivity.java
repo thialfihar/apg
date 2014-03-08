@@ -17,14 +17,14 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ActionBarHelper;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ActionBarHelper;
 
 public class SelectPublicKeyActivity extends ActionBarActivity {
 

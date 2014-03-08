@@ -17,13 +17,6 @@
 
 package org.thialfihar.android.apg.ui.adapter;
 
-import java.util.HashMap;
-import java.util.Set;
-
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -33,6 +26,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class KeyListSecretAdapter extends CursorAdapter {
     private LayoutInflater mInflater;

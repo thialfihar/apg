@@ -16,9 +16,9 @@
 
 package org.thialfihar.android.apg;
 
-import org.spongycastle.jce.provider.BouncyCastleProvider;
-
 import android.os.Environment;
+
+import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 public final class Constants {
 

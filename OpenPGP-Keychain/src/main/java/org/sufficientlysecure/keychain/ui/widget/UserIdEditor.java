@@ -16,11 +16,6 @@
 
 package org.thialfihar.android.apg.ui.widget;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.thialfihar.android.apg.R;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -31,6 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserIdEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;

@@ -17,9 +17,6 @@
 
 package org.thialfihar.android.apg.service.remote;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
-
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -31,6 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
 
 public class RegisteredAppsAdapter extends CursorAdapter {
 

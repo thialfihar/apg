@@ -17,17 +17,17 @@
 
 package org.thialfihar.android.apg.provider;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiAppsColumns;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRingsColumns;
 import org.thialfihar.android.apg.provider.KeychainContract.KeysColumns;
 import org.thialfihar.android.apg.provider.KeychainContract.UserIdsColumns;
 import org.thialfihar.android.apg.util.Log;
-
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 
 public class KeychainDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "apg";

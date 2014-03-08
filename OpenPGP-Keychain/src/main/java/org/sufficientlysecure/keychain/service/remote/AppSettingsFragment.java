@@ -17,17 +17,6 @@
 
 package org.thialfihar.android.apg.service.remote;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import org.spongycastle.util.encoders.Hex;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
-import org.thialfihar.android.apg.ui.adapter.KeyValueSpinnerAdapter;
-import org.thialfihar.android.apg.util.AlgorithmNames;
-import org.thialfihar.android.apg.util.Log;
-
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -48,6 +37,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.spongycastle.util.encoders.Hex;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
+import org.thialfihar.android.apg.ui.adapter.KeyValueSpinnerAdapter;
+import org.thialfihar.android.apg.util.AlgorithmNames;
+import org.thialfihar.android.apg.util.Log;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class AppSettingsFragment extends Fragment implements
         SelectSecretKeyLayoutFragment.SelectSecretKeyCallback {

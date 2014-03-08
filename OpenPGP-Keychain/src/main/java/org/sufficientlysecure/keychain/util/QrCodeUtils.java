@@ -18,19 +18,19 @@
 
 package org.thialfihar.android.apg.util;
 
-import java.util.Hashtable;
-
-import org.thialfihar.android.apg.Constants;
-
-import android.graphics.Bitmap;
-import android.graphics.Color;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
+import android.graphics.Bitmap;
+import android.graphics.Color;
+
+import org.thialfihar.android.apg.Constants;
+
+import java.util.Hashtable;
 
 public class QrCodeUtils {
     public final static QRCodeWriter QR_CODE_WRITER = new QRCodeWriter();

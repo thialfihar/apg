@@ -17,17 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.ui.adapter.KeyListSecretAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -46,11 +35,20 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
+import android.widget.ListView;
+
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.ui.adapter.KeyListSecretAdapter;
+import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
+
+import java.util.Set;
 
 public class KeyListSecretFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {

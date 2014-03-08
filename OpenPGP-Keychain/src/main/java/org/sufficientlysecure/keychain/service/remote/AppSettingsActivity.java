@@ -17,12 +17,6 @@
 
 package org.thialfihar.android.apg.service.remote;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ActionBarHelper;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.util.Log;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +24,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ActionBarHelper;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.util.Log;
 
 public class AppSettingsActivity extends ActionBarActivity {
     private Uri mAppUri;

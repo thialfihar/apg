@@ -18,11 +18,6 @@
 
 package org.thialfihar.android.apg.provider;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.Blobs;
-import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.BlobsColumns;
-import org.thialfihar.android.apg.util.Log;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -32,6 +27,10 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.BaseColumns;
 
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.Blobs;
+import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.BlobsColumns;
+import org.thialfihar.android.apg.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -17,19 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.Date;
-import java.util.Vector;
-
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.compatibility.ListFragmentWorkaround;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
-import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
-import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -43,6 +30,19 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.compatibility.ListFragmentWorkaround;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.Keys;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
+import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
+
+import java.util.Date;
+import java.util.Vector;
 
 public class SelectPublicKeyFragment extends ListFragmentWorkaround implements TextWatcher,
         LoaderManager.LoaderCallbacks<Cursor> {

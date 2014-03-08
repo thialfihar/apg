@@ -17,14 +17,14 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
 
 public class SelectSecretKeyActivity extends ActionBarActivity {
 

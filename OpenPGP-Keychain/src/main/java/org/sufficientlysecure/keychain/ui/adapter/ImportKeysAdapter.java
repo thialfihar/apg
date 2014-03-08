@@ -17,12 +17,6 @@
 
 package org.thialfihar.android.apg.ui.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -36,6 +30,12 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
     protected LayoutInflater mInflater;

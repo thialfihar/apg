@@ -18,10 +18,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-
 import android.annotation.TargetApi;
 import android.net.Uri;
 import android.nfc.NdefMessage;
@@ -35,6 +31,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ViewKeyActivityJB extends ViewKeyActivity implements CreateNdefMessageCallback,

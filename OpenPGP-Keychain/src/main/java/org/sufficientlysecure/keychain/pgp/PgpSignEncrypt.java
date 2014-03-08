@@ -47,7 +47,6 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.pgp.Progressable;
 
 import java.io.BufferedReader;
 import java.io.IOException;

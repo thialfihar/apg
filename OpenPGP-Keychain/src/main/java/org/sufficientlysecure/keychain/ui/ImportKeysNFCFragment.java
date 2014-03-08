@@ -17,8 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +26,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.R;
 
 public class ImportKeysNFCFragment extends Fragment {
 

@@ -17,13 +17,14 @@
 
 package org.thialfihar.android.apg.helper;
 
-import org.spongycastle.bcpg.HashAlgorithmTags;
-import org.spongycastle.openpgp.PGPEncryptedData;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import org.spongycastle.bcpg.HashAlgorithmTags;
+import org.spongycastle.openpgp.PGPEncryptedData;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
 
 import java.util.Vector;
 

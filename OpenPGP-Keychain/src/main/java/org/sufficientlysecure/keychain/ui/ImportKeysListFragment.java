@@ -17,12 +17,16 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import android.app.Activity;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.view.View;
+import android.widget.ListView;
+
+import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
@@ -36,16 +40,12 @@ import org.thialfihar.android.apg.ui.adapter.ImportKeysListServerLoader;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 
-import android.app.Activity;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.view.View;
-import android.widget.ListView;
-
-import com.devspark.appmsg.AppMsg;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportKeysListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {

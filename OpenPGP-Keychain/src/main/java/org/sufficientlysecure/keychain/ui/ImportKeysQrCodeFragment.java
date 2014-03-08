@@ -17,13 +17,7 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.util.IntentIntegratorSupportV4;
-import org.thialfihar.android.apg.util.Log;
+import com.google.zxing.integration.android.IntentResult;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -38,7 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.google.zxing.integration.android.IntentResult;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.util.IntentIntegratorSupportV4;
+import org.thialfihar.android.apg.util.Log;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class ImportKeysQrCodeFragment extends Fragment {
 

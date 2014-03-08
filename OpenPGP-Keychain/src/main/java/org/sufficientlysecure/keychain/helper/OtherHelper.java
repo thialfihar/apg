@@ -17,15 +17,13 @@
 
 package org.thialfihar.android.apg.helper;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.Set;
+import android.os.Bundle;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.util.Log;
 
-import android.os.Bundle;
+import java.util.Iterator;
+import java.util.Set;
 
 public class OtherHelper {
 

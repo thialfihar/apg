@@ -1,5 +1,24 @@
 package org.thialfihar.android.apg.pgp;
 
+import org.spongycastle.asn1.DERObjectIdentifier;
+import org.spongycastle.asn1.x509.AuthorityKeyIdentifier;
+import org.spongycastle.asn1.x509.BasicConstraints;
+import org.spongycastle.asn1.x509.GeneralName;
+import org.spongycastle.asn1.x509.GeneralNames;
+import org.spongycastle.asn1.x509.SubjectKeyIdentifier;
+import org.spongycastle.asn1.x509.X509Extensions;
+import org.spongycastle.asn1.x509.X509Name;
+import org.spongycastle.openpgp.PGPException;
+import org.spongycastle.openpgp.PGPPrivateKey;
+import org.spongycastle.openpgp.PGPPublicKey;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.x509.X509V3CertificateGenerator;
+import org.spongycastle.x509.extension.AuthorityKeyIdentifierStructure;
+import org.spongycastle.x509.extension.SubjectKeyIdentifierStructure;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -19,24 +38,6 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-
-import org.spongycastle.asn1.DERObjectIdentifier;
-import org.spongycastle.asn1.x509.AuthorityKeyIdentifier;
-import org.spongycastle.asn1.x509.BasicConstraints;
-import org.spongycastle.asn1.x509.GeneralName;
-import org.spongycastle.asn1.x509.GeneralNames;
-import org.spongycastle.asn1.x509.SubjectKeyIdentifier;
-import org.spongycastle.asn1.x509.X509Extensions;
-import org.spongycastle.asn1.x509.X509Name;
-import org.spongycastle.openpgp.PGPException;
-import org.spongycastle.openpgp.PGPPrivateKey;
-import org.spongycastle.openpgp.PGPPublicKey;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.x509.X509V3CertificateGenerator;
-import org.spongycastle.x509.extension.AuthorityKeyIdentifierStructure;
-import org.spongycastle.x509.extension.SubjectKeyIdentifierStructure;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.util.Log;
 
 public class PgpToX509 {
     public final static String DN_COMMON_PART_O = "OpenPGP to X.509 Bridge";

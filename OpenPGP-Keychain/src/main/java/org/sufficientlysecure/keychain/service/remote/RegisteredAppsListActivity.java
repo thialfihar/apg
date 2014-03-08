@@ -17,10 +17,10 @@
 
 package org.thialfihar.android.apg.service.remote;
 
+import android.os.Bundle;
+
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.ui.DrawerActivity;
-
-import android.os.Bundle;
 
 public class RegisteredAppsListActivity extends DrawerActivity {
 

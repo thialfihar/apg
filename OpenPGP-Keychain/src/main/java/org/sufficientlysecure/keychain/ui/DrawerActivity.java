@@ -17,10 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
-import org.thialfihar.android.apg.util.Log;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +37,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
 
 public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;

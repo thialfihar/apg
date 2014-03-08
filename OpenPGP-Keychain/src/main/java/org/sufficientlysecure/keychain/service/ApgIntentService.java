@@ -17,6 +17,43 @@
 
 package org.thialfihar.android.apg.service;
 
+import android.app.IntentService;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+
+import org.spongycastle.openpgp.PGPKeyRing;
+import org.spongycastle.openpgp.PGPObjectFactory;
+import org.spongycastle.openpgp.PGPPublicKeyRing;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.PGPUtil;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.FileHelper;
+import org.thialfihar.android.apg.helper.OtherHelper;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.pgp.HkpKeyServer;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
+import org.thialfihar.android.apg.pgp.PgpHelper;
+import org.thialfihar.android.apg.pgp.PgpImportExport;
+import org.thialfihar.android.apg.pgp.PgpKeyOperation;
+import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
+import org.thialfihar.android.apg.pgp.Progressable;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.Log;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,42 +67,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.spongycastle.openpgp.PGPKeyRing;
-import org.spongycastle.openpgp.PGPObjectFactory;
-import org.spongycastle.openpgp.PGPPublicKeyRing;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.PGPUtil;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.FileHelper;
-import org.thialfihar.android.apg.helper.OtherHelper;
-import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.pgp.PgpConversionHelper;
-import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
-import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
-import org.thialfihar.android.apg.pgp.PgpHelper;
-import org.thialfihar.android.apg.pgp.PgpImportExport;
-import org.thialfihar.android.apg.pgp.PgpKeyOperation;
-import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.pgp.HkpKeyServer;
-import org.thialfihar.android.apg.util.InputData;
-import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.pgp.Progressable;
-
-import android.app.IntentService;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 
 /**
  * This Service contains all important long lasting operations for APG. It receives Intents with

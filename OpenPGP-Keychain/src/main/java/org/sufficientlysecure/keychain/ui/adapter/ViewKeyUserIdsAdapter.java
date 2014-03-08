@@ -17,9 +17,6 @@
 
 package org.thialfihar.android.apg.ui.adapter;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -27,6 +24,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 
 public class ViewKeyUserIdsAdapter extends CursorAdapter {
     private LayoutInflater mInflater;

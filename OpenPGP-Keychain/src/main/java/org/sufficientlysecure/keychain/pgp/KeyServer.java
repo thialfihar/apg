@@ -18,9 +18,9 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import java.util.List;
-
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+
+import java.util.List;
 
 public abstract class KeyServer {
     static public class QueryException extends Exception {
