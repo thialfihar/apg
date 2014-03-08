@@ -499,7 +499,7 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             }
 
             if(mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
-                holder.text.setText("My Keys");
+                holder.text.setText(convertView.getResources().getString(R.string.my_keys));
                 return convertView;
             }
 
