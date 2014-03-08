@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package org.thialfihar.android.apg.util;
+package org.thialfihar.android.apg.pgp;
 
-public interface ProgressDialogUpdater {
+public interface Progressable {
     void setProgress(String message, int current, int total);
-
     void setProgress(int resourceId, int current, int total);
-
     void setProgress(int current, int total);
 }

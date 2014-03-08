@@ -47,7 +47,7 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class PgpSignEncrypt {
     private InputData data;
     private OutputStream outStream;
 
-    private ProgressDialogUpdater progress;
+    private Progressable progress;
     private boolean enableAsciiArmorOutput;
     private int compressionId;
     private long[] encryptionKeyIds;
@@ -103,7 +103,7 @@ public class PgpSignEncrypt {
         private OutputStream outStream;
 
         // optional
-        private ProgressDialogUpdater progress = null;
+        private Progressable progress = null;
         private boolean enableAsciiArmorOutput = false;
         private int compressionId = Id.choice.compression.none;
         private long[] encryptionKeyIds = new long[0];
@@ -120,7 +120,7 @@ public class PgpSignEncrypt {
             this.outStream = outStream;
         }
 
-        public Builder progress(ProgressDialogUpdater progress) {
+        public Builder progress(Progressable progress) {
             this.progress = progress;
             return this;
         }

@@ -66,13 +66,13 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.Primes;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 import android.content.Context;
 
 public class PgpKeyOperation {
     private Context mContext;
-    private ProgressDialogUpdater mProgress;
+    private Progressable mProgress;
 
     private static final int[] PREFERRED_SYMMETRIC_ALGORITHMS = new int[] {
             SymmetricKeyAlgorithmTags.AES_256, SymmetricKeyAlgorithmTags.AES_192,
@@ -84,7 +84,7 @@ public class PgpKeyOperation {
             CompressionAlgorithmTags.ZLIB, CompressionAlgorithmTags.BZIP2,
             CompressionAlgorithmTags.ZIP };
 
-    public PgpKeyOperation(Context context, ProgressDialogUpdater progress) {
+    public PgpKeyOperation(Context context, Progressable progress) {
         super();
         this.mContext = context;
         this.mProgress = progress;

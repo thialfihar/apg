@@ -39,17 +39,17 @@ import org.spongycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.pgp.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.IterableIterator;
-import org.thialfihar.android.apg.util.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.PositionAwareInputStream;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -57,9 +57,9 @@ import android.os.Environment;
 
 public class PgpImportExport {
     private Context mContext;
-    private ProgressDialogUpdater mProgress;
+    private Progressable mProgress;
 
-    public PgpImportExport(Context context, ProgressDialogUpdater progress) {
+    public PgpImportExport(Context context, Progressable progress) {
         super();
         this.mContext = context;
         this.mProgress = progress;

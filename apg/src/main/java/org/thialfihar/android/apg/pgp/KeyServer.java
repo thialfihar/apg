@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.thialfihar.android.apg.util;
+package org.thialfihar.android.apg.pgp;
 
 import java.util.List;
 
