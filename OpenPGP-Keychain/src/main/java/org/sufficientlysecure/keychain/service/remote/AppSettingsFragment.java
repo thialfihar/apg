@@ -53,7 +53,7 @@ public class AppSettingsFragment extends Fragment implements
         SelectSecretKeyLayoutFragment.SelectSecretKeyCallback {
 
     // model
-    private AppSettings appSettings;
+    private AppSettings mAppSettings;
 
     // view
     private LinearLayout mAdvancedSettingsContainer;
@@ -68,22 +68,22 @@ public class AppSettingsFragment extends Fragment implements
 
     private SelectSecretKeyLayoutFragment mSelectKeyFragment;
 
-    KeyValueSpinnerAdapter encryptionAdapter;
-    KeyValueSpinnerAdapter hashAdapter;
-    KeyValueSpinnerAdapter compressionAdapter;
+    KeyValueSpinnerAdapter mEncryptionAdapter;
+    KeyValueSpinnerAdapter mHashAdapter;
+    KeyValueSpinnerAdapter mCompressionAdapter;
 
     public AppSettings getAppSettings() {
-        return appSettings;
+        return mAppSettings;
     }
 
-    public void setAppSettings(AppSettings appSettings) {
-        this.appSettings = appSettings;
-        setPackage(appSettings.getPackageName());
-        mPackageName.setText(appSettings.getPackageName());
+    public void setAppSettings(AppSettings mAppSettings) {
+        this.mAppSettings = mAppSettings;
+        setPackage(mAppSettings.getPackageName());
+        mPackageName.setText(mAppSettings.getPackageName());
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(appSettings.getPackageSignature());
+            md.update(mAppSettings.getPackageSignature());
             byte[] digest = md.digest();
             String signature = new String(Hex.encode(digest));
 
@@ -92,11 +92,11 @@ public class AppSettingsFragment extends Fragment implements
             Log.e(Constants.TAG, "Should not happen!", e);
         }
 
-        mSelectKeyFragment.selectKey(appSettings.getKeyId());
-        mEncryptionAlgorithm.setSelection(encryptionAdapter.getPosition(appSettings
+        mSelectKeyFragment.selectKey(mAppSettings.getKeyId());
+        mEncryptionAlgorithm.setSelection(mEncryptionAdapter.getPosition(mAppSettings
                 .getEncryptionAlgorithm()));
-        mHashAlgorithm.setSelection(hashAdapter.getPosition(appSettings.getHashAlgorithm()));
-        mCompression.setSelection(compressionAdapter.getPosition(appSettings.getCompression()));
+        mHashAlgorithm.setSelection(mHashAdapter.getPosition(mAppSettings.getHashAlgorithm()));
+        mCompression.setSelection(mCompressionAdapter.getPosition(mAppSettings.getCompression()));
     }
 
     /**
@@ -139,14 +139,14 @@ public class AppSettingsFragment extends Fragment implements
 
         AlgorithmNames algorithmNames = new AlgorithmNames(getActivity());
 
-        encryptionAdapter = new KeyValueSpinnerAdapter(getActivity(),
+        mEncryptionAdapter = new KeyValueSpinnerAdapter(getActivity(),
                 algorithmNames.getEncryptionNames());
-        mEncryptionAlgorithm.setAdapter(encryptionAdapter);
+        mEncryptionAlgorithm.setAdapter(mEncryptionAdapter);
         mEncryptionAlgorithm.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                appSettings.setEncryptionAlgorithm((int) id);
+                mAppSettings.setEncryptionAlgorithm((int) id);
             }
 
             @Override
@@ -154,13 +154,13 @@ public class AppSettingsFragment extends Fragment implements
             }
         });
 
-        hashAdapter = new KeyValueSpinnerAdapter(getActivity(), algorithmNames.getHashNames());
-        mHashAlgorithm.setAdapter(hashAdapter);
+        mHashAdapter = new KeyValueSpinnerAdapter(getActivity(), algorithmNames.getHashNames());
+        mHashAlgorithm.setAdapter(mHashAdapter);
         mHashAlgorithm.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                appSettings.setHashAlgorithm((int) id);
+                mAppSettings.setHashAlgorithm((int) id);
             }
 
             @Override
@@ -168,14 +168,14 @@ public class AppSettingsFragment extends Fragment implements
             }
         });
 
-        compressionAdapter = new KeyValueSpinnerAdapter(getActivity(),
+        mCompressionAdapter = new KeyValueSpinnerAdapter(getActivity(),
                 algorithmNames.getCompressionNames());
-        mCompression.setAdapter(compressionAdapter);
+        mCompression.setAdapter(mCompressionAdapter);
         mCompression.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                appSettings.setCompression((int) id);
+                mAppSettings.setCompression((int) id);
             }
 
             @Override
@@ -236,8 +236,8 @@ public class AppSettingsFragment extends Fragment implements
      * callback from select secret key fragment
      */
     @Override
-    public void onKeySelected(long secretKeyId) {
-        appSettings.setKeyId(secretKeyId);
+    public void onKeySelected(long keyId) {
+        mAppSettings.setKeyId(keyId);
     }
 
 }

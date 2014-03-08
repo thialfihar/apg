@@ -102,12 +102,12 @@ public class EditKeyActivity extends ActionBarActivity {
 
     private CheckBox mNoPassphrase;
 
-    Vector<String> mUserIds;
-    Vector<PGPSecretKey> mKeys;
-    Vector<Integer> mKeysUsages;
-    boolean masterCanSign = true;
+    private Vector<String> mUserIds;
+    private Vector<PGPSecretKey> mKeys;
+    private Vector<Integer> mKeysUsages;
+    private boolean mMasterCanSign;
 
-    ExportHelper mExportHelper;
+    private ExportHelper mExportHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,8 @@ public class EditKeyActivity extends ActionBarActivity {
         mUserIds = new Vector<String>();
         mKeys = new Vector<PGPSecretKey>();
         mKeysUsages = new Vector<Integer>();
+
+        mMasterCanSign = true;
 
         // Catch Intents opened from other apps
         Intent intent = getIntent();
@@ -271,12 +273,12 @@ public class EditKeyActivity extends ActionBarActivity {
             // get master key id using row id
             long masterKeyId = ProviderHelper.getSecretMasterKeyId(this, keyRingRowId);
 
-            masterCanSign = ProviderHelper.getSecretMasterKeyCanSign(this, keyRingRowId);
-            finallyEdit(masterKeyId, masterCanSign);
+            mMasterCanSign = ProviderHelper.getSecretMasterKeyCanSign(this, keyRingRowId);
+            finallyEdit(masterKeyId, mMasterCanSign);
         }
     }
 
-    private void showPassphraseDialog(final long masterKeyId, final boolean masterCanSign) {
+    private void showPassphraseDialog(final long masterKeyId, final boolean mMasterCanSign) {
         // Message is received after passphrase is cached
         Handler returnHandler = new Handler() {
             @Override
@@ -352,7 +354,7 @@ public class EditKeyActivity extends ActionBarActivity {
     }
 
     @SuppressWarnings("unchecked")
-    private void finallyEdit(final long masterKeyId, final boolean masterCanSign) {
+    private void finallyEdit(final long masterKeyId, final boolean mMasterCanSign) {
         if (masterKeyId != 0) {
             PGPSecretKey masterKey = null;
             mKeyRing = ProviderHelper.getPGPSecretKeyRingByMasterKeyId(this, masterKeyId);
@@ -439,12 +441,12 @@ public class EditKeyActivity extends ActionBarActivity {
         LinearLayout container = (LinearLayout) findViewById(R.id.edit_key_container);
         mUserIdsView = (SectionView) inflater.inflate(R.layout.edit_key_section, container, false);
         mUserIdsView.setType(Id.type.user_id);
-        mUserIdsView.setCanEdit(masterCanSign);
+        mUserIdsView.setCanBeEdited(mMasterCanSign);
         mUserIdsView.setUserIds(mUserIds);
         container.addView(mUserIdsView);
         mKeysView = (SectionView) inflater.inflate(R.layout.edit_key_section, container, false);
         mKeysView.setType(Id.type.key);
-        mKeysView.setCanEdit(masterCanSign);
+        mKeysView.setCanBeEdited(mMasterCanSign);
         mKeysView.setKeys(mKeys, mKeysUsages);
         container.addView(mKeysView);
 
@@ -505,7 +507,7 @@ public class EditKeyActivity extends ActionBarActivity {
             else
                 passphrase = "";
             if (passphrase == null) {
-                showPassphraseDialog(masterKeyId, masterCanSign);
+                showPassphraseDialog(masterKeyId, mMasterCanSign);
             } else {
                 mCurrentPassphrase = passphrase;
                 finallySaveClicked();
@@ -538,7 +540,7 @@ public class EditKeyActivity extends ActionBarActivity {
             data.putSerializable(ApgIntentService.SAVE_KEYRING_KEYS_EXPIRY_DATES,
                     getKeysExpiryDates(mKeysView));
             data.putLong(ApgIntentService.SAVE_KEYRING_MASTER_KEY_ID, getMasterKeyId());
-            data.putBoolean(ApgIntentService.SAVE_KEYRING_CAN_SIGN, masterCanSign);
+            data.putBoolean(ApgIntentService.SAVE_KEYRING_CAN_SIGN, mMasterCanSign);
 
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 

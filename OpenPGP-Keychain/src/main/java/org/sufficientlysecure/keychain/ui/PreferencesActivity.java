@@ -44,11 +44,11 @@ public class PreferencesActivity extends PreferenceActivity {
     public final static String ACTION_PREFS_ADV = "org.thialfihar.android.apg.ui.PREFS_ADV";
 
     private PreferenceScreen mKeyServerPreference = null;
-    private static Preferences mPreferences;
+    private static Preferences sPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mPreferences = Preferences.getPreferences(this);
+        sPreferences = Preferences.getPreferences(this);
         super.onCreate(savedInstanceState);
 
 //        final ActionBar actionBar = getSupportActionBar();
@@ -66,7 +66,7 @@ public class PreferencesActivity extends PreferenceActivity {
                     (IntegerListPreference) findPreference(Constants.pref.PASSPHRASE_CACHE_TTL));
 
             mKeyServerPreference = (PreferenceScreen) findPreference(Constants.pref.KEY_SERVERS);
-            String servers[] = mPreferences.getKeyServers();
+            String servers[] = sPreferences.getKeyServers();
             mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_key_servers,
                     servers.length, servers.length));
             mKeyServerPreference
@@ -75,7 +75,7 @@ public class PreferencesActivity extends PreferenceActivity {
                             Intent intent = new Intent(PreferencesActivity.this,
                                     PreferencesKeyServerActivity.class);
                             intent.putExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS,
-                                    mPreferences.getKeyServers());
+                                    sPreferences.getKeyServers());
                             startActivityForResult(intent, Id.request.key_server_preference);
                             return false;
                         }
@@ -130,7 +130,7 @@ public class PreferencesActivity extends PreferenceActivity {
                 }
                 String servers[] = data
                         .getStringArrayExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS);
-                mPreferences.setKeyServers(servers);
+                sPreferences.setKeyServers(servers);
                 mKeyServerPreference.setSummary(getResources().getQuantityString(
                         R.plurals.n_key_servers, servers.length, servers.length));
                 break;
@@ -166,7 +166,7 @@ public class PreferencesActivity extends PreferenceActivity {
                     (IntegerListPreference) findPreference(Constants.pref.PASSPHRASE_CACHE_TTL));
 
             mKeyServerPreference = (PreferenceScreen) findPreference(Constants.pref.KEY_SERVERS);
-            String servers[] = mPreferences.getKeyServers();
+            String servers[] = sPreferences.getKeyServers();
             mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_key_servers,
                     servers.length, servers.length));
             mKeyServerPreference
@@ -175,7 +175,7 @@ public class PreferencesActivity extends PreferenceActivity {
                             Intent intent = new Intent(getActivity(),
                                     PreferencesKeyServerActivity.class);
                             intent.putExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS,
-                                    mPreferences.getKeyServers());
+                                    sPreferences.getKeyServers());
                             startActivityForResult(intent, Id.request.key_server_preference);
                             return false;
                         }
@@ -191,7 +191,7 @@ public class PreferencesActivity extends PreferenceActivity {
                     }
                     String servers[] = data
                             .getStringArrayExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS);
-                    mPreferences.setKeyServers(servers);
+                    sPreferences.setKeyServers(servers);
                     mKeyServerPreference.setSummary(getResources().getQuantityString(
                             R.plurals.n_key_servers, servers.length, servers.length));
                     break;
@@ -255,14 +255,14 @@ public class PreferencesActivity extends PreferenceActivity {
     }
 
     private static void initializePassPassPhraceCacheTtl(final IntegerListPreference mPassphraseCacheTtl) {
-        mPassphraseCacheTtl.setValue("" + mPreferences.getPassphraseCacheTtl());
+        mPassphraseCacheTtl.setValue("" + sPreferences.getPassphraseCacheTtl());
         mPassphraseCacheTtl.setSummary(mPassphraseCacheTtl.getEntry());
         mPassphraseCacheTtl
                 .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         mPassphraseCacheTtl.setValue(newValue.toString());
                         mPassphraseCacheTtl.setSummary(mPassphraseCacheTtl.getEntry());
-                        mPreferences.setPassphraseCacheTtl(Integer.parseInt(newValue.toString()));
+                        sPreferences.setPassphraseCacheTtl(Integer.parseInt(newValue.toString()));
                         return false;
                     }
                 });
@@ -281,14 +281,14 @@ public class PreferencesActivity extends PreferenceActivity {
         }
         mEncryptionAlgorithm.setEntries(entries);
         mEncryptionAlgorithm.setEntryValues(values);
-        mEncryptionAlgorithm.setValue("" + mPreferences.getDefaultEncryptionAlgorithm());
+        mEncryptionAlgorithm.setValue("" + sPreferences.getDefaultEncryptionAlgorithm());
         mEncryptionAlgorithm.setSummary(mEncryptionAlgorithm.getEntry());
         mEncryptionAlgorithm
                 .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         mEncryptionAlgorithm.setValue(newValue.toString());
                         mEncryptionAlgorithm.setSummary(mEncryptionAlgorithm.getEntry());
-                        mPreferences.setDefaultEncryptionAlgorithm(Integer.parseInt(newValue
+                        sPreferences.setDefaultEncryptionAlgorithm(Integer.parseInt(newValue
                                 .toString()));
                         return false;
                     }
@@ -308,13 +308,13 @@ public class PreferencesActivity extends PreferenceActivity {
         }
         mHashAlgorithm.setEntries(entries);
         mHashAlgorithm.setEntryValues(values);
-        mHashAlgorithm.setValue("" + mPreferences.getDefaultHashAlgorithm());
+        mHashAlgorithm.setValue("" + sPreferences.getDefaultHashAlgorithm());
         mHashAlgorithm.setSummary(mHashAlgorithm.getEntry());
         mHashAlgorithm.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 mHashAlgorithm.setValue(newValue.toString());
                 mHashAlgorithm.setSummary(mHashAlgorithm.getEntry());
-                mPreferences.setDefaultHashAlgorithm(Integer.parseInt(newValue.toString()));
+                sPreferences.setDefaultHashAlgorithm(Integer.parseInt(newValue.toString()));
                 return false;
             }
         });
@@ -324,14 +324,14 @@ public class PreferencesActivity extends PreferenceActivity {
             (final IntegerListPreference mMessageCompression, int[] valueIds, String[] entries, String[] values) {
         mMessageCompression.setEntries(entries);
         mMessageCompression.setEntryValues(values);
-        mMessageCompression.setValue("" + mPreferences.getDefaultMessageCompression());
+        mMessageCompression.setValue("" + sPreferences.getDefaultMessageCompression());
         mMessageCompression.setSummary(mMessageCompression.getEntry());
         mMessageCompression
                 .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         mMessageCompression.setValue(newValue.toString());
                         mMessageCompression.setSummary(mMessageCompression.getEntry());
-                        mPreferences.setDefaultMessageCompression(Integer.parseInt(newValue
+                        sPreferences.setDefaultMessageCompression(Integer.parseInt(newValue
                                 .toString()));
                         return false;
                     }
@@ -342,36 +342,36 @@ public class PreferencesActivity extends PreferenceActivity {
             (final IntegerListPreference mFileCompression, String[] entries, String[] values) {
         mFileCompression.setEntries(entries);
         mFileCompression.setEntryValues(values);
-        mFileCompression.setValue("" + mPreferences.getDefaultFileCompression());
+        mFileCompression.setValue("" + sPreferences.getDefaultFileCompression());
         mFileCompression.setSummary(mFileCompression.getEntry());
         mFileCompression.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 mFileCompression.setValue(newValue.toString());
                 mFileCompression.setSummary(mFileCompression.getEntry());
-                mPreferences.setDefaultFileCompression(Integer.parseInt(newValue.toString()));
+                sPreferences.setDefaultFileCompression(Integer.parseInt(newValue.toString()));
                 return false;
             }
         });
     }
 
     private static void initializeAsciiArmor(final CheckBoxPreference mAsciiArmor) {
-        mAsciiArmor.setChecked(mPreferences.getDefaultAsciiArmor());
+        mAsciiArmor.setChecked(sPreferences.getDefaultAsciiArmor());
         mAsciiArmor.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 mAsciiArmor.setChecked((Boolean) newValue);
-                mPreferences.setDefaultAsciiArmor((Boolean) newValue);
+                sPreferences.setDefaultAsciiArmor((Boolean) newValue);
                 return false;
             }
         });
     }
 
     private static void initializeForceV3Signatures(final CheckBoxPreference mForceV3Signatures) {
-        mForceV3Signatures.setChecked(mPreferences.getForceV3Signatures());
+        mForceV3Signatures.setChecked(sPreferences.getForceV3Signatures());
         mForceV3Signatures
                 .setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
                         mForceV3Signatures.setChecked((Boolean) newValue);
-                        mPreferences.setForceV3Signatures((Boolean) newValue);
+                        sPreferences.setForceV3Signatures((Boolean) newValue);
                         return false;
                     }
                 });

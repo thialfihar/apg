@@ -25,21 +25,20 @@ package org.thialfihar.android.apg.ui.adapter;
  * @param <T> - Typ of the result which is wrapped
  */
 public class AsyncTaskResultWrapper <T>{
-
-    private final T result;
-    private final Exception error;
+    private final T mResult;
+    private final Exception mError;
 
     public AsyncTaskResultWrapper(T result, Exception error){
-        this.result = result;
-        this.error = error;
+        mResult = result;
+        mError = error;
     }
 
     public T getResult() {
-        return result;
+        return mResult;
     }
 
     public Exception getError() {
-        return error;
+        return mError;
     }
 
 }

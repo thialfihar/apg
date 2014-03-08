@@ -182,7 +182,7 @@ public class KeyListPublicAdapter extends CursorAdapter implements StickyListHea
     }
 
     class HeaderViewHolder {
-        TextView text;
+        public TextView text;
     }
 
     /**

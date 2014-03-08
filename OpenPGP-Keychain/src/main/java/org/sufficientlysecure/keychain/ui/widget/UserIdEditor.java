@@ -57,8 +57,8 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         }
     }
 
-    public void setCanEdit(boolean bCanEdit) {
-        if (!bCanEdit) {
+    public void setCanBeEdited(boolean canBeEdited) {
+        if (!canBeEdited) {
             mDeleteButton.setVisibility(View.INVISIBLE);
             mName.setEnabled(false);
             mIsMainUserId.setEnabled(false);

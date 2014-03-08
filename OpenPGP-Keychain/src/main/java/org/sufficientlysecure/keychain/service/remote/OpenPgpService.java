@@ -162,11 +162,11 @@ public class OpenPgpService extends RemoteService {
 
                 // sign-only
                 PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(getContext(), inputData, os);
-                builder.enableAsciiArmorOutput(asciiArmor)
-                        .signatureHashAlgorithm(appSettings.getHashAlgorithm())
-                        .signatureForceV3(false)
-                        .signatureKeyId(appSettings.getKeyId())
-                        .signaturePassphrase(passphrase);
+                builder.setEnableAsciiArmorOutput(asciiArmor)
+                        .setSignatureHashAlgorithm(appSettings.getHashAlgorithm())
+                        .setSignatureForceV3(false)
+                        .setSignatureKeyId(appSettings.getKeyId())
+                        .setSignaturePassphrase(passphrase);
                 builder.build().execute();
             } finally {
                 is.close();
@@ -226,10 +226,10 @@ public class OpenPgpService extends RemoteService {
                 InputData inputData = new InputData(is, inputLength);
 
                 PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(getContext(), inputData, os);
-                builder.enableAsciiArmorOutput(asciiArmor)
-                        .compressionId(appSettings.getCompression())
-                        .symmetricEncryptionAlgorithm(appSettings.getEncryptionAlgorithm())
-                        .encryptionKeyIds(keyIds);
+                builder.setEnableAsciiArmorOutput(asciiArmor)
+                        .setCompressionId(appSettings.getCompression())
+                        .setSymmetricEncryptionAlgorithm(appSettings.getEncryptionAlgorithm())
+                        .setEncryptionKeyIds(keyIds);
 
                 if (sign) {
                     String passphrase;
@@ -246,13 +246,13 @@ public class OpenPgpService extends RemoteService {
                     }
 
                     // sign and encrypt
-                    builder.signatureHashAlgorithm(appSettings.getHashAlgorithm())
-                            .signatureForceV3(false)
-                            .signatureKeyId(appSettings.getKeyId())
-                            .signaturePassphrase(passphrase);
+                    builder.setSignatureHashAlgorithm(appSettings.getHashAlgorithm())
+                            .setSignatureForceV3(false)
+                            .setSignatureKeyId(appSettings.getKeyId())
+                            .setSignaturePassphrase(passphrase);
                 } else {
                     // encrypt only
-                    builder.signatureKeyId(Id.key.none);
+                    builder.setSignatureKeyId(Id.key.none);
                 }
                 // execute PGP operation!
                 builder.build().execute();
@@ -288,9 +288,9 @@ public class OpenPgpService extends RemoteService {
                 InputData inputData = new InputData(is, inputLength);
 
                 PgpDecryptVerify.Builder builder = new PgpDecryptVerify.Builder(this, inputData, os);
-                builder.assumeSymmetric(false) // no support for symmetric encryption
-                        .enforcedKeyId(appSettings.getKeyId()) // allow only the private key for this app for decryption
-                        .passphrase(passphrase);
+                builder.setAssumeSymmetric(false) // no support for symmetric encryption
+                        .setEnforcedKeyId(appSettings.getKeyId()) // allow only the private key for this app for decryption
+                        .setPassphrase(passphrase);
 
                 // TODO: currently does not support binary signed-only content
                 PgpDecryptVerifyResult decryptVerifyResult = builder.build().execute();

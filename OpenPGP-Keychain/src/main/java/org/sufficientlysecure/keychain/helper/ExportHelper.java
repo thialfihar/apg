@@ -41,11 +41,11 @@ public class ExportHelper {
     protected FileDialogFragment mFileDialog;
     protected String mExportFilename;
 
-    ActionBarActivity activity;
+    private ActionBarActivity mActivity;
 
     public ExportHelper(ActionBarActivity activity) {
         super();
-        this.activity = activity;
+        mActivity = activity;
     }
 
     public void deleteKey(Uri dataUri, final int keyType, Handler deleteHandler) {
@@ -57,7 +57,7 @@ public class ExportHelper {
         DeleteKeyDialogFragment deleteKeyDialog = DeleteKeyDialogFragment.newInstance(messenger,
                 new long[] { keyRingRowId }, keyType);
 
-        deleteKeyDialog.show(activity.getSupportFragmentManager(), "deleteKeyDialog");
+        deleteKeyDialog.show(mActivity.getSupportFragmentManager(), "deleteKeyDialog");
     }
 
     /**
@@ -88,23 +88,23 @@ public class ExportHelper {
                 String title = null;
                 if (dataUri == null) {
                     // export all keys
-                    title = activity.getString(R.string.title_export_keys);
+                    title = mActivity.getString(R.string.title_export_keys);
                 } else {
                     // export only key specified at data uri
-                    title = activity.getString(R.string.title_export_key);
+                    title = mActivity.getString(R.string.title_export_key);
                 }
 
                 String message = null;
                 if (keyType == Id.type.public_key) {
-                    message = activity.getString(R.string.specify_file_to_export_to);
+                    message = mActivity.getString(R.string.specify_file_to_export_to);
                 } else {
-                    message = activity.getString(R.string.specify_file_to_export_secret_keys_to);
+                    message = mActivity.getString(R.string.specify_file_to_export_secret_keys_to);
                 }
 
                 mFileDialog = FileDialogFragment.newInstance(messenger, title, message,
                         exportFilename, null);
 
-                mFileDialog.show(activity.getSupportFragmentManager(), "fileDialog");
+                mFileDialog.show(mActivity.getSupportFragmentManager(), "fileDialog");
             }
         });
     }
@@ -116,7 +116,7 @@ public class ExportHelper {
         Log.d(Constants.TAG, "exportKeys started");
 
         // Send all information needed to service to export key in other thread
-        Intent intent = new Intent(activity, ApgIntentService.class);
+        Intent intent = new Intent(mActivity, ApgIntentService.class);
 
         intent.setAction(ApgIntentService.ACTION_EXPORT_KEYRING);
 
@@ -130,7 +130,7 @@ public class ExportHelper {
             data.putBoolean(ApgIntentService.EXPORT_ALL, true);
         } else {
             // TODO: put data uri into service???
-            long keyRingMasterKeyId = ProviderHelper.getMasterKeyId(activity, dataUri);
+            long keyRingMasterKeyId = ProviderHelper.getMasterKeyId(mActivity, dataUri);
 
             data.putLong(ApgIntentService.EXPORT_KEY_RING_MASTER_KEY_ID, keyRingMasterKeyId);
         }
@@ -138,7 +138,7 @@ public class ExportHelper {
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // Message is received after exporting is done in ApgService
-        ApgIntentServiceHandler exportHandler = new ApgIntentServiceHandler(activity,
+        ApgIntentServiceHandler exportHandler = new ApgIntentServiceHandler(mActivity,
                 R.string.progress_exporting, ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
@@ -151,13 +151,13 @@ public class ExportHelper {
                     int exported = returnData.getInt(ApgIntentService.RESULT_EXPORT);
                     String toastMessage;
                     if (exported == 1) {
-                        toastMessage = activity.getString(R.string.key_exported);
+                        toastMessage = mActivity.getString(R.string.key_exported);
                     } else if (exported > 0) {
-                        toastMessage = activity.getString(R.string.keys_exported, exported);
+                        toastMessage = mActivity.getString(R.string.keys_exported, exported);
                     } else {
-                        toastMessage = activity.getString(R.string.no_keys_exported);
+                        toastMessage = mActivity.getString(R.string.no_keys_exported);
                     }
-                    Toast.makeText(activity, toastMessage, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, toastMessage, Toast.LENGTH_SHORT).show();
 
                 }
             };
@@ -168,10 +168,10 @@ public class ExportHelper {
         intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
-        exportHandler.showProgressDialog(activity);
+        exportHandler.showProgressDialog(mActivity);
 
         // start service with intent
-        activity.startService(intent);
+        mActivity.startService(intent);
     }
 
 }

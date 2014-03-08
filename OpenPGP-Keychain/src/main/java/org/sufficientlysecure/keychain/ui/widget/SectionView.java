@@ -57,7 +57,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     private Choice mNewKeyAlgorithmChoice;
     private int mNewKeySize;
-    private boolean canEdit = true;
+    private boolean mCanBeEdited = true;
 
     private ActionBarActivity mActivity;
 
@@ -96,9 +96,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         }
     }
 
-    public void setCanEdit(boolean bCanEdit) {
-        canEdit = bCanEdit;
-        if (!canEdit) {
+    public void setCanBeEdited(boolean canBeEdited) {
+        mCanBeEdited = canBeEdited;
+        if (!mCanBeEdited) {
             mPlusButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -133,7 +133,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     /** {@inheritDoc} */
     public void onClick(View v) {
-        if (canEdit) {
+        if (mCanBeEdited) {
             switch (mType) {
             case Id.type.user_id: {
                 UserIdEditor view = (UserIdEditor) mInflater.inflate(
@@ -182,7 +182,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             if (mEditors.getChildCount() == 0) {
                 view.setIsMainUserId(true);
             }
-            view.setCanEdit(canEdit);
+            view.setCanBeEdited(mCanBeEdited);
             mEditors.addView(view);
         }
 
@@ -203,7 +203,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             view.setEditorListener(this);
             boolean isMasterKey = (mEditors.getChildCount() == 0);
             view.setValue(list.get(i), isMasterKey, usages.get(i));
-            view.setCanEdit(canEdit);
+            view.setCanBeEdited(mCanBeEdited);
             mEditors.addView(view);
         }
 

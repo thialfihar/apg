@@ -31,19 +31,19 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 public class HelpHtmlFragment extends Fragment {
     private Activity mActivity;
 
-    private int htmlFile;
+    private int mHtmlFile;
 
-    public static final String ARG_HTML_FILE = "htmlFile";
+    public static final String ARG_HTML_FILE = "mHtmlFile";
 
     /**
-     * Create a new instance of HelpHtmlFragment, providing "htmlFile" as an argument.
+     * Create a new instance of HelpHtmlFragment, providing "mHtmlFile" as an argument.
      */
-    static HelpHtmlFragment newInstance(int htmlFile) {
+    static HelpHtmlFragment newInstance(int mHtmlFile) {
         HelpHtmlFragment f = new HelpHtmlFragment();
 
         // Supply html raw file input as an argument.
         Bundle args = new Bundle();
-        args.putInt(ARG_HTML_FILE, htmlFile);
+        args.putInt(ARG_HTML_FILE, mHtmlFile);
         f.setArguments(args);
 
         return f;
@@ -53,7 +53,7 @@ public class HelpHtmlFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
 
-        htmlFile = getArguments().getInt(ARG_HTML_FILE);
+        mHtmlFile = getArguments().getInt(ARG_HTML_FILE);
 
         ScrollView scroller = new ScrollView(mActivity);
         HtmlTextView text = new HtmlTextView(mActivity);
@@ -66,7 +66,7 @@ public class HelpHtmlFragment extends Fragment {
         scroller.addView(text);
 
         // load html from raw resource (Parsing handled by HtmlTextView library)
-        text.setHtmlFromRawResource(getActivity(), htmlFile);
+        text.setHtmlFromRawResource(getActivity(), mHtmlFile);
 
         // no flickering when clicking textview for Android < 4
         text.setTextColor(getResources().getColor(android.R.color.black));

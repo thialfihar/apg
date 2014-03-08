@@ -268,8 +268,8 @@ public class PgpToX509 {
      */
     public final static class PredefinedPasswordCallbackHandler implements CallbackHandler {
 
-        private char[] password;
-        private String prompt;
+        private char[] mPassword;
+        private String mPrompt;
 
         public PredefinedPasswordCallbackHandler(String password) {
             this(password == null ? null : password.toCharArray(), null);
@@ -284,16 +284,16 @@ public class PgpToX509 {
         }
 
         public PredefinedPasswordCallbackHandler(char[] password, String prompt) {
-            this.password = password;
-            this.prompt = prompt;
+            mPassword = password;
+            mPrompt = prompt;
         }
 
         public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
             for (Callback callback : callbacks) {
                 if (callback instanceof PasswordCallback) {
                     PasswordCallback pwCallback = (PasswordCallback) callback;
-                    if ((this.prompt == null) || (this.prompt.equals(pwCallback.getPrompt()))) {
-                        pwCallback.setPassword(this.password);
+                    if (mPrompt == null || mPrompt.equals(pwCallback.getPrompt())) {
+                        pwCallback.setPassword(mPassword);
                     }
                 } else {
                     throw new UnsupportedCallbackException(callback, "Unrecognised callback.");

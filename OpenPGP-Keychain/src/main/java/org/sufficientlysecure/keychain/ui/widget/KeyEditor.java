@@ -158,8 +158,8 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         super.onFinishInflate();
     }
 
-    public void setCanEdit(boolean bCanEdit) {
-        if (!bCanEdit) {
+    public void setCanBeEdited(boolean canBeEdited) {
+        if (!canBeEdited) {
             mDeleteButton.setVisibility(View.INVISIBLE);
             mUsage.setEnabled(false);
             mExpiryDateButton.setEnabled(false);
