@@ -24,7 +24,7 @@ package org.thialfihar.android.apg.ui.adapter;
  * https://stackoverflow.com/questions/19593577/how-to-handle-errors-in-custom-asynctaskloader
  * @param <T> - Typ of the result which is wrapped
  */
-public class AsyncTaskResultWrapper <T>{
+public class AsyncTaskResultWrapper<T> {
     private final T mResult;
     private final Exception mError;
 
@@ -40,5 +40,4 @@ public class AsyncTaskResultWrapper <T>{
     public Exception getError() {
         return mError;
     }
-
 }
