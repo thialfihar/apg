@@ -71,11 +71,11 @@ public class Key {
     }
 
     public Key(PGPPublicKey publicKey) {
-        mPublicKey = mPublicKey;
+        mPublicKey = publicKey;
     }
 
     public Key(PGPSecretKey secretKey) {
-        mSecretKey = mSecretKey;
+        mSecretKey = secretKey;
         mPublicKey = mSecretKey.getPublicKey();
     }
 
