@@ -16,6 +16,16 @@
 
 package org.thialfihar.android.apg.helper;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -26,16 +36,6 @@ import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
 import org.thialfihar.android.apg.util.Log;
-
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
-import android.support.v7.app.ActionBarActivity;
-import android.widget.Toast;
 
 public class ExportHelper {
     protected FileDialogFragment mFileDialog;

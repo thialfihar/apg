@@ -16,16 +16,7 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.spongycastle.bcpg.HashAlgorithmTags;
-import org.spongycastle.openpgp.PGPEncryptedData;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.ui.widget.IntegerListPreference;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +25,15 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
-import android.support.v7.app.ActionBarActivity;
+
+import org.spongycastle.bcpg.HashAlgorithmTags;
+import org.spongycastle.openpgp.PGPEncryptedData;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.ui.widget.IntegerListPreference;
 
 import java.util.List;
 

@@ -17,16 +17,16 @@
 
 package org.thialfihar.android.apg;
 
-import java.io.File;
-import java.security.Provider;
-import java.security.Security;
+import android.app.Application;
+import android.os.Environment;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.PRNGFixes;
 
-import android.app.Application;
-import android.os.Environment;
+import java.io.File;
+import java.security.Provider;
+import java.security.Security;
 
 public class ApgApplication extends Application {
 

@@ -17,13 +17,16 @@
 
 package org.thialfihar.android.apg.util;
 
-import java.util.HashMap;
-import org.spongycastle.bcpg.HashAlgorithmTags;
-import org.spongycastle.openpgp.PGPEncryptedData;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+
+import org.spongycastle.bcpg.HashAlgorithmTags;
+import org.spongycastle.openpgp.PGPEncryptedData;
+
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+
+import java.util.HashMap;
 
 @SuppressLint("UseSparseArrays")
 public class AlgorithmNames {

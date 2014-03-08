@@ -17,10 +17,6 @@
 
 package org.thialfihar.android.apg.service.remote;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
-
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
@@ -33,6 +29,10 @@ import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
 
 public class RegisteredAppsListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {

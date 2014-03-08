@@ -16,14 +16,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.Vector;
-
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ActionBarHelper;
-import org.thialfihar.android.apg.ui.widget.Editor;
-import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
-import org.thialfihar.android.apg.ui.widget.KeyServerEditor;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +25,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ActionBarHelper;
+import org.thialfihar.android.apg.ui.widget.Editor;
+import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
+import org.thialfihar.android.apg.ui.widget.KeyServerEditor;
+
+import java.util.Vector;
 
 public class PreferencesKeyServerActivity extends ActionBarActivity implements OnClickListener,
         EditorListener {

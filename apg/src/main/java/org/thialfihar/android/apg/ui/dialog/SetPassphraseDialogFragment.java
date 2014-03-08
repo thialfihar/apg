@@ -17,10 +17,6 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.util.Log;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -40,6 +36,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.util.Log;
 
 public class SetPassphraseDialogFragment extends DialogFragment implements OnEditorActionListener {
     private static final String ARG_MESSENGER = "messenger";

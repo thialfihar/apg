@@ -17,9 +17,6 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import org.sufficientlysecure.htmltextview.HtmlTextView;
-import org.thialfihar.android.apg.R;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -31,6 +28,9 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+import org.thialfihar.android.apg.R;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ShareNfcDialogFragment extends DialogFragment {

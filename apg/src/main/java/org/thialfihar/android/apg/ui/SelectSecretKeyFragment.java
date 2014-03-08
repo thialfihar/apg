@@ -17,17 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.Date;
-
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
-import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
-import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
-
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +28,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.Keys;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
+import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
+
+import java.util.Date;
 
 public class SelectSecretKeyFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {

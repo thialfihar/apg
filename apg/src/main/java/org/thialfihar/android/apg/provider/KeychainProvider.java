@@ -17,8 +17,17 @@
 
 package org.thialfihar.android.apg.provider;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.provider.BaseColumns;
+import android.text.TextUtils;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
@@ -32,17 +41,8 @@ import org.thialfihar.android.apg.provider.KeychainContract.UserIdsColumns;
 import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
 import org.thialfihar.android.apg.util.Log;
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.net.Uri;
-import android.provider.BaseColumns;
-import android.text.TextUtils;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class KeychainProvider extends ContentProvider {
     // public static final String ACTION_BROADCAST_DATABASE_CHANGE = Constants.PACKAGE_NAME

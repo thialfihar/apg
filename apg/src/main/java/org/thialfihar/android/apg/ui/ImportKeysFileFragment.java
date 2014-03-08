@@ -17,11 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.FileHelper;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +26,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.FileHelper;
 
 public class ImportKeysFileFragment extends Fragment {
     private ImportKeysActivity mImportActivity;

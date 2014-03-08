@@ -17,21 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.ui.adapter.KeyListPublicAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
-
-import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -63,6 +48,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.ui.adapter.KeyListPublicAdapter;
+import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
+
+import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Public key list with sticky list headers. It does _not_ extend ListFragment because it uses

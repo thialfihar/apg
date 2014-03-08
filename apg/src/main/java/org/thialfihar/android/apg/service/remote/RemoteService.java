@@ -17,17 +17,6 @@
 
 package org.thialfihar.android.apg.service.remote;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.openintents.openpgp.OpenPgpError;
-import org.openintents.openpgp.util.OpenPgpApi;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.util.Log;
-
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -38,6 +27,17 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Binder;
+
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.util.Log;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Abstract service class for remote APIs that handle app registration and user input.

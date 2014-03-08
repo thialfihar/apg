@@ -17,12 +17,12 @@
 
 package org.thialfihar.android.apg.compatibility;
 
-import java.lang.reflect.Method;
-
 import android.content.Context;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.util.Log;
+
+import java.lang.reflect.Method;
 
 public class ClipboardReflection {
 

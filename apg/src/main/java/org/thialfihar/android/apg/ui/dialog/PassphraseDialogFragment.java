@@ -17,20 +17,6 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import org.spongycastle.openpgp.PGPException;
-import org.spongycastle.openpgp.PGPPrivateKey;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
-import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.PassphraseCacheService;
-import org.thialfihar.android.apg.util.Log;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -52,6 +38,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+
+import org.spongycastle.openpgp.PGPException;
+import org.spongycastle.openpgp.PGPPrivateKey;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
+import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.util.Log;
 
 public class PassphraseDialogFragment extends DialogFragment implements OnEditorActionListener {
     private static final String ARG_MESSENGER = "messenger";

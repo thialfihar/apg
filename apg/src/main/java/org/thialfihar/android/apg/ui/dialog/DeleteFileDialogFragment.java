@@ -17,10 +17,6 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -32,6 +28,10 @@ import android.os.Messenger;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 
 public class DeleteFileDialogFragment extends DialogFragment {
     private static final String ARG_DELETE_FILE = "delete_file";

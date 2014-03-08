@@ -17,8 +17,15 @@
 
 package org.thialfihar.android.apg.ui.adapter;
 
-import java.util.HashMap;
-import java.util.Set;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.support.v4.widget.CursorAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
@@ -28,16 +35,8 @@ import org.thialfihar.android.apg.util.Log;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.support.v4.widget.CursorAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Implements StickyListHeadersAdapter from library

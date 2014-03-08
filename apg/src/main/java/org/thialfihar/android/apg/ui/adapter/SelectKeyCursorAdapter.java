@@ -17,12 +17,6 @@
 
 package org.thialfihar.android.apg.ui.adapter;
 
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -32,6 +26,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 
 public class SelectKeyCursorAdapter extends CursorAdapter {
 

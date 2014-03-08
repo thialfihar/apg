@@ -17,11 +17,6 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.FileHelper;
-import org.thialfihar.android.apg.util.Log;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,7 +28,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.DialogFragment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -41,6 +35,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.FileHelper;
+import org.thialfihar.android.apg.util.Log;
 
 public class FileDialogFragment extends DialogFragment {
     private static final String ARG_MESSENGER = "messenger";

@@ -17,18 +17,7 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import java.security.SignatureException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import android.content.Context;
 
 import org.spongycastle.bcpg.CompressionAlgorithmTags;
 import org.spongycastle.bcpg.HashAlgorithmTags;
@@ -59,6 +48,7 @@ import org.spongycastle.openpgp.operator.jcajce.JcaPGPDigestCalculatorProviderBu
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPKeyPair;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -66,9 +56,19 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.Primes;
-import org.thialfihar.android.apg.pgp.Progressable;
 
-import android.content.Context;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import java.security.SignatureException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class PgpKeyOperation {
     private Context mContext;

@@ -17,20 +17,24 @@
 
 package org.thialfihar.android.apg.provider;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.OperationApplicationException;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.net.Uri;
+import android.os.RemoteException;
 
 import org.spongycastle.bcpg.ArmoredOutputStream;
-import org.spongycastle.bcpg.UserAttributePacket;
-import org.spongycastle.bcpg.UserAttributeSubpacket;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
@@ -44,15 +48,10 @@ import org.thialfihar.android.apg.service.remote.AppSettings;
 import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 
-import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.OperationApplicationException;
-import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.net.Uri;
-import android.os.RemoteException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class ProviderHelper {
 

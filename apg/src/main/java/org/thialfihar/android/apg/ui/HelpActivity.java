@@ -17,21 +17,14 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.ArrayList;
-
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.widget.TextView;
+
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 
 public class HelpActivity extends ActionBarActivity {
     public static final String EXTRA_SELECTED_TAB = "selectedTab";

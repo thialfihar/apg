@@ -17,14 +17,9 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.security.SecureRandom;
-import java.util.Iterator;
-import java.util.regex.Pattern;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 import org.spongycastle.openpgp.PGPEncryptedDataList;
 import org.spongycastle.openpgp.PGPObjectFactory;
@@ -40,11 +35,15 @@ import org.thialfihar.android.apg.pgp.exception.NoAsymmetricEncryptionException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.pgp.Progressable;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.security.SecureRandom;
+import java.util.Iterator;
+import java.util.regex.Pattern;
 
 public class PgpHelper {
 

@@ -17,13 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.util.Log;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,6 +31,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.util.Log;
 
 /**
  * Sends the selected public key to a keyserver
