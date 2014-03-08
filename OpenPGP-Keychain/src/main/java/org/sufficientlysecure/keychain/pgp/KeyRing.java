@@ -60,11 +60,11 @@ public class KeyRing {
     }
 
     public KeyRing(PGPPublicKeyRing publicKeyRing) {
-        mPublicKeyRing = mPublicKeyRing;
+        mPublicKeyRing = publicKeyRing;
     }
 
     public KeyRing(PGPSecretKeyRing secretKeyRing) {
-        mSecretKeyRing = mSecretKeyRing;
+        mSecretKeyRing = secretKeyRing;
     }
 
     public boolean isPublic() {
