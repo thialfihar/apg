@@ -338,14 +338,22 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         // Get the searchview
-        MenuItem searchItem = menu.findItem(R.id.menu_key_list_public_search);
-        MenuItem addContactItem = menu.findItem(R.id.menu_key_list_public_import);
+        final MenuItem searchItem = menu.findItem(R.id.menu_key_list_public_search);
 
-        addContactItem.setVisible(false);//Hide Add Contacts Icon
         mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         // Execute this when searching
         mSearchView.setOnQueryTextListener(this);
+
+        //Collapse the SearchView if it does not have focus
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    MenuItemCompat.collapseActionView(searchItem);
+                }
+            }
+        });
 
         super.onCreateOptionsMenu(menu, inflater);
     }
