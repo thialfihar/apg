@@ -29,7 +29,6 @@ import android.os.RemoteException;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
-import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPUtil;
 
 import org.thialfihar.android.apg.Constants;
@@ -39,6 +38,8 @@ import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.HkpKeyServer;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
@@ -126,7 +127,7 @@ public class ApgIntentService extends IntentService implements Progressable {
     public static final String DECRYPT_CIPHERTEXT_BYTES = "ciphertext_bytes";
     public static final String DECRYPT_ASSUME_SYMMETRIC = "assume_symmetric";
 
-    // save keyring
+    // save key ring
     public static final String SAVE_KEYRING_NEW_PASSPHRASE = "new_passphrase";
     public static final String SAVE_KEYRING_CURRENT_PASSPHRASE = "current_passphrase";
     public static final String SAVE_KEYRING_USER_IDS = "user_ids";
@@ -197,7 +198,7 @@ public class ApgIntentService extends IntentService implements Progressable {
     public static final String RESULT_QUERY_KEY_DATA = "query_key_data";
     public static final String RESULT_QUERY_KEY_SEARCH_RESULT = "query_key_search_result";
 
-    Messenger mMessenger;
+    private Messenger mMessenger;
 
     private boolean mIsCanceled;
 
@@ -549,8 +550,8 @@ public class ApgIntentService extends IntentService implements Progressable {
                     newPassphrase = oldPassphrase;
                 }
                 ArrayList<String> userIds = data.getStringArrayList(SAVE_KEYRING_USER_IDS);
-                ArrayList<PGPSecretKey> keys = PgpConversionHelper.BytesToPGPSecretKeyList(data
-                        .getByteArray(SAVE_KEYRING_KEYS));
+                KeyRing keyRing = KeyRing.decode(data.getByteArray(SAVE_KEYRING_KEYS));
+                ArrayList<Key> keys = keyRing.getSecretKeys();
                 ArrayList<Integer> keysUsages = data.getIntegerArrayList(SAVE_KEYRING_KEYS_USAGES);
                 ArrayList<GregorianCalendar> keysExpiryDates =
                     (ArrayList<GregorianCalendar>) data.getSerializable(SAVE_KEYRING_KEYS_EXPIRY_DATES);
@@ -584,13 +585,11 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                 /* Operation */
                 PgpKeyOperation keyOperations = new PgpKeyOperation(this, this);
-                PGPSecretKey newKey = keyOperations.createKey(algorithm, keysize,
-                        passphrase, masterKey);
+                Key newKey = keyOperations.createKey(algorithm, keysize, passphrase, masterKey);
 
                 /* Output */
                 Bundle resultData = new Bundle();
-                resultData.putByteArray(RESULT_NEW_KEY,
-                        PgpConversionHelper.PGPSecretKeyToBytes(newKey));
+                resultData.putByteArray(RESULT_NEW_KEY, newKey.getEncoded());
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
@@ -607,10 +606,10 @@ public class ApgIntentService extends IntentService implements Progressable {
                 /* Operation */
                 PgpKeyOperation keyOperations = new PgpKeyOperation(this, this);
 
-                PGPSecretKey masterKey = keyOperations.createKey(Id.choice.algorithm.rsa,
+                Key masterKey = keyOperations.createKey(Id.choice.algorithm.rsa,
                         4096, passphrase, true);
 
-                PGPSecretKey subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
+                Key subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
                         4096, passphrase, false);
 
                 // TODO: default to one master for cert, one sub for encrypt and one sub
@@ -618,10 +617,8 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                 /* Output */
                 Bundle resultData = new Bundle();
-                resultData.putByteArray(RESULT_NEW_KEY,
-                        PgpConversionHelper.PGPSecretKeyToBytes(masterKey));
-                resultData.putByteArray(RESULT_NEW_KEY2,
-                        PgpConversionHelper.PGPSecretKeyToBytes(subKey));
+                resultData.putByteArray(RESULT_NEW_KEY, masterKey.getEncoded());
+                resultData.putByteArray(RESULT_NEW_KEY2, subKey.getEncoded());
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
@@ -723,12 +720,12 @@ public class ApgIntentService extends IntentService implements Progressable {
                 /* Operation */
                 HkpKeyServer server = new HkpKeyServer(keyServer);
 
-                PGPPublicKeyRing keyring = (PGPPublicKeyRing) ProviderHelper.getPGPKeyRing(this, dataUri);
-                if (keyring != null) {
+                KeyRing keyRing = ProviderHelper.getKeyRing(this, dataUri);
+                if (keyRing != null) {
                     PgpImportExport pgpImportExport = new PgpImportExport(this, null);
 
-                    boolean uploaded = pgpImportExport.uploadKeyRingToServer(server,
-                            (PGPPublicKeyRing) keyring);
+                    boolean uploaded =
+                        pgpImportExport.uploadKeyRingToServer(server, keyRing.getPublicKeyRing());
                     if (!uploaded) {
                         throw new PgpGeneralException("Unable to export key to selected server");
                     }

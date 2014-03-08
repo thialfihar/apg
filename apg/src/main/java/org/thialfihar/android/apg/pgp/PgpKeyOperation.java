@@ -118,7 +118,7 @@ public class PgpKeyOperation {
      */
 
     // TODO: key flags?
-    public PGPSecretKey createKey(int algorithmChoice, int keySize, String passphrase,
+    public Key createKey(int algorithmChoice, int keySize, String passphrase,
        boolean isMasterKey) throws NoSuchAlgorithmException, PGPException, NoSuchProviderException,
        PgpGeneralException, InvalidAlgorithmParameterException {
 
@@ -186,7 +186,7 @@ public class PgpKeyOperation {
         PGPSecretKey secKey = new PGPSecretKey(keyPair.getPrivateKey(), keyPair.getPublicKey(),
             sha1Calc, isMasterKey, keyEncryptor);
 
-        return secKey;
+        return new Key(secKey);
     }
 
     public void changeSecretKeyPassphrase(PGPSecretKeyRing keyRing, String oldPassphrase,
@@ -217,7 +217,7 @@ public class PgpKeyOperation {
 
     }
 
-    public void buildSecretKey(ArrayList<String> userIds, ArrayList<PGPSecretKey> keys,
+    public void buildSecretKey(ArrayList<String> userIds, ArrayList<Key> keys,
             ArrayList<Integer> keysUsages, ArrayList<GregorianCalendar> keysExpiryDates,
             long masterKeyId, String oldPassphrase,
             String newPassphrase) throws PgpGeneralException, NoSuchProviderException,
@@ -244,7 +244,7 @@ public class PgpKeyOperation {
 
         String mainUserId = userIds.get(0);
 
-        PGPSecretKey masterKey = keys.get(0);
+        Key masterKey = keys.get(0);
 
         // this removes all userIds and certifications previously attached to the masterPublicKey
         PGPPublicKey tmpKey = masterKey.getPublicKey();
@@ -340,13 +340,11 @@ public class PgpKeyOperation {
         for (int i = 1; i < keys.size(); ++i) {
             updateProgress(40 + 50 * (i - 1) / (keys.size() - 1), 100);
 
-            PGPSecretKey subKey = keys.get(i);
-            PGPPublicKey subPublicKey = subKey.getPublicKey();
+            Key key = keys.get(i);
+            PGPSecretKey subSecretKey = key.getSecretKey();
+            PGPPublicKey subPublicKey = key.getPublicKey();
 
-            PBESecretKeyDecryptor keyDecryptor2 = new JcePBESecretKeyDecryptorBuilder()
-                    .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(
-                            oldPassphrase.toCharArray());
-            PGPPrivateKey subPrivateKey = subKey.extractPrivateKey(keyDecryptor2);
+            PGPPrivateKey subPrivateKey = key.extractPrivateKey(oldPassphrase);
 
             // TODO: now used without algorithm and creation time?! (APG 1)
             PGPKeyPair subKeyPair = new PGPKeyPair(subPublicKey, subPrivateKey);
