@@ -118,6 +118,7 @@ public class KeychainDatabase extends SQLiteOpenHelper {
                 case 2:
                     db.execSQL("ALTER TABLE " + Tables.KEYS + " ADD COLUMN " + KeysColumns.CAN_CERTIFY
                             + " INTEGER DEFAULT 0;");
+                    break;
                 case 3:
                     db.execSQL("ALTER TABLE " + Tables.KEYS + " ADD COLUMN " + KeysColumns.CAN_CERTIFY
                             + " INTEGER DEFAULT 0;");
