@@ -57,7 +57,9 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
 
         public void setTitle(CharSequence title) {
             // set fixed title
-            super.setTitle(R.string.expiry_date_dialog_title);
+            // need to get the string manually here, else it'll look it up and call
+            // the CharSequence version again, resulting in an endless loop
+            super.setTitle(getContext().getString(R.string.expiry_date_dialog_title));
         }
     }
 
