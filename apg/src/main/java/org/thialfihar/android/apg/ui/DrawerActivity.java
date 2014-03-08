@@ -102,7 +102,7 @@ public class DrawerActivity extends ActionBarActivity {
                 supportInvalidateOptionsMenu();
 
                 // call intent activity if selected
-                if(mSelectedItem != null) {
+                if (mSelectedItem != null) {
                     finish();
                     overridePendingTransition(0, 0);
 

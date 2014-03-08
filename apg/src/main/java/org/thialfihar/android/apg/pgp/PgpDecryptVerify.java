@@ -297,25 +297,29 @@ public class PgpDecryptVerify {
                         // allow only a specific key for decryption?
                         if (mEnforcedKeyId != 0) {
                             // TODO: improve this code! get master key directly!
-                            PGPSecretKeyRing secretKeyRing = ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, encData.getKeyID());
+                            PGPSecretKeyRing secretKeyRing =
+                                ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, encData.getKeyID());
                             long masterKeyId = PgpKeyHelper.getMasterKey(secretKeyRing).getKeyID();
                             Log.d(Constants.TAG, "encData.getKeyID():" + encData.getKeyID());
                             Log.d(Constants.TAG, "mEnforcedKeyId: " + mEnforcedKeyId);
                             Log.d(Constants.TAG, "masterKeyId: " + masterKeyId);
 
                             if (mEnforcedKeyId != masterKeyId) {
-                                throw new PgpGeneralException(mContext.getString(R.string.error_no_secret_key_found));
+                                throw new PgpGeneralException(
+                                    mContext.getString(R.string.error_no_secret_key_found));
                             }
                         }
 
                         pbe = encData;
 
-                        // if no mPassphrase was explicitly set try to get it from the cache service
+                        // if no passphrase was explicitly set try to get it from the cache service
                         if (mPassphrase == null) {
-                            // returns "" if key has no mPassphrase
-                            mPassphrase = PassphraseCacheService.getCachedPassphrase(mContext, encData.getKeyID());
+                            // returns "" if key has no passphrase
+                            mPassphrase = PassphraseCacheService.getCachedPassphrase(
+                                                mContext, encData.getKeyID());
 
-                            // if mPassphrase was not cached, return here indicating that a mPassphrase is missing!
+                            // if passphrase was not cached, return here indicating that a
+                            // passphrase is missing!
                             if (mPassphrase == null) {
                                 returnData.setKeyPassphraseNeeded(true);
                                 return returnData;
@@ -409,7 +413,8 @@ public class PgpDecryptVerify {
             signatureResult.setKeyId(signatureKeyId);
 
             if (signature != null) {
-                JcaPGPContentVerifierBuilderProvider contentVerifierBuilderProvider = new JcaPGPContentVerifierBuilderProvider()
+                JcaPGPContentVerifierBuilderProvider contentVerifierBuilderProvider =
+                    new JcaPGPContentVerifierBuilderProvider()
                         .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
 
                 signature.init(contentVerifierBuilderProvider, signatureKey);
@@ -638,11 +643,12 @@ public class PgpDecryptVerify {
         return returnData;
     }
 
-    private static boolean verifyKeyBinding(Context mContext, PGPSignature signature, PGPPublicKey signatureKey) {
+    private static boolean verifyKeyBinding(Context context, PGPSignature signature,
+                                            PGPPublicKey signatureKey) {
         long signatureKeyId = signature.getKeyID();
         boolean validKeyBinding = false;
 
-        PGPPublicKeyRing signKeyRing = ProviderHelper.getPGPPublicKeyRingByKeyId(mContext,
+        PGPPublicKeyRing signKeyRing = ProviderHelper.getPGPPublicKeyRingByKeyId(context,
                 signatureKeyId);
         PGPPublicKey mKey = null;
         if (signKeyRing != null) {
@@ -668,13 +674,15 @@ public class PgpDecryptVerify {
 
         Iterator<PGPSignature> itr = signingPublicKey.getSignatures();
 
-        while (itr.hasNext()) { //what does gpg do if the subkey binding is wrong?
-            //gpg has an invalid subkey binding error on key import I think, but doesn't shout
-            //about keys without subkey signing. Can't get it to import a slightly broken one
-            //either, so we will err on bad subkey binding here.
+        while (itr.hasNext()) {
+            // what does gpg do if the subkey binding is wrong?
+            // gpg has an invalid subkey binding error on key import I think, but doesn't shout
+            // about keys without subkey signing. Can't get it to import a slightly broken one
+            // either, so we will err on bad subkey binding here.
             PGPSignature sig = itr.next();
-            if (sig.getKeyID() == masterPublicKey.getKeyID() && sig.getSignatureType() == PGPSignature.SUBKEY_BINDING) {
-                //check and if ok, check primary key binding.
+            if (sig.getKeyID() == masterPublicKey.getKeyID() &&
+                sig.getSignatureType() == PGPSignature.SUBKEY_BINDING) {
+                // check and if ok, check primary key binding.
                 try {
                     sig.init(contentVerifierBuilderProvider, masterPublicKey);
                     validTempSubkeyBinding = sig.verifyCertification(masterPublicKey, signingPublicKey);
@@ -684,17 +692,25 @@ public class PgpDecryptVerify {
                     continue;
                 }
 
-                if (validTempSubkeyBinding)
-                    validSubkeyBinding = true;
                 if (validTempSubkeyBinding) {
-                    validPrimaryKeyBinding = verifyPrimaryKeyBinding(sig.getUnhashedSubPackets(),
-                            masterPublicKey, signingPublicKey);
-                    if (validPrimaryKeyBinding)
+                    validSubkeyBinding = true;
+                }
+
+                if (validTempSubkeyBinding) {
+                    validPrimaryKeyBinding =
+                        verifyPrimaryKeyBinding(sig.getUnhashedSubPackets(), masterPublicKey,
+                                                signingPublicKey);
+
+                    if (validPrimaryKeyBinding) {
                         break;
-                    validPrimaryKeyBinding = verifyPrimaryKeyBinding(sig.getHashedSubPackets(),
-                            masterPublicKey, signingPublicKey);
-                    if (validPrimaryKeyBinding)
+                    }
+
+                    validPrimaryKeyBinding =
+                        verifyPrimaryKeyBinding(sig.getHashedSubPackets(), masterPublicKey,
+                                                signingPublicKey);
+                    if (validPrimaryKeyBinding) {
                         break;
+                    }
                 }
             }
         }
@@ -702,7 +718,8 @@ public class PgpDecryptVerify {
     }
 
     private static boolean verifyPrimaryKeyBinding(PGPSignatureSubpacketVector packets,
-                                                   PGPPublicKey masterPublicKey, PGPPublicKey signingPublicKey) {
+                                                   PGPPublicKey masterPublicKey,
+                                                   PGPPublicKey signingPublicKey) {
         boolean validPrimaryKeyBinding = false;
         JcaPGPContentVerifierBuilderProvider contentVerifierBuilderProvider =
                 new JcaPGPContentVerifierBuilderProvider()
@@ -722,9 +739,11 @@ public class PgpDecryptVerify {
                 if (emSig.getSignatureType() == PGPSignature.PRIMARYKEY_BINDING) {
                     try {
                         emSig.init(contentVerifierBuilderProvider, signingPublicKey);
-                        validPrimaryKeyBinding = emSig.verifyCertification(masterPublicKey, signingPublicKey);
-                        if (validPrimaryKeyBinding)
+                        validPrimaryKeyBinding =
+                            emSig.verifyCertification(masterPublicKey, signingPublicKey);
+                        if (validPrimaryKeyBinding) {
                             break;
+                        }
                     } catch (PGPException e) {
                         continue;
                     } catch (SignatureException e) {

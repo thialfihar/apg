@@ -52,7 +52,8 @@ public class PgpHelper {
 
     public static final Pattern PGP_SIGNED_MESSAGE = Pattern
             .compile(
-                    ".*?(-----BEGIN PGP SIGNED MESSAGE-----.*?-----BEGIN PGP SIGNATURE-----.*?-----END PGP SIGNATURE-----).*",
+                    ".*?(-----BEGIN PGP SIGNED MESSAGE-----.*?-----BEGIN PGP SIGNATURE-----.*?" +
+                        "-----END PGP SIGNATURE-----).*",
                     Pattern.DOTALL);
 
     public static final Pattern PGP_PUBLIC_KEY = Pattern.compile(
@@ -206,8 +207,9 @@ public class PgpHelper {
         int pos = 0;
         String msg = context.getString(R.string.progress_deleting_securely, file.getName());
         while (pos < length) {
-            if (progress != null)
+            if (progress != null) {
                 progress.setProgress(msg, (int) (100 * pos / length), 100);
+            }
             random.nextBytes(data);
             raf.write(data);
             pos += data.length;

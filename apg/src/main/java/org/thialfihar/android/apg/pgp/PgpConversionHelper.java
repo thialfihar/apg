@@ -88,13 +88,14 @@ public class PgpConversionHelper {
             Log.e(Constants.TAG, "Error while converting to PGPSecretKey!", e);
         }
         PGPSecretKey secKey = null;
-        if(obj instanceof PGPSecretKey) {
-            if ((secKey = (PGPSecretKey)obj ) == null) {
+        if (obj instanceof PGPSecretKey) {
+            if ((secKey = (PGPSecretKey) obj) == null) {
                 Log.e(Constants.TAG, "No keys given!");
             }
-        } else if(obj instanceof PGPSecretKeyRing) { //master keys are sent as keyrings
+        } else if (obj instanceof PGPSecretKeyRing) {
+            // master keys are sent as keyrings
             PGPSecretKeyRing keyRing = null;
-            if ((keyRing = (PGPSecretKeyRing)obj) == null) {
+            if ((keyRing = (PGPSecretKeyRing) obj) == null) {
                 Log.e(Constants.TAG, "No keys given!");
             }
             secKey = keyRing.getSecretKey();

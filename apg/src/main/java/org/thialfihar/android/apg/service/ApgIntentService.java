@@ -328,32 +328,39 @@ public class ApgIntentService extends IntentService implements Progressable {
                 if (generateSignature) {
                     Log.d(Constants.TAG, "generating signature...");
                     builder.setEnableAsciiArmorOutput(useAsciiArmor)
-                            .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                            .setSignatureKeyId(secretKeyId)
-                            .setSignatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                            .setSignaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                        .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
+                        .setSignatureKeyId(secretKeyId)
+                        .setSignatureHashAlgorithm(
+                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                        .setSignaturePassphrase(
+                            PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                     builder.build().generateSignature();
                 } else if (signOnly) {
                     Log.d(Constants.TAG, "sign only...");
                     builder.setEnableAsciiArmorOutput(useAsciiArmor)
-                            .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                            .setSignatureKeyId(secretKeyId)
-                            .setSignatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                            .setSignaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                        .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
+                        .setSignatureKeyId(secretKeyId)
+                        .setSignatureHashAlgorithm(
+                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                        .setSignaturePassphrase(
+                            PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                     builder.build().execute();
                 } else {
                     Log.d(Constants.TAG, "encrypt...");
                     builder.setEnableAsciiArmorOutput(useAsciiArmor)
-                            .setCompressionId(compressionId)
-                            .setSymmetricEncryptionAlgorithm(Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
-                            .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                            .setEncryptionKeyIds(encryptionKeyIds)
-                            .setEncryptionPassphrase(encryptionPassphrase)
-                            .setSignatureKeyId(secretKeyId)
-                            .setSignatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                            .setSignaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                        .setCompressionId(compressionId)
+                        .setSymmetricEncryptionAlgorithm(
+                            Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
+                        .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
+                        .setEncryptionKeyIds(encryptionKeyIds)
+                        .setEncryptionPassphrase(encryptionPassphrase)
+                        .setSignatureKeyId(secretKeyId)
+                        .setSignatureHashAlgorithm(
+                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                        .setSignaturePassphrase(
+                            PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                     builder.build().execute();
                 }
@@ -545,7 +552,8 @@ public class ApgIntentService extends IntentService implements Progressable {
                 ArrayList<PGPSecretKey> keys = PgpConversionHelper.BytesToPGPSecretKeyList(data
                         .getByteArray(SAVE_KEYRING_KEYS));
                 ArrayList<Integer> keysUsages = data.getIntegerArrayList(SAVE_KEYRING_KEYS_USAGES);
-                ArrayList<GregorianCalendar> keysExpiryDates = (ArrayList<GregorianCalendar>) data.getSerializable(SAVE_KEYRING_KEYS_EXPIRY_DATES);
+                ArrayList<GregorianCalendar> keysExpiryDates =
+                    (ArrayList<GregorianCalendar>) data.getSerializable(SAVE_KEYRING_KEYS_EXPIRY_DATES);
 
                 long masterKeyId = data.getLong(SAVE_KEYRING_MASTER_KEY_ID);
 
@@ -750,7 +758,8 @@ public class ApgIntentService extends IntentService implements Progressable {
                     // need to have access to the bufferedInput, so we can reuse it for the possible
                     // PGPObject chunks after the first one, e.g. files with several consecutive ASCII
                     // armor blocks
-                    BufferedInputStream bufferedInput = new BufferedInputStream(new ByteArrayInputStream(downloadedKey));
+                    BufferedInputStream bufferedInput =
+                        new BufferedInputStream(new ByteArrayInputStream(downloadedKey));
                     try {
 
                         // read all available blocks... (asc files can contain many blocks with BEGIN END)
@@ -822,8 +831,9 @@ public class ApgIntentService extends IntentService implements Progressable {
 
     private void sendErrorToHandler(Exception e) {
         // Service was canceled. Do not send error to handler.
-        if (this.mIsCanceled)
+        if (this.mIsCanceled) {
             return;
+        }
 
         Log.e(Constants.TAG, "ApgService Exception: ", e);
         e.printStackTrace();
@@ -835,8 +845,9 @@ public class ApgIntentService extends IntentService implements Progressable {
 
     private void sendMessageToHandler(Integer arg1, Integer arg2, Bundle data) {
         // Service was canceled. Do not send message to handler.
-        if (this.mIsCanceled)
+        if (this.mIsCanceled) {
             return;
+        }
 
         Message msg = Message.obtain();
         msg.arg1 = arg1;

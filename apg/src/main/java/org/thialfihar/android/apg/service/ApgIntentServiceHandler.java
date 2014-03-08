@@ -68,7 +68,7 @@ public class ApgIntentServiceHandler extends Handler {
     }
 
     public void showProgressDialog(FragmentActivity activity) {
-        // TODO: This is a hack!, see http://stackoverflow.com/questions/10114324/show-dialogfragment-from-onactivityresult
+        // TODO: This is a hack!, see http://bit.ly/1n53EXo
         final FragmentManager manager = activity.getSupportFragmentManager();
         Handler handler = new Handler();
         handler.post(new Runnable() {

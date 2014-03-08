@@ -40,8 +40,8 @@ import java.util.List;
 @SuppressLint("NewApi")
 public class PreferencesActivity extends PreferenceActivity {
 
-    public final static String ACTION_PREFS_GEN = "org.thialfihar.android.apg.ui.PREFS_GEN";
-    public final static String ACTION_PREFS_ADV = "org.thialfihar.android.apg.ui.PREFS_ADV";
+    public static final String ACTION_PREFS_GEN = "org.thialfihar.android.apg.ui.PREFS_GEN";
+    public static final String ACTION_PREFS_ADV = "org.thialfihar.android.apg.ui.PREFS_ADV";
 
     private PreferenceScreen mKeyServerPreference = null;
     private static Preferences sPreferences;
@@ -100,20 +100,22 @@ public class PreferencesActivity extends PreferenceActivity {
             }
 
             initializeHashAlgorithm(
-                    (IntegerListPreference) findPreference(Constants.pref.DEFAULT_HASH_ALGORITHM),
-                                            valueIds, entries, values);
+                (IntegerListPreference) findPreference(Constants.pref.DEFAULT_HASH_ALGORITHM),
+                valueIds, entries, values);
 
             initializeMessageCompression(
-                    (IntegerListPreference) findPreference(Constants.pref.DEFAULT_MESSAGE_COMPRESSION),
-                                            valueIds, entries, values);
+                (IntegerListPreference) findPreference(Constants.pref.DEFAULT_MESSAGE_COMPRESSION),
+                valueIds, entries, values);
 
             initializeFileCompression(
-                    (IntegerListPreference) findPreference(Constants.pref.DEFAULT_FILE_COMPRESSION),
-                                            entries, values);
+                (IntegerListPreference) findPreference(Constants.pref.DEFAULT_FILE_COMPRESSION),
+                entries, values);
 
-            initializeAsciiArmor((CheckBoxPreference) findPreference(Constants.pref.DEFAULT_ASCII_ARMOR));
+            initializeAsciiArmor(
+                (CheckBoxPreference) findPreference(Constants.pref.DEFAULT_ASCII_ARMOR));
 
-            initializeForceV3Signatures((CheckBoxPreference) findPreference(Constants.pref.FORCE_V3_SIGNATURES));
+            initializeForceV3Signatures(
+                (CheckBoxPreference) findPreference(Constants.pref.FORCE_V3_SIGNATURES));
 
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             // Load the legacy preferences headers
@@ -231,20 +233,22 @@ public class PreferencesActivity extends PreferenceActivity {
             }
 
             initializeHashAlgorithm(
-                    (IntegerListPreference) findPreference(Constants.pref.DEFAULT_HASH_ALGORITHM),
-                                                                    valueIds, entries, values);
+                (IntegerListPreference) findPreference(Constants.pref.DEFAULT_HASH_ALGORITHM),
+                valueIds, entries, values);
 
             initializeMessageCompression(
-                    (IntegerListPreference) findPreference(Constants.pref.DEFAULT_MESSAGE_COMPRESSION),
-                                                                valueIds, entries, values);
+                (IntegerListPreference) findPreference(Constants.pref.DEFAULT_MESSAGE_COMPRESSION),
+                valueIds, entries, values);
 
             initializeFileCompression(
-                    (IntegerListPreference) findPreference(Constants.pref.DEFAULT_FILE_COMPRESSION),
-                    entries, values);
+                (IntegerListPreference) findPreference(Constants.pref.DEFAULT_FILE_COMPRESSION),
+                entries, values);
 
-            initializeAsciiArmor((CheckBoxPreference) findPreference(Constants.pref.DEFAULT_ASCII_ARMOR));
+            initializeAsciiArmor(
+                (CheckBoxPreference) findPreference(Constants.pref.DEFAULT_ASCII_ARMOR));
 
-            initializeForceV3Signatures((CheckBoxPreference) findPreference(Constants.pref.FORCE_V3_SIGNATURES));
+            initializeForceV3Signatures(
+                (CheckBoxPreference) findPreference(Constants.pref.FORCE_V3_SIGNATURES));
         }
     }
 
@@ -320,8 +324,9 @@ public class PreferencesActivity extends PreferenceActivity {
         });
     }
 
-    private static void initializeMessageCompression
-            (final IntegerListPreference mMessageCompression, int[] valueIds, String[] entries, String[] values) {
+    private static void initializeMessageCompression(
+            final IntegerListPreference mMessageCompression, int[] valueIds,
+            String[] entries, String[] values) {
         mMessageCompression.setEntries(entries);
         mMessageCompression.setEntryValues(values);
         mMessageCompression.setValue("" + sPreferences.getDefaultMessageCompression());

@@ -68,8 +68,9 @@ import java.util.Set;
  * Public key list with sticky list headers. It does _not_ extend ListFragment because it uses
  * StickyListHeaders library which does not extend upon ListView.
  */
-public class KeyListPublicFragment extends Fragment implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class KeyListPublicFragment extends Fragment
+        implements SearchView.OnQueryTextListener, AdapterView.OnItemClickListener,
+                    LoaderManager.LoaderCallbacks<Cursor> {
 
     private KeyListPublicAdapter mAdapter;
     private StickyListHeadersListView mStickyList;
@@ -178,9 +179,9 @@ public class KeyListPublicFragment extends Fragment implements SearchView.OnQuer
                             break;
                         }
                         case R.id.menu_key_list_public_multi_select_all: {
-                            //Select all
+                            // select all
                             int localCount = mStickyList.getCount();
-                            for(int k = 0; k < localCount; k++) {
+                            for (int k = 0; k < localCount; k++) {
                                 mStickyList.setItemChecked(k, true);
                             }
                             break;
@@ -243,9 +244,9 @@ public class KeyListPublicFragment extends Fragment implements SearchView.OnQuer
         Uri baseUri = KeyRings.buildPublicKeyRingsUri();
         String where = null;
         String whereArgs[] = null;
-        if(mCurQuery != null){
+        if (mCurQuery != null){
             where = KeychainContract.UserIds.USER_ID + " LIKE ?";
-            whereArgs = new String[]{mCurQuery+"%"};
+            whereArgs = new String[] {mCurQuery + "%"};
         }
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
@@ -330,9 +331,11 @@ public class KeyListPublicFragment extends Fragment implements SearchView.OnQuer
                         for (String userId : notDeleted) {
                             notDeletedMsg += userId + "\n";
                         }
-                        Toast.makeText(getActivity(), getString(R.string.error_can_not_delete_contacts, notDeletedMsg)
-                                + getResources().getQuantityString(R.plurals.error_can_not_delete_info, notDeleted.size()),
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),
+                            getString(R.string.error_can_not_delete_contacts, notDeletedMsg) +
+                                getResources().getQuantityString(R.plurals.error_can_not_delete_info,
+                                                                    notDeleted.size()),
+                            Toast.LENGTH_LONG).show();
 
                         mode.finish();
                     }

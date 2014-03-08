@@ -60,8 +60,9 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
         super.beforeExecute(t, r);
         mPauseLock.lock();
         try {
-            while (mIsPaused)
+            while (mIsPaused) {
                 mUnpaused.await();
+            }
         } catch (InterruptedException ie) {
             t.interrupt();
         } finally {

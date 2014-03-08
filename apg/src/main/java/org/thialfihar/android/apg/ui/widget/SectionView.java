@@ -147,8 +147,10 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             }
 
             case Id.type.key: {
-                CreateKeyDialogFragment mCreateKeyDialogFragment = CreateKeyDialogFragment.newInstance(mEditors.getChildCount());
-                mCreateKeyDialogFragment.setOnAlgorithmSelectedListener(new CreateKeyDialogFragment.OnAlgorithmSelectedListener() {
+                CreateKeyDialogFragment mCreateKeyDialogFragment =
+                    CreateKeyDialogFragment.newInstance(mEditors.getChildCount());
+                mCreateKeyDialogFragment.setOnAlgorithmSelectedListener(
+                    new CreateKeyDialogFragment.OnAlgorithmSelectedListener() {
                     @Override
                     public void onAlgorithmSelected(Choice algorithmChoice, int keySize) {
                         mNewKeyAlgorithmChoice = algorithmChoice;

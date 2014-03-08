@@ -103,7 +103,7 @@ public class HkpKeyServer extends KeyServer {
         mPort = port;
     }
 
-    static private String readAll(InputStream in, String encoding) throws IOException {
+    private static String readAll(InputStream in, String encoding) throws IOException {
         ByteArrayOutputStream raw = new ByteArrayOutputStream();
 
         byte buffer[] = new byte[1 << 16];
