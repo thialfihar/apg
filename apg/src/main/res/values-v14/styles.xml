@@ -2,7 +2,7 @@
 <resources>
     <!-- Used in Android >= 4 -->
 
-    <style name="KeychainTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="ApgTheme" parent="@style/Theme.AppCompat">
     </style>
 
     <style name="SectionHeader">

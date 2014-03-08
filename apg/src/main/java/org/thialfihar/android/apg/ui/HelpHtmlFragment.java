@@ -28,6 +28,8 @@ import android.widget.ScrollView;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import org.thialfihar.android.apg.R;
+
 public class HelpHtmlFragment extends Fragment {
     private Activity mActivity;
 
@@ -69,7 +71,7 @@ public class HelpHtmlFragment extends Fragment {
         text.setHtmlFromRawResource(getActivity(), mHtmlFile);
 
         // no flickering when clicking textview for Android < 4
-        text.setTextColor(getResources().getColor(android.R.color.black));
+        text.setTextColor(getResources().getColor(R.color.html_text_color));
 
         return scroller;
     }

@@ -30,7 +30,7 @@
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:paddingRight="20dp"
-        style="@style/Widget.AppCompat.Light.ActionBar.TabText"
+        style="@style/Widget.AppCompat.ActionBar.TabText"
         android:text="Done (set in-code!)" />
 
 </FrameLayout>
