@@ -87,11 +87,11 @@ public class HkpKeyServer extends KeyServer {
     // pub 2048R/<a href="/pks/lookup?op=get&search=0x887DF4BE9F5C9090">9F5C9090</a> 2009-08-17 <a
     // href="/pks/lookup?op=vindex&search=0x887DF4BE9F5C9090">Jörg Runge
     // &lt;joerg@joergrunge.de&gt;</a>
-    public static Pattern PUB_KEY_LINE = Pattern
+    public static final Pattern PUB_KEY_LINE = Pattern
             .compile(
                     "pub +([0-9]+)([a-z]+)/.*?0x([0-9a-z]+).*? +([0-9-]+) +(.+)[\n\r]+((?:    +.+[\n\r]+)*)",
                     Pattern.CASE_INSENSITIVE);
-    public static Pattern USER_ID_LINE = Pattern.compile("^   +(.+)$", Pattern.MULTILINE
+    public static final Pattern USER_ID_LINE = Pattern.compile("^   +(.+)$", Pattern.MULTILINE
             | Pattern.CASE_INSENSITIVE);
 
     public HkpKeyServer(String host) {

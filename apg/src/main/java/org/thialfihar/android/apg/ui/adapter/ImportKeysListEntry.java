@@ -46,22 +46,22 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     public String algorithm;
     public boolean secretKey;
 
-    private boolean selected;
-
-    private byte[] bytes = new byte[]{};
+    private byte[] mBytes = new byte[] {};
+    private boolean mSelected;
 
     public ImportKeysListEntry(ImportKeysListEntry b) {
-        this.userIds = b.userIds;
-        this.keyId = b.keyId;
-        this.revoked = b.revoked;
-        this.date = b.date;
-        this.fingerPrint = b.fingerPrint;
-        this.hexKeyId = b.hexKeyId;
-        this.bitStrength = b.bitStrength;
-        this.algorithm = b.algorithm;
-        this.secretKey = b.secretKey;
-        this.selected = b.selected;
-        this.bytes = b.bytes;
+        userIds = b.userIds;
+        keyId = b.keyId;
+        revoked = b.revoked;
+        date = b.date;
+        fingerPrint = b.fingerPrint;
+        hexKeyId = b.hexKeyId;
+        bitStrength = b.bitStrength;
+        algorithm = b.algorithm;
+        secretKey = b.secretKey;
+
+        mSelected = b.isSelected();
+        mBytes = b.getBytes();
     }
 
     public int describeContents() {
@@ -79,9 +79,9 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         dest.writeInt(bitStrength);
         dest.writeString(algorithm);
         dest.writeByte((byte) (secretKey ? 1 : 0));
-        dest.writeByte((byte) (selected ? 1 : 0));
-        dest.writeInt(bytes.length);
-        dest.writeByteArray(bytes);
+        dest.writeByte((byte) (mSelected ? 1 : 0));
+        dest.writeInt(mBytes.length);
+        dest.writeByteArray(mBytes);
     }
 
     public static final Creator<ImportKeysListEntry> CREATOR = new Creator<ImportKeysListEntry>() {
@@ -97,9 +97,9 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
             vr.bitStrength = source.readInt();
             vr.algorithm = source.readString();
             vr.secretKey = source.readByte() == 1;
-            vr.selected = source.readByte() == 1;
-            vr.bytes = new byte[source.readInt()];
-            source.readByteArray(vr.bytes);
+            vr.setSelected(source.readByte() == 1);
+            vr.setBytes(new byte[source.readInt()]);
+            source.readByteArray(vr.mBytes);
 
             return vr;
         }
@@ -114,11 +114,11 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     }
 
     public byte[] getBytes() {
-        return bytes;
+        return mBytes;
     }
 
     public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
+        mBytes = bytes;
     }
 
     /**
@@ -130,11 +130,11 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     }
 
     public boolean isSelected() {
-        return selected;
+        return mSelected;
     }
 
     public void setSelected(boolean selected) {
-        this.selected = selected;
+        mSelected = selected;
     }
 
     /**
@@ -144,13 +144,13 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     public ImportKeysListEntry(PGPKeyRing pgpKeyRing) {
         // save actual key object into entry, used to import it later
         try {
-            this.bytes = pgpKeyRing.getEncoded();
+            mBytes = pgpKeyRing.getEncoded();
         } catch (IOException e) {
             Log.e(Constants.TAG, "IOException on pgpKeyRing.getEncoded()", e);
         }
 
         // selected is default
-        this.selected = true;
+        mSelected = true;
 
         if (pgpKeyRing instanceof PGPSecretKeyRing) {
             secretKey = true;
@@ -162,27 +162,29 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         for (String userId : new IterableIterator<String>(pgpKeyRing.getPublicKey().getUserIDs())) {
             userIds.add(userId);
         }
-        this.keyId = pgpKeyRing.getPublicKey().getKeyID();
+        keyId = pgpKeyRing.getPublicKey().getKeyID();
 
-        this.revoked = pgpKeyRing.getPublicKey().isRevoked();
-        this.fingerPrint = PgpKeyHelper.convertFingerprintToHex(pgpKeyRing.getPublicKey()
+        revoked = pgpKeyRing.getPublicKey().isRevoked();
+        fingerPrint = PgpKeyHelper.convertFingerprintToHex(pgpKeyRing.getPublicKey()
                 .getFingerprint(), true);
-        this.hexKeyId = "0x" + PgpKeyHelper.convertKeyIdToHex(keyId);
-        this.bitStrength = pgpKeyRing.getPublicKey().getBitStrength();
-        int algorithm = pgpKeyRing.getPublicKey().getAlgorithm();
-        if (algorithm == PGPPublicKey.RSA_ENCRYPT || algorithm == PGPPublicKey.RSA_GENERAL
-                || algorithm == PGPPublicKey.RSA_SIGN) {
-            this.algorithm = "RSA";
-        } else if (algorithm == PGPPublicKey.DSA) {
-            this.algorithm = "DSA";
-        } else if (algorithm == PGPPublicKey.ELGAMAL_ENCRYPT
-                || algorithm == PGPPublicKey.ELGAMAL_GENERAL) {
-            this.algorithm = "ElGamal";
-        } else if (algorithm == PGPPublicKey.EC || algorithm == PGPPublicKey.ECDSA) {
-            this.algorithm = "ECC";
+        hexKeyId = "0x" + PgpKeyHelper.convertKeyIdToHex(keyId);
+        bitStrength = pgpKeyRing.getPublicKey().getBitStrength();
+        int algorithmId = pgpKeyRing.getPublicKey().getAlgorithm();
+        if (algorithmId == PGPPublicKey.RSA_ENCRYPT ||
+            algorithmId == PGPPublicKey.RSA_GENERAL ||
+            algorithmId == PGPPublicKey.RSA_SIGN) {
+            algorithm = "RSA";
+        } else if (algorithmId == PGPPublicKey.DSA) {
+            algorithm = "DSA";
+        } else if (algorithmId == PGPPublicKey.ELGAMAL_ENCRYPT ||
+                   algorithmId == PGPPublicKey.ELGAMAL_GENERAL) {
+            algorithm = "ElGamal";
+        } else if (algorithmId == PGPPublicKey.EC ||
+                   algorithmId == PGPPublicKey.ECDSA) {
+            algorithm = "ECC";
         } else {
             // TODO: with resources
-            this.algorithm = "unknown";
+            algorithm = "unknown";
         }
     }
 }

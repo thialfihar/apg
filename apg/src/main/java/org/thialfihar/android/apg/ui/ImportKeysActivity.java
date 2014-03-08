@@ -361,7 +361,7 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
 
 
     // Message is received after importing is done in ApgService
-    ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
+    private ApgIntentServiceHandler mSaveHandler = new ApgIntentServiceHandler(this,
             R.string.progress_importing, ProgressDialog.STYLE_HORIZONTAL) {
         public void handleMessage(Message message) {
             // handle messages by standard ApgHandler first
@@ -423,11 +423,11 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
-            Messenger messenger = new Messenger(saveHandler);
+            Messenger messenger = new Messenger(mSaveHandler);
             intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
-            saveHandler.showProgressDialog(this);
+            mSaveHandler.showProgressDialog(this);
 
             // start service with intent
             startService(intent);
@@ -449,11 +449,11 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
-            Messenger messenger = new Messenger(saveHandler);
+            Messenger messenger = new Messenger(mSaveHandler);
             intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
-            saveHandler.showProgressDialog(this);
+            mSaveHandler.showProgressDialog(this);
 
             // start service with intent
             startService(intent);

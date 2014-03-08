@@ -52,39 +52,39 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
     }
 
-    private boolean isPaused;
-    private ReentrantLock pauseLock = new ReentrantLock();
-    private Condition unpaused = pauseLock.newCondition();
+    private boolean mIsPaused;
+    private ReentrantLock mPauseLock = new ReentrantLock();
+    private Condition mUnpaused = mPauseLock.newCondition();
 
     protected void beforeExecute(Thread t, Runnable r) {
         super.beforeExecute(t, r);
-        pauseLock.lock();
+        mPauseLock.lock();
         try {
-            while (isPaused)
-                unpaused.await();
+            while (mIsPaused)
+                mUnpaused.await();
         } catch (InterruptedException ie) {
             t.interrupt();
         } finally {
-            pauseLock.unlock();
+            mPauseLock.unlock();
         }
     }
 
     public void pause() {
-        pauseLock.lock();
+        mPauseLock.lock();
         try {
-            isPaused = true;
+            mIsPaused = true;
         } finally {
-            pauseLock.unlock();
+            mPauseLock.unlock();
         }
     }
 
     public void resume() {
-        pauseLock.lock();
+        mPauseLock.lock();
         try {
-            isPaused = false;
-            unpaused.signalAll();
+            mIsPaused = false;
+            mUnpaused.signalAll();
         } finally {
-            pauseLock.unlock();
+            mPauseLock.unlock();
         }
     }
 }

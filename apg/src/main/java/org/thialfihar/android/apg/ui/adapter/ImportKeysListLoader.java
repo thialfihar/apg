@@ -32,33 +32,33 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class ImportKeysListLoader extends AsyncTaskLoader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {
-    Context mContext;
+public class ImportKeysListLoader
+    extends AsyncTaskLoader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {
+    private Context mContext;
 
-    InputData mInputData;
+    private InputData mInputData;
 
-    ArrayList<ImportKeysListEntry> data = new ArrayList<ImportKeysListEntry>();
-    AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> entryListWrapper;
+    private ArrayList<ImportKeysListEntry> mData = new ArrayList<ImportKeysListEntry>();
+    private AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> mEntryListWrapper;
 
     public ImportKeysListLoader(Context context, InputData inputData) {
         super(context);
-        this.mContext = context;
-        this.mInputData = inputData;
+        mContext = context;
+        mInputData = inputData;
     }
 
     @Override
     public AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> loadInBackground() {
-
-        entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(data, null);
+        mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mData, null);
 
         if (mInputData == null) {
             Log.e(Constants.TAG, "Input data is null!");
-            return entryListWrapper;
+            return mEntryListWrapper;
         }
 
         generateListOfKeyrings(mInputData);
 
-        return entryListWrapper;
+        return mEntryListWrapper;
     }
 
     @Override
@@ -80,8 +80,8 @@ public class ImportKeysListLoader extends AsyncTaskLoader<AsyncTaskResultWrapper
     }
 
     @Override
-    public void deliverResult(AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> data) {
-        super.deliverResult(data);
+    public void deliverResult(AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> mData) {
+        super.deliverResult(mData);
     }
 
     /**
@@ -91,8 +91,7 @@ public class ImportKeysListLoader extends AsyncTaskLoader<AsyncTaskResultWrapper
      * @return
      */
     private void generateListOfKeyrings(InputData inputData) {
-        PositionAwareInputStream progressIn = new PositionAwareInputStream(
-                inputData.getInputStream());
+        PositionAwareInputStream progressIn = new PositionAwareInputStream(inputData.getInputStream());
 
         // need to have access to the bufferedInput, so we can reuse it for the possible
         // PGPObject chunks after the first one, e.g. files with several consecutive ASCII
@@ -125,7 +124,6 @@ public class ImportKeysListLoader extends AsyncTaskLoader<AsyncTaskResultWrapper
 
     private void addToData(PGPKeyRing keyring) {
         ImportKeysListEntry item = new ImportKeysListEntry(keyring);
-        data.add(item);
+        mData.add(item);
     }
-
 }

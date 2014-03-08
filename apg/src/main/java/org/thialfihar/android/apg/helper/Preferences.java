@@ -32,18 +32,18 @@ import java.util.Vector;
  * Singleton Implementation of a Preference Helper
  */
 public class Preferences {
-    private static Preferences mPreferences;
+    private static Preferences sPreferences;
     private SharedPreferences mSharedPreferences;
 
     public static synchronized Preferences getPreferences(Context context) {
         return getPreferences(context, false);
     }
 
-    public static synchronized Preferences getPreferences(Context context, boolean force_new) {
-        if (mPreferences == null || force_new) {
-            mPreferences = new Preferences(context);
+    public static synchronized Preferences getPreferences(Context context, boolean forceNew) {
+        if (sPreferences == null || forceNew) {
+            sPreferences = new Preferences(context);
         }
-        return mPreferences;
+        return sPreferences;
     }
 
     private Preferences(Context context) {

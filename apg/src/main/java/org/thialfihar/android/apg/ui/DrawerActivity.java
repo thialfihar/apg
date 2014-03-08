@@ -49,9 +49,14 @@ public class DrawerActivity extends ActionBarActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
 
-    private static Class[] mItemsClass = new Class[] { KeyListPublicActivity.class,
-            EncryptActivity.class, DecryptActivity.class, ImportKeysActivity.class,
-            KeyListSecretActivity.class, RegisteredAppsListActivity.class };
+    private static Class[] sItemsClass = new Class[] {
+        KeyListPublicActivity.class,
+        EncryptActivity.class,
+        DecryptActivity.class,
+        ImportKeysActivity.class,
+        KeyListSecretActivity.class,
+        RegisteredAppsListActivity.class,
+    };
     private Class mSelectedItem;
 
     private static final int MENU_ID_PREFERENCE = 222;
@@ -195,7 +200,7 @@ public class DrawerActivity extends ActionBarActivity {
         // setTitle(mDrawerTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
         // set selected class
-        mSelectedItem = mItemsClass[position];
+        mSelectedItem = sItemsClass[position];
     }
 
     /**
@@ -228,15 +233,15 @@ public class DrawerActivity extends ActionBarActivity {
     }
 
     private class NavigationDrawerAdapter extends ArrayAdapter<NavItem> {
-        Context context;
-        int layoutResourceId;
-        NavItem data[] = null;
+        private Context mContext;
+        private int mLayoutResourceId;
+        private NavItem mData[] = null;
 
         public NavigationDrawerAdapter(Context context, int layoutResourceId, NavItem[] data) {
             super(context, layoutResourceId, data);
-            this.layoutResourceId = layoutResourceId;
-            this.context = context;
-            this.data = data;
+            mLayoutResourceId = layoutResourceId;
+            mContext = context;
+            mData = data;
         }
 
         @Override
@@ -245,21 +250,21 @@ public class DrawerActivity extends ActionBarActivity {
             NavItemHolder holder = null;
 
             if (row == null) {
-                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                row = inflater.inflate(layoutResourceId, parent, false);
+                LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+                row = inflater.inflate(mLayoutResourceId, parent, false);
 
                 holder = new NavItemHolder();
-                holder.img = (FontAwesomeText) row.findViewById(R.id.drawer_item_icon);
-                holder.txtTitle = (TextView) row.findViewById(R.id.drawer_item_text);
+                holder.image = (FontAwesomeText) row.findViewById(R.id.drawer_item_icon);
+                holder.titleView = (TextView) row.findViewById(R.id.drawer_item_text);
 
                 row.setTag(holder);
             } else {
                 holder = (NavItemHolder) row.getTag();
             }
 
-            NavItem item = data[position];
-            holder.txtTitle.setText(item.title);
-            holder.img.setIcon(item.icon);
+            NavItem item = mData[position];
+            holder.titleView.setText(item.title);
+            holder.image.setIcon(item.icon);
 
             return row;
         }
@@ -267,8 +272,8 @@ public class DrawerActivity extends ActionBarActivity {
     }
 
     static class NavItemHolder {
-        FontAwesomeText img;
-        TextView txtTitle;
+        public FontAwesomeText image;
+        public TextView titleView;
     }
 
 }

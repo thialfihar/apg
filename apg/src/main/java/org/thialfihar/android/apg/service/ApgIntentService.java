@@ -323,37 +323,37 @@ public class ApgIntentService extends IntentService implements Progressable {
                 /* Operation */
                 PgpSignEncrypt.Builder builder =
                         new PgpSignEncrypt.Builder(this, inputData, outStream);
-                builder.progress(this);
+                builder.setProgressable(this);
 
                 if (generateSignature) {
                     Log.d(Constants.TAG, "generating signature...");
-                    builder.enableAsciiArmorOutput(useAsciiArmor)
-                            .signatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                            .signatureKeyId(secretKeyId)
-                            .signatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                            .signaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                    builder.setEnableAsciiArmorOutput(useAsciiArmor)
+                            .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
+                            .setSignatureKeyId(secretKeyId)
+                            .setSignatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                            .setSignaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                     builder.build().generateSignature();
                 } else if (signOnly) {
                     Log.d(Constants.TAG, "sign only...");
-                    builder.enableAsciiArmorOutput(useAsciiArmor)
-                            .signatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                            .signatureKeyId(secretKeyId)
-                            .signatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                            .signaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                    builder.setEnableAsciiArmorOutput(useAsciiArmor)
+                            .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
+                            .setSignatureKeyId(secretKeyId)
+                            .setSignatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                            .setSignaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                     builder.build().execute();
                 } else {
                     Log.d(Constants.TAG, "encrypt...");
-                    builder.enableAsciiArmorOutput(useAsciiArmor)
-                            .compressionId(compressionId)
-                            .symmetricEncryptionAlgorithm(Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
-                            .signatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                            .encryptionKeyIds(encryptionKeyIds)
-                            .encryptionPassphrase(encryptionPassphrase)
-                            .signatureKeyId(secretKeyId)
-                            .signatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                            .signaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                    builder.setEnableAsciiArmorOutput(useAsciiArmor)
+                            .setCompressionId(compressionId)
+                            .setSymmetricEncryptionAlgorithm(Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
+                            .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
+                            .setEncryptionKeyIds(encryptionKeyIds)
+                            .setEncryptionPassphrase(encryptionPassphrase)
+                            .setSignatureKeyId(secretKeyId)
+                            .setSignatureHashAlgorithm(Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                            .setSignaturePassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                     builder.build().execute();
                 }
@@ -485,10 +485,10 @@ public class ApgIntentService extends IntentService implements Progressable {
                 // verifyText and decrypt returning additional resultData values for the
                 // verification of signatures
                 PgpDecryptVerify.Builder builder = new PgpDecryptVerify.Builder(this, inputData, outStream);
-                builder.progressDialogUpdater(this);
+                builder.setProgressable(this);
 
-                builder.assumeSymmetric(assumeSymmetricEncryption)
-                        .passphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
+                builder.setAssumeSymmetric(assumeSymmetricEncryption)
+                        .setPassphrase(PassphraseCacheService.getCachedPassphrase(this, secretKeyId));
 
                 PgpDecryptVerifyResult decryptVerifyResult = builder.build().execute();
 
@@ -865,7 +865,7 @@ public class ApgIntentService extends IntentService implements Progressable {
     }
 
     /**
-     * Set progressDialogUpdater of ProgressDialog by sending message to handler on UI thread
+     * Set progress of ProgressDialog by sending message to handler on UI thread
      */
     public void setProgress(String message, int progress, int max) {
         Log.d(Constants.TAG, "Send message by setProgress with progressDialogUpdater=" + progress + ", max="

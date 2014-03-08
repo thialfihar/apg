@@ -169,7 +169,8 @@ public class ProviderHelper {
 
         // get current _ID of key
         long currentRowId = -1;
-        Cursor oldQuery = context.getContentResolver().query(deleteUri, new String[]{KeyRings._ID}, null, null, null);
+        Cursor oldQuery = context.getContentResolver().query(deleteUri,
+            new String[] {KeyRings._ID}, null, null, null);
         if (oldQuery != null && oldQuery.moveToFirst()) {
             currentRowId = oldQuery.getLong(0);
         } else {
@@ -185,10 +186,11 @@ public class ProviderHelper {
 
         ContentValues values = new ContentValues();
         // use exactly the same _ID again to replace key in-place.
-        // NOTE: If we would not use the same _ID again, getting back to the ViewKeyActivity would result in Nullpointer,
-        // because the currently loaded key would be gone from the database
-        if (currentRowId != -1)
+        // NOTE: If we would not use the same _ID again, getting back to the ViewKeyActivity would
+        // result in Nullpointer, because the currently loaded key would be gone from the database
+        if (currentRowId != -1) {
             values.put(KeyRings._ID, currentRowId);
+        }
         values.put(KeyRings.MASTER_KEY_ID, masterKeyId);
         values.put(KeyRings.KEY_RING_DATA, keyRing.getEncoded());
 
@@ -212,8 +214,10 @@ public class ProviderHelper {
             ++userIdRank;
         }
 
-        for (PGPSignature certification : new IterableIterator<PGPSignature>(masterKey.getSignaturesOfType(PGPSignature.POSITIVE_CERTIFICATION))) {
-            //TODO: how to do this?? we need to verify the signatures again and again when they are displayed...
+        for (PGPSignature certification : new IterableIterator<PGPSignature>(
+                 masterKey.getSignaturesOfType(PGPSignature.POSITIVE_CERTIFICATION))) {
+            //TODO: how to do this?? we need to verify the signatures again and again when
+            // they are displayed...
 //            if (certification.verify
 //            operations.add(buildPublicKeyOperations(context, keyRingRowId, key, rank));
         }
@@ -240,7 +244,8 @@ public class ProviderHelper {
 
         // get current _ID of key
         long currentRowId = -1;
-        Cursor oldQuery = context.getContentResolver().query(deleteUri, new String[]{KeyRings._ID}, null, null, null);
+        Cursor oldQuery = context.getContentResolver().query(deleteUri,
+            new String[] {KeyRings._ID}, null, null, null);
         if (oldQuery != null && oldQuery.moveToFirst()) {
             currentRowId = oldQuery.getLong(0);
         } else {
@@ -256,10 +261,11 @@ public class ProviderHelper {
 
         ContentValues values = new ContentValues();
         // use exactly the same _ID again to replace key in-place.
-        // NOTE: If we would not use the same _ID again, getting back to the ViewKeyActivity would result in Nullpointer,
-        // because the currently loaded key would be gone from the database
-        if (currentRowId != -1)
+        // NOTE: If we would not use the same _ID again, getting back to the ViewKeyActivity would
+        // result in Nullpointer, because the currently loaded key would be gone from the database
+        if (currentRowId != -1) {
             values.put(KeyRings._ID, currentRowId);
+        }
         values.put(KeyRings.MASTER_KEY_ID, masterKeyId);
         values.put(KeyRings.KEY_RING_DATA, keyRing.getEncoded());
 
@@ -342,10 +348,10 @@ public class ProviderHelper {
                                                                      long keyRingRowId, PGPSecretKey key, int rank) throws IOException {
         ContentValues values = new ContentValues();
 
-        boolean has_private = true;
+        boolean hasPrivateKey = true;
         if (key.isMasterKey()) {
             if (PgpKeyHelper.isSecretKeyPrivateEmpty(key)) {
-                has_private = false;
+                hasPrivateKey = false;
             }
         }
 
@@ -353,8 +359,8 @@ public class ProviderHelper {
         values.put(Keys.IS_MASTER_KEY, key.isMasterKey());
         values.put(Keys.ALGORITHM, key.getPublicKey().getAlgorithm());
         values.put(Keys.KEY_SIZE, key.getPublicKey().getBitStrength());
-        values.put(Keys.CAN_CERTIFY, (PgpKeyHelper.isCertificationKey(key) && has_private));
-        values.put(Keys.CAN_SIGN, (PgpKeyHelper.isSigningKey(key) && has_private));
+        values.put(Keys.CAN_CERTIFY, (PgpKeyHelper.isCertificationKey(key) && hasPrivateKey));
+        values.put(Keys.CAN_SIGN, (PgpKeyHelper.isSigningKey(key) && hasPrivateKey));
         values.put(Keys.CAN_ENCRYPT, PgpKeyHelper.isEncryptionKey(key));
         values.put(Keys.IS_REVOKED, key.getPublicKey().isRevoked());
         values.put(Keys.CREATION, PgpKeyHelper.getCreationDate(key).getTime() / 1000);

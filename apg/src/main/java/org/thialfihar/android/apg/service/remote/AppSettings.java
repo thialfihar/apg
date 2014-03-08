@@ -22,12 +22,12 @@ import org.spongycastle.openpgp.PGPEncryptedData;
 import org.thialfihar.android.apg.Id;
 
 public class AppSettings {
-    private String packageName;
-    private byte[] packageSignature;
-    private long keyId = Id.key.none;
-    private int encryptionAlgorithm;
-    private int hashAlgorithm;
-    private int compression;
+    private String mPackageName;
+    private byte[] mPackageSignature;
+    private long mKeyId;
+    private int mEncryptionAlgorithm;
+    private int mHashAlgorithm;
+    private int mCompression;
 
     public AppSettings() {
 
@@ -35,60 +35,61 @@ public class AppSettings {
 
     public AppSettings(String packageName, byte[] packageSignature) {
         super();
-        this.packageName = packageName;
-        this.packageSignature = packageSignature;
+        mPackageName = packageName;
+        mPackageSignature = packageSignature;
         // defaults:
-        this.encryptionAlgorithm = PGPEncryptedData.AES_256;
-        this.hashAlgorithm = HashAlgorithmTags.SHA512;
-        this.compression = Id.choice.compression.zlib;
+        mEncryptionAlgorithm = PGPEncryptedData.AES_256;
+        mHashAlgorithm = HashAlgorithmTags.SHA512;
+        mCompression = Id.choice.compression.zlib;
+
+        mKeyId = Id.key.none;
     }
 
     public String getPackageName() {
-        return packageName;
+        return mPackageName;
     }
 
     public void setPackageName(String packageName) {
-        this.packageName = packageName;
+        mPackageName = packageName;
     }
 
     public byte[] getPackageSignature() {
-        return packageSignature;
+        return mPackageSignature;
     }
 
     public void setPackageSignature(byte[] packageSignature) {
-        this.packageSignature = packageSignature;
+        mPackageSignature = packageSignature;
     }
 
     public long getKeyId() {
-        return keyId;
+        return mKeyId;
     }
 
-    public void setKeyId(long scretKeyId) {
-        this.keyId = scretKeyId;
+    public void setKeyId(long keyId) {
+        mKeyId = keyId;
     }
 
     public int getEncryptionAlgorithm() {
-        return encryptionAlgorithm;
+        return mEncryptionAlgorithm;
     }
 
     public void setEncryptionAlgorithm(int encryptionAlgorithm) {
-        this.encryptionAlgorithm = encryptionAlgorithm;
+        mEncryptionAlgorithm = encryptionAlgorithm;
     }
 
     public int getHashAlgorithm() {
-        return hashAlgorithm;
+        return mHashAlgorithm;
     }
 
     public void setHashAlgorithm(int hashAlgorithm) {
-        this.hashAlgorithm = hashAlgorithm;
+        mHashAlgorithm = hashAlgorithm;
     }
 
     public int getCompression() {
-        return compression;
+        return mCompression;
     }
 
     public void setCompression(int compression) {
-        this.compression = compression;
+        mCompression = compression;
     }
-
 }

@@ -41,7 +41,7 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
     protected LayoutInflater mInflater;
     protected Activity mActivity;
 
-    protected List<ImportKeysListEntry> data;
+    protected List<ImportKeysListEntry> mData;
 
     public ImportKeysAdapter(Activity activity) {
         super(activity, -1);
@@ -53,13 +53,13 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
     public void setData(List<ImportKeysListEntry> data) {
         clear();
         if (data != null) {
-            this.data = data;
+            mData = data;
 
             // add data to extended ArrayAdapter
             if (Build.VERSION.SDK_INT >= 11) {
-                addAll(data);
+                addAll(mData);
             } else {
-                for (ImportKeysListEntry entry : data) {
+                for (ImportKeysListEntry entry : mData) {
                     add(entry);
                 }
             }
@@ -67,14 +67,15 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
     }
 
     public List<ImportKeysListEntry> getData() {
-        return data;
+        return mData;
     }
 
     public ArrayList<ImportKeysListEntry> getSelectedData() {
         ArrayList<ImportKeysListEntry> selectedData = new ArrayList<ImportKeysListEntry>();
-        for (ImportKeysListEntry entry : data) {
-            if (entry.isSelected())
+        for (ImportKeysListEntry entry : mData) {
+            if (entry.isSelected()) {
                 selectedData.add(entry);
+            }
         }
         return selectedData;
     }
@@ -85,7 +86,7 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImportKeysListEntry entry = data.get(position);
+        ImportKeysListEntry entry = mData.get(position);
 
         View view = mInflater.inflate(R.layout.import_keys_list_entry, null);
 

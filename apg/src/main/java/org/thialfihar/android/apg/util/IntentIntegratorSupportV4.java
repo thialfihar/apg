@@ -28,7 +28,7 @@ import android.support.v4.app.Fragment;
  */
 public final class IntentIntegratorSupportV4 extends IntentIntegrator {
 
-    private final Fragment fragment;
+    private final Fragment mFragment;
 
     /**
      * @param fragment
@@ -36,12 +36,12 @@ public final class IntentIntegratorSupportV4 extends IntentIntegrator {
      */
     public IntentIntegratorSupportV4(Fragment fragment) {
         super(fragment.getActivity());
-        this.fragment = fragment;
+        mFragment = fragment;
     }
 
     @Override
     protected void startActivityForResult(Intent intent, int code) {
-        fragment.startActivityForResult(intent, code);
+        mFragment.startActivityForResult(intent, code);
     }
 
 }
