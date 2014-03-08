@@ -169,7 +169,8 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
                     query = "0x" + fingerprint;
                 }
             } else {
-                Log.e(Constants.TAG, "IMPORT_KEY_FROM_KEYSERVER action needs to contain the 'query', 'key_id', or 'fingerprint' extra!");
+                Log.e(Constants.TAG, "IMPORT_KEY_FROM_KEYSERVER action needs to contain the 'query', " +
+                                        "'key_id', or 'fingerprint' extra!");
                 return;
             }
 
@@ -234,7 +235,7 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
      * onNavigationItemSelected() should check whether the Fragment is already in existence
      * inside your Activity."
      * <p/>
-     * from http://stackoverflow.com/questions/10983396/fragment-oncreateview-and-onactivitycreated-called-twice/14295474#14295474
+     * from http://bit.ly/1dBYThO
      * <p/>
      * In our case, if we start ImportKeysActivity with parameters to directly search using a fingerprint,
      * the fragment would be loaded twice resulting in the query being empty after the second load.
@@ -338,7 +339,8 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
     // } else {
     // status.putString(
     // EXTRA_ERROR,
-    // "Scanned fingerprint does NOT match the fingerprint of the received key.  You shouldnt trust this key.");
+    // "Scanned fingerprint does NOT match the fingerprint of the received key. " +
+    //     "You shouldnt trust this key.");
     // }
     // }
     // } catch (QueryException e) {
@@ -391,10 +393,10 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
                 } else {
                     toastMessage = getString(R.string.no_keys_added_or_updated);
                 }
-                AppMsg.makeText(ImportKeysActivity.this, toastMessage, AppMsg.STYLE_INFO)
-                        .show();
+                AppMsg.makeText(ImportKeysActivity.this, toastMessage, AppMsg.STYLE_INFO).show();
                 if (bad > 0) {
-                    BadImportKeyDialogFragment badImportKeyDialogFragment = BadImportKeyDialogFragment.newInstance(bad);
+                    BadImportKeyDialogFragment badImportKeyDialogFragment =
+                        BadImportKeyDialogFragment.newInstance(bad);
                     badImportKeyDialogFragment.show(getSupportFragmentManager(), "badKeyDialog");
                 }
             }

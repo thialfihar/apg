@@ -216,15 +216,16 @@ public class PassphraseCacheService extends Service {
             PGPSecretKey secretKey = null;
             boolean foundValidKey = false;
             for (Iterator keys = secRing.getSecretKeys(); keys.hasNext();) {
-                secretKey = (PGPSecretKey)keys.next();
+                secretKey = (PGPSecretKey) keys.next();
                 if (!secretKey.isPrivateKeyEmpty()) {
                     foundValidKey = true;
                     break;
                 }
             }
 
-            if (!foundValidKey)
+            if (!foundValidKey) {
                 return false;
+            }
 
             PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
                     "SC").build("".toCharArray());

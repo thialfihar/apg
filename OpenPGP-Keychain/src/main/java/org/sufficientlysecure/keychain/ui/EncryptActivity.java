@@ -231,9 +231,9 @@ public class EncryptActivity extends DrawerActivity {
                 }
             } else {
                 Log.e(Constants.TAG,
-                        "Direct binary data without actual file in filesystem is not supported by Intents. Please use the Remote Service API!");
-                Toast.makeText(this, R.string.error_only_files_are_supported, Toast.LENGTH_LONG)
-                        .show();
+                        "Direct binary data without actual file in filesystem is not supported by " +
+                        "Intents. Please use the Remote Service API!");
+                Toast.makeText(this, R.string.error_only_files_are_supported, Toast.LENGTH_LONG).show();
                 // end activity
                 finish();
             }
@@ -797,17 +797,18 @@ public class EncryptActivity extends DrawerActivity {
         });
 
         mFileCompression = (Spinner) findViewById(R.id.fileCompression);
-        Choice[] choices = new Choice[]{
-                new Choice(Id.choice.compression.none, getString(R.string.choice_none) + " ("
-                        + getString(R.string.compression_fast) + ")"),
-                new Choice(Id.choice.compression.zip, "ZIP ("
-                        + getString(R.string.compression_fast) + ")"),
-                new Choice(Id.choice.compression.zlib, "ZLIB ("
-                        + getString(R.string.compression_fast) + ")"),
-                new Choice(Id.choice.compression.bzip2, "BZIP2 ("
-                        + getString(R.string.compression_very_slow) + ")"),};
-        ArrayAdapter<Choice> adapter = new ArrayAdapter<Choice>(this,
-                android.R.layout.simple_spinner_item, choices);
+        Choice[] choices = new Choice[] {
+                new Choice(Id.choice.compression.none, getString(R.string.choice_none) + " (" +
+                            getString(R.string.compression_fast) + ")"),
+                new Choice(Id.choice.compression.zip, "ZIP (" +
+                            getString(R.string.compression_fast) + ")"),
+                new Choice(Id.choice.compression.zlib, "ZLIB (" +
+                            getString(R.string.compression_fast) + ")"),
+                new Choice(Id.choice.compression.bzip2, "BZIP2 (" +
+                            getString(R.string.compression_very_slow) + ")"),
+        };
+        ArrayAdapter<Choice> adapter =
+            new ArrayAdapter<Choice>(this, android.R.layout.simple_spinner_item, choices);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mFileCompression.setAdapter(adapter);
 

@@ -127,9 +127,7 @@ public class FileHelper {
             } catch (Exception e) {
                 // Eat it
             }
-        }
-
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
 

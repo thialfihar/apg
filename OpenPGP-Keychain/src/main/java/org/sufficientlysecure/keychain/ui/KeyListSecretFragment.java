@@ -110,9 +110,9 @@ public class KeyListSecretFragment extends ListFragment implements
                             break;
                         }
                         case R.id.menu_key_list_public_multi_select_all: {
-                            //Select all
+                            // select all
                             int localCount = getListView().getCount();
-                            for(int k = 0; k < localCount; k++) {
+                            for (int k = 0; k < localCount; k++) {
                                 getListView().setItemChecked(k, true);
                             }
                             break;

@@ -502,10 +502,12 @@ public class EditKeyActivity extends ActionBarActivity {
             }
 
             String passphrase = null;
-            if (mIsPassphraseSet)
+            if (mIsPassphraseSet) {
                 passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
-            else
+            } else {
                 passphrase = "";
+            }
+
             if (passphrase == null) {
                 showPassphraseDialog(masterKeyId, mMasterCanSign);
             } else {

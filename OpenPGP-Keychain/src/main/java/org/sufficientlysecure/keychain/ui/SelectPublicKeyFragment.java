@@ -72,7 +72,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSearchView = (EditText)getActivity().findViewById(R.id.select_public_key_search);
+        mSearchView = (EditText) getActivity().findViewById(R.id.select_public_key_search);
         mSearchView.addTextChangedListener(this);
         mSelectedMasterKeyIds = getArguments().getLongArray(ARG_PRESELECTED_KEY_IDS);
     }
@@ -227,9 +227,9 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
         }
         String where = null;
         String whereArgs[] = null;
-        if(mCurQuery != null){
+        if (mCurQuery != null) {
             where = UserIds.USER_ID + " LIKE ?";
-            whereArgs = new String[]{mCurQuery+"%"};
+            whereArgs = new String[] {mCurQuery + "%"};
         }
 
         // Now create and return a CursorLoader that will take care of

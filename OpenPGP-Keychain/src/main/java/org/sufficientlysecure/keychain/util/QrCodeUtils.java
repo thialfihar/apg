@@ -33,7 +33,7 @@ import org.thialfihar.android.apg.Constants;
 import java.util.Hashtable;
 
 public class QrCodeUtils {
-    public final static QRCodeWriter QR_CODE_WRITER = new QRCodeWriter();
+    public static final QRCodeWriter QR_CODE_WRITER = new QRCodeWriter();
 
     /**
      * Generate Bitmap with QR Code based on input.

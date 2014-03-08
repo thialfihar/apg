@@ -27,7 +27,8 @@ import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
 
-public class ImportKeysListServerLoader extends AsyncTaskLoader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {
+public class ImportKeysListServerLoader
+    extends AsyncTaskLoader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> {
     private Context mContext;
 
     private String mServerQuery;

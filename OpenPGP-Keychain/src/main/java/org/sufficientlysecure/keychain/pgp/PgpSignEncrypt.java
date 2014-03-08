@@ -461,7 +461,8 @@ public class PgpSignEncrypt {
             throw new PgpGeneralException(mContext.getString(R.string.error_no_signature_key));
         }
 
-        PGPSecretKeyRing signingKeyRing = ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, mSignatureKeyId);
+        PGPSecretKeyRing signingKeyRing =
+            ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, mSignatureKeyId);
         PGPSecretKey signingKey = PgpKeyHelper.getSigningKey(mContext, mSignatureKeyId);
         if (signingKey == null) {
             throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));

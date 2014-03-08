@@ -354,11 +354,10 @@ public class KeychainProvider extends ContentProvider {
         HashMap<String, String> projectionMap = new HashMap<String, String>();
 
         projectionMap.put(BaseColumns._ID, Tables.KEY_RINGS + "." + BaseColumns._ID);
-        projectionMap.put(KeyRingsColumns.KEY_RING_DATA, Tables.KEY_RINGS + "."
-                + KeyRingsColumns.KEY_RING_DATA);
-        projectionMap.put(KeyRingsColumns.MASTER_KEY_ID, Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID);
-        // TODO: deprecated master key id
-        //projectionMap.put(KeyRingsColumns.MASTER_KEY_ID, Tables.KEYS + "." + KeysColumns.KEY_ID);
+        projectionMap.put(KeyRingsColumns.KEY_RING_DATA,
+                          Tables.KEY_RINGS + "." + KeyRingsColumns.KEY_RING_DATA);
+        projectionMap.put(KeyRingsColumns.MASTER_KEY_ID,
+                          Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID);
 
         projectionMap.put(KeysColumns.FINGERPRINT, Tables.KEYS + "." + KeysColumns.FINGERPRINT);
         projectionMap.put(KeysColumns.IS_REVOKED, Tables.KEYS + "." + KeysColumns.IS_REVOKED);

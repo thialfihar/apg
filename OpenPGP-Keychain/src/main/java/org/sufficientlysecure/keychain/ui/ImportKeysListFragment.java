@@ -184,7 +184,8 @@ public class ImportKeysListFragment extends ListFragment implements
     }
 
     @Override
-    public Loader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>> onCreateLoader(int id, Bundle args) {
+    public Loader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>>
+                onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_BYTES: {
                 InputData inputData = getInputData(mKeyBytes, mDataUri);
@@ -227,19 +228,19 @@ public class ImportKeysListFragment extends ListFragment implements
 
                 Exception error = data.getError();
 
-                if(error == null){
+                if (error == null) {
                     AppMsg.makeText(
                             getActivity(), getResources().getQuantityString(R.plurals.keys_found,
                             mAdapter.getCount(), mAdapter.getCount()),
                             AppMsg.STYLE_INFO
                     ).show();
-                } else if(error instanceof KeyServer.InsufficientQuery){
+                } else if (error instanceof KeyServer.InsufficientQuery) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_insufficient_query,
                             AppMsg.STYLE_ALERT).show();
-                }else if(error instanceof  KeyServer.QueryException){
+                } else if (error instanceof  KeyServer.QueryException) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_query,
                             AppMsg.STYLE_ALERT).show();
-                }else if(error instanceof KeyServer.TooManyResponses){
+                } else if (error instanceof KeyServer.TooManyResponses) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_too_many_responses,
                             AppMsg.STYLE_ALERT).show();
                 }

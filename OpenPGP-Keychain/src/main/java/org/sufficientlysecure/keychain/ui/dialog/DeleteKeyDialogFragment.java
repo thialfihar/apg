@@ -118,8 +118,9 @@ public class DeleteKeyDialogFragment extends DialogFragment {
                     String selectionIDs = "";
                     for (int i = 0; i < keyRingRowIds.length; i++) {
                         selectionIDs += "'" + String.valueOf(keyRingRowIds[i]) + "'";
-                        if (i+1 < keyRingRowIds.length)
+                        if (i + 1 < keyRingRowIds.length) {
                             selectionIDs += ",";
+                        }
                     }
                     selection += selectionIDs + ")";
 
@@ -140,8 +141,9 @@ public class DeleteKeyDialogFragment extends DialogFragment {
 
                             // check if a corresponding secret key exists...
                             Cursor secretCursor = activity.getContentResolver().query(
-                                    KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(String.valueOf(masterKeyId)),
-                                    null, null, null, null
+                                KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
+                                    String.valueOf(masterKeyId)),
+                                null, null, null, null
                             );
                             if (secretCursor != null && secretCursor.getCount() > 0) {
                                 notDeleted.add(userId);
