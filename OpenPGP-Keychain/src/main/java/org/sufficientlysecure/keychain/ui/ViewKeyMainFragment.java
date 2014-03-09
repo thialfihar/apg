@@ -311,7 +311,6 @@ public class ViewKeyMainFragment extends Fragment  implements
                         fingerprintBlob = ProviderHelper.getFingerprint(getActivity(), mDataUri);
                     }
                     String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, true);
-                    fingerprint = fingerprint.replace("  ", "\n");
 
                     mFingerprint.setText(colorizeFingerprint(fingerprint));
                 }
