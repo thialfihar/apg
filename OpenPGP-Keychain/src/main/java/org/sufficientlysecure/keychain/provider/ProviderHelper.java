@@ -523,10 +523,10 @@ public class ProviderHelper implements PgpKeyProvider {
                                                                      int rank) throws IOException {
         ContentValues values = new ContentValues();
 
-        boolean hasPrivateKey = true;
+        boolean hasPrivate = true;
         if (key.isMasterKey()) {
-            if (PgpKeyHelper.isSecretKeyPrivateEmpty(key)) {
-                hasPrivateKey = false;
+            if (key.isPrivateKeyEmpty()) {
+                hasPrivate = false;
             }
         }
 
@@ -534,8 +534,8 @@ public class ProviderHelper implements PgpKeyProvider {
         values.put(Keys.IS_MASTER_KEY, key.isMasterKey());
         values.put(Keys.ALGORITHM, key.getPublicKey().getAlgorithm());
         values.put(Keys.KEY_SIZE, key.getPublicKey().getBitStrength());
-        values.put(Keys.CAN_CERTIFY, (PgpKeyHelper.isCertificationKey(key) && hasPrivateKey));
-        values.put(Keys.CAN_SIGN, (PgpKeyHelper.isSigningKey(key) && hasPrivateKey));
+        values.put(Keys.CAN_CERTIFY, (PgpKeyHelper.isCertificationKey(key) && hasPrivate));
+        values.put(Keys.CAN_SIGN, (PgpKeyHelper.isSigningKey(key) && hasPrivate));
         values.put(Keys.CAN_ENCRYPT, PgpKeyHelper.isEncryptionKey(key));
         values.put(Keys.IS_REVOKED, key.getPublicKey().isRevoked());
         values.put(Keys.CREATION, PgpKeyHelper.getCreationDate(key).getTime() / 1000);
