@@ -56,15 +56,32 @@ public class ApgIntentServiceHandler extends Handler {
     }
 
     public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId, int progressDialogStyle) {
+        this(activity, progressDialogMessage, progressDialogStyle, false, null);
+    }
+
+    public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId, int progressDialogStyle) {
         this(activity, progressDialogMessageId, progressDialogStyle, false, null);
     }
 
     public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId,
                                         int progressDialogStyle, boolean cancelable,
                                         OnCancelListener onCancelListener) {
+        this(activity,
+                activity.getString(progressDialogMessageId),
+                progressDialogStyle,
+                cancelable,
+                onCancelListener);
+    }
+
+    public KeychainIntentServiceHandler(Activity activity, String progressDialogMessage,
+                                        int progressDialogStyle, boolean cancelable,
+                                        OnCancelListener onCancelListener) {
         this.mActivity = activity;
-        this.mProgressDialogFragment = ProgressDialogFragment.newInstance(progressDialogMessageId,
-                progressDialogStyle, cancelable, onCancelListener);
+        this.mProgressDialogFragment = ProgressDialogFragment.newInstance(
+                progressDialogMessage,
+                progressDialogStyle,
+                cancelable,
+                onCancelListener);
     }
 
     public void showProgressDialog(FragmentActivity activity) {

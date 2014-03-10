@@ -83,7 +83,10 @@ public class DeleteFileDialogFragment extends DialogFragment {
                 intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
                 ProgressDialogFragment deletingDialog = ProgressDialogFragment.newInstance(
-                        R.string.progress_deleting_securely, ProgressDialog.STYLE_HORIZONTAL, false, null);
+                        getString(R.string.progress_deleting_securely),
+                        ProgressDialog.STYLE_HORIZONTAL,
+                        false,
+                        null);
 
                 // Message is received after deleting is done in ApgService
                 ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(activity, deletingDialog) {
