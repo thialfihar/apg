@@ -47,6 +47,7 @@ import org.thialfihar.android.apg.pgp.PgpImportExport;
 import org.thialfihar.android.apg.pgp.PgpKeyOperation;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.Progressable;
+import org.thialfihar.android.apg.pgp.PublicKeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
 import org.thialfihar.android.apg.provider.ProviderHelper;
@@ -724,7 +725,7 @@ public class ApgIntentService extends IntentService implements Progressable {
                     PgpImportExport pgpImportExport = new PgpImportExport(this, null);
 
                     boolean uploaded =
-                        pgpImportExport.uploadKeyRingToServer(server, keyRing.getPublicKeyRing());
+                        pgpImportExport.uploadKeyRingToServer(server, new PublicKeyRing(keyRing));
                     if (!uploaded) {
                         throw new PgpGeneralException("Unable to export key to selected server");
                     }

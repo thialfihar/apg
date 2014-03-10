@@ -76,15 +76,9 @@ public class PgpImportExport {
         }
     }
 
-    public boolean uploadKeyRingToServer(HkpKeyServer server, PGPPublicKeyRing keyRing) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ArmoredOutputStream aos = new ArmoredOutputStream(bos);
+    public boolean uploadKeyRingToServer(KeyServer server, PublicKeyRing keyRing) {
         try {
-            aos.write(keyRing.getEncoded());
-            aos.close();
-
-            String armoredKey = bos.toString("UTF-8");
-            server.add(armoredKey);
+            server.add(keyRing.getArmoredEncoded(mContext));
 
             return true;
         } catch (IOException e) {
@@ -92,11 +86,6 @@ public class PgpImportExport {
         } catch (AddKeyException e) {
             // TODO: tell the user?
             return false;
-        } finally {
-            try {
-                bos.close();
-            } catch (IOException e) {
-            }
         }
     }
 
