@@ -42,16 +42,13 @@ import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.PGPSecretKeyRing;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.PgpConversionHelper;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
@@ -63,7 +60,6 @@ import org.thialfihar.android.apg.ui.dialog.SetPassphraseDialogFragment;
 import org.thialfihar.android.apg.ui.widget.KeyEditor;
 import org.thialfihar.android.apg.ui.widget.SectionView;
 import org.thialfihar.android.apg.ui.widget.UserIdEditor;
-import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
@@ -88,7 +84,9 @@ public class EditKeyActivity extends ActionBarActivity {
     // EDIT
     private Uri mDataUri;
 
-    private PGPSecretKeyRing mKeyRing = null;
+    private ProviderHelper mProvider;
+
+    private KeyRing mKeyRing = null;
 
     private SectionView mUserIdsView;
     private SectionView mKeysView;
@@ -103,7 +101,7 @@ public class EditKeyActivity extends ActionBarActivity {
     private CheckBox mNoPassphrase;
 
     private Vector<String> mUserIds;
-    private Vector<PGPSecretKey> mKeys;
+    private Vector<Key> mKeys;
     private Vector<Integer> mKeysUsages;
     private boolean mMasterCanSign;
 
@@ -114,9 +112,10 @@ public class EditKeyActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         mExportHelper = new ExportHelper(this);
+        mProvider = new ProviderHelper(this);
 
         mUserIds = new Vector<String>();
-        mKeys = new Vector<PGPSecretKey>();
+        mKeys = new Vector<Key>();
         mKeysUsages = new Vector<Integer>();
 
         mMasterCanSign = true;
@@ -210,12 +209,8 @@ public class EditKeyActivity extends ActionBarActivity {
                             if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                                 // get new key from data bundle returned from service
                                 Bundle data = message.getData();
-                                PGPSecretKey masterKey = (PGPSecretKey) PgpConversionHelper
-                                        .BytesToPGPSecretKey(data
-                                                .getByteArray(ApgIntentService.RESULT_NEW_KEY));
-                                PGPSecretKey subKey = (PGPSecretKey) PgpConversionHelper
-                                        .BytesToPGPSecretKey(data
-                                                .getByteArray(ApgIntentService.RESULT_NEW_KEY2));
+                                Key masterKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY);
+                                Key subKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY2);
 
                                 // add master key
                                 mKeys.add(masterKey);
@@ -271,9 +266,11 @@ public class EditKeyActivity extends ActionBarActivity {
             long keyRingRowId = Long.valueOf(mDataUri.getLastPathSegment());
 
             // get master key id using row id
-            long masterKeyId = ProviderHelper.getSecretMasterKeyId(this, keyRingRowId);
+            KeyRing keyRing = mProvider.getSecretKeyRingByRowId(keyRingRowId);
+            Key masterKey = keyRing.getMasterKey();
+            long masterKeyId = masterKey.getKeyId();
+            mMasterCanSign = masterKey.isSigningKey();
 
-            mMasterCanSign = ProviderHelper.getSecretMasterKeyCanSign(this, keyRingRowId);
             finallyEdit(masterKeyId, mMasterCanSign);
         }
     }
@@ -356,11 +353,11 @@ public class EditKeyActivity extends ActionBarActivity {
     @SuppressWarnings("unchecked")
     private void finallyEdit(final long masterKeyId, final boolean mMasterCanSign) {
         if (masterKeyId != 0) {
-            PGPSecretKey masterKey = null;
-            mKeyRing = ProviderHelper.getPGPSecretKeyRingByMasterKeyId(this, masterKeyId);
+            Key masterKey = null;
+            mKeyRing = mProvider.getSecretKeyRingByMasterKeyId(masterKeyId);
             if (mKeyRing != null) {
-                masterKey = PgpKeyHelper.getMasterKey(mKeyRing);
-                for (PGPSecretKey key : new IterableIterator<PGPSecretKey>(mKeyRing.getSecretKeys())) {
+                masterKey = mKeyRing.getMasterKey();
+                for (Key key : mKeyRing.getSecretKeys()) {
                     mKeys.add(key);
                     mKeysUsages.add(-1); // get usage when view is created
                 }
@@ -369,7 +366,7 @@ public class EditKeyActivity extends ActionBarActivity {
                 Toast.makeText(this, R.string.error_no_secret_key_found, Toast.LENGTH_LONG).show();
             }
             if (masterKey != null) {
-                for (String userId : new IterableIterator<String>(masterKey.getUserIDs())) {
+                for (String userId : masterKey.getUserIds()) {
                     Log.d(Constants.TAG, "Added userId " + userId);
                     mUserIds.add(userId);
                 }
@@ -480,7 +477,7 @@ public class EditKeyActivity extends ActionBarActivity {
         if (mKeysView.getEditors().getChildCount() == 0) {
             return 0;
         }
-        return ((KeyEditor) mKeysView.getEditors().getChildAt(0)).getValue().getKeyID();
+        return ((KeyEditor) mKeysView.getEditors().getChildAt(0)).getValue().getKeyId();
     }
 
     public boolean isPassphraseSet() {
@@ -534,9 +531,8 @@ public class EditKeyActivity extends ActionBarActivity {
             data.putString(ApgIntentService.SAVE_KEYRING_NEW_PASSPHRASE, mNewPassphrase);
             data.putStringArrayList(ApgIntentService.SAVE_KEYRING_USER_IDS,
                     getUserIds(mUserIdsView));
-            ArrayList<PGPSecretKey> keys = getKeys(mKeysView);
-            data.putByteArray(ApgIntentService.SAVE_KEYRING_KEYS,
-                    PgpConversionHelper.PGPSecretKeyArrayListToBytes(keys));
+            ArrayList<Key> keys = getKeys(mKeysView);
+            data.putSerializable(ApgIntentService.SAVE_KEYRING_KEYS, keys);
             data.putIntegerArrayList(ApgIntentService.SAVE_KEYRING_KEYS_USAGES,
                     getKeysUsages(mKeysView));
             data.putSerializable(ApgIntentService.SAVE_KEYRING_KEYS_EXPIRY_DATES,
@@ -643,8 +639,8 @@ public class EditKeyActivity extends ActionBarActivity {
      * @param keysView
      * @return
      */
-    private ArrayList<PGPSecretKey> getKeys(SectionView keysView) throws PgpGeneralException {
-        ArrayList<PGPSecretKey> keys = new ArrayList<PGPSecretKey>();
+    private ArrayList<Key> getKeys(SectionView keysView) throws PgpGeneralException {
+        ArrayList<Key> keys = new ArrayList<Key>();
 
         ViewGroup keyEditors = keysView.getEditors();
 

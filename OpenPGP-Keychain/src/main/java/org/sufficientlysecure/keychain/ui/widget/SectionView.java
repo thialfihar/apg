@@ -34,10 +34,9 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.spongycastle.openpgp.PGPSecretKey;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpConversionHelper;
+import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
@@ -191,7 +190,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         this.updateEditorsVisible();
     }
 
-    public void setKeys(Vector<PGPSecretKey> list, Vector<Integer> usages) {
+    public void setKeys(Vector<Key> list, Vector<Integer> usages) {
         if (mType != Id.type.key) {
             return;
         }
@@ -224,9 +223,8 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
         String passphrase;
         if (mEditors.getChildCount() > 0) {
-            PGPSecretKey masterKey = ((KeyEditor) mEditors.getChildAt(0)).getValue();
-            passphrase = PassphraseCacheService
-                    .getCachedPassphrase(mActivity, masterKey.getKeyID());
+            Key masterKey = ((KeyEditor) mEditors.getChildAt(0)).getValue();
+            passphrase = PassphraseCacheService.getCachedPassphrase(mActivity, masterKey.getKeyId());
             isMasterKey = false;
         } else {
             passphrase = "";
@@ -258,9 +256,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                 if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get new key from data bundle returned from service
                     Bundle data = message.getData();
-                    PGPSecretKey newKey = (PGPSecretKey) PgpConversionHelper
-                            .BytesToPGPSecretKey(data
-                                    .getByteArray(ApgIntentService.RESULT_NEW_KEY));
+                    Key newKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY);
                     addGeneratedKeyToView(newKey);
                 }
             };
@@ -276,7 +272,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         mActivity.startService(intent);
     }
 
-    private void addGeneratedKeyToView(PGPSecretKey newKey) {
+    private void addGeneratedKeyToView(Key newKey) {
         // add view with new key
         KeyEditor view = (KeyEditor) mInflater.inflate(R.layout.edit_key_key_item,
                 mEditors, false);

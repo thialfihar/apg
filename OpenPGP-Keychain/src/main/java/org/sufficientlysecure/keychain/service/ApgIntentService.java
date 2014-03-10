@@ -550,8 +550,7 @@ public class ApgIntentService extends IntentService implements Progressable {
                     newPassphrase = oldPassphrase;
                 }
                 ArrayList<String> userIds = data.getStringArrayList(SAVE_KEYRING_USER_IDS);
-                KeyRing keyRing = KeyRing.decode(data.getByteArray(SAVE_KEYRING_KEYS));
-                ArrayList<Key> keys = keyRing.getSecretKeys();
+                ArrayList<Key> keys = (ArrayList<Key>) data.getSerializable(SAVE_KEYRING_KEYS);
                 ArrayList<Integer> keysUsages = data.getIntegerArrayList(SAVE_KEYRING_KEYS_USAGES);
                 ArrayList<GregorianCalendar> keysExpiryDates =
                     (ArrayList<GregorianCalendar>) data.getSerializable(SAVE_KEYRING_KEYS_EXPIRY_DATES);
@@ -589,7 +588,7 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                 /* Output */
                 Bundle resultData = new Bundle();
-                resultData.putByteArray(RESULT_NEW_KEY, newKey.getEncoded());
+                resultData.putSerializable(RESULT_NEW_KEY, newKey);
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
@@ -617,8 +616,8 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                 /* Output */
                 Bundle resultData = new Bundle();
-                resultData.putByteArray(RESULT_NEW_KEY, masterKey.getEncoded());
-                resultData.putByteArray(RESULT_NEW_KEY2, subKey.getEncoded());
+                resultData.putSerializable(RESULT_NEW_KEY, masterKey);
+                resultData.putSerializable(RESULT_NEW_KEY2, subKey);
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 

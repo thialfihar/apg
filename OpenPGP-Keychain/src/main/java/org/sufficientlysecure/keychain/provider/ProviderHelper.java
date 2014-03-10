@@ -125,6 +125,14 @@ public class ProviderHelper implements PgpKeyProvider {
         return keyRing.getSecretKey(keyId);
     }
 
+    /**
+     * Retrieves the actual SecretKeyRing object from the database blob based on the rowId
+     */
+    public KeyRing getSecretKeyRingByRowId(long rowId) {
+        Uri queryUri = KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
+        return getKeyRing(queryUri);
+    }
+
     public static KeyRing getKeyRing(Context context, Uri queryUri) {
         return new KeyRing(getPGPKeyRing(context, queryUri));
     }
@@ -136,13 +144,13 @@ public class ProviderHelper implements PgpKeyProvider {
         Cursor cursor = context.getContentResolver().query(queryUri,
                 new String[]{KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
 
-        PGPKeyRing keyRing = null;
+        KeyRing keyRing = null;
         if (cursor != null && cursor.moveToFirst()) {
             int keyRingDataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
 
             byte[] data = cursor.getBlob(keyRingDataCol);
             if (data != null) {
-                keyRing = PgpConversionHelper.BytesToPGPKeyRing(data);
+                keyRing = KeyRing.decode(data);
             }
         }
 
@@ -150,7 +158,11 @@ public class ProviderHelper implements PgpKeyProvider {
             cursor.close();
         }
 
-        return keyRing;
+        if (keyRing.isPublic()) {
+            return keyRing.getPublicKeyRing();
+        } else {
+            return keyRing.getSecretKeyRing();
+        }
     }
 
     /**

@@ -33,12 +33,10 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.spongycastle.openpgp.PGPPublicKey;
-import org.spongycastle.openpgp.PGPSecretKey;
-
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.Utils;
 import org.thialfihar.android.apg.util.Choice;
 
 import java.text.DateFormat;
@@ -63,7 +61,7 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         }
     }
 
-    private PGPSecretKey mKey;
+    private Key mKey;
 
     private EditorListener mEditorListener = null;
 
@@ -184,7 +182,7 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         }
     }
 
-    public void setValue(PGPSecretKey key, boolean isMasterKey, int usage) {
+    public void setValue(Key key, boolean isMasterKey, int usage) {
         mKey = key;
 
         mIsMasterKey = isMasterKey;
@@ -192,14 +190,12 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
             mDeleteButton.setVisibility(View.INVISIBLE);
         }
 
-        mAlgorithm.setText(PgpKeyHelper.getAlgorithmInfo(key));
-        String keyId1Str = PgpKeyHelper.convertKeyIdToHex(key.getKeyID());
-        String keyId2Str = PgpKeyHelper.convertKeyIdToHex(key.getKeyID() >> 32);
-        mKeyId.setText(keyId1Str + " " + keyId2Str);
+        mAlgorithm.setText(key.getAlgorithmInfo());
+        mKeyId.setText(Utils.toHex(key.getKeyId(), 16));
 
         Vector<Choice> choices = new Vector<Choice>();
-        boolean isElGamalKey = (key.getPublicKey().getAlgorithm() == PGPPublicKey.ELGAMAL_ENCRYPT);
-        boolean isDSAKey = (key.getPublicKey().getAlgorithm() == PGPPublicKey.DSA);
+        boolean isElGamalKey = (key.getAlgorithm() == Key.ELGAMAL_ENCRYPT);
+        boolean isDSAKey = (key.getAlgorithm() == Key.DSA);
         if (!isElGamalKey) {
             choices.add(new Choice(Id.choice.usage.sign_only, getResources().getString(
                     R.string.choice_sign_only)));
@@ -220,8 +216,8 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
 
         // Set value in choice dropdown to key
         int selectId = 0;
-        if (PgpKeyHelper.isEncryptionKey(key)) {
-            if (PgpKeyHelper.isSigningKey(key)) {
+        if (key.isEncryptionKey()) {
+            if (key.isSigningKey()) {
                 selectId = Id.choice.usage.sign_and_encrypt;
             } else {
                 selectId = Id.choice.usage.encrypt_only;
@@ -244,20 +240,20 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         }
 
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTime(PgpKeyHelper.getCreationDate(key));
+        cal.setTime(key.getCreationDate());
         setCreatedDate(cal);
         cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        Date expiryDate = PgpKeyHelper.getExpiryDate(key);
+        Date expiryDate = key.getExpiryDate();
         if (expiryDate == null) {
             setExpiryDate(null);
         } else {
-            cal.setTime(PgpKeyHelper.getExpiryDate(key));
+            cal.setTime(key.getExpiryDate());
             setExpiryDate(cal);
         }
 
     }
 
-    public PGPSecretKey getValue() {
+    public Key getValue() {
         return mKey;
     }
 
@@ -300,6 +296,5 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     public int getUsage() {
         return ((Choice) mUsage.getSelectedItem()).getId();
     }
-
 }
 
