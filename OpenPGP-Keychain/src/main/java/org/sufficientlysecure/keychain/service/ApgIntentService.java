@@ -74,7 +74,7 @@ import java.util.List;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class ApgIntentService extends IntentService implements Progressable {
+public class ApgIntentService extends IntentService implements Progressable, PgpImportExport.KeychainServiceListener {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";
@@ -717,11 +717,16 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                 Bundle resultData;
 
-                PgpImportExport pgpImportExport = new PgpImportExport(this, this);
+                PgpImportExport pgpImportExport = new PgpImportExport(this, this, this);
+
                 resultData = pgpImportExport
                         .exportKeyRings(keyRingRowIds, keyType, outStream);
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                if (mIsCanceled){
+                   new File(outputFile).delete();
+                }
+
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -911,5 +916,10 @@ public class ApgIntentService extends IntentService implements Progressable {
 
     public void setProgress(int progress, int max) {
         setProgress(null, progress, max);
+    }
+
+    @Override
+    public boolean hasServiceStopped() {
+        return mIsCanceled;
     }
 }

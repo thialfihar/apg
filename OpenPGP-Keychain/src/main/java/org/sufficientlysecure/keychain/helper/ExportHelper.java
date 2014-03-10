@@ -17,6 +17,7 @@
 package org.thialfihar.android.apg.helper;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -116,7 +117,7 @@ public class ExportHelper {
         Log.d(Constants.TAG, "exportKeys started");
 
         // Send all information needed to service to export key in other thread
-        Intent intent = new Intent(mActivity, ApgIntentService.class);
+        final Intent intent = new Intent(mActivity, ApgIntentService.class);
 
         intent.setAction(ApgIntentService.ACTION_EXPORT_KEYRING);
 
@@ -136,7 +137,12 @@ public class ExportHelper {
 
         // Message is received after exporting is done in ApgService
         ApgIntentServiceHandler exportHandler = new ApgIntentServiceHandler(mActivity,
-                activity.getString(R.string.progress_exporting), ProgressDialog.STYLE_HORIZONTAL) {
+                activity.getString(R.string.progress_exporting), ProgressDialog.STYLE_HORIZONTAL, true, new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                activity.stopService(intent);
+            }
+        }) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);

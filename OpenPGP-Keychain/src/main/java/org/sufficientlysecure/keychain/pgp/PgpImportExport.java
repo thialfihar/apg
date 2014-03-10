@@ -49,13 +49,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PgpImportExport {
+
+    public interface KeychainServiceListener{
+        public boolean hasServiceStopped();
+    }
     private Context mContext;
     private Progressable mProgress;
 
+<<<<<<< HEAD:apg/src/main/java/org/thialfihar/android/apg/pgp/PgpImportExport.java
     public PgpImportExport(Context context, Progressable progress) {
+=======
+    private KeychainServiceListener mKeychainServiceListener;
+
+    public PgpImportExport(Context context, ProgressDialogUpdater progress) {
+>>>>>>> Export is cancellable now:OpenPGP-Keychain/src/main/java/org/sufficientlysecure/keychain/pgp/PgpImportExport.java
         super();
         this.mContext = context;
         this.mProgress = progress;
+    }
+
+    public PgpImportExport(Context context, ProgressDialogUpdater progress, KeychainServiceListener keychainListener){
+        super();
+        this.mContext = context;
+        this.mProgress = progress;
+        this.mKeychainServiceListener = keychainListener;
     }
 
     public void updateProgress(int message, int current, int total) {
@@ -176,8 +193,10 @@ public class PgpImportExport {
                 if (secretKeyRing != null) {
                     secretKeyRing.encode(arOutStream);
                 }
-                // Else if it's a public key get the PGPPublicKeyRing
-                // and encode that to the output
+                if(mKeychainServiceListener.hasServiceStopped()==true){
+                    arOutStream.close();
+                    return null;
+                }
             } else {
                 updateProgress(i * 100 / rowIdsSize, 100);
                 PGPPublicKeyRing publicKeyRing =
@@ -185,6 +204,11 @@ public class PgpImportExport {
 
                 if (publicKeyRing != null) {
                     publicKeyRing.encode(arOutStream);
+                }
+
+                if(mKeychainServiceListener.hasServiceStopped() == true){
+                    arOutStream.close();
+                    return null;
                 }
             }
 
