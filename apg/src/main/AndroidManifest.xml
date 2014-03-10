@@ -30,10 +30,6 @@
         For OI Filemanager it makes no difference, gpg files can't be associated
     -->
 
-    <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
-
     <uses-feature
         android:name="android.hardware.wifi"
         android:required="false" />
