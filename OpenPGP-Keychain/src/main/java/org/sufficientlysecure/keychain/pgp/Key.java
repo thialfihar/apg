@@ -273,7 +273,11 @@ public class Key implements Serializable {
         return algorithmStr + ", " + keySize + "bit";
     }
 
-    public String getFingerprint() {
+    public byte[] getFingerprint() {
+        return mPublicKey.getFingerprint();
+    }
+
+    /*public String getFingerprint() {
         String fingerprint = "";
         byte fp[] = mPublicKey.getFingerprint();
         for (int i = 0; i < fp.length; ++i) {
@@ -290,7 +294,7 @@ public class Key implements Serializable {
         }
 
         return fingerprint;
-    }
+    }*/
 
     public byte[] getEncoded() throws IOException {
         if (isPublic()) {

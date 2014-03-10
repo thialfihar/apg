@@ -35,6 +35,7 @@ import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ExportHelper;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
@@ -43,11 +44,13 @@ import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import android.widget.Toast;
 
 public class ViewKeyActivity extends ActionBarActivity {
 
     ExportHelper mExportHelper;
+    ProviderHelper mProvider;
 
     protected Uri mDataUri;
 
@@ -63,6 +66,7 @@ public class ViewKeyActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         mExportHelper = new ExportHelper(this);
+        mProvider = new ProviderHelper(this);
 
         // let the actionbar look like Android's contact app
         ActionBar actionBar = getSupportActionBar();
@@ -154,7 +158,7 @@ public class ViewKeyActivity extends ActionBarActivity {
     }
 
     private void updateFromKeyserver(Uri dataUri) {
-        long updateKeyId = ProviderHelper.getMasterKeyId(ViewKeyActivity.this, mDataUri);
+        long updateKeyId = mProvider.getMasterKeyId(dataUri);
 
         if (updateKeyId == 0) {
             Log.e(Constants.TAG, "this shouldn't happen. KeyId == 0!");
@@ -177,12 +181,16 @@ public class ViewKeyActivity extends ActionBarActivity {
 
             content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;
         } else {
-            // get public keyring as ascii armored string
-            long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
-            ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(this,
-                    dataUri, new long[]{masterKeyId});
-
-            content = keyringArmored.get(0);
+            // get public key ring as ascii armored string
+            long masterKeyId = mProvider.getMasterKeyId(dataUri);
+            KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
+            try {
+                content = keyRing.getArmoredEncoded(this);
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), R.string.error_could_not_encode_key_ring,
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
 
             // Android will fail with android.os.TransactionTooLargeException if key is too big
             // see http://www.lonestarprod.com/?p=34
@@ -210,10 +218,17 @@ public class ViewKeyActivity extends ActionBarActivity {
     private void copyToClipboard(Uri dataUri) {
         // get public keyring as ascii armored string
         long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
-        ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(this, dataUri,
-                new long[]{masterKeyId});
+        KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
+        String armoredKeyRing;
+        try {
+            armoredKeyRing = keyRing.getArmoredEncoded(this);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), R.string.error_could_not_encode_key_ring,
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        ClipboardReflection.copyToClipboard(this, keyringArmored.get(0));
+        ClipboardReflection.copyToClipboard(this, armoredKeyRing);
         Toast.makeText(getApplicationContext(), R.string.key_copied_to_clipboard, Toast.LENGTH_LONG)
                 .show();
     }

@@ -17,9 +17,9 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -28,18 +28,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.QrCodeUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ShareQrCodeDialogFragment extends DialogFragment {
     private static final String ARG_KEY_URI = "uri";
     private static final String ARG_FINGERPRINT_ONLY = "fingerprint_only";
+
+    private Context mContext;
+    private ProviderHelper mProvider;
 
     private ImageView mImage;
     private TextView mText;
@@ -70,16 +76,17 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Activity activity = getActivity();
+        mContext = getActivity();
+        mProvider = new ProviderHelper(mContext);
 
         Uri dataUri = getArguments().getParcelable(ARG_KEY_URI);
         mFingerprintOnly = getArguments().getBoolean(ARG_FINGERPRINT_ONLY);
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
 
         alert.setTitle(R.string.share_qr_code_dialog_title);
 
-        LayoutInflater inflater = activity.getLayoutInflater();
+        LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.share_qr_code_dialog, null);
         alert.setView(view);
 
@@ -90,7 +97,7 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
         if (mFingerprintOnly) {
             alert.setPositiveButton(R.string.btn_okay, null);
 
-            byte[] fingerprintBlob = ProviderHelper.getFingerprint(getActivity(), dataUri);
+            byte[] fingerprintBlob = ProviderHelper.getFingerprint(mContext, dataUri);
             String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, false);
 
             mText.setText(getString(R.string.share_qr_code_dialog_fingerprint_text) + " " + fingerprint);
@@ -101,15 +108,15 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
             mText.setText(R.string.share_qr_code_dialog_start);
 
             // TODO
-            long masterKeyId = ProviderHelper.getMasterKeyId(getActivity(), dataUri);
-
-            // get public keyring as ascii armored string
-            ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(
-                    getActivity(), dataUri, new long[]{masterKeyId});
-
-            // TODO: binary?
-
-            content = keyringArmored.get(0);
+            long masterKeyId = ProviderHelper.getMasterKeyId(mContext, dataUri);
+            KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
+            try {
+                content = keyRing.getArmoredEncoded(mContext);
+            } catch (IOException e) {
+                Toast.makeText(mContext, R.string.error_could_not_encode_key_ring,
+                    Toast.LENGTH_LONG).show();
+                return null;
+            }
 
             // OnClickListener are set in onResume to prevent automatic dismissing of Dialogs
             // http://bit.ly/O5vfaR

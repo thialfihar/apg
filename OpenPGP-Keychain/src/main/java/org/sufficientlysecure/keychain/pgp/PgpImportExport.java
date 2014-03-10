@@ -76,11 +76,11 @@ public class PgpImportExport {
         }
     }
 
-    public boolean uploadKeyRingToServer(HkpKeyServer server, PGPPublicKeyRing keyring) {
+    public boolean uploadKeyRingToServer(HkpKeyServer server, PGPPublicKeyRing keyRing) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ArmoredOutputStream aos = new ArmoredOutputStream(bos);
         try {
-            aos.write(keyring.getEncoded());
+            aos.write(keyRing.getEncoded());
             aos.close();
 
             String armoredKey = bos.toString("UTF-8");
@@ -116,12 +116,12 @@ public class PgpImportExport {
         int position = 0;
         try {
             for (ImportKeysListEntry entry : entries) {
-                Object obj = PgpConversionHelper.BytesToPGPKeyRing(entry.getBytes());
+                KeyRing obj = KeyRing.decode(entry.getBytes());
 
-                if (obj instanceof PGPKeyRing) {
-                    PGPKeyRing keyring = (PGPKeyRing) obj;
+                if (obj.isPublic()) {
+                    PGPKeyRing keyRing = obj.getPublicKeyRing();
 
-                    int status = storeKeyRingInCache(keyring);
+                    int status = storeKeyRingInCache(keyRing);
 
                     if (status == Id.return_value.error) {
                         throw new PgpGeneralException(
@@ -217,11 +217,11 @@ public class PgpImportExport {
      * TODO: implement Id.return_value.updated as status when key already existed
      */
     @SuppressWarnings("unchecked")
-    public int storeKeyRingInCache(PGPKeyRing keyring) {
+    public int storeKeyRingInCache(PGPKeyRing keyRing) {
         int status = Integer.MIN_VALUE; // out of bounds value (Id.return_value.*)
         try {
-            if (keyring instanceof PGPSecretKeyRing) {
-                PGPSecretKeyRing secretKeyRing = (PGPSecretKeyRing) keyring;
+            if (keyRing instanceof PGPSecretKeyRing) {
+                PGPSecretKeyRing secretKeyRing = (PGPSecretKeyRing) keyRing;
                 boolean save = true;
 
                 for (PGPSecretKey testSecretKey : new IterableIterator<PGPSecretKey>(
@@ -254,8 +254,8 @@ public class PgpImportExport {
                     // TODO: remove status returns, use exceptions!
                     status = Id.return_value.ok;
                 }
-            } else if (keyring instanceof PGPPublicKeyRing) {
-                PGPPublicKeyRing publicKeyRing = (PGPPublicKeyRing) keyring;
+            } else if (keyRing instanceof PGPPublicKeyRing) {
+                PGPPublicKeyRing publicKeyRing = (PGPPublicKeyRing) keyRing;
                 ProviderHelper.saveKeyRing(mContext, publicKeyRing);
                 // TODO: remove status returns, use exceptions!
                 status = Id.return_value.ok;
