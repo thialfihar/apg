@@ -16,6 +16,9 @@
 
 package org.thialfihar.android.apg.pgp;
 
+import android.content.Context;
+
+import org.spongycastle.bcpg.ArmoredOutputStream;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKey;
@@ -25,6 +28,7 @@ import org.spongycastle.openpgp.PGPSecretKeyRing;
 
 import org.thialfihar.android.apg.util.IterableIterator;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -98,6 +102,16 @@ public class KeyRing {
             return mPublicKeyRing.getEncoded();
         }
         return mSecretKeyRing.getEncoded();
+    }
+
+    public String getArmoredEncoded(Context context) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ArmoredOutputStream aos = new ArmoredOutputStream(bos);
+        aos.setHeader("Version", PgpHelper.getFullVersion(context));
+        aos.write(getEncoded());
+        aos.close();
+
+        return bos.toString("UTF-8");
     }
 
     public ArrayList<Key> getPublicKeys() {

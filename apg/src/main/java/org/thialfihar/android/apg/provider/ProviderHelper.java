@@ -27,7 +27,6 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.RemoteException;
 
-import org.spongycastle.bcpg.ArmoredOutputStream;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
@@ -38,8 +37,6 @@ import org.spongycastle.openpgp.PGPSignature;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
-import org.thialfihar.android.apg.pgp.PgpConversionHelper;
-import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyProvider;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
@@ -123,6 +120,89 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         return keyRing.getSecretKey(keyId);
+    }
+
+    /**
+     * Get master key id of key
+     */
+    public long getMasterKeyId(Uri queryUri) {
+        String[] projection = new String[] {KeyRings.MASTER_KEY_ID};
+        Cursor cursor = mContext.getContentResolver().query(queryUri, projection, null, null, null);
+
+        long masterKeyId = 0;
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                int masterKeyIdCol = cursor.getColumnIndexOrThrow(KeyRings.MASTER_KEY_ID);
+
+                masterKeyId = cursor.getLong(masterKeyIdCol);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return masterKeyId;
+    }
+
+
+    /**
+     * Get fingerprint of key
+     */
+    public byte[] getFingerprint(Uri queryUri) {
+        String[] projection = new String[] {Keys.FINGERPRINT};
+        Cursor cursor = mContext.getContentResolver().query(queryUri, projection, null, null, null);
+
+        byte[] fingerprint = null;
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                int col = cursor.getColumnIndexOrThrow(Keys.FINGERPRINT);
+
+                fingerprint = cursor.getBlob(col);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        if (fingerprint != null) {
+            return fingerprint;
+        }
+
+        // FALLBACK: If fingerprint is not in database, get it from key blob!
+        // this could happen if the key was saved by a previous version of Keychain!
+        Log.d(Constants.TAG, "FALLBACK: fingerprint is not in database, get it from key blob!");
+
+        // get master key id
+        projection = new String[] {KeyRings.MASTER_KEY_ID};
+        cursor = mContext.getContentResolver().query(queryUri, projection, null, null, null);
+        long masterKeyId = 0;
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                int col = cursor.getColumnIndexOrThrow(KeyRings.MASTER_KEY_ID);
+
+                masterKeyId = cursor.getLong(col);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        KeyRing keyRing = getPublicKeyRingByMasterKeyId(masterKeyId);
+        if (keyRing == null) {
+            // try to find a secret key ring instead
+            keyRing = getSecretKeyRingByMasterKeyId(masterKeyId);
+        }
+        if (keyRing == null) {
+            Log.e(Constants.TAG, "Key could not be found!");
+            return null;
+        }
+
+        Key key = keyRing.getMasterKey();
+
+        return key.getFingerprint();
     }
 
     /**
@@ -688,67 +768,6 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         return userId;
-    }
-
-    public static ArrayList<String> getKeyRingsAsArmoredString(Context context, Uri uri,
-                                                               long[] masterKeyIds) {
-        ArrayList<String> output = new ArrayList<String>();
-
-        if (masterKeyIds != null && masterKeyIds.length > 0) {
-
-            Cursor cursor = getCursorWithSelectedKeyringMasterKeyIds(context, uri, masterKeyIds);
-
-            if (cursor != null) {
-                int masterIdCol = cursor.getColumnIndex(KeyRings.MASTER_KEY_ID);
-                int dataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
-                if (cursor.moveToFirst()) {
-                    do {
-                        Log.d(Constants.TAG, "masterKeyId: " + cursor.getLong(masterIdCol));
-
-                        // get actual keyring data blob and write it to ByteArrayOutputStream
-                        try {
-                            Object keyRing = null;
-                            byte[] data = cursor.getBlob(dataCol);
-                            if (data != null) {
-                                keyRing = PgpConversionHelper.BytesToPGPKeyRing(data);
-                            }
-
-                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                            ArmoredOutputStream aos = new ArmoredOutputStream(bos);
-                            aos.setHeader("Version", PgpHelper.getFullVersion(context));
-
-                            if (keyRing instanceof PGPSecretKeyRing) {
-                                aos.write(((PGPSecretKeyRing) keyRing).getEncoded());
-                            } else if (keyRing instanceof PGPPublicKeyRing) {
-                                aos.write(((PGPPublicKeyRing) keyRing).getEncoded());
-                            }
-                            aos.close();
-
-                            String armoredKey = bos.toString("UTF-8");
-
-                            Log.d(Constants.TAG, "armoredKey:" + armoredKey);
-
-                            output.add(armoredKey);
-                        } catch (IOException e) {
-                            Log.e(Constants.TAG, "IOException", e);
-                        }
-                    } while (cursor.moveToNext());
-                }
-            }
-
-            if (cursor != null) {
-                cursor.close();
-            }
-
-        } else {
-            Log.e(Constants.TAG, "No master keys given!");
-        }
-
-        if (output.size() > 0) {
-            return output;
-        } else {
-            return null;
-        }
     }
 
     public static byte[] getKeyRingsAsByteArray(Context context, Uri uri, long[] masterKeyIds) {
