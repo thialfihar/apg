@@ -87,13 +87,23 @@ public class ProviderHelper implements PgpKeyProvider {
         return keyRing;
     }
 
-    public KeyRing getPublicKeyRingByKeyId(long keyId) {
+    public KeyRing getPublicKeyRingByMasterKeyId(long keyId) {
         Uri queryUri = KeyRings.buildPublicKeyRingsByMasterKeyIdUri(Long.toString(keyId));
         return getKeyRing(queryUri);
     }
 
-    public KeyRing getSecretKeyRingByKeyId(long keyId) {
+    public KeyRing getSecretKeyRingByMasterKeyId(long keyId) {
         Uri queryUri = KeyRings.buildSecretKeyRingsByMasterKeyIdUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public KeyRing getPublicKeyRingByKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildPublicKeyRingsByKeyIdUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public KeyRing getSecretKeyRingByKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildSecretKeyRingsByKeyIdUri(Long.toString(keyId));
         return getKeyRing(queryUri);
     }
 

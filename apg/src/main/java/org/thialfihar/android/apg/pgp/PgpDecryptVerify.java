@@ -34,9 +34,6 @@ import org.spongycastle.openpgp.PGPPBEEncryptedData;
 import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPPublicKeyEncryptedData;
-import org.spongycastle.openpgp.PGPPublicKeyRing;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureList;
 import org.spongycastle.openpgp.PGPSignatureSubpacketVector;
@@ -53,8 +50,8 @@ import org.spongycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactory
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyProvider;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
@@ -75,6 +72,7 @@ public class PgpDecryptVerify {
     private Context mContext;
     private InputData mData;
     private OutputStream mOutputStream;
+    private PgpKeyProvider mKeyProvider;
 
     private Progressable mProgressable;
     private boolean mAssumeSymmetric;
@@ -86,6 +84,7 @@ public class PgpDecryptVerify {
         mContext = builder.mContext;
         mData = builder.mData;
         mOutputStream = builder.mOutputStream;
+        mKeyProvider = builder.mKeyProvider;
 
         mProgressable = builder.mProgressable;
         mAssumeSymmetric = builder.mAssumeSymmetric;
@@ -98,6 +97,7 @@ public class PgpDecryptVerify {
         private Context mContext;
         private InputData mData;
         private OutputStream mOutputStream;
+        private PgpKeyProvider mKeyProvider;
 
         // optional
         private Progressable mProgressable = null;
@@ -105,10 +105,12 @@ public class PgpDecryptVerify {
         private String mPassphrase = "";
         private long mEnforcedKeyId = 0;
 
-        public Builder(Context context, InputData data, OutputStream outputStream) {
+        public Builder(Context context, InputData data, OutputStream outputStream,
+                        PgpKeyProvider keyProvider) {
             mContext = context;
             mData = data;
             mOutputStream = outputStream;
+            mKeyProvider = keyProvider;
         }
 
         public Builder setProgressable(Progressable progressable) {
@@ -283,23 +285,23 @@ public class PgpDecryptVerify {
             updateProgress(R.string.progress_finding_key, currentProgress, 100);
 
             PGPPublicKeyEncryptedData pbe = null;
-            PGPSecretKey secretKey = null;
+            Key secretKey = null;
             Iterator<?> it = enc.getEncryptedDataObjects();
             // find secret key
             while (it.hasNext()) {
                 Object obj = it.next();
                 if (obj instanceof PGPPublicKeyEncryptedData) {
                     PGPPublicKeyEncryptedData encData = (PGPPublicKeyEncryptedData) obj;
-                    secretKey = ProviderHelper.getPGPSecretKeyByKeyId(mContext, encData.getKeyID());
+                    secretKey = mKeyProvider.getSecretKeyByKeyId(encData.getKeyID());
                     if (secretKey != null) {
                         // secret key exists in database
 
                         // allow only a specific key for decryption?
                         if (mEnforcedKeyId != 0) {
                             // TODO: improve this code! get master key directly!
-                            PGPSecretKeyRing secretKeyRing =
-                                ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, encData.getKeyID());
-                            long masterKeyId = PgpKeyHelper.getMasterKey(secretKeyRing).getKeyID();
+                            KeyRing secretKeyRing =
+                                mKeyProvider.getSecretKeyRingByKeyId(encData.getKeyID());
+                            long masterKeyId = secretKeyRing.getMasterKey().getKeyId();
                             Log.d(Constants.TAG, "encData.getKeyID():" + encData.getKeyID());
                             Log.d(Constants.TAG, "mEnforcedKeyId: " + mEnforcedKeyId);
                             Log.d(Constants.TAG, "masterKeyId: " + masterKeyId);
@@ -368,7 +370,7 @@ public class PgpDecryptVerify {
         Object dataChunk = plainFact.nextObject();
         PGPOnePassSignature signature = null;
         OpenPgpSignatureResult signatureResult = null;
-        PGPPublicKey signatureKey = null;
+        Key signatureKey = null;
         int signatureIndex = -1;
 
         if (dataChunk instanceof PGPCompressedData) {
@@ -389,8 +391,7 @@ public class PgpDecryptVerify {
             PGPOnePassSignatureList sigList = (PGPOnePassSignatureList) dataChunk;
             for (int i = 0; i < sigList.size(); ++i) {
                 signature = sigList.get(i);
-                signatureKey = ProviderHelper
-                        .getPGPPublicKeyByKeyId(mContext, signature.getKeyID());
+                signatureKey = mKeyProvider.getPublicKeyByKeyId(signature.getKeyID());
                 if (signatureKeyId == 0) {
                     signatureKeyId = signature.getKeyID();
                 }
@@ -400,10 +401,9 @@ public class PgpDecryptVerify {
                     signatureIndex = i;
                     signatureKeyId = signature.getKeyID();
                     String userId = null;
-                    PGPPublicKeyRing signKeyRing = ProviderHelper.getPGPPublicKeyRingByKeyId(
-                            mContext, signatureKeyId);
+                    KeyRing signKeyRing = mKeyProvider.getPublicKeyRingByKeyId(signatureKeyId);
                     if (signKeyRing != null) {
-                        userId = PgpKeyHelper.getMainUserId(PgpKeyHelper.getMasterKey(signKeyRing));
+                        userId = signKeyRing.getMasterKey().getMainUserId();
                     }
                     signatureResult.setUserId(userId);
                     break;
@@ -417,7 +417,7 @@ public class PgpDecryptVerify {
                     new JcaPGPContentVerifierBuilderProvider()
                         .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
 
-                signature.init(contentVerifierBuilderProvider, signatureKey);
+                signature.init(contentVerifierBuilderProvider, signatureKey.getPublicKey());
             } else {
                 signatureResult.setStatus(OpenPgpSignatureResult.SIGNATURE_UNKNOWN_PUB_KEY);
             }
@@ -485,7 +485,8 @@ public class PgpDecryptVerify {
                 signatureResult.setSignatureOnly(false);
 
                 //Now check binding signatures
-                boolean validKeyBinding = verifyKeyBinding(mContext, messageSignature, signatureKey);
+                boolean validKeyBinding =
+                    verifyKeyBinding(messageSignature, signatureKey.getPublicKey());
                 boolean validSignature = signature.verify(messageSignature);
 
                 // TODO: implement CERTIFIED!
@@ -571,10 +572,10 @@ public class PgpDecryptVerify {
         }
         PGPSignature signature = null;
         long signatureKeyId = 0;
-        PGPPublicKey signatureKey = null;
+        Key signatureKey = null;
         for (int i = 0; i < sigList.size(); ++i) {
             signature = sigList.get(i);
-            signatureKey = ProviderHelper.getPGPPublicKeyByKeyId(mContext, signature.getKeyID());
+            signatureKey = mKeyProvider.getPublicKeyByKeyId(signature.getKeyID());
             if (signatureKeyId == 0) {
                 signatureKeyId = signature.getKeyID();
             }
@@ -584,10 +585,9 @@ public class PgpDecryptVerify {
             } else {
                 signatureKeyId = signature.getKeyID();
                 String userId = null;
-                PGPPublicKeyRing signKeyRing = ProviderHelper.getPGPPublicKeyRingByKeyId(mContext,
-                        signatureKeyId);
+                KeyRing signKeyRing = mKeyProvider.getPublicKeyRingByKeyId(signatureKeyId);
                 if (signKeyRing != null) {
-                    userId = PgpKeyHelper.getMainUserId(PgpKeyHelper.getMasterKey(signKeyRing));
+                    userId = signKeyRing.getMasterKey().getMainUserId();
                 }
                 signatureResult.setUserId(userId);
                 break;
@@ -608,7 +608,7 @@ public class PgpDecryptVerify {
                 new JcaPGPContentVerifierBuilderProvider()
                         .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
 
-        signature.init(contentVerifierBuilderProvider, signatureKey);
+        signature.init(contentVerifierBuilderProvider, signatureKey.getPublicKey());
 
         InputStream sigIn = new BufferedInputStream(new ByteArrayInputStream(clearText));
 
@@ -628,7 +628,7 @@ public class PgpDecryptVerify {
         }
 
         //Now check binding signatures
-        boolean validKeyBinding = verifyKeyBinding(mContext, signature, signatureKey);
+        boolean validKeyBinding = verifyKeyBinding(signature, signatureKey.getPublicKey());
         boolean validSignature = signature.verify();
 
         if (validSignature & validKeyBinding) {
@@ -643,27 +643,26 @@ public class PgpDecryptVerify {
         return returnData;
     }
 
-    private static boolean verifyKeyBinding(Context context, PGPSignature signature,
-                                            PGPPublicKey signatureKey) {
+    private boolean verifyKeyBinding(PGPSignature signature, PGPPublicKey signatureKey) {
         long signatureKeyId = signature.getKeyID();
         boolean validKeyBinding = false;
 
-        PGPPublicKeyRing signKeyRing = ProviderHelper.getPGPPublicKeyRingByKeyId(context,
-                signatureKeyId);
-        PGPPublicKey mKey = null;
+        KeyRing signKeyRing = mKeyProvider.getPublicKeyRingByKeyId(signatureKeyId);
+        Key mKey = null;
         if (signKeyRing != null) {
-            mKey = PgpKeyHelper.getMasterKey(signKeyRing);
+            mKey = signKeyRing.getMasterKey();
         }
 
-        if (signature.getKeyID() != mKey.getKeyID()) {
-            validKeyBinding = verifyKeyBinding(mKey, signatureKey);
-        } else { //if the key used to make the signature was the master key, no need to check binding sigs
+        if (signature.getKeyID() != mKey.getKeyId()) {
+            validKeyBinding = verifyKeyBinding(mKey.getPublicKey(), signatureKey);
+        } else {
+            // if the key used to make the signature was the master key, no need to check binding sigs
             validKeyBinding = true;
         }
         return validKeyBinding;
     }
 
-    private static boolean verifyKeyBinding(PGPPublicKey masterPublicKey, PGPPublicKey signingPublicKey) {
+    private boolean verifyKeyBinding(PGPPublicKey masterPublicKey, PGPPublicKey signingPublicKey) {
         boolean validSubkeyBinding = false;
         boolean validTempSubkeyBinding = false;
         boolean validPrimaryKeyBinding = false;

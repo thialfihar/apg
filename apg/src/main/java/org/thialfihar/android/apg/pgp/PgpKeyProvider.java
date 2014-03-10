@@ -17,6 +17,8 @@
 package org.thialfihar.android.apg.pgp;
 
 public interface PgpKeyProvider {
+    public KeyRing getPublicKeyRingByMasterKeyId(long keyId);
+    public KeyRing getSecretKeyRingByMasterKeyId(long keyId);
     public KeyRing getPublicKeyRingByKeyId(long keyId);
     public KeyRing getSecretKeyRingByKeyId(long keyId);
     public Key getPublicKeyByKeyId(long keyId);

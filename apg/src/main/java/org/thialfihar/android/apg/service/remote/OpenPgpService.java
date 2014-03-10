@@ -292,7 +292,8 @@ public class OpenPgpService extends RemoteService {
                 long inputLength = is.available();
                 InputData inputData = new InputData(is, inputLength);
 
-                PgpDecryptVerify.Builder builder = new PgpDecryptVerify.Builder(this, inputData, os);
+                PgpDecryptVerify.Builder builder =
+                    new PgpDecryptVerify.Builder(this, inputData, os, new ProviderHelper(this));
                 builder.setAssumeSymmetric(false)
                         // allow only the private key for this app for decryption
                         .setEnforcedKeyId(appSettings.getKeyId())
