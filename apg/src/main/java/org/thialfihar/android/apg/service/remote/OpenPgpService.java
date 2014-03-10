@@ -163,7 +163,8 @@ public class OpenPgpService extends RemoteService {
                 InputData inputData = new InputData(is, inputLength);
 
                 // sign-only
-                PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(getContext(), inputData, os);
+                PgpSignEncrypt.Builder builder =
+                    new PgpSignEncrypt.Builder(getContext(), inputData, os, new ProviderHelper(this));
                 builder.setEnableAsciiArmorOutput(asciiArmor)
                         .setSignatureHashAlgorithm(appSettings.getHashAlgorithm())
                         .setSignatureForceV3(false)
@@ -228,7 +229,8 @@ public class OpenPgpService extends RemoteService {
                 long inputLength = is.available();
                 InputData inputData = new InputData(is, inputLength);
 
-                PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(getContext(), inputData, os);
+                PgpSignEncrypt.Builder builder =
+                    new PgpSignEncrypt.Builder(getContext(), inputData, os, new ProviderHelper(this));
                 builder.setEnableAsciiArmorOutput(asciiArmor)
                         .setCompressionId(appSettings.getCompression())
                         .setSymmetricEncryptionAlgorithm(appSettings.getEncryptionAlgorithm())

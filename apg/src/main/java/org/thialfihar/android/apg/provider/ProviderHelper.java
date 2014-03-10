@@ -41,6 +41,7 @@ import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.PgpKeyProvider;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.Keys;
@@ -55,7 +56,64 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ProviderHelper {
+public class ProviderHelper implements PgpKeyProvider {
+    Context mContext;
+
+    public ProviderHelper(Context context) {
+        mContext = context;
+    }
+
+    /**
+     * Private helper method to get KeyRing from database
+     */
+    public KeyRing getKeyRing(Uri queryUri) {
+        Cursor cursor = mContext.getContentResolver().query(queryUri,
+                new String[]{KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
+
+        KeyRing keyRing = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            int keyRingDataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
+
+            byte[] data = cursor.getBlob(keyRingDataCol);
+            if (data != null) {
+                keyRing = KeyRing.decode(data);
+            }
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return keyRing;
+    }
+
+    public KeyRing getPublicKeyRingByKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildPublicKeyRingsByMasterKeyIdUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public KeyRing getSecretKeyRingByKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildSecretKeyRingsByMasterKeyIdUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public Key getPublicKeyByKeyId(long keyId) {
+        KeyRing keyRing = getPublicKeyRingByKeyId(keyId);
+        if (keyRing == null) {
+            return null;
+        }
+
+        return keyRing.getPublicKey(keyId);
+    }
+
+    public Key getSecretKeyByKeyId(long keyId) {
+        KeyRing keyRing = getSecretKeyRingByKeyId(keyId);
+        if (keyRing == null) {
+            return null;
+        }
+
+        return keyRing.getSecretKey(keyId);
+    }
 
     public static KeyRing getKeyRing(Context context, Uri queryUri) {
         return new KeyRing(getPGPKeyRing(context, queryUri));
