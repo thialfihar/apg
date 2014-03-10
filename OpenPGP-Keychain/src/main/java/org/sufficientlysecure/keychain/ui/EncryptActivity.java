@@ -693,7 +693,7 @@ public class EncryptActivity extends DrawerActivity {
      */
     private String fixBadCharactersForGmail(String message) {
         // fix the message a bit, trailing spaces and newlines break stuff,
-        // because GMail sends as HTML and such things fuck up the
+        // because Gmail sends as HTML and such things fuck up the
         // signature,
         // TODO: things like "<" and ">" also fuck up the signature
         message = message.replaceAll(" +\n", "\n");
