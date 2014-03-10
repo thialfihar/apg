@@ -38,6 +38,7 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ViewKeyKeysAdapter;
 import org.thialfihar.android.apg.ui.adapter.ViewKeyUserIdsAdapter;
@@ -201,7 +202,12 @@ public class ViewKeyMainFragment extends Fragment  implements
         KeychainContract.UserIds._ID,
         KeychainContract.UserIds.USER_ID,
         KeychainContract.UserIds.RANK,
+        "verified",
     };
+
+    // not the main user id
+    static final String USER_IDS_SELECTION =
+        KeychainDatabase.Tables.USER_IDS + "." + KeychainContract.UserIds.RANK + " > 0 ";
     static final String USER_IDS_SORT_ORDER =
         KeychainContract.UserIds.USER_ID + " COLLATE LOCALIZED ASC";
 

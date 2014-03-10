@@ -36,7 +36,8 @@ import java.util.ArrayList;
 public class ViewKeyUserIdsAdapter extends CursorAdapter {
     private LayoutInflater mInflater;
 
-    private int mIndexUserId, mIndexRank;
+    private int mIndexUserId;
+    private int mVerifiedId;
 
     private final ArrayList<Boolean> mCheckStates;
 
@@ -80,60 +81,16 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter {
     private void initIndex(Cursor cursor) {
         if (cursor != null) {
             mIndexUserId = cursor.getColumnIndexOrThrow(UserIds.USER_ID);
-            mIndexRank = cursor.getColumnIndexOrThrow(UserIds.RANK);
         }
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        String userIdStr = cursor.getString(mIndexUserId);
+        int verified = cursor.getInt(mVerifiedId);
 
-        TextView vRank = (TextView) view.findViewById(R.id.rank);
-        TextView vUserId = (TextView) view.findViewById(R.id.userId);
-        TextView vAddress = (TextView) view.findViewById(R.id.address);
-
-        vRank.setText(Integer.toString(cursor.getInt(mIndexRank)));
-
-        String[] userId = PgpKeyHelper.splitUserId(cursor.getString(mIndexUserId));
-        if (userId[0] != null) {
-            vUserId.setText(userId[0]);
-        } else {
-            vUserId.setText(R.string.user_id_no_name);
-        }
-        vAddress.setText(userId[1]);
-
-        // don't care further if checkboxes aren't shown
-        if (mCheckStates == null) {
-            return;
-        }
-
-        final CheckBox vCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
-        final int position = cursor.getPosition();
-        vCheckBox.setClickable(false);
-        vCheckBox.setChecked(mCheckStates.get(position));
-        vCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mCheckStates.set(position, b);
-            }
-        });
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                vCheckBox.toggle();
-            }
-        });
-
-    }
-
-    public ArrayList<String> getSelectedUserIds() {
-        ArrayList<String> result = new ArrayList<String>();
-        for (int i = 0; i < mCheckStates.size(); i++) {
-            if (mCheckStates.get(i)) {
-                mCursor.moveToPosition(i);
-                result.add(mCursor.getString(mIndexUserId));
-            }
-        }
-        return result;
+        TextView userId = (TextView) view.findViewById(R.id.userId);
+        userId.setText(userIdStr + (verified > 0 ? " (ok)" : "(nope)"));
     }
 
     @Override
