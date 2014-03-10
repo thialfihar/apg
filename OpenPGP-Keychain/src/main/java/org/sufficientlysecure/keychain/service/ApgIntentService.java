@@ -44,6 +44,7 @@ import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpImportExport;
+import org.thialfihar.android.apg.pgp.PgpImportExport.KeychainServiceListener;
 import org.thialfihar.android.apg.pgp.PgpKeyOperation;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.Progressable;
@@ -74,7 +75,7 @@ import java.util.List;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class ApgIntentService extends IntentService implements Progressable, PgpImportExport.KeychainServiceListener {
+public class ApgIntentService extends IntentService implements Progressable, KeychainServiceListener {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";

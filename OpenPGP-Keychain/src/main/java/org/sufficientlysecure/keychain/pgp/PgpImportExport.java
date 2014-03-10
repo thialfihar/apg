@@ -50,19 +50,11 @@ import java.util.List;
 
 public class PgpImportExport {
 
-    public interface KeychainServiceListener{
-        public boolean hasServiceStopped();
-    }
     private Context mContext;
     private Progressable mProgress;
-
-<<<<<<< HEAD:apg/src/main/java/org/thialfihar/android/apg/pgp/PgpImportExport.java
-    public PgpImportExport(Context context, Progressable progress) {
-=======
     private KeychainServiceListener mKeychainServiceListener;
 
-    public PgpImportExport(Context context, ProgressDialogUpdater progress) {
->>>>>>> Export is cancellable now:OpenPGP-Keychain/src/main/java/org/sufficientlysecure/keychain/pgp/PgpImportExport.java
+    public PgpImportExport(Context context, Progressable progress) {
         super();
         this.mContext = context;
         this.mProgress = progress;
@@ -193,7 +185,7 @@ public class PgpImportExport {
                 if (secretKeyRing != null) {
                     secretKeyRing.encode(arOutStream);
                 }
-                if(mKeychainServiceListener.hasServiceStopped()==true){
+                if(mKeychainServiceListener.hasServiceStopped()){
                     arOutStream.close();
                     return null;
                 }
@@ -206,7 +198,7 @@ public class PgpImportExport {
                     publicKeyRing.encode(arOutStream);
                 }
 
-                if(mKeychainServiceListener.hasServiceStopped() == true){
+                if(mKeychainServiceListener.hasServiceStopped()){
                     arOutStream.close();
                     return null;
                 }
