@@ -5,9 +5,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.github.johnkil.android-appmsg:appmsg:1.2.0'
     compile project(':libs:HtmlTextView')
-    compile project(':libs:spongycastle:core')
-    compile project(':libs:spongycastle:pg')
-    compile project(':libs:spongycastle:prov')
+    compile project(':libs:bc:core')
+    compile project(':libs:bc:pg')
+    compile project(':libs:bc:prov')
     compile project(':libs:AndroidBootstrap')
     compile project(':libs:StickyListHeaders:library')
     compile project(':OpenPGP-Keychain-API:libraries:keychain-api-library')

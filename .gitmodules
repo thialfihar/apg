@@ -1,0 +1,3 @@
+[submodule "libs/bc"]
+	path = libs/bc
+	url = https://github.com/thialfihar/bc-java-for-apg
