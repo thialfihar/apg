@@ -618,7 +618,7 @@ public class EncryptActivity extends DrawerActivity {
 
         // Message is received after encrypting is done in ApgService
         ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
-                R.string.progress_encrypting, ProgressDialog.STYLE_HORIZONTAL) {
+                getString(R.string.progress_encrypting), ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);

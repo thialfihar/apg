@@ -231,7 +231,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
 
         // Message is received after signing is done in ApgService
         ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
-                R.string.progress_signing, ProgressDialog.STYLE_SPINNER) {
+                getString(R.string.progress_signing), ProgressDialog.STYLE_SPINNER) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
@@ -284,7 +284,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
 
         // Message is received after uploading is done in ApgService
         ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
-                R.string.progress_exporting, ProgressDialog.STYLE_HORIZONTAL) {
+                getString(R.string.progress_exporting), ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);

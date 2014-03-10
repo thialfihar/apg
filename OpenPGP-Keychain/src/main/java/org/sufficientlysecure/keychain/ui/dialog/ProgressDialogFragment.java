@@ -30,7 +30,7 @@ import android.view.KeyEvent;
 import org.thialfihar.android.apg.R;
 
 public class ProgressDialogFragment extends DialogFragment {
-    private static final String ARG_MESSAGE = "message_id";
+    private static final String ARG_MESSAGE = "message";
     private static final String ARG_STYLE = "style";
     private static final String ARG_CANCELABLE = "cancelable";
 
@@ -129,11 +129,11 @@ public class ProgressDialogFragment extends DialogFragment {
             dialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                     activity.getString(R.string.progress_cancel),
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
         }
 
         // Disable the back button
@@ -141,7 +141,6 @@ public class ProgressDialogFragment extends DialogFragment {
 
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     return true;
                 }
