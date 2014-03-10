@@ -40,7 +40,6 @@ import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.HkpKeyServer;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
-import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
@@ -323,7 +322,7 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                 /* Operation */
                 PgpSignEncrypt.Builder builder =
-                        new PgpSignEncrypt.Builder(this, inputData, outStream);
+                    new PgpSignEncrypt.Builder(this, inputData, outStream, new ProviderHelper(this));
                 builder.setProgressable(this);
 
                 if (generateSignature) {

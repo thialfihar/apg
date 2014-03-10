@@ -28,23 +28,18 @@ import org.spongycastle.openpgp.PGPLiteralData;
 import org.spongycastle.openpgp.PGPLiteralDataGenerator;
 import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPPublicKey;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureGenerator;
 import org.spongycastle.openpgp.PGPSignatureSubpacketGenerator;
 import org.spongycastle.openpgp.PGPV3SignatureGenerator;
-import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePBEKeyEncryptionMethodGenerator;
-import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePGPDataEncryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodGenerator;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 
@@ -65,6 +60,7 @@ public class PgpSignEncrypt {
     private Context mContext;
     private InputData mData;
     private OutputStream mOutputStream;
+    private PgpKeyProvider mKeyProvider;
 
     private Progressable mProgressable;
     private boolean mEnableAsciiArmorOutput;
@@ -82,6 +78,7 @@ public class PgpSignEncrypt {
         this.mContext = builder.mContext;
         this.mData = builder.mData;
         this.mOutputStream = builder.mOutputStream;
+        this.mKeyProvider = builder.mKeyProvider;
 
         this.mProgressable = builder.mProgressable;
         this.mEnableAsciiArmorOutput = builder.mEnableAsciiArmorOutput;
@@ -100,6 +97,7 @@ public class PgpSignEncrypt {
         private Context mContext;
         private InputData mData;
         private OutputStream mOutputStream;
+        private PgpKeyProvider mKeyProvider;
 
         // optional
         private Progressable mProgressable = null;
@@ -113,10 +111,12 @@ public class PgpSignEncrypt {
         private boolean mSignatureForceV3 = false;
         private String mSignaturePassphrase = null;
 
-        public Builder(Context context, InputData data, OutputStream outputStream) {
+        public Builder(Context context, InputData data, OutputStream outputStream,
+                        PgpKeyProvider keyProvider) {
             mContext = context;
             mData = data;
             mOutputStream = outputStream;
+            mKeyProvider = keyProvider;
         }
 
         public Builder setProgressable(Progressable progressable) {
@@ -228,12 +228,12 @@ public class PgpSignEncrypt {
         }
 
         /* Get keys for signature generation for later usage */
-        PGPSecretKey signingKey = null;
-        PGPSecretKeyRing signingKeyRing = null;
+        Key signingKey = null;
+        KeyRing signingKeyRing = null;
         PGPPrivateKey signaturePrivateKey = null;
         if (enableSignature) {
-            signingKeyRing = ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, mSignatureKeyId);
-            signingKey = PgpKeyHelper.getSigningKey(mContext, mSignatureKeyId);
+            signingKeyRing = mKeyProvider.getSecretKeyRingByKeyId(mSignatureKeyId);
+            signingKey = signingKeyRing.getSigningKey();
             if (signingKey == null) {
                 throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
             }
@@ -245,9 +245,7 @@ public class PgpSignEncrypt {
 
             updateProgress(R.string.progress_extracting_signature_key, 0, 100);
 
-            PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
-                    Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(mSignaturePassphrase.toCharArray());
-            signaturePrivateKey = signingKey.extractPrivateKey(keyDecryptor);
+            signaturePrivateKey = signingKey.extractPrivateKey(mSignaturePassphrase);
             if (signaturePrivateKey == null) {
                 throw new PgpGeneralException(
                         mContext.getString(R.string.error_could_not_extract_private_key));
@@ -304,7 +302,7 @@ public class PgpSignEncrypt {
                 signatureGenerator = new PGPSignatureGenerator(contentSignerBuilder);
                 signatureGenerator.init(signatureType, signaturePrivateKey);
 
-                String userId = PgpKeyHelper.getMainUserId(PgpKeyHelper.getMasterKey(signingKeyRing));
+                String userId = signingKeyRing.getMasterKey().getMainUserId();
                 PGPSignatureSubpacketGenerator spGen = new PGPSignatureSubpacketGenerator();
                 spGen.setSignerUserID(false, userId);
                 signatureGenerator.setHashedSubpackets(spGen.generate());
@@ -461,9 +459,8 @@ public class PgpSignEncrypt {
             throw new PgpGeneralException(mContext.getString(R.string.error_no_signature_key));
         }
 
-        PGPSecretKeyRing signingKeyRing =
-            ProviderHelper.getPGPSecretKeyRingByKeyId(mContext, mSignatureKeyId);
-        PGPSecretKey signingKey = PgpKeyHelper.getSigningKey(mContext, mSignatureKeyId);
+        KeyRing signingKeyRing = mKeyProvider.getSecretKeyRingByKeyId(mSignatureKeyId);
+        Key signingKey = signingKeyRing.getSigningKey();
         if (signingKey == null) {
             throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
         }
@@ -472,9 +469,7 @@ public class PgpSignEncrypt {
             throw new PgpGeneralException(mContext.getString(R.string.error_no_signature_passphrase));
         }
 
-        PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
-                Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(mSignaturePassphrase.toCharArray());
-        PGPPrivateKey signaturePrivateKey = signingKey.extractPrivateKey(keyDecryptor);
+        PGPPrivateKey signaturePrivateKey = signingKey.extractPrivateKey(mSignaturePassphrase);
         if (signaturePrivateKey == null) {
             throw new PgpGeneralException(
                     mContext.getString(R.string.error_could_not_extract_private_key));
@@ -503,7 +498,7 @@ public class PgpSignEncrypt {
             signatureGenerator.init(type, signaturePrivateKey);
 
             PGPSignatureSubpacketGenerator spGen = new PGPSignatureSubpacketGenerator();
-            String userId = PgpKeyHelper.getMainUserId(PgpKeyHelper.getMasterKey(signingKeyRing));
+            String userId = signingKeyRing.getMasterKey().getMainUserId();
             spGen.setSignerUserID(false, userId);
             signatureGenerator.setHashedSubpackets(spGen.generate());
         }
