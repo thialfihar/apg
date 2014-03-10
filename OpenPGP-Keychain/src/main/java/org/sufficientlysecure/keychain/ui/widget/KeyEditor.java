@@ -16,7 +16,6 @@
 
 package org.thialfihar.android.apg.ui.widget;
 
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -125,7 +124,6 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         setExpiryDate(null);
 
         mExpiryDateButton.setOnClickListener(new OnClickListener() {
-            @TargetApi(11)
             public void onClick(View v) {
                 GregorianCalendar date = mExpiryDate;
                 if (date == null) {
