@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">APG</string>
+
+    <!-- title_lowerCase: capitalized words, no punctuation -->
+    <string name="title_mailInbox">Safata d'entrada</string>
+    <string name="title_managePublicKeys">Administrar claus públiques</string>
+    <string name="title_manageSecretKeys">Administrar claus privades</string>
+    <string name="title_selectRecipients">Seleccionar destinataris</string>
+    <string name="title_selectSignature">Seleccionar signatura</string>
+    <string name="title_encrypt">Xifrar</string>
+    <string name="title_decrypt">Desxifrar</string>
+    <string name="title_authentication">Frase de pas</string>
+    <string name="title_createKey">Crear clau</string>
+    <string name="title_editKey">Editar clau</string>
+    <string name="title_preferences">Preferències</string>
+    <string name="title_keyServerPreference">Preferències del servidor de claus</string>
+    <string name="title_changePassPhrase">Canviar frase de pas</string>
+    <string name="title_setPassPhrase">Establir frase de pas</string>
+    <string name="title_sendEmail">"Enviar correu..."</string>
+    <string name="title_encryptToFile">Xifrar a arxiu</string>
+    <string name="title_decryptToFile">Desxifrar a arxiu</string>
+    <string name="title_addAccount">Afegir compte</string>
+    <string name="title_importKeys">Importar claus</string>
+    <string name="title_exportKey">Exportar clau</string>
+    <string name="title_exportKeys">Exportar claus</string>
+    <string name="title_keyNotFound">Clau no trobada</string>
+    <string name="title_help">Iniciant</string>
+    <string name="title_keyServerQuery">Petició al servidor de claus</string>
+
+    <!-- section_lowerCase: capitalized words, no punctuation -->
+    <string name="section_userIds">Identitats d'usuari</string>
+    <string name="section_keys">Claus</string>
+    <string name="section_general">General</string>
+    <string name="section_defaults">Valors per defecte</string>
+    <string name="section_advanced">Avançat</string>
+
+    <!-- btn_lowerCase: capitalized words, no punctuation -->
+    <string name="btn_signToClipboard">Signar al porta-retalls</string>
+    <string name="btn_encryptToClipboard">Xifrar al porta-retalls</string>
+    <string name="btn_encryptAndEmail">Xifrar i enviar</string>
+    <string name="btn_signAndEmail">Signar i enviar</string>
+    <string name="btn_encrypt">Xifrar</string>
+    <string name="btn_sign">Signar</string>
+    <string name="btn_decrypt">Desxifrar</string>
+    <string name="btn_verify">Verificar</string>
+    <string name="btn_selectEncryptKeys">Seleccionar destinataris</string>
+    <string name="btn_reply">Contestar</string>
+    <string name="btn_encryptMessage">Xifrar missatge</string>
+    <string name="btn_decryptMessage">Desxifrar missatge</string>
+    <string name="btn_encryptFile">Xifrar arxiu</string>
+    <string name="btn_decryptFile">Desxifrar missatge</string>
+    <string name="btn_save">Desar</string>
+    <string name="btn_doNotSave">Cancelar</string>
+    <string name="btn_delete">Esborrar</string>
+    <string name="btn_noDate">Cap</string>
+    <string name="btn_clearFilter">Netejar filtre</string>
+    <string name="btn_changePassPhrase">Canviar frase de pas</string>
+    <string name="btn_setPassPhrase">Establir frase de pas</string>
+    <string name="btn_search">Cercar</string>
+
+    <!-- menu_lowerCase: capitalized words, no punctuation -->
+    <string name="menu_about">Quant a</string>
+    <string name="menu_addAccount">Afegir compte de Gmail</string>
+    <string name="menu_deleteAccount">Esborrar compte</string>
+    <string name="menu_managePublicKeys">Administrar claus públiques</string>
+    <string name="menu_manageSecretKeys">Administrar claus privades</string>
+    <string name="menu_preferences">Preferències</string>
+    <string name="menu_importKeys">Importar claus</string>
+    <string name="menu_exportKeys">Exportar claus</string>
+    <string name="menu_exportKey">Exportar clau</string>
+    <string name="menu_deleteKey">Esborrar clau</string>
+    <string name="menu_createKey">Crear clau</string>
+    <string name="menu_editKey">Editar clau</string>
+    <string name="menu_search">Cercar</string>
+    <string name="menu_help">Ajuda</string>
+    <string name="menu_keyServer">Servidor de claus</string>
+    <string name="menu_updateKey">Actualitzar</string>
+
+    <!-- label_lowerCase: capitalized words, no punctuation -->
+    <string name="label_sign">Signar</string>
+    <string name="label_message">Missatge</string>
+    <string name="label_file">Arxiu</string>
+    <string name="label_passPhrase">Frase de pas</string>
+    <string name="label_passPhraseAgain">Altre cop</string>
+    <string name="label_algorithm">Algorisme</string>
+    <string name="label_asciiArmour">Armadura ASCII</string>
+    <string name="label_selectPublicKeys">Clau(s) pública(ques)</string>
+    <string name="label_deleteAfterEncryption">Esborrar un cop xifrat</string>
+    <string name="label_deleteAfterDecryption">Esborrar un cop dexcifrat</string>
+    <string name="label_deleteAfterImport">Esborrar després d'importar</string>
+    <string name="label_encryptionAlgorithm">Algorisme de xifrat</string>
+    <string name="label_hashAlgorithm">Algorisme hash</string>
+    <string name="label_asymmetric">Clau pública</string>
+    <string name="label_symmetric">Frase de pas</string>
+    <string name="label_passPhraseCacheTtl">Cau de la frase de pas</string>
+    <string name="label_messageCompression">Compresió de missatge</string>
+    <string name="label_fileCompression">Compresió d'arxiu</string>
+    <string name="label_language">Idioma</string>
+    <string name="label_forceV3Signature">Forçar signatures V3</string>
+    <string name="label_keyServers">Servidors de claus</string>
+    <string name="label_keyId">Identitat de clau</string>
+    <string name="label_creation">Creació</string>
+    <string name="label_expiry">Expira</string>
+    <string name="label_usage">Ús</string>
+    <string name="label_keySize">Mida de la clau</string>
+    <string name="label_mainUserId">Identitat principal de l'usuari</string>
+    <string name="label_name">Nom</string>
+    <string name="label_comment">Comentari</string>
+    <string name="label_email">Email</string>
+
+    <string name="noKeysSelected">Seleccionar</string>
+    <string name="oneKeySelected">1 seleccionada</string>
+    <string name="nKeysSelected">Seleccionada</string>
+    <string name="unknownUserId">&lt;desconegut&gt;</string>
+    <string name="none">&lt;cap&gt;</string>
+    <string name="noKey">&lt;sense clau&gt;</string>
+    <string name="noDate">-</string>
+    <string name="noExpiry">&lt;no expira&gt;</string>
+    <string name="unknownStatus"></string>
+    <string name="canEncrypt">pot xifrar</string>
+    <string name="canSign">pot signar</string>
+    <string name="expired">expirada</string>
+    <string name="notValid">no vàlida</string>
+    <string name="nKeyServers">%s servidor de clau(s)</string>
+
+    <!-- choice_lowerCase: capitalized first word, no punctuation -->
+    <string name="choice_none">Cap</string>
+    <string name="choice_signOnly">Només signar</string>
+    <string name="choice_encryptOnly">Només xifrar</string>
+    <string name="choice_signAndEncrypt">Signar i xifrar</string>
+    <string name="choice_15secs">15 segs</string>
+    <string name="choice_1min">1 min</string>
+    <string name="choice_3mins">3 mins</string>
+    <string name="choice_5mins">5 mins</string>
+    <string name="choice_10mins">10 mins</string>
+    <string name="choice_20mins">20 mins</string>
+    <string name="choice_40mins">40 mins</string>
+    <string name="choice_untilQuit">fins a sortir</string>
+    <string name="choice_language_system">Sistema per defecte</string>
+
+    <string name="dsa">DSA</string>
+    <string name="elgamal">ElGamal</string>
+    <string name="rsa">RSA</string>
+
+    <string name="filemanager_titleOpen">Obrir...</string>
+    <string name="filemanager_titleSave">Anomenar i desar...</string>
+    <string name="filemanager_titleEncrypt">Seleccionar arxiu a xifrar...</string>
+    <string name="filemanager_titleDecrypt">Seleccionar arxiu a desxifrar...</string>
+    <string name="filemanager_btnOpen">Obrir</string>
+    <string name="filemanager_btnSave">Desar</string>
+
+    <string name="warning">Advertència</string>
+    <string name="error">Error</string>
+    <string name="warningMessage">Advertència: %s</string>
+    <string name="errorMessage">Error: %s</string>
+
+    <!-- sentences -->
+    <string name="wrongPassPhrase">Frase de pas incorrecta.</string>
+    <string name="usingClipboardContent">Utilitzant el contingut del porta-retalls.</string>
+    <string name="keySaved">Clau desada.</string>
+    <string name="setAPassPhrase">Estableix primer una frase de pas.</string>
+    <string name="noFilemanagerInstalled">Administrador d'arxius instalat no compatible.</string>
+    <string name="passPhrasesDoNotMatch">La frase de pas no coincideix.</string>
+    <string name="passPhraseMustNotBeEmpty">No es permeten frases de pas buides.</string>
+    <string name="passPhraseForSymmetricEncryption">Xifrat simètric.</string>
+    <string name="passPhraseFor">%s</string>
+    <string name="fileDeleteConfirmation">Segur que voleu esborrar\n%s?</string>
+    <string name="fileDeleteSuccessful">Esborrat complet.</string>
+    <string name="noFileSelected">Selecciona primer un arxiu.</string>
+    <string name="decryptionSuccessful">Desxifrat correcte.</string>
+    <string name="encryptionSuccessful">Xifrat correcte.</string>
+    <string name="encryptionToClipboardSuccessful">Xifrat al porta-retalls correcte.</string>
+    <string name="enterPassPhraseTwice">Introduïu la frase de pas dos cops.</string>
+    <string name="selectEncryptionKey">Seleccioneu al menys una clau de xifrat.</string>
+    <string name="selectEncryptionOrSignatureKey">Seleccioneu al menys una clau de xifrat o de signatura.</string>
+    <string name="specifyFileToEncryptTo">Per favor, indiqueu el nom de l'arxiu a xifrar.\nADVERTÈNCIA! L'arxiu se sobrescriurà si ja existeix.</string>
+    <string name="specifyFileToDecryptTo">Per favor, indiqueu el nom de l'arxiu a desxifrar.\nADVERTÈNCIA! L'arxiu se sobrescriurà si ja existeix.</string>
+    <string name="specifyGoogleMailAccount">Indiqueu el compte de Gmail que voleu afegir.</string>
+    <string name="specifyFileToImportFrom">Per favor, indiqueu l'arxiu des del qual importar les claus. (.asc o .gpg)</string>
+    <string name="specifyFileToExportTo">Per favor, indiqueu l'arxiu al que exportar.\nADVERTÈNCIA! L'arxiu se sobrescriurà si ja existeix.</string>
+    <string name="specifyFileToExportSecretKeysTo">Per favor, indiqueu l'arxiu al que exportar.\n¡ADVERTENCIA! Esteu a punt d'exportar les claus PRIVADES.\nADVERTÈNCIA! L'arxiu se sobrescriurà si ja existeix.</string>
+    <string name="keyDeletionConfirmation">Realment voleu esborrar la clau \'%s\'?\n¡No pot desfer-se!</string>
+    <string name="secretKeyDeletionConfirmation">Realment voleu esborrar la clau SECRETA \'%s\'?\n¡No pot desfer-se!</string>
+    <string name="keysAddedAndUpdated">Se han añadido %1$s llave(s) y actualizado %2$s llave(s) de forma correcta."</string>
+    <string name="keysAdded">Se ha(n) añadido %s llave(s) de forma correcta.</string>
+    <string name="keysUpdated">Se ha(n) actualizado %s llave(s) de forma correcta.</string>
+    <string name="noKeysAddedOrUpdated">No se ha añadido ni actualizado ninguna llave.</string>
+    <string name="keyExported">Se ha exportado correctamente 1 llave.</string>
+    <string name="keysExported">Se han exportado %s llaves de forma correcta.</string>
+    <string name="noKeysExported">No se han exportado llaves.</string>
+    <string name="keyCreationElGamalInfo">Nota: solamente las sub-llaves admiten ElGamal, y para ElGamal se usará el tamaño más cercano a 1536, 2048, 3072, 4096, o 8192.</string>
+    <string name="keyNotFound">No se pudo encontrar la llave %08X.</string>
+    <string name="keysFound">Se ha(n) encontrado %s llave(s).</string>
+    <string name="unknownSignatureKeyTouchToLookUp">Firma desconocida, pulsa para buscarla.</string>
+    <string name="keyEditingIsBeta">Edición de llaves aún en fase beta.</string>
+
+    <!-- error_lowerCase: phrases, no punctuation, all lowercase,
+         they will be put after "errorMessage", e.g. "Error: file not found" -->
+    <string name="error_fileDeleteFailed">borrado de \'%s\' fallido</string>
+    <string name="error_fileNotFound">no se encontró el fichero</string>
+    <string name="error_noSecretKeyFound">no se encontró la llave secreta adecuada</string>
+    <string name="error_noKnownEncryptionFound">no se encontró un medio de cifrado</string>
+    <string name="error_externalStorageNotReady">el sistema de almacenamiento externo no está preparado</string>
+    <string name="error_accountNotFound">la cuenta \'%s\' no se encontró</string>
+    <string name="error_accountReadingNotAllowed">no tienes permisos para leer esta cuenta</string>
+    <string name="error_addingAccountFailed">la creación de la cuenta \'%s\' ha fallado</string>
+    <string name="error_invalidEmail">dirección de correo no válida \'%s\'</string>
+    <string name="error_keySizeMinimum512bit">el tamaño mínimo debe ser de 512 bits</string>
+    <string name="error_masterKeyMustNotBeElGamal">la llave maestra no puede ser ElGamal</string>
+    <string name="error_unknownAlgorithmChoice">algoritmo desconocido</string>
+    <string name="error_userIdNeedsAName">necesitas especificar un nombre</string>
+    <string name="error_userIdNeedsAnEmailAddress">necesitas indicar una dirección de correo</string>
+    <string name="error_keyNeedsAUserId">necesitas al menos una identidad de usuario</string>
+    <string name="error_mainUserIdMustNotBeEmpty">el usuario principal no puede estar vacío</string>
+    <string name="error_keyNeedsMasterKey">necesitas al menos una llave maestra</string>
+    <string name="error_expiryMustComeAfterCreation">la fecha de expiración debe ser posterior a la fecha de creación</string>
+    <string name="error_noEncryptionKeysOrPassPhrase">no se ha(n) indicado llave(s) de cifrado o frase de paso</string>
+    <string name="error_signatureFailed">el proceso de firma ha fallado</string>
+    <string name="error_noSignaturePassPhrase">no se ha indicado frase de paso</string>
+    <string name="error_noSignatureKey">no se ha indicado llave de firma</string>
+    <string name="error_invalidData">datos de cifrado no válidos</string>
+    <string name="error_corruptData">datos corruptos</string>
+    <string name="error_noSymmetricEncryptionPacket">no se ha podido encontrar un paquete con cifrado simétrico</string>
+    <string name="error_wrongPassPhrase">frase de paso incorrecta</string>
+    <string name="error_savingKeys">hubo un error al guardar alguna(s) llave(s)</string>
+
+    <!-- progress_lowerCase: lowercase, phrases, usually ending in '...' -->
+    <string name="progress_done">hecho.</string>
+    <string name="progress_initializing">iniciando...</string>
+    <string name="progress_saving">guardando...</string>
+    <string name="progress_importing">importando...</string>
+    <string name="progress_exporting">exportando...</string>
+    <string name="progress_generating">generando la llave, esto puede tardar un rato...</string>
+    <string name="progress_buildingKey">creando la llave...</string>
+    <string name="progress_preparingMasterKey">preparando la llave maestra...</string>
+    <string name="progress_certifyingMasterKey">certificando la llave maestra...</string>
+    <string name="progress_buildingMasterKeyRing">creando el anillo maestro de llaves...</string>
+    <string name="progress_addingSubKeys">añadiendo sub-llaves...</string>
+    <string name="progress_savingKeyRing">guardando anillo de llaves...</string>
+    <string name="progress_importingSecretKeys">importando llaves privadas...</string>
+    <string name="progress_importingPublicKeys">importando llaves públicas...</string>
+    <string name="progress_reloadingKeys">recargando llaves...</string>
+    <string name="progress_exportingKey">exportando llave...</string>
+    <string name="progress_exportingKeys">exportando llaves...</string>
+    <string name="progress_extractingSignatureKey">extrayendo llave de firma...</string>
+    <string name="progress_extractingKey">extrayendo llave...</string>
+    <string name="progress_preparingStreams">preparando flujos...</string>
+    <string name="progress_encrypting">cifrando datos...</string>
+    <string name="progress_decrypting">descifrando datos...</string>
+    <string name="progress_preparingSignature">preparando firma...</string>
+    <string name="progress_generatingSignature">generando firma...</string>
+    <string name="progress_processingSignature">procesando firma...</string>
+    <string name="progress_verifyingSignature">verificando firma...</string>
+    <string name="progress_signing">firmando...</string>
+    <string name="progress_readingData">leyendo datos...</string>
+    <string name="progress_findingKey">buscando la llave...</string>
+    <string name="progress_decompressingData">descomprimiendo datos...</string>
+    <string name="progress_verifyingIntegrity">verificando integridad...</string>
+    <string name="progress_deletingSecurely">borrando \'%s\' de forma segura...</string>
+    <string name="progress_querying">realizando petición...</string>
+    <string name="progress_queryingServer">realizando %s petición(es)...</string>
+
+    <!-- permission strings -->
+    <string name="permission_read_key_details_label">Leer detalles de llave desde APG.</string>
+    <string name="permission_read_key_details_description">Leer detalles de llaves pública y privada almacenados en APG, como identidades de llave y usuario. Las llaves en sí NO se pueden leer.</string>
+
+    <!-- action strings -->
+    <string name="action_encrypt">Cifrar</string>
+    <string name="action_decrypt">Descifrar</string>
+    <string name="action_importPublic">Importar llaves públicas</string>
+    <string name="action_importSecret">Importar llaves privadas</string>
+
+    <string name="hint_publicKeys">Buscar llaves públicas</string>
+    <string name="hint_secretKeys">Buscar llaves privadas</string>
+    <string name="filterInfo">Filtro: \"%s\"</string>
+
+    <!-- misc -->
+    <string name="fast">rápido</string>
+    <string name="slow">lento</string>
+    <string name="very_slow">muy lento</string>
+
+    <!-- texts -->
+    <!-- "OI File Manager", "ASTRO", and "K-9 Mail" must not be translated in order for the links to the market to work. -->
+    <string name="text_help">Puedes instalar K-9 Mail para una mejor integración, soporta APG para PGP de forma nativa y permite difrar/descifrar mensajes directamente.
+\n\nSe recomienda instalar OI File Manager o ASTRO para poder usar el botón de navegación para seleccioar ficheros en APG.
+\n\nPrimero necesitarás algunas llaves. Puedes importarlas mediante los menús de opciones en \"Administrar llaves públicas\" y \"Administrar llaves privadas\" o crearlas mediante \"Administrar llaves privadas\".
+\n\nTambién puedes añadir una cuenta Gmail como actividad principal mediante \"Añadir cuenta\", lo que simplifica el descifrado de mensajes recibidos en esa cuenta.
+\n\nDale un vistazo a los menús de opciones para encontrar más funciones.
+    </string>
+
+</resources>
