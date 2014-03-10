@@ -223,19 +223,21 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Private helper method to get PGPKeyRing from database
      */
-    public static PGPKeyRing getPGPKeyRing(Context context, Uri queryUri) {
+    public static Map<Long, PGPKeyRing> getPGPKeyRings(Context context, Uri queryUri) {
         Cursor cursor = context.getContentResolver().query(queryUri,
-                new String[] {KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
+                new String[] {KeyRings._ID, KeyRings.KEY_RING_DATA, KeyRings.KEY_RING_DATA}, null, null, null);
 
-        KeyRing keyRing = null;
-        if (cursor != null && cursor.moveToFirst()) {
+        Map<Long, PGPKeyRing> result = new HashMap<Long, PGPKeyRing>(cursor.getCount());
+        if (cursor != null && cursor.moveToFirst()) do {
             int keyRingDataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
+            int masterKeyIdCol = cursor.getColumnIndex(KeyRings.MASTER_KEY_ID);
 
             byte[] data = cursor.getBlob(keyRingDataCol);
             if (data != null) {
                 keyRing = KeyRing.decode(data);
+                result.put(cursor.getLong(masterKeyIdCol), PgpConversionHelper.BytesToPGPKeyRing(data));
             }
-        }
+        } while(cursor.moveToNext());
 
         if (cursor != null) {
             cursor.close();
@@ -250,6 +252,11 @@ public class ProviderHelper implements PgpKeyProvider {
         } else {
             return keyRing.getSecretKeyRing();
         }
+        return result;
+    }
+
+    public static PGPKeyRing getPGPKeyRing(Context context, Uri queryUri) {
+        return getPGPKeyRings(context, queryUri).values().iterator().next();
     }
 
     /**
@@ -495,6 +502,30 @@ public class ProviderHelper implements PgpKeyProvider {
         values.put(Keys.FINGERPRINT, key.getFingerprint());
 
         Uri uri = Keys.buildPublicKeysUri(Long.toString(keyRingRowId));
+
+        return ContentProviderOperation.newInsert(uri).withValues(values).build();
+    }
+
+    /**
+     * Build ContentProviderOperation to add PGPPublicKey to database corresponding to a keyRing
+     */
+    private static ContentProviderOperation buildPublicCertOperations(Context context,
+                                                                     long keyRingRowId,
+                                                                     int rank,
+                                                                     long keyId,
+                                                                     PGPSignature cert,
+                                                                     boolean verified)
+            throws IOException {
+        ContentValues values = new ContentValues();
+        values.put(Certs.KEY_RING_ROW_ID, keyRingRowId);
+        values.put(Certs.RANK, rank);
+        values.put(Certs.KEY_ID, keyId);
+        values.put(Certs.KEY_ID_CERTIFIER, cert.getKeyID());
+        values.put(Certs.CREATION, cert.getCreationTime().getTime() / 1000);
+        values.put(Certs.VERIFIED, verified);
+        values.put(Certs.KEY_DATA, cert.getEncoded());
+
+        Uri uri = Certs.buildCertsUri(Long.toString(keyRingRowId));
 
         return ContentProviderOperation.newInsert(uri).withValues(values).build();
     }

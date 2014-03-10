@@ -492,8 +492,8 @@ public class KeyListFragment extends Fragment
         /**
          * Bind cursor data to the item list view
          * <p/>
-         * NOTE: CursorAdapter already implements the ViewHolder pattern in its getView() method. Thus
-         * no ViewHolder is required here.
+         * NOTE: CursorAdapter already implements the ViewHolder pattern in its getView() method.
+         * Thus no ViewHolder is required here.
          */
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
@@ -614,8 +614,7 @@ public class KeyListFragment extends Fragment
             String userId = mCursor.getString(KeyListFragment.INDEX_USER_ID);
             String headerText = convertView.getResources().getString(R.string.user_id_no_name);
             if (userId != null && userId.length() > 0) {
-                headerText = "" +
-                            mCursor.getString(KeyListFragment.INDEX_USER_ID).subSequence(0, 1).charAt(0);
+                headerText = "" + userId.subSequence(0, 1).charAt(0);
             }
             holder.mText.setText(headerText);
             holder.mCount.setVisibility(View.GONE);
