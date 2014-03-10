@@ -1,0 +1,1 @@
+checkstyle -c tools/checkstyle.xml -r apg/src/main/java 2>&1 | egrep -v 'log4j'

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="emphasis">#31b6e7</color>
+    <color name="bg_gray">#909090</color>
+    <color name="html_text_color">#ddd</color>
+
+</resources>

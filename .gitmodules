@@ -1,0 +1,9 @@
+[submodule "libs/bc"]
+	path = libs/bc
+	url = git://github.com/thialfihar/bc-java-for-apg
+[submodule "libs/AndroidBootstrap"]
+	path = libs/AndroidBootstrap
+	url = git://github.com/Bearded-Hen/Android-Bootstrap
+[submodule "libs/HtmlTextView"]
+	path = libs/HtmlTextView
+	url = git://github.com/thialfihar/html-textview

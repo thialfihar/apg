@@ -2,7 +2,6 @@
 bin
 gen
 obj
-libs/armeabi
 lint.xml
 local.properties
 release.properties
@@ -23,17 +22,8 @@ pom.xml.*
 .project
 .classpath
 .settings
-*.swp
-local.properties
-bouncycastle
-apg.sublime-*
-apg/build
-.gradle
 .metadata
 
 #IntelliJ IDEA
 .idea
 *.iml
-
-#OS Specific
-[Tt]humbs.db
