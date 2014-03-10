@@ -4,15 +4,15 @@ dependencies {
     compile 'com.android.support:support-v4:19.0.1'
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.github.johnkil.android-appmsg:appmsg:1.2.0'
-    compile project(':libs:HtmlTextView')
+    compile 'se.emilsjolander:stickylistheaders:2.1.5'
+    compile 'com.google.zxing:core:2.2'
+    compile 'com.google.zxing:android-integration:3.0.0'
+    compile project(':libs:AndroidBootstrap:AndroidBootstrap')
     compile project(':libs:bc:core')
     compile project(':libs:bc:pg')
     compile project(':libs:bc:prov')
-    compile project(':libs:AndroidBootstrap')
-    compile project(':libs:StickyListHeaders:library')
+    compile project(':libs:HtmlTextView')
     compile project(':OpenPGP-Keychain-API:libraries:keychain-api-library')
-    compile project(':libs:zxing')
-    compile project(':libs:zxing-android-integration')
 }
 
 android {
