@@ -33,17 +33,20 @@ import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.thialfihar.android.apg.util.IterableIterator;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-public class Key {
+public class Key implements Serializable {
     public static final int ELGAMAL_ENCRYPT = PGPPublicKey.ELGAMAL_ENCRYPT;
     public static final int DSA = PGPPublicKey.DSA;
 
-    private PGPSecretKey mSecretKey;
-    private PGPPublicKey mPublicKey;
+    private transient PGPSecretKey mSecretKey;
+    private transient PGPPublicKey mPublicKey;
 
     public static Key decode(byte[] data) {
         PGPObjectFactory factory = new PGPObjectFactory(data);
@@ -312,5 +315,26 @@ public class Key {
             return null;
         }
         return mSecretKey.extractPrivateKey(keyDecryptor);
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        if (isPublic()) {
+            out.writeObject(mPublicKey.getEncoded());
+        } else {
+            out.writeObject(mSecretKey.getEncoded());
+        }
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        byte[] data = (byte[]) in.readObject();
+        Key tmp = decode(data);
+        if (tmp.isPublic()) {
+            mPublicKey = tmp.getPublicKey();
+        } else {
+            mSecretKey = tmp.getSecretKey();
+            mPublicKey = mSecretKey.getPublicKey();
+        }
     }
 }
