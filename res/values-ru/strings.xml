@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">APG</string>
+
+    <!-- title_lowerCase: capitalized words, no punctuation -->
+    <string name="title_mailInbox">Входящие</string>
+    <string name="title_managePublicKeys">Открытые ключи</string>
+    <string name="title_manageSecretKeys">Закрытые ключи</string>
+    <string name="title_selectRecipients">Выбор получателей</string>
+    <string name="title_selectSignature">Выбор подписи</string>
+    <string name="title_encrypt">Шифрование</string>
+    <string name="title_decrypt">Дешифрование</string>
+    <string name="title_authentication">Введите пароль</string>
+    <string name="title_createKey">Создание ключа</string>
+    <string name="title_editKey">Правка ключа</string>
+    <string name="title_preferences">Настройки</string>
+    <string name="title_keyServerPreference">Серверы ключей</string>
+    <string name="title_changePassPhrase">Изменение пароля</string>
+    <string name="title_setPassPhrase">Установка пароля</string>
+    <string name="title_sendEmail">"Отправка почты…"</string>
+    <string name="title_encryptToFile">Шифрование в файл</string>
+    <string name="title_decryptToFile">Дешифрование в файл</string>
+    <string name="title_addAccount">Добавление ящика</string>
+    <string name="title_importKeys">Импорт ключей</string>
+    <string name="title_exportKey">Экспорт ключа</string>
+    <string name="title_exportKeys">Экспорт ключей</string>
+    <string name="title_keyNotFound">Ключ не найден</string>
+    <string name="title_help">С чего начать…</string>
+    <string name="title_keyServerQuery">Поиск на сервере ключей</string>
+    <string name="title_unknownSignatureKey">Неизвестная подпись</string>
+
+    <!-- section_lowerCase: capitalized words, no punctuation -->
+    <string name="section_userIds">Сведения о пользователе</string>
+    <string name="section_keys">Ключи</string>
+    <string name="section_general">Основные</string>
+    <string name="section_defaults">Умолчания</string>
+    <string name="section_advanced">Дополнительно</string>
+
+    <!-- btn_lowerCase: capitalized words, no punctuation -->
+    <string name="btn_signToClipboard">Подписать в буфер</string>
+    <string name="btn_encryptToClipboard">В буфер</string>
+    <string name="btn_encryptAndEmail">Отправить</string>
+    <string name="btn_signAndEmail">Подп. и отправить</string>
+    <string name="btn_encrypt">Шифровать</string>
+    <string name="btn_sign">Подписать</string>
+    <string name="btn_decrypt">Дешифровать</string>
+    <string name="btn_verify">Проверка</string>
+    <string name="btn_selectEncryptKeys">Получатели</string>
+    <string name="btn_reply">Ответ</string>
+    <string name="btn_encryptMessage">Шифр. текст</string>
+    <string name="btn_decryptMessage">Дешифр. текст</string>
+    <string name="btn_encryptFile">Шифр. файл</string>
+    <string name="btn_decryptFile">Дешифр. файл</string>
+    <string name="btn_save">Сохранить</string>
+    <string name="btn_doNotSave">Отмена</string>
+    <string name="btn_delete">Удалить</string>
+    <string name="btn_noDate">Нет</string>
+    <string name="btn_clearFilter">Очистить</string>
+    <string name="btn_changePassPhrase">Изменить пароль</string>
+    <string name="btn_setPassPhrase">Установить пароль</string>
+    <string name="btn_search">Поиск</string>
+
+    <!-- menu_lowerCase: capitalized words, no punctuation -->
+    <string name="menu_about">Сведения</string>
+    <string name="menu_addAccount">Gmail</string>
+    <string name="menu_deleteAccount">Удалить</string>
+    <string name="menu_managePublicKeys">Открытые</string>
+    <string name="menu_manageSecretKeys">Закрытые</string>
+    <string name="menu_preferences">Настройки</string>
+    <string name="menu_importKeys">Импорт</string>
+    <string name="menu_exportKeys">Экспорт</string>
+    <string name="menu_exportKey">Экспорт</string>
+    <string name="menu_deleteKey">Удалить</string>
+    <string name="menu_createKey">Создать</string>
+    <string name="menu_editKey">Правка</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_help">Помощь</string>
+    <string name="menu_keyServer">Сервер</string>
+    <string name="menu_updateKey">Обновить</string>
+
+    <!-- label_lowerCase: capitalized words, no punctuation -->
+    <string name="label_sign">Подписать</string>
+    <string name="label_message">Текст</string>
+    <string name="label_file">Файл</string>
+    <string name="label_passPhrase">Пароль</string>
+    <string name="label_passPhraseAgain">Повтор</string>
+    <string name="label_algorithm">Алгоритм</string>
+    <string name="label_asciiArmour">Преобразовать в ASCII</string>
+    <string name="label_selectPublicKeys">Ключи</string>
+    <string name="label_deleteAfterEncryption">Удалить исходный</string>
+    <string name="label_deleteAfterDecryption">Удалить исходный</string>
+    <string name="label_deleteAfterImport">Удалить файл</string>
+    <string name="label_encryptionAlgorithm">Шифрование</string>
+    <string name="label_hashAlgorithm">Хэширование</string>
+    <string name="label_asymmetric">Открытый ключ</string>
+    <string name="label_symmetric">Пароль</string>
+    <string name="label_passPhraseCacheTtl">Кэшировать пароль</string>
+    <string name="label_messageCompression">Сжать текст</string>
+    <string name="label_fileCompression">Сжать файл</string>
+    <string name="label_language">Язык</string>
+    <string name="label_forceV3Signature">Подписи X.509 v3</string>
+    <string name="label_keyServers">Серверы ключей</string>
+    <string name="label_keyId">ID ключа</string>
+    <string name="label_creation">Создан</string>
+    <string name="label_expiry">До</string>
+    <string name="label_usage">Роль</string>
+    <string name="label_keySize">Длина</string>
+    <string name="label_mainUserId">Основной ID пользователя</string>
+    <string name="label_name">Имя</string>
+    <string name="label_comment">Прим.</string>
+    <string name="label_email">Email</string>
+
+    <string name="noKeysSelected">Выбрать</string>
+    <string name="oneKeySelected">1 выбран</string>
+    <string name="nKeysSelected">Выбрано</string>
+    <string name="unknownUserId">&lt;н/д&gt;</string>
+    <string name="none">&lt;нет&gt;</string>
+    <string name="noKey">&lt;нет ключа&gt;</string>
+    <string name="noDate">-</string>
+    <string name="noExpiry">&lt;актуален&gt;</string>
+    <string name="unknownStatus"></string>
+    <string name="canEncrypt">шифрование возможно</string>
+    <string name="canSign">подписание возможно</string>
+    <string name="expired">истёк</string>
+    <string name="notValid">неверен</string>
+    <string name="nKeyServers">%s сохранено</string>
+    <string name="fingerprint">отпечаток</string>
+
+    <!-- choice_lowerCase: capitalized first word, no punctuation -->
+    <string name="choice_none">Нет</string>
+    <string name="choice_signOnly">Только подпись</string>
+    <string name="choice_encryptOnly">Только шифр.</string>
+    <string name="choice_signAndEncrypt">Подпись и шифр.</string>
+    <string name="choice_15secs">15 секунд</string>
+    <string name="choice_1min">1 минута</string>
+    <string name="choice_3mins">3 минуты</string>
+    <string name="choice_5mins">5 минут</string>
+    <string name="choice_10mins">10 минут</string>
+    <string name="choice_20mins">20 минут</string>
+    <string name="choice_40mins">40 минут</string>
+    <string name="choice_1hour">1 час</string>
+    <string name="choice_2hours">2 часа</string>
+    <string name="choice_4hours">4 часа</string>
+    <string name="choice_8hours">8 часов</string>
+    <string name="choice_untilQuit">до выхода</string>
+    <string name="choice_language_system">Системные установки</string>
+
+    <string name="dsa">DSA</string>
+    <string name="elgamal">Эль-Гамаль</string>
+    <string name="rsa">RSA</string>
+
+    <string name="filemanager_titleOpen">Открыть…</string>
+    <string name="filemanager_titleSave">Сохранить как…</string>
+    <string name="filemanager_titleEncrypt">Файл для шифрования…</string>
+    <string name="filemanager_titleDecrypt">Файл для дешифрования…</string>
+    <string name="filemanager_btnOpen">Открыть</string>
+    <string name="filemanager_btnSave">Сохранить</string>
+
+    <string name="warning">Внимание</string>
+    <string name="error">Ошибка</string>
+    <string name="warningMessage">Внимание: %s</string>
+    <string name="errorMessage">Ошибка: %s</string>
+
+    <!-- sentences -->
+    <string name="wrongPassPhrase">Неверный пароль</string>
+    <string name="usingClipboardContent">Данные получены из буфера обмена</string>
+    <string name="keySaved">Ключ сохранён</string>
+    <string name="setAPassPhrase">Укажите пароль</string>
+    <string name="noFilemanagerInstalled">Менеджер файлов не найден</string>
+    <string name="passPhrasesDoNotMatch">Пароли не совпадают</string>
+    <string name="passPhraseMustNotBeEmpty">Необходим пароль</string>
+    <string name="passPhraseForSymmetricEncryption">Симметричное шифрование</string>
+    <string name="passPhraseFor">%s</string>
+    <string name="fileDeleteConfirmation">Действительно удалить\n%s?</string>
+    <string name="fileDeleteSuccessful">Удалено</string>
+    <string name="noFileSelected">Выберите файл</string>
+    <string name="decryptionSuccessful">Дешифрование выполнено</string>
+    <string name="encryptionSuccessful">Шифрование выполнено</string>
+    <string name="encryptionToClipboardSuccessful">Шифрование в буфер выполнено</string>
+    <string name="enterPassPhraseTwice">Введите пароль в оба поля</string>
+    <string name="selectEncryptionKey">Выберите ключ шифрования</string>
+    <string name="selectEncryptionOrSignatureKey">Выберите ключ шифрования или подписи</string>
+    <string name="specifyFileToEncryptTo">Введите имя файла.\nВНИМАНИЕ! Файл будет перезаписан</string>
+    <string name="specifyFileToDecryptTo">Введите имя файла.\nВНИМАНИЕ! Файл будет перезаписан</string>
+    <string name="specifyGoogleMailAccount">Введите адрес Gmail</string>
+    <string name="specifyFileToImportFrom">Введите имя файла (.asc или .gpg)</string>
+    <string name="specifyFileToExportTo">Введите имя файла.\nВНИМАНИЕ! Файл будет перезаписан</string>
+    <string name="specifyFileToExportSecretKeysTo">Введите имя файла.\nВНИМАНИЕ! Экспортируется ЗАКРЫТЫЙ ключ.\nВНИМАНИЕ! Файл будет перезаписан</string>
+    <string name="keyDeletionConfirmation">Ключ \'%s\' будет необратимо удалён. Продолжить?</string>
+    <string name="secretKeyDeletionConfirmation">ЗАКРЫТЫЙ ключ \'%s\' будет необратимо удалён. Продолжить?</string>
+    <string name="keysAddedAndUpdated">Ключи добавлены (%1$s шт.) и обновлены (%2$s шт.)</string>
+    <string name="keysAdded">Ключи (%s шт.) добавлены</string>
+    <string name="keysUpdated">Ключи (%s шт.) обновлены</string>
+    <string name="noKeysAddedOrUpdated">Ключи не были добавлены или обновлены</string>
+    <string name="keyExported">Ключ экспортирован</string>
+    <string name="keysExported">Ключи (%s шт.) экспортированы</string>
+    <string name="noKeysExported">Сбой экспорта</string>
+    <string name="keyCreationElGamalInfo">Примечание: только субключи используют схему Эль-Гамаля, допустимая длина 1536, 2048, 3072, 4096 или 8192</string>
+    <string name="keyNotFound">Ключ %08X не найден</string>
+    <string name="keysFound">Найдены ключи (%s шт.)</string>
+    <string name="unknownSignatureKeyTouchToLookUp">Подпись неизвестна, нажмите для поиска ключа</string>
+    <string name="keyEditingIsBeta">экспериментальная функция</string>
+    <string name="badKeysEncountered">Ключи (%s шт.) пропущены. Убедитесь, что используете --export-secret-keys, а не --export-secret-subkeys</string>
+    <string name="lookupUnknownKey">Ключ %s неизвестен. Искать на сервере ключей?</string>
+
+    <!-- error_lowerCase: phrases, no punctuation, all lowercase,
+         they will be put after "errorMessage", e.g. "Error: file not found" -->
+    <string name="error_fileDeleteFailed">сбой удаления \'%s\'</string>
+    <string name="error_fileNotFound">файл не найден</string>
+    <string name="error_noSecretKeyFound">подходящий закрытый ключ не найден</string>
+    <string name="error_noKnownEncryptionFound">шифрование не определено</string>
+    <string name="error_externalStorageNotReady">накопитель не готов</string>
+    <string name="error_accountNotFound">ящик \'%s\' не найден</string>
+    <string name="error_accountReadingNotAllowed">нет доступа к ящику</string>
+    <string name="error_addingAccountFailed">сбой добавления \'%s\'</string>
+    <string name="error_invalidEmail">неверный email \'%s\'</string>
+    <string name="error_keySizeMinimum512bit">ключ должен быть не менее 512 бит</string>
+    <string name="error_masterKeyMustNotBeElGamal">главный ключ не может использовать схему Эль-Гамаля</string>
+    <string name="error_unknownAlgorithmChoice">неизвестный алгоритм</string>
+    <string name="error_userIdNeedsAName">необходимо имя</string>
+    <string name="error_userIdNeedsAnEmailAddress">необходим адрес email</string>
+    <string name="error_keyNeedsAUserId">необходим id пользователя</string>
+    <string name="error_mainUserIdMustNotBeEmpty">заполните основной id пользователя</string>
+    <string name="error_keyNeedsMasterKey">необходим главный ключ</string>
+    <string name="error_expiryMustComeAfterCreation">дата окончания действия всегда позднее даты создания</string>
+    <string name="error_noEncryptionKeysOrPassPhrase">ключи шифрования или пароль не определены</string>
+    <string name="error_signatureFailed">сбой при подписании</string>
+    <string name="error_noSignaturePassPhrase">пароль не определён</string>
+    <string name="error_noSignatureKey">ключ подписи не определён</string>
+    <string name="error_invalidData">нет зашифрованных данных</string>
+    <string name="error_corruptData">данные повреждены</string>
+    <string name="error_noSymmetricEncryptionPacket">не найден контейнер</string>
+    <string name="error_wrongPassPhrase">неверный пароль</string>
+    <string name="error_savingKeys">сбой сохранения ключей</string>
+    <string name="error_couldNotExtractPrivateKey">сбой определения закрытого ключа</string>
+
+    <!-- progress_lowerCase: lowercase, phrases, usually ending in '...' -->
+    <string name="progress_done">выполнено</string>
+    <string name="progress_initializing">инициализация…</string>
+    <string name="progress_saving">сохранение…</string>
+    <string name="progress_importing">импорт…</string>
+    <string name="progress_exporting">экспорт…</string>
+    <string name="progress_generating">генерация ключа…</string>
+    <string name="progress_buildingKey">построение ключа…</string>
+    <string name="progress_preparingMasterKey">подготовка главного ключа…</string>
+    <string name="progress_certifyingMasterKey">сертификация главного ключа…</string>
+    <string name="progress_buildingMasterKeyRing">создание связки главного ключа…</string>
+    <string name="progress_addingSubKeys">добавление субключа…</string>
+    <string name="progress_savingKeyRing">сохранение связки…</string>
+    <string name="progress_importingSecretKeys">импорт закрытых ключей…</string>
+    <string name="progress_importingPublicKeys">импорт открытых ключей…</string>
+    <string name="progress_reloadingKeys">перезагрузка ключей…</string>
+    <string name="progress_exportingKey">экспорт ключа…</string>
+    <string name="progress_exportingKeys">экспорт ключей…</string>
+    <string name="progress_extractingSignatureKey">распаковка ключа подписи…</string>
+    <string name="progress_extractingKey">распаковка ключа…</string>
+    <string name="progress_preparingStreams">подготовка потоков…</string>
+    <string name="progress_encrypting">шифрование данных…</string>
+    <string name="progress_decrypting">дешифрование данных…</string>
+    <string name="progress_preparingSignature">подготовка подписи…</string>
+    <string name="progress_generatingSignature">создание подписи…</string>
+    <string name="progress_processingSignature">обработка подписи…</string>
+    <string name="progress_verifyingSignature">проверка подписи…</string>
+    <string name="progress_signing">подписание…</string>
+    <string name="progress_readingData">чтение данных…</string>
+    <string name="progress_findingKey">поиск ключа…</string>
+    <string name="progress_decompressingData">распаковка данных…</string>
+    <string name="progress_verifyingIntegrity">проверка целостности…</string>
+    <string name="progress_deletingSecurely">надёжное удаление \'%s\'…</string>
+    <string name="progress_querying">запрос…</string>
+    <string name="progress_queryingServer">запрос %s…</string>
+
+    <!-- permission strings -->
+    <string name="permission_read_key_details_label">Сведения о ключе из APG</string>
+    <string name="permission_read_key_details_description">Чтение сведений об открытых или закрытых ключах, хранящихся в APG, например ID ключа и ID пользователя. Сами ключи НЕ могут быть прочитаны</string>
+
+    <!-- action strings -->
+    <string name="action_encrypt">Шифровать</string>
+    <string name="action_decrypt">Дешифровать</string>
+    <string name="action_importPublic">Импорт открытых ключей</string>
+    <string name="action_importSecret">Импорт закрытых ключей</string>
+
+    <string name="hint_publicKeys">Открытые ключи</string>
+    <string name="hint_secretKeys">Закрытые ключи</string>
+    <string name="filterInfo">Фильтр: \"%s\"</string>
+
+    <!-- misc -->
+    <string name="fast">быстро</string>
+    <string name="slow">средне</string>
+    <string name="very_slow">медленно</string>
+
+    <!-- texts -->
+    <!-- "OI File Manager", "ASTRO", and "K-9 Mail" must not be translated in order for the links to the market to work. -->
+    <string name="text_help">Для максимального удобства установите K-9 Mail — почтовый клиент, прозрачно интегрирующийся с APG для работы с PGP-INLINE и позволяющий шифровать и дешифровать сообщения
+\n\nТакже рекомендуется установить OI File Manager или Total Commander для работы функций обзора и выбора файлов в APG
+\n\nДля работы необходимы ключи шифрования, их можно импортировать или создать в приложении
+\n\nТакже можно добавить почтовый ящик Gmail для упрощения дешифрования почты
+\n\nВ меню настроек доступны дополнительные возможности по управлению приложением
+    </string>
+
+</resources>
