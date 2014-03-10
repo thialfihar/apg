@@ -22,4 +22,8 @@ public class PublicKeyRing extends KeyRing {
     public PublicKeyRing(PGPPublicKeyRing publicKeyRing) {
         super(publicKeyRing);
     }
+
+    public PublicKeyRing(KeyRing keyRing) {
+        super(keyRing.getPublicKeyRing());
+    }
 }
