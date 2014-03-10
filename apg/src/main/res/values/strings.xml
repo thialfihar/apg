@@ -282,6 +282,7 @@
     <string name="error_no_symmetric_encryption_packet">couldn\'t find a packet with symmetric encryption</string>
     <string name="error_wrong_passphrase">wrong passphrase</string>
     <string name="error_saving_keys">error saving some keys</string>
+    <string name="error_could_not_encode_key_ring">Couldn\'t encode key ring</string>
     <string name="error_could_not_extract_private_key">could not extract private key</string>
     <string name="error_only_files_are_supported">Direct binary data without actual file in filesystem is not supported. This is only supported by ACTION_ENCRYPT_STREAM_AND_RETURN.</string>
     <string name="error_jelly_bean_needed">You need Android 4.1 alias Jelly Bean to use Androids NFC Beam feature!</string>
