@@ -574,8 +574,8 @@ public class EditKeyActivity extends ActionBarActivity {
             // start service with intent
             startService(intent);
         } catch (PgpGeneralException e) {
-            //Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
-            //        Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -595,7 +595,6 @@ public class EditKeyActivity extends ActionBarActivity {
 
         ViewGroup userIdEditors = userIdsView.getEditors();
 
-        boolean gotMainUserId = false;
         for (int i = 0; i < userIdEditors.getChildCount(); ++i) {
             UserIdEditor editor = (UserIdEditor) userIdEditors.getChildAt(i);
             String userId = null;
@@ -614,20 +613,11 @@ public class EditKeyActivity extends ActionBarActivity {
                 continue;
             }
 
-            if (editor.isMainUserId()) {
-                userIds.add(0, userId);
-                gotMainUserId = true;
-            } else {
-                userIds.add(userId);
-            }
+            userIds.add(userId);
         }
 
         if (userIds.size() == 0) {
             throw new PgpGeneralException(getString(R.string.error_key_needs_a_user_id));
-        }
-
-        if (!gotMainUserId) {
-            throw new PgpGeneralException(getString(R.string.error_main_user_id_must_not_be_empty));
         }
 
         return userIds;
