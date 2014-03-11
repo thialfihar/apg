@@ -45,7 +45,6 @@ import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.IOException;
-import android.widget.Toast;
 
 public class ViewKeyActivity extends ActionBarActivity {
 
