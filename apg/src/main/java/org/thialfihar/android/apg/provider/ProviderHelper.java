@@ -238,6 +238,10 @@ public class ProviderHelper implements PgpKeyProvider {
             cursor.close();
         }
 
+        if (keyRing == null) {
+            return null;
+        }
+
         if (keyRing.isPublic()) {
             return keyRing.getPublicKeyRing();
         } else {
