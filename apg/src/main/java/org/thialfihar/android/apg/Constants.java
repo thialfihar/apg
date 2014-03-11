@@ -24,7 +24,7 @@ public final class Constants {
 
     public static final boolean DEBUG = BuildConfig.DEBUG;
 
-    public static final String TAG = "Keychain";
+    public static final String TAG = "APG";
 
     public static final String PACKAGE_NAME = "org.thialfihar.android.apg";
 
