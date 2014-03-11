@@ -292,7 +292,7 @@ public class PgpSignEncrypt {
 
             // content signer based on signing key algorithm and chosen hash algorithm
             JcaPGPContentSignerBuilder contentSignerBuilder = new JcaPGPContentSignerBuilder(
-                    signingKey.getPublicKey().getAlgorithm(), mSignatureHashAlgorithm)
+                    signingKey.getAlgorithm(), mSignatureHashAlgorithm)
                     .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
 
             if (mSignatureForceV3) {
