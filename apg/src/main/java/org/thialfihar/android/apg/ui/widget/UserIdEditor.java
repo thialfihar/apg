@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.Utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,14 +62,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
             mName.setEnabled(false);
             mEmail.setEnabled(false);
             mComment.setEnabled(false);
-        }
-    }
-
-    public static class NoEmailException extends Exception {
-        static final long serialVersionUID = 0xf812773344L;
-
-        public NoEmailException(String message) {
-            super(message);
         }
     }
 
@@ -108,25 +101,15 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mComment.setText("");
         mEmail.setText("");
 
-        Pattern withComment = Pattern.compile("^(.*) [(](.*)[)] <(.*)>$");
-        Matcher matcher = withComment.matcher(userId);
-        if (matcher.matches()) {
-            mName.setText(matcher.group(1));
-            mComment.setText(matcher.group(2));
-            mEmail.setText(matcher.group(3));
-            return;
-        }
-
-        Pattern withoutComment = Pattern.compile("^(.*) <(.*)>$");
-        matcher = withoutComment.matcher(userId);
-        if (matcher.matches()) {
-            mName.setText(matcher.group(1));
-            mEmail.setText(matcher.group(2));
-            return;
+        String[] chunks = Utils.splitUserId(userId);
+        if (chunks[0] != null) {
+            mName.setText(chunks[0]);
+            mEmail.setText(chunks[1]);
+            mComment.setText(chunks[2]);
         }
     }
 
-    public String getValue() throws NoNameException, NoEmailException, InvalidEmailException {
+    public String getValue() throws NoNameException, InvalidEmailException {
         String name = ("" + mName.getText()).trim();
         String email = ("" + mEmail.getText()).trim();
         String comment = ("" + mComment.getText()).trim();
@@ -155,10 +138,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         // otherwise make sure that name and email exist
         if (name.equals("")) {
             throw new NoNameException("need a name");
-        }
-
-        if (email.equals("")) {
-            throw new NoEmailException("need an email");
         }
 
         return userId;
