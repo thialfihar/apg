@@ -37,6 +37,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.Utils;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ViewKeyKeysAdapter;
@@ -242,7 +243,7 @@ public class ViewKeyMainFragment extends Fragment  implements
                     // get key id from MASTER_KEY_ID
                     long keyId = data.getLong(KEYS_INDEX_KEY_ID);
 
-                    String keyIdStr = "0x" + PgpKeyHelper.convertKeyIdToHex(keyId);
+                    String keyIdStr = "0x" + Utils.toHex(keyId, 16);
                     mKeyId.setText(keyIdStr);
 
                     // get creation date from CREATION

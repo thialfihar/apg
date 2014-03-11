@@ -191,7 +191,7 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         }
 
         mAlgorithm.setText(key.getAlgorithmInfo());
-        mKeyId.setText(Utils.toHex(key.getKeyId(), 16));
+        mKeyId.setText("0x" + Utils.toHex(key.getKeyId(), 16));
 
         Vector<Choice> choices = new Vector<Choice>();
         boolean isElGamalKey = (key.getAlgorithm() == Key.ELGAMAL_ENCRYPT);
