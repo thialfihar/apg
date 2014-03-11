@@ -58,9 +58,9 @@ public class KeyListActivity extends DrawerActivity {
             startActivityForResult(intentImport, 0);
 
             return true;
-        case R.id.menu_key_list_export:
-            mExportHelper.showExportKeysDialog(null, Id.type.public_key, Constants.path.APP_DIR
-                    + "/pubexport.asc");
+        case R.id.menu_key_list_public_export:
+            mExportHelper.showExportKeysDialog(null, Id.type.public_key,
+                Constants.path.APP_DIR_FILE_PUB);
 
             return true;
         default:
