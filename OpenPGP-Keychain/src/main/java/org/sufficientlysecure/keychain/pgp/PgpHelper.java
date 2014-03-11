@@ -193,7 +193,6 @@ public class PgpHelper {
      * @param context
      * @param progress
      * @param file
-     * @throws FileNotFoundException
      * @throws IOException
      */
     public static void deleteFileSecurely(Context context, Progressable progress, File file)

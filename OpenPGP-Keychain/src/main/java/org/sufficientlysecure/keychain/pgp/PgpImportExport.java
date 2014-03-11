@@ -79,7 +79,6 @@ public class PgpImportExport {
     public boolean uploadKeyRingToServer(KeyServer server, PublicKeyRing keyRing) {
         try {
             server.add(keyRing.getArmoredEncoded(mContext));
-
             return true;
         } catch (IOException e) {
             return false;
@@ -147,7 +146,7 @@ public class PgpImportExport {
     }
 
     public Bundle exportKeyRings(ArrayList<Long> keyRingRowIds, int keyType,
-                                 OutputStream outStream) throws PgpGeneralException, FileNotFoundException,
+                                 OutputStream outStream) throws PgpGeneralException,
             PGPException, IOException {
         Bundle returnData = new Bundle();
 

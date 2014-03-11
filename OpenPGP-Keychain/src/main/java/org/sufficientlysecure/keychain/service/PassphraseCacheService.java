@@ -77,7 +77,7 @@ public class PassphraseCacheService extends Service {
 
     private BroadcastReceiver mIntentReceiver;
 
-    private HashMap<Long, String> mPassphraseCache = new HashMap<Long, String>();
+    private LongSparseArray<String> mPassphraseCache = new LongSparseArray<String>();
 
     Context mContext;
 
@@ -348,7 +348,7 @@ public class PassphraseCacheService extends Service {
         Log.d(TAG, "Timeout of keyId " + keyId + ", removed from memory!");
 
         // stop whole service if no cached passphrases remaining
-        if (mPassphraseCache.isEmpty()) {
+        if (mPassphraseCache.size() == 0) {
             Log.d(TAG, "No passphrases remaining in memory, stopping service!");
             stopSelf();
         }
