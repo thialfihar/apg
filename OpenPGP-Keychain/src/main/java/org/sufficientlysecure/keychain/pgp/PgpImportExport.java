@@ -41,7 +41,6 @@ import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
