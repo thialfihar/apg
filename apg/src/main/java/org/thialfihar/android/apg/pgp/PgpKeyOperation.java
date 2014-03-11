@@ -183,7 +183,14 @@ public class PgpKeyOperation {
                 PGPEncryptedData.CAST5, sha1Calc)
                 .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(passphrase.toCharArray());
 
-        PGPSecretKey secKey = new PGPSecretKey(keyPair.getPrivateKey(), keyPair.getPublicKey(),
+        PGPPublicKey pubKey = keyPair.getPublicKey();
+        if (!isMasterKey) {
+            // since the keys are now serialized without sending them through a KeyRing, this
+            // public key will be identified as a master key, as it has subSigs == null set,
+            // give it an empty list of sub sigs to fix that
+            pubKey = new PGPPublicKey(pubKey, null, new ArrayList());
+        }
+        PGPSecretKey secKey = new PGPSecretKey(keyPair.getPrivateKey(), pubKey,
             sha1Calc, isMasterKey, keyEncryptor);
 
         return new Key(secKey);

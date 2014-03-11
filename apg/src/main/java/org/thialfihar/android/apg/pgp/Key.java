@@ -16,9 +16,16 @@
 
 package org.thialfihar.android.apg.pgp;
 
+import org.spongycastle.bcpg.BCPGInputStream;
+import org.spongycastle.bcpg.PacketTags;
+import org.spongycastle.bcpg.PublicKeyPacket;
+import org.spongycastle.bcpg.SecretKeyPacket;
+import org.spongycastle.bcpg.SecretSubkeyPacket;
+import org.spongycastle.bcpg.TrustPacket;
 import org.spongycastle.bcpg.sig.KeyFlags;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.spongycastle.openpgp.PGPException;
+import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPPublicKey;
@@ -28,17 +35,23 @@ import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureSubpacketVector;
 import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
+import org.spongycastle.openpgp.operator.bc.BcKeyFingerprintCalculator;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 
+import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.Log;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Vector;
 
 public class Key implements Serializable {
@@ -55,8 +68,11 @@ public class Key implements Serializable {
         try {
             obj = factory.nextObject();
         } catch (IOException e) {
+            Log.e(Constants.TAG, "error while decoding Key/KeyRing", e);
             return null;
         }
+
+        Log.v(Constants.TAG, "class: " + obj.getClass().getName());
 
         if (obj instanceof PGPSecretKey) {
             return new Key((PGPSecretKey) obj);
@@ -323,21 +339,112 @@ public class Key implements Serializable {
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        if (isPublic()) {
-            out.writeObject(mPublicKey.getEncoded());
-        } else {
-            out.writeObject(mSecretKey.getEncoded());
-        }
+        out.writeObject(getEncoded());
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         byte[] data = (byte[]) in.readObject();
-        Key tmp = decode(data);
-        if (tmp.isPublic()) {
-            mPublicKey = tmp.getPublicKey();
-        } else {
-            mSecretKey = tmp.getSecretKey();
+        mPublicKey = null;
+        mSecretKey = null;
+        BCPGInputStream pIn = new BCPGInputStream(new ByteArrayInputStream(data));
+
+        int initialTag = pIn.nextPacketTag();
+        if (initialTag != PacketTags.PUBLIC_KEY &&
+            initialTag != PacketTags.PUBLIC_SUBKEY &&
+            initialTag != PacketTags.SECRET_KEY &&
+            initialTag != PacketTags.SECRET_SUBKEY) {
+            throw new IOException("could not decode Key: tag " + initialTag);
+        }
+
+        BcKeyFingerprintCalculator fingerPrintCalculator = new BcKeyFingerprintCalculator();
+
+        switch (initialTag) {
+        case PacketTags.PUBLIC_KEY: {
+            PublicKeyPacket pubPk = (PublicKeyPacket) pIn.readPacket();
+            TrustPacket trustPk = PGPKeyRing.readOptionalTrustPacket(pIn);
+
+            // direct signatures and revocations
+            List keySigs = PGPKeyRing.readSignaturesAndTrust(pIn);
+
+            List ids = new ArrayList();
+            List idTrusts = new ArrayList();
+            List idSigs = new ArrayList();
+            PGPKeyRing.readUserIDs(pIn, ids, idTrusts, idSigs);
+
+            try {
+                mPublicKey = new PGPPublicKey(pubPk, trustPk, keySigs, ids, idTrusts, idSigs,
+                                              fingerPrintCalculator);
+            } catch (PGPException e) {
+                throw new IOException("processing exception: " + e.toString());
+            }
+            break;
+        }
+
+        case PacketTags.PUBLIC_SUBKEY: {
+            PublicKeyPacket pk = (PublicKeyPacket) pIn.readPacket();
+            TrustPacket kTrust = PGPKeyRing.readOptionalTrustPacket(pIn);
+
+            // PGP 8 actually leaves out the signature.
+            List sigList = PGPKeyRing.readSignaturesAndTrust(pIn);
+
+            try {
+                mPublicKey = new PGPPublicKey(pk, kTrust, sigList, fingerPrintCalculator);
+            } catch (PGPException e) {
+                throw new IOException("processing exception: " + e.toString());
+            }
+            break;
+        }
+
+        case PacketTags.SECRET_KEY: {
+            SecretKeyPacket secret = (SecretKeyPacket) pIn.readPacket();
+
+            // ignore GPG comment packets if found.
+            while (pIn.nextPacketTag() == PacketTags.EXPERIMENTAL_2) {
+                pIn.readPacket();
+            }
+
+            TrustPacket trust = PGPKeyRing.readOptionalTrustPacket(pIn);
+
+            // revocation and direct signatures
+            List keySigs = PGPKeyRing.readSignaturesAndTrust(pIn);
+
+            List ids = new ArrayList();
+            List idTrusts = new ArrayList();
+            List idSigs = new ArrayList();
+            PGPKeyRing.readUserIDs(pIn, ids, idTrusts, idSigs);
+
+            try {
+                mSecretKey = new PGPSecretKey(secret, new PGPPublicKey(secret.getPublicKeyPacket(),
+                                trust, keySigs, ids, idTrusts, idSigs, fingerPrintCalculator));
+            } catch (PGPException e) {
+                throw new IOException("processing exception: " + e.toString());
+            }
+            break;
+        }
+
+        case PacketTags.SECRET_SUBKEY: {
+            SecretSubkeyPacket sub = (SecretSubkeyPacket) pIn.readPacket();
+
+            // ignore GPG comment packets if found.
+            while (pIn.nextPacketTag() == PacketTags.EXPERIMENTAL_2) {
+                pIn.readPacket();
+            }
+
+            TrustPacket subTrust = PGPKeyRing.readOptionalTrustPacket(pIn);
+            List sigList = PGPKeyRing.readSignaturesAndTrust(pIn);
+
+            try {
+                mSecretKey = new PGPSecretKey(sub, new PGPPublicKey(sub.getPublicKeyPacket(), subTrust,
+                                                sigList, fingerPrintCalculator));
+            } catch (PGPException e) {
+                throw new IOException("processing exception: " + e.toString());
+            }
+            break;
+        }
+        }
+
+        if (mSecretKey != null) {
             mPublicKey = mSecretKey.getPublicKey();
         }
     }
