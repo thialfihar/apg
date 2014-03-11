@@ -23,7 +23,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
@@ -36,7 +35,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     private EditorListener mEditorListener = null;
 
     private BootstrapButton mDeleteButton;
-    private RadioButton mIsMainUserId;
     private EditText mName;
     private EditText mEmail;
     private EditText mComment;
@@ -61,7 +59,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         if (!canBeEdited) {
             mDeleteButton.setVisibility(View.INVISIBLE);
             mName.setEnabled(false);
-            mIsMainUserId.setEnabled(false);
             mEmail.setEnabled(false);
             mComment.setEnabled(false);
         }
@@ -98,8 +95,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
 
         mDeleteButton = (BootstrapButton) findViewById(R.id.delete);
         mDeleteButton.setOnClickListener(this);
-        mIsMainUserId = (RadioButton) findViewById(R.id.isMainUserId);
-        mIsMainUserId.setOnClickListener(this);
 
         mName = (EditText) findViewById(R.id.name);
         mEmail = (EditText) findViewById(R.id.email);
@@ -172,33 +167,11 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     public void onClick(View v) {
         final ViewGroup parent = (ViewGroup) getParent();
         if (v == mDeleteButton) {
-            boolean wasMainUserId = mIsMainUserId.isChecked();
             parent.removeView(this);
             if (mEditorListener != null) {
                 mEditorListener.onDeleted(this);
             }
-            if (wasMainUserId && parent.getChildCount() > 0) {
-                UserIdEditor editor = (UserIdEditor) parent.getChildAt(0);
-                editor.setIsMainUserId(true);
-            }
-        } else if (v == mIsMainUserId) {
-            for (int i = 0; i < parent.getChildCount(); ++i) {
-                UserIdEditor editor = (UserIdEditor) parent.getChildAt(i);
-                if (editor == this) {
-                    editor.setIsMainUserId(true);
-                } else {
-                    editor.setIsMainUserId(false);
-                }
-            }
         }
-    }
-
-    public void setIsMainUserId(boolean value) {
-        mIsMainUserId.setChecked(value);
-    }
-
-    public boolean isMainUserId() {
-        return mIsMainUserId.isChecked();
     }
 
     public void setEditorListener(EditorListener listener) {
