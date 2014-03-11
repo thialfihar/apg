@@ -73,8 +73,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.crypto.SecretKey;
-
 public class PgpKeyOperation {
     private final Context mContext;
     private final ProgressDialogUpdater mProgress;
