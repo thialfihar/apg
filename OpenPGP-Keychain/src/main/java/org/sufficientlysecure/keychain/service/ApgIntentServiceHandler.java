@@ -75,11 +75,11 @@ public class ApgIntentServiceHandler extends Handler {
                 onCancelListener);
     }
 
-    public KeychainIntentServiceHandler(Activity activity, String progressDialogMessage,
-                                        int progressDialogStyle, boolean cancelable,
-                                        OnCancelListener onCancelListener) {
-        this.mActivity = activity;
-        this.mProgressDialogFragment = ProgressDialogFragment.newInstance(
+    public ApgIntentServiceHandler(Activity activity, String progressDialogMessage,
+                                   int progressDialogStyle, boolean cancelable,
+                                   OnCancelListener onCancelListener) {
+        mActivity = activity;
+        mProgressDialogFragment = ProgressDialogFragment.newInstance(
                 progressDialogMessage,
                 progressDialogStyle,
                 cancelable,
