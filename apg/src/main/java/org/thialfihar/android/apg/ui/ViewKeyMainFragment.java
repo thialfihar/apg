@@ -306,14 +306,12 @@ public class ViewKeyMainFragment extends Fragment  implements
                 byte[] bytes = {(byte) ((raw >> 8) & 0xff - 128), (byte) (raw & 0xff - 128)};
                 int[] color = Utils.getRgbForData(bytes);
                 if (color[0] < 100 && color[1] < 100 && color[2] < 100) {
-                    sb.setSpan(new BackgroundColorSpan(Color.parseColor("#ffffff")),
+                    sb.setSpan(new BackgroundColorSpan(Color.WHITE),
                                 i, Math.min(i + 4, fingerprint.length()),
                                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
                 sb.setSpan(
-                    new ForegroundColorSpan(
-                        Color.parseColor(String.format("#%02X%02X%02X",
-                                            color[0], color[1], color[2]))),
+                    new ForegroundColorSpan(Color.rgb(color[0], color[1], color[2])),
                     i, Math.min(i + 4, fingerprint.length()),
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
