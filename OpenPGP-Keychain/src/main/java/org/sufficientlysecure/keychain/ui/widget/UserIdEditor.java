@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import org.sufficientlysecure.keychain.helper.ContactHelper;
 
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Utils;
@@ -37,7 +38,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
 
     private BootstrapButton mDeleteButton;
     private EditText mName;
-    private EditText mEmail;
+    private AutoCompleteTextView mEmail;
     private EditText mComment;
 
     // see http://www.regular-expressions.info/email.html
@@ -90,8 +91,16 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mDeleteButton.setOnClickListener(this);
 
         mName = (EditText) findViewById(R.id.name);
-        mEmail = (EditText) findViewById(R.id.email);
+        mEmail = (AutoCompleteTextView) findViewById(R.id.email);
         mComment = (EditText) findViewById(R.id.comment);
+
+
+        mEmail.setThreshold(1); // Start working from first character
+        mEmail.setAdapter(
+                new ArrayAdapter<String>
+                        (this.getContext(), android.R.layout.simple_dropdown_item_1line,
+                                                                    ContactHelper.getMailAccounts(getContext())
+                        ));
 
         super.onFinishInflate();
     }
