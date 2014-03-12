@@ -17,9 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -31,6 +28,11 @@ import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.KeyListAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -231,7 +233,11 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
 
     static final int INDEX_TYPE = 1;
     static final int INDEX_UID = 3;
-    static final String SORT_ORDER = UserIds.USER_ID + " ASC";
+    static final String SORT_ORDER =
+                // show secret before public key
+                KeychainDatabase.Tables.KEY_RINGS + "." + KeyRings.TYPE + " DESC, "
+                    // sort by user id otherwise
+                    + UserIds.USER_ID + " ASC";
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
