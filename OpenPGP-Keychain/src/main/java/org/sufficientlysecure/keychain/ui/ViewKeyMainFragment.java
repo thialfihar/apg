@@ -19,13 +19,18 @@ package org.thialfihar.android.apg.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -280,7 +285,7 @@ public class ViewKeyMainFragment extends Fragment  implements
                     String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, true);
                     fingerprint = fingerprint.replace("  ", "\n");
 
-                    mFingerprint.setText(fingerprint);
+                    mFingerprint.setText(colorizeFingerprint(fingerprint));
                 }
 
                 mKeysAdapter.swapCursor(data);
@@ -289,6 +294,37 @@ public class ViewKeyMainFragment extends Fragment  implements
             default:
                 break;
         }
+    }
+
+    private SpannableStringBuilder colorizeFingerprint(String fingerprint) {
+        SpannableStringBuilder sb = new SpannableStringBuilder(fingerprint);
+
+        try {
+            for (int i = 0; i < fingerprint.length(); i += 5) {
+                String fourChars = fingerprint.substring(i, Math.min(i + 4, fingerprint.length()));
+                int raw = Integer.parseInt(fourChars, 16);
+                byte[] bytes = {(byte) ((raw >> 8) & 0xff - 128), (byte) (raw & 0xff - 128)};
+                int[] color = Utils.getRgbForData(bytes);
+                if (color[0] < 100 && color[1] < 100 && color[2] < 100) {
+                    sb.setSpan(new BackgroundColorSpan(Color.parseColor("#ffffff")),
+                                i, Math.min(i + 4, fingerprint.length()),
+                                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                }
+                sb.setSpan(
+                    new ForegroundColorSpan(
+                        Color.parseColor(String.format("#%02X%02X%02X",
+                                            color[0], color[1], color[2]))),
+                    i, Math.min(i + 4, fingerprint.length()),
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            }
+        } catch (Exception e) {
+            Log.e(Constants.TAG, "Colorization failed", e);
+            // if anything goes wrong, then just display the fingerprint without colour,
+            // instead of partially correct colour or wrong colours
+            return new SpannableStringBuilder(fingerprint);
+        }
+
+        return sb;
     }
 
     /**
