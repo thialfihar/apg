@@ -131,9 +131,7 @@ public class ViewKeyMainFragment extends Fragment implements
                 mSecretKey.setText(R.string.secret_key_yes);
 
                 // certify button
-                // TODO this button MIGHT be useful if the user wants to
-                // certify a private key with another...
-                // mActionCertify.setVisibility(View.GONE);
+                mActionCertify.setVisibility(View.GONE);
 
                 // edit button
                 mActionEdit.setVisibility(View.VISIBLE);
@@ -153,6 +151,14 @@ public class ViewKeyMainFragment extends Fragment implements
 
                 // certify button
                 mActionCertify.setVisibility(View.VISIBLE);
+                mActionCertify.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                        certifyKey(KeychainContract.KeyRings.buildPublicKeyRingsByMasterKeyIdUri(
+                                Long.toString(masterKeyId)
+                        ));
+                    }
+                });
+
                 // edit button
                 mActionEdit.setVisibility(View.GONE);
             }
