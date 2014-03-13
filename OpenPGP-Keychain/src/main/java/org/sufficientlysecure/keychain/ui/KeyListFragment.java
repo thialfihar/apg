@@ -180,6 +180,20 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                             showDeleteKeyDialog(mode, ids);
                             break;
                         }
+                        case R.id.menu_key_list_multi_export: {
+                            // todo: public/secret needs to be handled differently here
+                            ids = mStickyList.getWrappedList().getCheckedItemIds();
+                            ExportHelper mExportHelper = new ExportHelper((ActionBarActivity) getActivity());
+                            mExportHelper.showExportKeysDialog(ids, Id.type.public_key, Constants.path.APP_DIR_FILE_PUB);
+                            break;
+                        }
+                        case R.id.menu_key_list_multi_select_all: {
+                            // select all
+                            for (int i = 0; i < mStickyList.getCount(); i++) {
+                                mStickyList.setItemChecked(i, true);
+                            }
+                            break;
+                        }
                     }
                     return true;
                 }
@@ -345,7 +359,7 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
     /**
      * Implements StickyListHeadersAdapter from library
      */
-    private class KeyListAdapter extends CursorAdapter implements StickyListHeadersAdapter {
+    private class KeyListAdapter extends HighlightQueryCursorAdapter implements StickyListHeadersAdapter {
         private LayoutInflater mInflater;
         private int mIndexUserId;
         private int mIndexIsRevoked;
@@ -600,13 +614,14 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
              * Change color for multi-selection
              */
             // default color
-            v.setBackgroundColor(Color.TRANSPARENT);
             if (mSelection.get(position) != null) {
                 // this is a selected position, change color!
                 v.setBackgroundColor(parent.getResources().getColor(R.color.emphasis));
+            } else {
+                v.setBackgroundColor(Color.TRANSPARENT);
             }
+
             return v;
         }
-
     }
 }
