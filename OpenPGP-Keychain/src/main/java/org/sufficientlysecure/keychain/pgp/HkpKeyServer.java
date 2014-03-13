@@ -97,7 +97,8 @@ public class HkpKeyServer extends KeyServer {
     private static final short PORT_DEFAULT = 11371;
 
     /**
-     * @param hostAndPort may be just "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then it will
+     * @param hostAndPort may be just
+     *                    "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then it will
      *                    connect using {@link #PORT_DEFAULT}. However, port may be specified after colon
      *                    ("<code>hostname:port</code>", eg. "<code>p80.pool.sks-keyservers.net:80</code>").
      */
