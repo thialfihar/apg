@@ -1,0 +1,2 @@
+adb install -r apg/build/apk/apg-release-unaligned.apk
+./run
