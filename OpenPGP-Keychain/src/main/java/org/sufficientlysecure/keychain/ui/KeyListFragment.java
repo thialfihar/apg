@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2013-2014 Dominik Schürmann <dominik@dominikschuermann.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -246,10 +250,13 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
     };
 
     static final int INDEX_TYPE = 1;
-    static final int INDEX_UID = 3;
+    static final int INDEX_MASTER_KEY_ID = 2;
+    static final int INDEX_USER_ID = 3;
+    static final int INDEX_IS_REVOKED = 4;
+
     static final String SORT_ORDER =
-                // show secret before public key
-                KeychainDatabase.Tables.KEY_RINGS + "." + KeyRings.TYPE + " DESC, "
+            // show secret before public key
+            KeychainDatabase.Tables.KEY_RINGS + "." + KeyRings.TYPE + " DESC, "
                     // sort by user id otherwise
                     + UserIds.USER_ID + " ASC";
 
@@ -361,39 +368,17 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
      */
     private class KeyListAdapter extends HighlightQueryCursorAdapter implements StickyListHeadersAdapter {
         private LayoutInflater mInflater;
-        private int mIndexUserId;
-        private int mIndexIsRevoked;
-        private int mMasterKeyId;
-
-        @SuppressLint("UseSparseArrays")
         private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
 
         public KeyListAdapter(Context context, Cursor c, int flags) {
             super(context, c, flags);
 
             mInflater = LayoutInflater.from(context);
-            initIndex(c);
         }
 
         @Override
         public Cursor swapCursor(Cursor newCursor) {
-            initIndex(newCursor);
-
             return super.swapCursor(newCursor);
-        }
-
-        /**
-         * Get column indexes for performance reasons just once in constructor and swapCursor. For a
-         * performance comparison see http://stackoverflow.com/a/17999582
-         *
-         * @param cursor
-         */
-        private void initIndex(Cursor cursor) {
-            if (cursor != null) {
-                mIndexUserId = cursor.getColumnIndexOrThrow(KeychainContract.UserIds.USER_ID);
-                mIndexIsRevoked = cursor.getColumnIndexOrThrow(KeychainContract.Keys.IS_REVOKED);
-                mMasterKeyId = cursor.getColumnIndexOrThrow(KeychainContract.KeyRings.MASTER_KEY_ID);
-            }
         }
 
         /**
@@ -409,15 +394,15 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                 TextView mainUserId = (TextView) view.findViewById(R.id.mainUserId);
                 TextView mainUserIdRest = (TextView) view.findViewById(R.id.mainUserIdRest);
 
-                String userId = cursor.getString(mIndexUserId);
+                String userId = cursor.getString(INDEX_USER_ID);
                 String[] userIdSplit = Utils.splitUserId(userId);
                 if (userIdSplit[0] != null) {
-                    mainUserId.setText(userIdSplit[0]);
+                    mainUserId.setText(highlightSearchQuery(userIdSplit[0]));
                 } else {
                     mainUserId.setText(R.string.user_id_no_name);
                 }
                 if (userIdSplit[1] != null) {
-                    mainUserIdRest.setText(userIdSplit[1]);
+                    mainUserIdRest.setText(highlightSearchQuery(userIdSplit[1]));
                     mainUserIdRest.setVisibility(View.VISIBLE);
                 } else {
                     mainUserIdRest.setVisibility(View.GONE);
@@ -428,12 +413,12 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                 Button button = (Button) view.findViewById(R.id.edit);
                 TextView revoked = (TextView) view.findViewById(R.id.revoked);
 
-                if(cursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
+                if (cursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
                     // this is a secret key - show the edit button
                     revoked.setVisibility(View.GONE);
                     button.setVisibility(View.VISIBLE);
 
-                    final long id = cursor.getLong(mMasterKeyId);
+                    final long id = cursor.getLong(INDEX_MASTER_KEY_ID);
                     button.setOnClickListener(new OnClickListener() {
                         public void onClick(View view) {
                             Intent editIntent = new Intent(getActivity(), EditKeyActivity.class);
@@ -446,7 +431,7 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                     // this is a public key - hide the edit button, show if it's revoked
                     button.setVisibility(View.GONE);
 
-                    boolean isRevoked = cursor.getInt(mIndexIsRevoked) > 0;
+                    boolean isRevoked = cursor.getInt(INDEX_IS_REVOKED) > 0;
                     revoked.setVisibility(isRevoked ? View.VISIBLE : View.GONE);
                 }
             }
@@ -454,23 +439,11 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
         }
 
         public long getMasterKeyId(int id) {
-
             if (!mCursor.moveToPosition(id)) {
                 throw new IllegalStateException("couldn't move cursor to position " + id);
             }
 
-            return mCursor.getLong(mMasterKeyId);
-
-        }
-
-        public int getKeyType(int position) {
-
-            if (!mCursor.moveToPosition(position)) {
-                throw new IllegalStateException("couldn't move cursor to position " + position);
-            }
-
-            return mCursor.getInt(KeyListFragment.INDEX_TYPE);
-
+            return mCursor.getLong(INDEX_MASTER_KEY_ID);
         }
 
         @Override
@@ -508,7 +481,7 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                 throw new IllegalStateException("couldn't move cursor to position " + position);
             }
 
-            if(mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
+            if (mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
                 { // set contact count
                     int num = mCursor.getCount();
                     String contactsTotal = getResources().getQuantityString(R.plurals.n_contacts, num, num);
@@ -521,10 +494,10 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             }
 
             // set header text as first char in user id
-            String userId = mCursor.getString(KeyListFragment.INDEX_UID);
+            String userId = mCursor.getString(KeyListFragment.INDEX_USER_ID);
             String headerText = convertView.getResources().getString(R.string.user_id_no_name);
             if (userId != null && userId.length() > 0) {
-                headerText = "" + mCursor.getString(KeyListFragment.INDEX_UID).subSequence(0, 1).charAt(0);
+                headerText = "" + mCursor.getString(KeyListFragment.INDEX_USER_ID).subSequence(0, 1).charAt(0);
             }
             holder.text.setText(headerText);
             holder.count.setVisibility(View.GONE);
@@ -547,11 +520,11 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             }
 
             // early breakout: all secret keys are assigned id 0
-            if(mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET)
+            if (mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET)
                 return 1L;
 
             // otherwise, return the first character of the name as ID
-            String userId = mCursor.getString(KeyListFragment.INDEX_UID);
+            String userId = mCursor.getString(KeyListFragment.INDEX_USER_ID);
             if (userId != null && userId.length() > 0) {
                 return userId.charAt(0);
             } else {
@@ -590,8 +563,9 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             long[] ids = new long[mSelection.size()];
             int i = 0;
             // get master key ids
-            for (int pos : mSelection.keySet())
+            for (int pos : mSelection.keySet()) {
                 ids[i++] = mAdapter.getMasterKeyId(pos);
+            }
             return ids;
         }
 
@@ -613,11 +587,11 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             /**
              * Change color for multi-selection
              */
-            // default color
             if (mSelection.get(position) != null) {
-                // this is a selected position, change color!
+                // selected position color
                 v.setBackgroundColor(parent.getResources().getColor(R.color.emphasis));
             } else {
+                // default color
                 v.setBackgroundColor(Color.TRANSPARENT);
             }
 
