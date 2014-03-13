@@ -25,42 +25,42 @@ import org.thialfihar.android.apg.Constants;
 public class KeychainContract {
 
     interface KeyRingsColumns {
-        String MASTER_KEY_ID = "c_master_key_id"; // not a database id
-        String TYPE = "c_type"; // see KeyTypes
-        String KEY_RING_DATA = "c_key_ring_data"; // PGPPublicKeyRing / PGPSecretKeyRing blob
+        String MASTER_KEY_ID = "master_key_id"; // not a database id
+        String TYPE = "type"; // see KeyTypes
+        String KEY_RING_DATA = "key_ring_data"; // PGPPublicKeyRing / PGPSecretKeyRing blob
     }
 
     interface KeysColumns {
-        String KEY_ID = "c_key_id"; // not a database id
-        String TYPE = "c_type"; // see KeyTypes
-        String IS_MASTER_KEY = "c_is_master_key";
-        String ALGORITHM = "c_algorithm";
-        String KEY_SIZE = "c_key_size";
-        String CAN_CERTIFY = "c_can_certify";
-        String CAN_SIGN = "c_can_sign";
-        String CAN_ENCRYPT = "c_can_encrypt";
-        String IS_REVOKED = "c_is_revoked";
-        String CREATION = "c_creation";
-        String EXPIRY = "c_expiry";
-        String KEY_RING_ROW_ID = "c_key_ring_row_id"; // foreign key to key_rings._ID
-        String KEY_DATA = "c_key_data"; // PGPPublicKey/PGPSecretKey blob
-        String RANK = "c_rank";
-        String FINGERPRINT = "c_fingerprint";
+        String KEY_ID = "key_id"; // not a database id
+        String TYPE = "type"; // see KeyTypes
+        String IS_MASTER_KEY = "is_master_key";
+        String ALGORITHM = "algorithm";
+        String KEY_SIZE = "key_size";
+        String CAN_CERTIFY = "can_certify";
+        String CAN_SIGN = "can_sign";
+        String CAN_ENCRYPT = "can_encrypt";
+        String IS_REVOKED = "is_revoked";
+        String CREATION = "creation";
+        String EXPIRY = "expiry";
+        String KEY_RING_ROW_ID = "key_ring_row_id"; // foreign key to key_rings._ID
+        String KEY_DATA = "key_data"; // PGPPublicKey/PGPSecretKey blob
+        String RANK = "rank";
+        String FINGERPRINT = "fingerprint";
     }
 
     interface UserIdsColumns {
-        String KEY_RING_ROW_ID = "c_key_ring_row_id"; // foreign key to key_rings._ID
-        String USER_ID = "c_user_id"; // not a database id
-        String RANK = "c_rank";
+        String KEY_RING_ROW_ID = "key_ring_row_id"; // foreign key to key_rings._ID
+        String USER_ID = "user_id"; // not a database id
+        String RANK = "rank";
     }
 
     interface ApiAppsColumns {
-        String PACKAGE_NAME = "c_package_name";
-        String PACKAGE_SIGNATURE = "c_package_signature";
-        String KEY_ID = "c_key_id"; // not a database id
-        String ENCRYPTION_ALGORITHM = "c_encryption_algorithm";
-        String HASH_ALORITHM = "c_hash_algorithm";
-        String COMPRESSION = "c_compression";
+        String PACKAGE_NAME = "package_name";
+        String PACKAGE_SIGNATURE = "package_signature";
+        String KEY_ID = "key_id"; // not a database id
+        String ENCRYPTION_ALGORITHM = "encryption_algorithm";
+        String HASH_ALORITHM = "hash_algorithm";
+        String COMPRESSION = "compression";
     }
 
     public static final class KeyTypes {
