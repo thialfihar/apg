@@ -29,7 +29,6 @@ import android.support.v4.content.Loader;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -301,19 +300,43 @@ public class ViewKeyMainFragment extends Fragment  implements
 
         try {
             for (int i = 0; i < fingerprint.length(); i += 5) {
-                String fourChars = fingerprint.substring(i, Math.min(i + 4, fingerprint.length()));
+                int spanEnd = Math.min(i + 4, fingerprint.length());
+                String fourChars = fingerprint.substring(i, spanEnd);
+
                 int raw = Integer.parseInt(fourChars, 16);
                 byte[] bytes = {(byte) ((raw >> 8) & 0xff - 128), (byte) (raw & 0xff - 128)};
                 int[] color = Utils.getRgbForData(bytes);
-                if (color[0] < 100 && color[1] < 100 && color[2] < 100) {
-                    sb.setSpan(new BackgroundColorSpan(Color.WHITE),
-                                i, Math.min(i + 4, fingerprint.length()),
-                                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                int r = color[0];
+                int g = color[1];
+                int b = color[2];
+
+                // we cannot change black by multiplication, so adjust it to an almost-black grey,
+                // which will then be brightened to the minimal brightness level
+                if (r == 0 && g == 0 && b == 0) {
+                    r = 1;
+                    g = 1;
+                    b = 1;
                 }
-                sb.setSpan(
-                    new ForegroundColorSpan(Color.rgb(color[0], color[1], color[2])),
-                    i, Math.min(i + 4, fingerprint.length()),
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+                // Convert rgb to brightness
+                double brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+                if (brightness < 80) {
+                    double factor = 80.0 / brightness;
+                    r = Math.min(255, (int) (r * factor));
+                    g = Math.min(255, (int) (g * factor));
+                    b = Math.min(255, (int) (b * factor));
+                }
+
+                if (brightness > 180) {
+                    double factor = 180.0 / brightness;
+                    r = (int) (r * factor);
+                    g = (int) (g * factor);
+                    b = (int) (b * factor);
+                }
+
+                sb.setSpan(new ForegroundColorSpan(Color.rgb(r, g, b)),
+                            i, spanEnd, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
         } catch (Exception e) {
             Log.e(Constants.TAG, "Colorization failed", e);
