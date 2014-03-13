@@ -81,7 +81,7 @@ public class HkpKeyServer extends KeyServer {
     }
 
     private String mHost;
-    private short mPort = 11371;
+    private short mPort;
 
     // example:
     // pub 2048R/<a href="/pks/lookup?op=get&search=0x887DF4BE9F5C9090">9F5C9090</a> 2009-08-17 <a
@@ -94,9 +94,25 @@ public class HkpKeyServer extends KeyServer {
     public static final Pattern USER_ID_LINE = Pattern.compile("^   +(.+)$", Pattern.MULTILINE
             | Pattern.CASE_INSENSITIVE);
 
-    public HkpKeyServer(String host) {
-        mHost = host;
-    }
+	private static final short PORT_DEFAULT = 11371;
+
+	/**
+	 * @param hostAndPort may be just "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then it will
+	 *                connect using {@link #PORT_DEFAULT}. However, port may be specified after colon
+	 *                ("<code>hostname:port</code>", eg. "<code>p80.pool.sks-keyservers.net:80</code>").
+	 */
+	public HkpKeyServer(String hostAndPort) {
+		String host = hostAndPort;
+		short port = PORT_DEFAULT;
+		final int colonPosition = hostAndPort.lastIndexOf(':');
+		if (colonPosition > 0) {
+			host = hostAndPort.substring(0, colonPosition);
+			final String portStr = hostAndPort.substring(colonPosition + 1);
+			port = Short.decode(portStr);
+		}
+		mHost = host;
+		mPort = port;
+	}
 
     public HkpKeyServer(String host, short port) {
         mHost = host;
@@ -225,7 +241,7 @@ public class HkpKeyServer extends KeyServer {
         HttpClient client = new DefaultHttpClient();
         try {
             HttpGet get = new HttpGet("http://" + mHost + ":" + mPort
-                    + "/pks/lookup?op=get&search=" + PgpKeyHelper.convertKeyIdToHex(keyId));
+                    + "/pks/lookup?op=get&search=0x" + PgpKeyHelper.convertKeyIdToHex(keyId));
 
             HttpResponse response = client.execute(get);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
