@@ -600,8 +600,6 @@ public class EditKeyActivity extends ActionBarActivity {
                 userId = editor.getValue();
             } catch (UserIdEditor.NoNameException e) {
                 throw new PgpGeneralException(this.getString(R.string.error_user_id_needs_a_name));
-            } catch (UserIdEditor.InvalidEmailException e) {
-                throw new PgpGeneralException(e.getMessage());
             }
 
             if (userId.equals("")) {
