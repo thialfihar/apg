@@ -634,13 +634,10 @@ public class KeychainProvider extends ContentProvider {
         // Tell the cursor what uri to watch, so it knows when its source data changes
         c.setNotificationUri(getContext().getContentResolver(), uri);
 
-        if (Constants.DEBUG) {
-            Log.d(Constants.TAG,
-                    "Query: "
-                            + qb.buildQuery(projection, selection, selectionArgs, null, null,
-                            orderBy, null));
-            Log.d(Constants.TAG, "Cursor: " + DatabaseUtils.dumpCursorToString(c));
-        }
+        Log.d(Constants.TAG,
+                "Query: " + qb.buildQuery(projection, selection, selectionArgs, null, null,
+                        orderBy, null));
+        Log.d(Constants.TAG, "Cursor: " + DatabaseUtils.dumpCursorToString(c));
 
         return c;
     }
