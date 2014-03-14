@@ -113,7 +113,7 @@ public class ImportKeysListLoader
                         PGPKeyRing newKeyring = (PGPKeyRing) obj;
                         addToData(newKeyring);
                     } else {
-                        Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!");
+                        Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!", new Exception());
                     }
                 }
             }

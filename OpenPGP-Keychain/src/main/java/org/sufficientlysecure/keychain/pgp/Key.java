@@ -216,6 +216,14 @@ public class Key implements Serializable {
     }
 
     public boolean isSigningKey() {
+        if (isPublic()) {
+            return false;
+        }
+
+        if (mSecretKey.isPrivateKeyEmpty()) {
+            return false;
+        }
+
         if (mPublicKey.getVersion() <= 3) {
             return true;
         }

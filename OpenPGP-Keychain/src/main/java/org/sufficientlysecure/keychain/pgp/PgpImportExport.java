@@ -104,12 +104,15 @@ public class PgpImportExport {
         int position = 0;
         try {
             for (ImportKeysListEntry entry : entries) {
-                KeyRing obj = KeyRing.decode(entry.getBytes());
+                KeyRing keyRing = KeyRing.decode(entry.getBytes());
 
-                if (obj.isPublic()) {
-                    PGPKeyRing keyRing = obj.getPublicKeyRing();
-
-                    int status = storeKeyRingInCache(keyRing);
+                if (keyRing != null) {
+                    int status;
+                    if (keyRing.isPublic()) {
+                        status = storeKeyRingInCache(keyRing.getPublicKeyRing());
+                    } else {
+                        status = storeKeyRingInCache(keyRing.getSecretKeyRing());
+                    }
 
                     if (status == Id.return_value.error) {
                         throw new PgpGeneralException(
@@ -125,7 +128,7 @@ public class PgpImportExport {
                         ++badKeys;
                     }
                 } else {
-                    Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!");
+                    Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!", new Exception());
                 }
 
                 position++;
