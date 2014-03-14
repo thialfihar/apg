@@ -65,6 +65,7 @@ import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyTypes;
 import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -200,13 +201,24 @@ public class KeyListFragment extends Fragment
                             break;
                         }
                         case R.id.menu_key_list_multi_export: {
-                            // todo: public/secret needs to be handled differently here
                             ids = mStickyList.getWrappedList().getCheckedItemIds();
+                            long[] masterKeyIds = new long[2 * ids.length];
+                            ArrayList<Long> allPubRowIds =
+                                    ProviderHelper.getPublicKeyRingsRowIds(getActivity());
+                            for (int i = 0; i < ids.length; i++) {
+                                if (allPubRowIds.contains(ids[i])) {
+                                    masterKeyIds[i] =
+                                        ProviderHelper.getPublicMasterKeyId(getActivity(), ids[i]);
+                                } else {
+                                    masterKeyIds[i] =
+                                        ProviderHelper.getSecretMasterKeyId(getActivity(), ids[i]);
+                                }
+                            }
                             ExportHelper mExportHelper = new ExportHelper((ActionBarActivity) getActivity());
                             mExportHelper
-                                    .showExportKeysDialog(ids,
-                                            Id.type.public_key,
-                                            Constants.Path.APP_DIR_FILE_PUB);
+                                    .showExportKeysDialog(masterKeyIds, Id.type.public_key,
+                                            Constants.Path.APP_DIR_FILE_PUB,
+                                            getString(R.string.also_export_secret_keys));
                             break;
                         }
                         case R.id.menu_key_list_multi_select_all: {

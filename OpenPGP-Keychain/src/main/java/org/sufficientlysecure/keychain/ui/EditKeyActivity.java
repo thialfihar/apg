@@ -322,28 +322,30 @@ public class EditKeyActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_key_edit_cancel:
-            cancelClicked();
-            return true;
-        case R.id.menu_key_edit_export_file:
-            long[] ids = new long[] {Long.valueOf(mDataUri.getLastPathSegment())};
-            mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC);
-            return true;
-        case R.id.menu_key_edit_delete: {
-            // Message is received after key is deleted
-            Handler returnHandler = new Handler() {
-                @Override
-                public void handleMessage(Message message) {
-                    if (message.what == DeleteKeyDialogFragment.MESSAGE_OKAY) {
-                        setResult(RESULT_CANCELED);
-                        finish();
+            case R.id.menu_key_edit_cancel:
+                cancelClicked();
+                return true;
+            case R.id.menu_key_edit_export_file:
+                long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
+                long[] ids = new long[] {masterKeyId};
+                mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC,
+                                                            null);
+                return true;
+            case R.id.menu_key_edit_delete: {
+                // Message is received after key is deleted
+                Handler returnHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message message) {
+                        if (message.what == DeleteKeyDialogFragment.MESSAGE_OKAY) {
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
                     }
-                }
-            };
+                };
 
-            mExportHelper.deleteKey(mDataUri, Id.type.secret_key, returnHandler);
-            return true;
-        }
+                mExportHelper.deleteKey(mDataUri, Id.type.secret_key, returnHandler);
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
