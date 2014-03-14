@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.util.ArrayList;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.ui.adapter.TabsAdapter;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 
 import android.content.Context;
 import android.content.Intent;

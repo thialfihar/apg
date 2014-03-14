@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.service;
+package org.thialfihar.android.apg.service;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -36,27 +36,27 @@ import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPUtil;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.FileHelper;
-import org.sufficientlysecure.keychain.helper.OtherHelper;
-import org.sufficientlysecure.keychain.helper.Preferences;
-import org.sufficientlysecure.keychain.pgp.PgpConversionHelper;
-import org.sufficientlysecure.keychain.pgp.PgpDecryptVerify;
-import org.sufficientlysecure.keychain.pgp.PgpDecryptVerifyResult;
-import org.sufficientlysecure.keychain.pgp.PgpHelper;
-import org.sufficientlysecure.keychain.pgp.PgpImportExport;
-import org.sufficientlysecure.keychain.pgp.PgpKeyOperation;
-import org.sufficientlysecure.keychain.pgp.PgpSignEncrypt;
-import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
-import org.sufficientlysecure.keychain.provider.KeychainContract.DataStream;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
-import org.sufficientlysecure.keychain.util.HkpKeyServer;
-import org.sufficientlysecure.keychain.util.InputData;
-import org.sufficientlysecure.keychain.util.Log;
-import org.sufficientlysecure.keychain.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.FileHelper;
+import org.thialfihar.android.apg.helper.OtherHelper;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
+import org.thialfihar.android.apg.pgp.PgpHelper;
+import org.thialfihar.android.apg.pgp.PgpImportExport;
+import org.thialfihar.android.apg.pgp.PgpKeyOperation;
+import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import android.app.IntentService;
 import android.content.Context;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui.widget;
+package org.thialfihar.android.apg.ui.widget;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 /**
  * Copied from StickyListHeaders lib example
- * 
+ *
  * @author Eric Frohnhoefer
  */
 public class UnderlineTextView extends TextView {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -23,7 +23,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 /**
  * IntentIntegrator for the V4 Android compatibility package.
- * 
+ *
  * @author Lachezar Dobrev
  */
 public final class IntentIntegratorSupportV4 extends IntentIntegrator {

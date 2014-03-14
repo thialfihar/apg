@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.util.Date;
 
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
-import org.sufficientlysecure.keychain.provider.KeychainContract.Keys;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
-import org.sufficientlysecure.keychain.provider.KeychainDatabase;
-import org.sufficientlysecure.keychain.provider.KeychainDatabase.Tables;
-import org.sufficientlysecure.keychain.ui.adapter.SelectKeyCursorAdapter;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.Keys;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
+import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,9 +46,9 @@ public class SelectSecretKeyFragment extends ListFragment implements
     private SelectSecretKeyActivity mActivity;
     private SelectKeyCursorAdapter mAdapter;
     private ListView mListView;
-    
+
     private boolean mFilterCertify;
-    
+
     private static final String ARG_FILTER_CERTIFY = "filter_certify";
 
     /**

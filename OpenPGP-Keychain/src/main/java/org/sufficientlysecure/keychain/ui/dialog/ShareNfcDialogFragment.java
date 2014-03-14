@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.dialog;
+package org.thialfihar.android.apg.ui.dialog;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;

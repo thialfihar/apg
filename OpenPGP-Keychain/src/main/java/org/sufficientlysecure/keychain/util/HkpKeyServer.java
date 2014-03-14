@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,9 +47,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.sufficientlysecure.keychain.pgp.PgpHelper;
-import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.pgp.PgpHelper;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 
 import android.text.Html;
 

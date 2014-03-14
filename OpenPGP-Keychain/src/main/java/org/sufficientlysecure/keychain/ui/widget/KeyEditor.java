@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui.widget;
+package org.thialfihar.android.apg.ui.widget;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -25,10 +25,10 @@ import java.util.Vector;
 
 import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPSecretKey;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
-import org.sufficientlysecure.keychain.util.Choice;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.util.Choice;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -116,7 +116,7 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
                     date = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
                 }
                 /*
-                 * Using custom DatePickerDialog which overrides the setTitle because 
+                 * Using custom DatePickerDialog which overrides the setTitle because
                  * the DatePickerDialog title is buggy (unix warparound bug).
                  * See: https://code.google.com/p/android/issues/detail?id=49066
                  */

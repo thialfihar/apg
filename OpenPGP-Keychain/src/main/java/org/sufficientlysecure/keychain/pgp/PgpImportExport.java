@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -36,20 +36,20 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
 import org.spongycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.service.KeychainIntentService;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
-import org.sufficientlysecure.keychain.util.HkpKeyServer;
-import org.sufficientlysecure.keychain.util.InputData;
-import org.sufficientlysecure.keychain.util.IterableIterator;
-import org.sufficientlysecure.keychain.util.KeyServer.AddKeyException;
-import org.sufficientlysecure.keychain.util.Log;
-import org.sufficientlysecure.keychain.util.PositionAwareInputStream;
-import org.sufficientlysecure.keychain.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.KeyServer.AddKeyException;
+import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.PositionAwareInputStream;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import android.content.Context;
 import android.os.Bundle;

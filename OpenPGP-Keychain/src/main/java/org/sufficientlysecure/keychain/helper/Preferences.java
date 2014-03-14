@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 Dominik Schürmann <dominik@dominikschuermann.de>
  * Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.helper;
+package org.thialfihar.android.apg.helper;
 
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
 
 import android.content.Context;
 import android.content.SharedPreferences;

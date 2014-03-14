@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.service.remote.RegisteredAppsListActivity;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
+import org.thialfihar.android.apg.util.Log;
 
 import android.app.Activity;
 import android.content.Context;

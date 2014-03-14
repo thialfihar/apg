@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.compatibility;
+package org.thialfihar.android.apg.compatibility;
 
 import java.lang.reflect.Method;
 
 import android.content.Context;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
 
 public class ClipboardReflection {
 
@@ -30,7 +30,7 @@ public class ClipboardReflection {
 
     /**
      * Wrapper around ClipboardManager based on Android version using Reflection API
-     * 
+     *
      * @param context
      * @param text
      */
@@ -57,7 +57,7 @@ public class ClipboardReflection {
 
     /**
      * Wrapper around ClipboardManager based on Android version using Reflection API
-     * 
+     *
      * @param context
      * @param text
      */

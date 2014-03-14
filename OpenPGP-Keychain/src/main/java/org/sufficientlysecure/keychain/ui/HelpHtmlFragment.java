@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -52,7 +52,7 @@ public class HelpHtmlFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mActivity = getActivity();
-        
+
         htmlFile = getArguments().getInt(ARG_HTML_FILE);
 
         ScrollView scroller = new ScrollView(mActivity);

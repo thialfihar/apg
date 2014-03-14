@@ -22,7 +22,7 @@
 
         <fragment
             android:id="@+id/sign_key_select_key_fragment"
-            android:name="org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment"
+            android:name="org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"

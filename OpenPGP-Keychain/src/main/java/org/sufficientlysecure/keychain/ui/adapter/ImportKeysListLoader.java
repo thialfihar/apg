@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.adapter;
+package org.thialfihar.android.apg.ui.adapter;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -25,10 +25,10 @@ import java.util.List;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPUtil;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.InputData;
-import org.sufficientlysecure.keychain.util.Log;
-import org.sufficientlysecure.keychain.util.PositionAwareInputStream;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.PositionAwareInputStream;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -87,7 +87,7 @@ public class ImportKeysListLoader extends AsyncTaskLoader<AsyncTaskResultWrapper
 
     /**
      * Reads all PGPKeyRing objects from input
-     * 
+     *
      * @param keyringBytes
      * @return
      */

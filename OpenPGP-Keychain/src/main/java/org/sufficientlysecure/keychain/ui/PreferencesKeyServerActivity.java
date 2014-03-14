@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.util.Vector;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.ActionBarHelper;
-import org.sufficientlysecure.keychain.ui.widget.Editor;
-import org.sufficientlysecure.keychain.ui.widget.Editor.EditorListener;
-import org.sufficientlysecure.keychain.ui.widget.KeyServerEditor;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ActionBarHelper;
+import org.thialfihar.android.apg.ui.widget.Editor;
+import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
+import org.thialfihar.android.apg.ui.widget.KeyServerEditor;
 
 import android.content.Context;
 import android.content.Intent;

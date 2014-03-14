@@ -15,19 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.provider.KeychainContract;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.ui.adapter.KeyListPublicAdapter;
-import org.sufficientlysecure.keychain.ui.dialog.DeleteKeyDialogFragment;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.ui.adapter.KeyListPublicAdapter;
+import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 
 import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
@@ -291,7 +291,7 @@ public class KeyListPublicFragment extends Fragment implements SearchView.OnQuer
         viewIntent.setData(KeychainContract.KeyRings.buildPublicKeyRingsUri(Long.toString(id)));
         startActivity(viewIntent);
     }
-    
+
     @TargetApi(11)
     public void encrypt(ActionMode mode, long[] keyRingRowIds) {
         // get master key ids from row ids

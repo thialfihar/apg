@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain;
+package org.thialfihar.android.apg;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
@@ -26,7 +26,7 @@ public final class Constants {
 
     public static final String TAG = "Keychain";
 
-    public static final String PACKAGE_NAME = "org.sufficientlysecure.keychain";
+    public static final String PACKAGE_NAME = "org.thialfihar.android.apg";
 
     // as defined in http://tools.ietf.org/html/rfc3156, section 7
     public static final String NFC_MIME = "application/pgp-keys";

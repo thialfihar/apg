@@ -15,18 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.service.remote;
+package org.thialfihar.android.apg.service.remote;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.spongycastle.util.encoders.Hex;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment;
-import org.sufficientlysecure.keychain.ui.adapter.KeyValueSpinnerAdapter;
-import org.sufficientlysecure.keychain.util.AlgorithmNames;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
+import org.thialfihar.android.apg.ui.adapter.KeyValueSpinnerAdapter;
+import org.thialfihar.android.apg.util.AlgorithmNames;
+import org.thialfihar.android.apg.util.Log;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;

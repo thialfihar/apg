@@ -1,4 +1,4 @@
-package org.sufficientlysecure.keychain.ui.adapter;
+package org.thialfihar.android.apg.ui.adapter;
 
 import android.content.Context;
 import android.os.Bundle;

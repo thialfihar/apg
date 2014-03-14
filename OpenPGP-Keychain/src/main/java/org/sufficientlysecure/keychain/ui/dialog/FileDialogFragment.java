@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.dialog;
+package org.thialfihar.android.apg.ui.dialog;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.FileHelper;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.FileHelper;
+import org.thialfihar.android.apg.util.Log;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -202,7 +202,7 @@ public class FileDialogFragment extends DialogFragment {
 
     /**
      * Send message back to handler which is initialized in a activity
-     * 
+     *
      * @param what
      *            Message integer you want to send
      */

@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.dialog;
+package org.thialfihar.android.apg.ui.dialog;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.util.Log;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -55,7 +55,7 @@ public class SetPassphraseDialogFragment extends DialogFragment implements OnEdi
 
     /**
      * Creates new instance of this dialog fragment
-     * 
+     *
      * @param title
      *            title of dialog
      * @param messenger
@@ -96,7 +96,7 @@ public class SetPassphraseDialogFragment extends DialogFragment implements OnEdi
         mPassphraseAgainEditText = (EditText) view.findViewById(R.id.passphrase_passphrase_again);
 
         alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            
+
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dismiss();
@@ -130,7 +130,7 @@ public class SetPassphraseDialogFragment extends DialogFragment implements OnEdi
         });
 
         alert.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            
+
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dismiss();
@@ -168,7 +168,7 @@ public class SetPassphraseDialogFragment extends DialogFragment implements OnEdi
 
     /**
      * Send message back to handler which is initialized in a activity
-     * 
+     *
      * @param what
      *            Message integer you want to send
      */

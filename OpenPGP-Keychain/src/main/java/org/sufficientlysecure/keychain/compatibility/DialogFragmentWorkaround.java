@@ -15,19 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.compatibility;
+package org.thialfihar.android.apg.compatibility;
 
 import android.os.Build;
 import android.os.Handler;
 
 /**
  * Bug on Android >= 4.2
- * 
+ *
  * http://code.google.com/p/android/issues/detail?id=41901
- * 
+ *
  * DialogFragment disappears on pressing home and comming back. This also happens especially in
  * FileDialogFragment after launching a file manager and coming back.
- * 
+ *
  * Usage: <code>
  * DialogFragmentWorkaround.INTERFACE.runnableRunDelayed(new Runnable() {
  *          public void run() {

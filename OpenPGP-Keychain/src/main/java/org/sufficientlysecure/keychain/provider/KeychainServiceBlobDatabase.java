@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.provider;
+package org.thialfihar.android.apg.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import org.sufficientlysecure.keychain.provider.KeychainServiceBlobContract.BlobsColumns;
+import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.BlobsColumns;
 
 public class KeychainServiceBlobDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "apg_blob.db";

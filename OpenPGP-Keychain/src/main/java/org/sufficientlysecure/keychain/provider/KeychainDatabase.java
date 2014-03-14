@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.provider;
+package org.thialfihar.android.apg.provider;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.provider.KeychainContract.ApiAppsColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingsColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeysColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIdsColumns;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiAppsColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRingsColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.KeysColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIdsColumns;
+import org.thialfihar.android.apg.util.Log;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

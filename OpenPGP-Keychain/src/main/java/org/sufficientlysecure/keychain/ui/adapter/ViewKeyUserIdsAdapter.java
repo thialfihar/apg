@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.adapter;
+package org.thialfihar.android.apg.ui.adapter;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -51,7 +51,7 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter {
     /**
      * Get column indexes for performance reasons just once in constructor and swapCursor. For a
      * performance comparison see http://stackoverflow.com/a/17999582
-     * 
+     *
      * @param cursor
      */
     private void initIndex(Cursor cursor) {

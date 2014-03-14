@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import java.util.List;
 
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 
 public abstract class KeyServer {
     static public class QueryException extends Exception {

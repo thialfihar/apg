@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.helper;
+package org.thialfihar.android.apg.helper;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.util.Log;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -35,7 +35,7 @@ public class FileHelper {
 
     /**
      * Checks if external storage is mounted if file is located on external storage
-     * 
+     *
      * @param file
      * @return true if storage is mounted
      */
@@ -52,7 +52,7 @@ public class FileHelper {
     /**
      * Opens the preferred installed file manager on Android and shows a toast if no manager is
      * installed.
-     * 
+     *
      * @param activity
      * @param filename
      *            default selected file, not supported by all file managers
@@ -97,14 +97,14 @@ public class FileHelper {
 
     /**
      * Get a file path from a Uri.
-     * 
+     *
      * from https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/
      * afilechooser/utils/FileUtils.java
-     * 
+     *
      * @param context
      * @param uri
      * @return
-     * 
+     *
      * @author paulburke
      */
     public static String getPath(Context context, Uri uri) {

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -24,17 +24,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.Preferences;
-import org.sufficientlysecure.keychain.ui.adapter.AsyncTaskResultWrapper;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysAdapter;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListLoader;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListServerLoader;
-import org.sufficientlysecure.keychain.util.InputData;
-import org.sufficientlysecure.keychain.util.KeyServer;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.ui.adapter.AsyncTaskResultWrapper;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysAdapter;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListLoader;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListServerLoader;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.KeyServer;
+import org.thialfihar.android.apg.util.Log;
 
 import android.app.Activity;
 import android.net.Uri;

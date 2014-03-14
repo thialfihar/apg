@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.widget;
+package org.thialfihar.android.apg.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -24,7 +24,7 @@ import android.widget.ListView;
 /**
  * Automatically calculate height of ListView based on contained items. This enables to put this
  * ListView into a ScrollView without messing up.
- * 
+ *
  * from
  * http://stackoverflow.com/questions/2419246/how-do-i-create-a-listview-thats-not-in-a-scrollview-
  * or-has-the-scrollview-dis

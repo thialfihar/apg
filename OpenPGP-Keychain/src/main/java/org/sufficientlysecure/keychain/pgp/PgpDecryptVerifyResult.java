@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -23,26 +23,26 @@ import java.util.Vector;
 
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.ActionBarHelper;
-import org.sufficientlysecure.keychain.helper.ExportHelper;
-import org.sufficientlysecure.keychain.pgp.PgpConversionHelper;
-import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
-import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.service.KeychainIntentService;
-import org.sufficientlysecure.keychain.service.KeychainIntentServiceHandler;
-import org.sufficientlysecure.keychain.service.PassphraseCacheService;
-import org.sufficientlysecure.keychain.ui.dialog.DeleteKeyDialogFragment;
-import org.sufficientlysecure.keychain.ui.dialog.PassphraseDialogFragment;
-import org.sufficientlysecure.keychain.ui.dialog.SetPassphraseDialogFragment;
-import org.sufficientlysecure.keychain.ui.widget.KeyEditor;
-import org.sufficientlysecure.keychain.ui.widget.SectionView;
-import org.sufficientlysecure.keychain.ui.widget.UserIdEditor;
-import org.sufficientlysecure.keychain.util.IterableIterator;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ActionBarHelper;
+import org.thialfihar.android.apg.helper.ExportHelper;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
+import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
+import org.thialfihar.android.apg.ui.dialog.SetPassphraseDialogFragment;
+import org.thialfihar.android.apg.ui.widget.KeyEditor;
+import org.thialfihar.android.apg.ui.widget.SectionView;
+import org.thialfihar.android.apg.ui.widget.UserIdEditor;
+import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.Log;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -130,7 +130,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
     /**
      * Handle intent action to create new key
-     * 
+     *
      * @param intent
      */
     private void handleActionCreateKey(Intent intent) {
@@ -244,7 +244,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
     /**
      * Handle intent action to edit existing key
-     * 
+     *
      * @param intent
      */
     private void handleActionEditKey(Intent intent) {
@@ -585,7 +585,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
     /**
      * Returns user ids from the SectionView
-     * 
+     *
      * @param userIdsView
      * @return
      */
@@ -634,7 +634,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
     /**
      * Returns keys from the SectionView
-     * 
+     *
      * @param keysView
      * @return
      */
@@ -657,7 +657,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
     /**
      * Returns usage selections of keys from the SectionView
-     * 
+     *
      * @param keysView
      * @return
      */

@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.service;
+package org.thialfihar.android.apg.service;
 
-import org.sufficientlysecure.keychain.ui.dialog.ProgressDialogFragment;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
+import org.thialfihar.android.apg.R;
 
 import android.app.Activity;
 import android.content.DialogInterface;

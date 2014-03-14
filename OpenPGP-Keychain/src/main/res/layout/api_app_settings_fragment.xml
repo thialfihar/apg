@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/api_app_settings_select_key_fragment"
-        android:name="org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment"
+        android:name="org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/select_secret_key_layout_fragment" />

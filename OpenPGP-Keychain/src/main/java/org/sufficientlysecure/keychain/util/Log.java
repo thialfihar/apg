@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
-import org.sufficientlysecure.keychain.Constants;
+import org.thialfihar.android.apg.Constants;
 
 /**
  * Wraps Android Logging to enable or disable debug output using Constants
- * 
+ *
  */
 public final class Log {
 

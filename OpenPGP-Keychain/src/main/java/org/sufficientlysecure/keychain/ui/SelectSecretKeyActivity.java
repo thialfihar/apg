@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -90,7 +90,7 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
 
     /**
      * This is executed by SelectSecretKeyFragment after clicking on an item
-     * 
+     *
      * @param masterKeyId
      * @param userId
      */

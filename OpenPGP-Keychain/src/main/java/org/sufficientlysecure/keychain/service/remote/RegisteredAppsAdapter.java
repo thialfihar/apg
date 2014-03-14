@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.service.remote;
+package org.thialfihar.android.apg.service.remote;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.dialog;
+package org.thialfihar.android.apg.ui.dialog;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.service.KeychainIntentService;
-import org.sufficientlysecure.keychain.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -67,7 +67,7 @@ public class DeleteFileDialogFragment extends DialogFragment {
         alert.setMessage(this.getString(R.string.file_delete_confirmation, deleteFile));
 
         alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            
+
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 dismiss();

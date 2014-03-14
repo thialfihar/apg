@@ -1,4 +1,4 @@
-package org.sufficientlysecure.keychain.service.remote;
+package org.thialfihar.android.apg.service.remote;
 
 public class WrongPackageSignatureException extends Exception {
 

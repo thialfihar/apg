@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.provider;
+package org.thialfihar.android.apg.provider;
 
-import org.sufficientlysecure.keychain.Constants;
+import org.thialfihar.android.apg.Constants;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

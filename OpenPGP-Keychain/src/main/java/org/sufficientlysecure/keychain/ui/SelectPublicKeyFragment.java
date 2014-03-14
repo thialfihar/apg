@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import java.util.Date;
 import java.util.Vector;
 
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.compatibility.ListFragmentWorkaround;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
-import org.sufficientlysecure.keychain.provider.KeychainContract.Keys;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
-import org.sufficientlysecure.keychain.provider.KeychainDatabase;
-import org.sufficientlysecure.keychain.provider.KeychainDatabase.Tables;
-import org.sufficientlysecure.keychain.ui.adapter.SelectKeyCursorAdapter;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.compatibility.ListFragmentWorkaround;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.Keys;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
+import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -106,7 +106,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
 
     /**
      * Selects items based on master key ids in list view
-     * 
+     *
      * @param masterKeyIds
      */
     private void preselectMasterKeyIds(long[] masterKeyIds) {
@@ -125,7 +125,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
 
     /**
      * Returns all selected master key ids
-     * 
+     *
      * @return
      */
     public long[] getSelectedMasterKeyIds() {
@@ -149,7 +149,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
 
     /**
      * Returns all selected user ids
-     * 
+     *
      * @return
      */
     public String[] getSelectedUserIds() {

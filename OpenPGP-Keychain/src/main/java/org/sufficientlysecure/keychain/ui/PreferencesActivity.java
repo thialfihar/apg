@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.Preferences;
-import org.sufficientlysecure.keychain.ui.widget.IntegerListPreference;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.ui.widget.IntegerListPreference;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -41,8 +41,8 @@ import java.util.List;
 @SuppressLint("NewApi")
 public class PreferencesActivity extends PreferenceActivity {
 
-    public final static String ACTION_PREFS_GEN = "org.sufficientlysecure.keychain.ui.PREFS_GEN";
-    public final static String ACTION_PREFS_ADV = "org.sufficientlysecure.keychain.ui.PREFS_ADV";
+    public final static String ACTION_PREFS_GEN = "org.thialfihar.android.apg.ui.PREFS_GEN";
+    public final static String ACTION_PREFS_ADV = "org.thialfihar.android.apg.ui.PREFS_ADV";
 
     private PreferenceScreen mKeyServerPreference = null;
     private static Preferences mPreferences;

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.service.remote;
+package org.thialfihar.android.apg.service.remote;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -29,17 +29,17 @@ import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.spongycastle.util.Arrays;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.pgp.PgpDecryptVerify;
-import org.sufficientlysecure.keychain.pgp.PgpDecryptVerifyResult;
-import org.sufficientlysecure.keychain.pgp.PgpSignEncrypt;
-import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
-import org.sufficientlysecure.keychain.provider.KeychainContract;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.service.PassphraseCacheService;
-import org.sufficientlysecure.keychain.util.InputData;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
+import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.Log;
 
 import java.io.InputStream;
 import java.io.OutputStream;

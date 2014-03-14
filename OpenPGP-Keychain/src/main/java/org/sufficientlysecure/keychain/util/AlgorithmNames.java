@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import java.util.HashMap;
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 

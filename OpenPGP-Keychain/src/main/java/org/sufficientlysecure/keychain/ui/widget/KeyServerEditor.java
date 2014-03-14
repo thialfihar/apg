@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.ui.widget;
+package org.thialfihar.android.apg.ui.widget;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 import android.content.Context;
 import android.util.AttributeSet;

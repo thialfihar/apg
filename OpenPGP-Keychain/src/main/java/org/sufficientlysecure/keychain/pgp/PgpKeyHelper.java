@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -32,11 +32,11 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureSubpacketVector;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.util.IterableIterator;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.Log;
 
 import android.content.Context;
 
@@ -443,7 +443,7 @@ public class PgpKeyHelper {
 
     /**
      * Converts fingerprint to hex with whitespaces after 4 characters
-     * 
+     *
      * @param fp
      * @return
      */
@@ -504,7 +504,7 @@ public class PgpKeyHelper {
 
     /**
      * TODO: documentation
-     * 
+     *
      * @param keyId
      * @return
      */
@@ -521,7 +521,7 @@ public class PgpKeyHelper {
 
     /**
      * Splits userId string into naming part, email part, and comment part
-     * 
+     *
      * @param userId
      * @return array with naming (0), email (1), comment (2)
      */

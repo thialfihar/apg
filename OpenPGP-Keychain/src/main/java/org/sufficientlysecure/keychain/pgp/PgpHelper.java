@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,14 +33,14 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.pgp.exception.NoAsymmetricEncryptionException;
-import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.util.Log;
-import org.sufficientlysecure.keychain.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.exception.NoAsymmetricEncryptionException;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -140,7 +140,7 @@ public class PgpHelper {
 
     /**
      * Generate a random filename
-     * 
+     *
      * @param length
      * @return
      */
@@ -170,7 +170,7 @@ public class PgpHelper {
     /**
      * Go once through stream to get length of stream. The length is later used to display progress
      * when encrypting/decrypting
-     * 
+     *
      * @param in
      * @return
      * @throws IOException
@@ -187,9 +187,9 @@ public class PgpHelper {
 
     /**
      * Deletes file securely by overwriting it with random data before deleting it.
-     * 
+     *
      * TODO: Does this really help on flash storage?
-     * 
+     *
      * @param context
      * @param progress
      * @param file

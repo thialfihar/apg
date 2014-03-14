@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.compatibility.ClipboardReflection;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

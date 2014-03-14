@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.dialog;
+package org.thialfihar.android.apg.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 public class BadImportKeyDialogFragment extends DialogFragment {
     private static final String ARG_BAD_IMPORT = "bad_import";

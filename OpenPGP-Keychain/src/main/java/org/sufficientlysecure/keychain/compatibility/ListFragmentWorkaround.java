@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.compatibility;
+package org.thialfihar.android.apg.compatibility;
 
 import android.support.v4.app.ListFragment;
 import android.view.View;

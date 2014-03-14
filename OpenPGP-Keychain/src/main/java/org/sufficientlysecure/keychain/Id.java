@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain;
+package org.thialfihar.android.apg;
 
 import org.spongycastle.bcpg.CompressionAlgorithmTags;
 
 /**
- * 
+ *
  * TODO:
- * 
+ *
  * - refactor ids, some are not needed and can be done with xml
- * 
+ *
  */
 public final class Id {
 

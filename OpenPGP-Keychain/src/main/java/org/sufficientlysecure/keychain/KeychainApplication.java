@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain;
+package org.thialfihar.android.apg;
 
 import java.io.File;
 import java.security.Provider;
 import java.security.Security;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
-import org.sufficientlysecure.keychain.util.Log;
-import org.sufficientlysecure.keychain.util.PRNGFixes;
+import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.PRNGFixes;
 
 import android.app.Application;
 import android.os.Environment;
@@ -40,14 +40,14 @@ public class KeychainApplication extends Application {
 
         /*
          * Sets Bouncy (Spongy) Castle as preferred security provider
-         * 
+         *
          * insertProviderAt() position starts from 1
          */
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
 
         /*
          * apply RNG fixes
-         * 
+         *
          * among other things, executes Security.insertProviderAt(new
          * LinuxPRNGSecureRandomProvider(), 1) for Android <= SDK 17
          */

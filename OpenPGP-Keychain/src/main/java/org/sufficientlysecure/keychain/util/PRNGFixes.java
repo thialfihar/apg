@@ -8,7 +8,7 @@
  * freely, as long as the origin is not misrepresented.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import android.os.Build;
 import android.os.Process;
@@ -31,23 +31,23 @@ import java.security.Security;
 
 /**
  * Fixes for the output of the default PRNG having low entropy.
- * 
+ *
  * The fixes need to be applied via {@link #apply()} before any use of Java Cryptography
  * Architecture primitives. A good place to invoke them is in the application's {@code onCreate}.
- * 
+ *
  * copied from http://android-developers.blogspot.de/2013/08/some-securerandom-thoughts.html
- * 
- * 
+ *
+ *
  * More information on these Android bugs:
  * http://blog.k3170makan.com/2013/08/more-details-on-android-jca-prng-flaw.html
  * Paper: "Randomly failed! Weaknesses in Java Pseudo Random Number Generators (PRNGs)"
- * 
- * 
+ *
+ *
  * Sep 15, 2013:
  * On some devices /dev/urandom is non-writable!
  * No need to seed /dev/urandom. urandom should have enough seeds from the OS and kernel.
  * Only OpenSSL seeds are broken. See http://emboss.github.io/blog/2013/08/21/openssl-prng-is-not-really-fork-safe
- * 
+ *
  * see also:
  * https://github.com/k9mail/k-9/commit/dda8f64276d4d29c43f86237cd77819c28f22f21
  * In addition to a couple of custom ROMs linking /dev/urandom to a non-writable

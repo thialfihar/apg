@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.helper;
+package org.thialfihar.android.apg.helper;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
 
 import android.os.Bundle;
 
@@ -31,7 +31,7 @@ public class OtherHelper {
 
     /**
      * Logs bundle content to debug for inspecting the content
-     * 
+     *
      * @param bundle
      * @param bundleName
      */

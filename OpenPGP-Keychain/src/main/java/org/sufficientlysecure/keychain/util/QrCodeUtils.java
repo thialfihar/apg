@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import java.util.Hashtable;
 
-import org.sufficientlysecure.keychain.Constants;
+import org.thialfihar.android.apg.Constants;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -37,7 +37,7 @@ public class QrCodeUtils {
 
     /**
      * Generate Bitmap with QR Code based on input.
-     * 
+     *
      * @param input
      * @param size
      * @return QR Code as Bitmap

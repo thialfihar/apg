@@ -1,4 +1,4 @@
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -35,8 +35,8 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.x509.X509V3CertificateGenerator;
 import org.spongycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.spongycastle.x509.extension.SubjectKeyIdentifierStructure;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
 
 public class PgpToX509 {
     public final static String DN_COMMON_PART_O = "OpenPGP to X.509 Bridge";
@@ -47,7 +47,7 @@ public class PgpToX509 {
      * extension is set up with: digital signature, non-repudiation, key-encipherment, key-agreement
      * and certificate-signing. The (non-critical) Netscape extension is set up with: SSL client and
      * S/MIME. A URI subjectAltName may also be set up.
-     * 
+     *
      * @param pubKey
      *            public key
      * @param privKey
@@ -70,7 +70,7 @@ public class PgpToX509 {
      * @throws NoSuchProviderException
      * @throws CertificateException
      * @throws Exception
-     * 
+     *
      * @author Bruno Harbulot
      */
     public static X509Certificate createSelfSignedCert(PublicKey pubKey, PrivateKey privKey,
@@ -171,7 +171,7 @@ public class PgpToX509 {
 
     /**
      * Creates a self-signed certificate from a PGP Secret Key.
-     * 
+     *
      * @param pgpSecKey
      *            PGP Secret Key (from which one can extract the public and private keys and other
      *            attributes).
@@ -187,7 +187,7 @@ public class PgpToX509 {
      * @throws NoSuchAlgorithmException
      * @throws SignatureException
      * @throws CertificateException
-     * 
+     *
      * @author Bruno Harbulot
      */
     public static X509Certificate createSelfSignedCert(PGPSecretKey pgpSecKey,
@@ -261,9 +261,9 @@ public class PgpToX509 {
      * This is a password callback handler that will fill in a password automatically. Useful to
      * configure passwords in advance, but should be used with caution depending on how much you
      * allow passwords to be stored within your application.
-     * 
+     *
      * @author Bruno Harbulot.
-     * 
+     *
      */
     public final static class PredefinedPasswordCallbackHandler implements CallbackHandler {
 

@@ -17,19 +17,19 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/section_defaults" >
-        <org.sufficientlysecure.keychain.ui.widget.IntegerListPreference
+        <org.thialfihar.android.apg.ui.widget.IntegerListPreference
             android:key="defaultEncryptionAlgorithm"
             android:persistent="false"
             android:title="@string/label_encryption_algorithm" />
-        <org.sufficientlysecure.keychain.ui.widget.IntegerListPreference
+        <org.thialfihar.android.apg.ui.widget.IntegerListPreference
             android:key="defaultHashAlgorithm"
             android:persistent="false"
             android:title="@string/label_hash_algorithm" />
-        <org.sufficientlysecure.keychain.ui.widget.IntegerListPreference
+        <org.thialfihar.android.apg.ui.widget.IntegerListPreference
             android:key="defaultMessageCompression"
             android:persistent="false"
             android:title="@string/label_message_compression" />
-        <org.sufficientlysecure.keychain.ui.widget.IntegerListPreference
+        <org.thialfihar.android.apg.ui.widget.IntegerListPreference
             android:key="defaultFileCompression"
             android:persistent="false"
             android:title="@string/label_file_compression" />
