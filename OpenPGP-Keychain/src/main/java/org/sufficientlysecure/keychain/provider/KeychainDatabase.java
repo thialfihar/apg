@@ -43,6 +43,12 @@ public class KeychainDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.w(Constants.TAG, "Creating database...");
 
+        db.execSQL("CREATE TABLE key_rings(" +
+            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "master_key_id INT64, " +
+            "type INTEGER, " +
+            "key_ring_data BLOB)");
+
         db.execSQL("CREATE TABLE keys(" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "key_ring_row_id INTEGER NOT NULL, " +
