@@ -407,7 +407,7 @@ public class KeychainProvider extends ContentProvider {
         qb.setTables(Tables.KEY_RINGS + " INNER JOIN " + Tables.KEYS + " ON " + "("
                 + Tables.KEY_RINGS + "." + BaseColumns._ID + " = " + Tables.KEYS + "."
                 + KeysColumns.KEY_RING_ROW_ID + " AND " + Tables.KEYS + "."
-                + KeysColumns.RANK + " = '0') " + " INNER JOIN " + Tables.USER_IDS + " ON "
+                + KeysColumns.IS_MASTER_KEY + " = '1') " + " INNER JOIN " + Tables.USER_IDS + " ON "
                 + "(" + Tables.KEY_RINGS + "." + BaseColumns._ID + " = " + Tables.USER_IDS + "."
                 + UserIdsColumns.KEY_RING_ROW_ID + " AND " + Tables.USER_IDS + "."
                 + UserIdsColumns.RANK + " = '0')");
