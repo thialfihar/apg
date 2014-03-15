@@ -19,20 +19,27 @@ package org.thialfihar.android.apg.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
@@ -42,23 +49,27 @@ import org.spongycastle.openpgp.PGPSignature;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.adapter.ViewKeyUserIdsAdapter;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
+import java.util.Date;
 import java.util.Iterator;
 
 /**
  * Signs the specified public key with the specified secret master key
  */
 public class CertifyKeyActivity extends ActionBarActivity implements
-        SelectSecretKeyLayoutFragment.SelectSecretKeyCallback {
+        SelectSecretKeyLayoutFragment.SelectSecretKeyCallback, LoaderManager.LoaderCallbacks<Cursor> {
     private BootstrapButton mSignButton;
     private CheckBox mUploadKeyCheckbox;
     private Spinner mSelectKeyserverSpinner;
@@ -68,6 +79,12 @@ public class CertifyKeyActivity extends ActionBarActivity implements
     private Uri mDataUri;
     private long mPubKeyId = 0;
     private long mMasterKeyId = 0;
+
+    private ListView mUserIds;
+    private ViewKeyUserIdsAdapter mUserIdsAdapter;
+
+    private static final int LOADER_ID_KEYRING = 0;
+    private static final int LOADER_ID_USER_IDS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,8 +149,17 @@ public class CertifyKeyActivity extends ActionBarActivity implements
             finish();
             return;
         }
+        Log.e(Constants.TAG, "uri: " + mDataUri);
 
         PGPPublicKeyRing signKey = (PGPPublicKeyRing) ProviderHelper.getPGPKeyRing(this, mDataUri);
+
+        mUserIds = (ListView) findViewById(R.id.user_ids);
+
+        mUserIdsAdapter = new ViewKeyUserIdsAdapter(this, null, 0, true);
+        mUserIds.setAdapter(mUserIdsAdapter);
+
+        getSupportLoaderManager().initLoader(LOADER_ID_KEYRING, null, this);
+        getSupportLoaderManager().initLoader(LOADER_ID_USER_IDS, null, this);
 
         if (signKey != null) {
             mPubKeyId = PgpKeyHelper.getMasterKey(signKey).getKeyID();
@@ -142,6 +168,76 @@ public class CertifyKeyActivity extends ActionBarActivity implements
             Log.e(Constants.TAG, "this shouldn't happen. KeyId == 0!");
             finish();
             return;
+        }
+    }
+
+    static final String[] KEYRING_PROJECTION =
+            new String[] {
+                    KeychainContract.KeyRings._ID,
+                    KeychainContract.KeyRings.MASTER_KEY_ID,
+                    KeychainContract.Keys.FINGERPRINT,
+                    KeychainContract.UserIds.USER_ID
+            };
+    static final int INDEX_MASTER_KEY_ID = 1;
+    static final int INDEX_FINGERPRINT = 2;
+    static final int INDEX_USER_ID = 3;
+
+    static final String[] USER_IDS_PROJECTION =
+            new String[] {
+                    KeychainContract.UserIds._ID,
+                    KeychainContract.UserIds.USER_ID,
+                    KeychainContract.UserIds.RANK
+            };
+    static final String USER_IDS_SORT_ORDER =
+            KeychainContract.UserIds.RANK + " ASC";
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch(id) {
+            case LOADER_ID_KEYRING:
+                return new CursorLoader(this, mDataUri, KEYRING_PROJECTION, null, null, null);
+            case LOADER_ID_USER_IDS: {
+                Uri baseUri = KeychainContract.UserIds.buildUserIdsUri(mDataUri);
+                return new CursorLoader(this, baseUri, USER_IDS_PROJECTION, null, null, USER_IDS_SORT_ORDER);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        switch(loader.getId()) {
+            case LOADER_ID_KEYRING:
+                // the first key here is our master key
+                if (data.moveToFirst()) {
+                    long keyId = data.getLong(INDEX_MASTER_KEY_ID);
+                    String keyIdStr = PgpKeyHelper.convertKeyIdToHex(keyId);
+                    ((TextView) findViewById(R.id.key_id)).setText(keyIdStr);
+
+                    String mainUserId = data.getString(INDEX_USER_ID);
+                    ((TextView) findViewById(R.id.main_user_id)).setText(mainUserId);
+
+                    byte[] fingerprintBlob = data.getBlob(INDEX_FINGERPRINT);
+                    if (fingerprintBlob == null) {
+                        // FALLBACK for old database entries
+                        fingerprintBlob = ProviderHelper.getFingerprint(this, mDataUri);
+                    }
+                    String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, true);
+                    ((TextView) findViewById(R.id.fingerprint)).setText(OtherHelper.colorizeFingerprint(fingerprint));
+                }
+                break;
+            case LOADER_ID_USER_IDS:
+                mUserIdsAdapter.swapCursor(data);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        switch(loader.getId()) {
+            case LOADER_ID_USER_IDS:
+                mUserIdsAdapter.swapCursor(null);
+                break;
         }
     }
 
@@ -226,6 +322,8 @@ public class CertifyKeyActivity extends ActionBarActivity implements
 
         data.putLong(ApgIntentService.CERTIFY_KEY_MASTER_KEY_ID, mMasterKeyId);
         data.putLong(ApgIntentService.CERTIFY_KEY_PUB_KEY_ID, mPubKeyId);
+        data.putStringArray(ApgIntentService.CERTIFY_KEY_UIDS,
+                (String[]) mUserIdsAdapter.getSelectedUserIds().toArray());
 
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
