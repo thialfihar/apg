@@ -485,16 +485,7 @@
     <string name="label_secret_key">Secret Key</string>
     <string name="secret_key_yes">available</string>
     <string name="secret_key_no">unavailable</string>
-    <string name="show_unknown_signatures">Show unknown signatures</string>
-    <string name="section_signer_id">Signer</string>
-    <string name="section_cert">Certificate Details</string>
-    <string name="sig_type_default">default</string>
-    <string name="sig_type_none">none</string>
-    <string name="sig_type_casual">casual</string>
-    <string name="sig_type_positive">positive</string>
-    <string name="label_user_id">User ID</string>
-    <string name="label_subkey_rank">Subkey Rank</string>
-    <string name="unknown_uid"><![CDATA[<unknown>]]></string>
-    <string name="empty_certs">No certificates for this key</string>
+    <string name="section_uids_to_sign">User IDs to sign</string>
+    <string name="progress_re_adding_certs">Reapplying certificates</string>
 
 </resources>
