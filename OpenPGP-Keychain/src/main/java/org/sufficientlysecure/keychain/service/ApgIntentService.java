@@ -828,7 +828,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 /* Input */
                 long masterKeyId = data.getLong(CERTIFY_KEY_MASTER_KEY_ID);
                 long pubKeyId = data.getLong(CERTIFY_KEY_PUB_KEY_ID);
-                // String[] userIds = data.getStringArray(CERTIFY_KEY_PUB_KEY_ID);
+                ArrayList<String> userIds = data.getStringArrayList(CERTIFY_KEY_UIDS);
 
                 /* Operation */
                 String signaturePassphrase = PassphraseCacheService.getCachedPassphrase(this,
@@ -836,7 +836,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 PgpKeyOperation keyOperation = new PgpKeyOperation(this, this);
                 PGPPublicKeyRing signedPubKeyRing = keyOperation.certifyKey(masterKeyId, pubKeyId,
-                        signaturePassphrase);
+                        userIds, signaturePassphrase);
 
                 // store the signed key in our local cache
                 PgpImportExport pgpImportExport = new PgpImportExport(this, null);

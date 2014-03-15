@@ -44,7 +44,6 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.openpgp.PGPPublicKeyRing;
-import org.spongycastle.openpgp.PGPSignature;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
@@ -61,7 +60,7 @@ import org.thialfihar.android.apg.ui.adapter.ViewKeyUserIdsAdapter;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 
 /**
  * Signs the specified public key with the specified secret master key
@@ -275,6 +274,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
             // if we have already signed this key, dont bother doing it again
             boolean alreadySigned = false;
 
+            /* todo: reconsider this at a later point when certs are in the db
             @SuppressWarnings("unchecked")
             Iterator<PGPSignature> itr = pubring.getPublicKey(mPubKeyId).getSignatures();
             while (itr.hasNext()) {
@@ -284,6 +284,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                     break;
                 }
             }
+            */
 
             if (!alreadySigned) {
                 /*
@@ -311,6 +312,15 @@ public class CertifyKeyActivity extends ActionBarActivity implements
      * kicks off the actual signing process on a background thread
      */
     private void startSigning() {
+
+        // Bail out if there is not at least one user id selected
+        ArrayList<String> userIds = mUserIdsAdapter.getSelectedUserIds();
+        if(userIds.isEmpty()) {
+            Toast.makeText(CertifyKeyActivity.this, "No User IDs to sign selected!",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Send all information needed to service to sign key in other thread
         Intent intent = new Intent(this, ApgIntentService.class);
 
@@ -321,8 +331,8 @@ public class CertifyKeyActivity extends ActionBarActivity implements
 
         data.putLong(ApgIntentService.CERTIFY_KEY_MASTER_KEY_ID, mMasterKeyId);
         data.putLong(ApgIntentService.CERTIFY_KEY_PUB_KEY_ID, mPubKeyId);
-        data.putStringArray(ApgIntentService.CERTIFY_KEY_UIDS,
-                (String[]) mUserIdsAdapter.getSelectedUserIds().toArray());
+        data.putLong(ApgIntentService.CERTIFY_KEY_PUB_KEY_ID, mPubKeyId);
+        data.putStringArrayList(ApgIntentService.CERTIFY_KEY_UIDS, userIds);
 
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 

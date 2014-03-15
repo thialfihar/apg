@@ -54,6 +54,7 @@ import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.Primes;
 
@@ -68,6 +69,7 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 public class PgpKeyOperation {
@@ -416,7 +418,16 @@ public class PgpKeyOperation {
         updateProgress(R.string.progress_done, 100, 100);
     }
 
-    public PGPPublicKeyRing certifyKey(long masterKeyId, long pubKeyId, String passphrase)
+    /**
+     * Certify the given pubkeyid with the given masterkeyid.
+     *
+     * @param masterKeyId Certifying key, must be available as secret key
+     * @param pubKeyId ID of public key to certify
+     * @param userIds User IDs to certify, must not be null or empty
+     * @param passphrase Passphrase of the secret key
+     * @return A keyring with added certifications
+     */
+    public PGPPublicKeyRing certifyKey(long masterKeyId, long pubKeyId, List<String> userIds, String passphrase)
             throws PgpGeneralException, NoSuchAlgorithmException, NoSuchProviderException,
             PGPException, SignatureException {
         if (passphrase == null) {
@@ -445,7 +456,7 @@ public class PgpKeyOperation {
                         .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
 
                 signatureGenerator = new PGPSignatureGenerator(contentSignerBuilder);
-                signatureGenerator.init(PGPSignature.DIRECT_KEY, signaturePrivateKey);
+                signatureGenerator.init(PGPSignature.DEFAULT_CERTIFICATION, signaturePrivateKey);
             }
 
             { // supply signatureGenerator with a SubpacketVector
@@ -457,8 +468,11 @@ public class PgpKeyOperation {
             // fetch public key ring, add the certification and return it
             PGPPublicKeyRing pubring = ProviderHelper
                     .getPGPPublicKeyRingByKeyId(mContext, pubKeyId);
-            PGPPublicKey signedKey = PGPPublicKey.addCertification(pubring.getPublicKey(pubKeyId),
-                    signatureGenerator.generate());
+            PGPPublicKey signedKey = pubring.getPublicKey(pubKeyId);
+            for(String userId : new IterableIterator<String>(userIds.iterator())) {
+                PGPSignature sig = signatureGenerator.generateCertification(userId, signedKey);
+                signedKey = PGPPublicKey.addCertification(signedKey, userId, sig);
+            }
             pubring = PGPPublicKeyRing.insertPublicKey(pubring, signedKey);
 
             return pubring;
