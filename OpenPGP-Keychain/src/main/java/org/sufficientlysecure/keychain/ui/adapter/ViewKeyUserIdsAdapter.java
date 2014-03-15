@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.thialfihar.android.apg.R;
@@ -86,11 +87,49 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        String userIdStr = cursor.getString(mIndexUserId);
-        int verified = cursor.getInt(mVerifiedId);
+        TextView vRank = (TextView) view.findViewById(R.id.rank);
+        TextView vUserId = (TextView) view.findViewById(R.id.userId);
+        TextView vAddress = (TextView) view.findViewById(R.id.address);
+        ImageView vVerified = (ImageView) view.findViewById(R.id.certified);
 
-        TextView userId = (TextView) view.findViewById(R.id.userId);
-        userId.setText(userIdStr + (verified > 0 ? " (ok)" : "(nope)"));
+        vRank.setText(Integer.toString(cursor.getInt(mIndexRank)));
+
+        String[] userId = PgpKeyHelper.splitUserId(cursor.getString(mIndexUserId));
+        if (userId[0] != null) {
+            vUserId.setText(userId[0]);
+        } else {
+            vUserId.setText(R.string.user_id_no_name);
+        }
+        vAddress.setText(userId[1]);
+
+        int verified = cursor.getInt(mVerifiedId);
+        // TODO introduce own resource for this :)
+        if(verified > 0)
+            vVerified.setImageResource(android.R.drawable.presence_online);
+        else
+            vVerified.setImageResource(android.R.drawable.presence_invisible);
+
+        // don't care further if checkboxes aren't shown
+        if(mCheckStates == null)
+            return;
+
+        final CheckBox vCheckBox = (CheckBox) view.findViewById(R.id.checkBox);
+        final int position = cursor.getPosition();
+        vCheckBox.setClickable(false);
+        vCheckBox.setChecked(mCheckStates.get(position));
+        vCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mCheckStates.set(position, b);
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vCheckBox.toggle();
+            }
+        });
+
     }
 
     @Override
