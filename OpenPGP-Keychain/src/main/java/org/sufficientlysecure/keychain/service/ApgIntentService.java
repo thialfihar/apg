@@ -569,8 +569,9 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                             ProviderHelper.getPGPSecretKeyRingByKeyId(this, masterKeyId),
                             oldPassphrase, newPassphrase);
                 } else {
-                    keyOperations.buildSecretKey(userIds, keys, keysUsages, keysExpiryDates, masterKeyId,
-                            oldPassphrase, newPassphrase);
+                    Key pubKey = new Key(ProviderHelper.getPGPPublicKeyByKeyId(this, masterKeyId));
+                    keyOperations.buildSecretKey(userIds, keys, keysUsages, keysExpiryDates,
+                            pubKey, oldPassphrase, newPassphrase);
                 }
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);
 

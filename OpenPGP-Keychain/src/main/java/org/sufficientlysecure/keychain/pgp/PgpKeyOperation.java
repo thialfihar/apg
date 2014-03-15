@@ -69,6 +69,7 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -225,9 +226,9 @@ public class PgpKeyOperation {
     }
 
     public void buildSecretKey(ArrayList<String> userIds, ArrayList<Key> keys,
-            ArrayList<Integer> keysUsages, ArrayList<GregorianCalendar> keysExpiryDates,
-            long masterKeyId, String oldPassphrase,
-            String newPassphrase) throws PgpGeneralException, NoSuchProviderException,
+                               ArrayList<Integer> keysUsages, ArrayList<GregorianCalendar> keysExpiryDates,
+                               Key oldPublicKey, String oldPassphrase,
+                               String newPassphrase) throws PgpGeneralException, NoSuchProviderException,
             PGPException, NoSuchAlgorithmException, SignatureException, IOException {
 
         Log.d(Constants.TAG, "userIds: " + userIds.toString());
@@ -263,9 +264,32 @@ public class PgpKeyOperation {
 
                 updateProgress(R.string.progress_certifying_master_key, 20, 100);
 
-                // TODO: if we are editing a key, keep old certs, don't remake certs we don't have to.
-
+                // re-add old certificates, or create new ones for new uids
                 for (String userId : userIds) {
+                    // re-add certs for this uid, take a note if self-signed cert is in there
+                    boolean foundSelfSign = false;
+                    Iterator<PGPSignature> it = tmpKey.getSignaturesForID(userId);
+                    if(it != null) for(PGPSignature sig : new IterableIterator<PGPSignature>(it)) {
+                        if(sig.getKeyID() == masterPublicKey.getKeyID()) {
+                            // already have a self sign? skip this other one, then.
+                            // note: PGPKeyRingGenerator adds one cert for the main user id, which
+                            // will lead to duplicates. unfortunately, if we add any other here
+                            // first, that will change the main user id order...
+                            if(foundSelfSign)
+                                continue;
+                            foundSelfSign = true;
+                        }
+                        Log.d(Constants.TAG, "adding old sig for " + userId + " from "
+                                + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()));
+                        masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, sig);
+                    }
+
+                    // there was an old self-signed certificate for this uid
+                    if(foundSelfSign)
+                        continue;
+
+                    Log.d(Constants.TAG, "generating self-signed cert for " + userId);
+
                     PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
                             masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
                             .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
@@ -345,7 +369,7 @@ public class PgpKeyOperation {
         updateProgress(R.string.progress_adding_sub_keys, 40, 100);
 
         for (int i = 1; i < keys.size(); ++i) {
-            updateProgress(40 + 50 * (i - 1) / (keys.size() - 1), 100);
+            updateProgress(40 + 40 * (i - 1) / (keys.size() - 1), 100);
 
             Key key = keys.get(i);
             PGPSecretKey subSecretKey = key.getSecretKey();
@@ -412,7 +436,38 @@ public class PgpKeyOperation {
         PGPSecretKeyRing secretKeyRing = keyGen.generateSecretKeyRing();
         PGPPublicKeyRing publicKeyRing = keyGen.generatePublicKeyRing();
 
+        updateProgress(R.string.progress_re_adding_certs, 80, 100);
+
+        // re-add certificates from old public key
+        // TODO: this only takes care of user id certificates, what about others?
+        PGPPublicKey pubkey = publicKeyRing.getPublicKey();
+        for(String uid : new IterableIterator<String>(pubkey.getUserIDs())) {
+            for(PGPSignature sig : new IterableIterator<PGPSignature>(
+                    oldPublicKey.getPublicKey().getSignaturesForID(uid), true)) {
+                // but skip self certificates
+                if(sig.getKeyID() == pubkey.getKeyID())
+                    continue;
+                pubkey = PGPPublicKey.addCertification(pubkey, uid, sig);
+            }
+        }
+        publicKeyRing = PGPPublicKeyRing.insertPublicKey(publicKeyRing, pubkey);
+
         updateProgress(R.string.progress_saving_key_ring, 90, 100);
+
+        /* additional handy debug info
+        Log.d(Constants.TAG, " ------- in private key -------");
+        for(String uid : new IterableIterator<String>(secretKeyRing.getPublicKey().getUserIDs())) {
+            for(PGPSignature sig : new IterableIterator<PGPSignature>(secretKeyRing.getPublicKey().getSignaturesForID(uid))) {
+                Log.d(Constants.TAG, "sig: " + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()) + " for " + uid);
+            }
+        }
+        Log.d(Constants.TAG, " ------- in public key -------");
+        for(String uid : new IterableIterator<String>(publicKeyRing.getPublicKey().getUserIDs())) {
+            for(PGPSignature sig : new IterableIterator<PGPSignature>(publicKeyRing.getPublicKey().getSignaturesForID(uid))) {
+                Log.d(Constants.TAG, "sig: " + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()) + " for " + uid);
+            }
+        }
+        */
 
         ProviderHelper.saveKeyRing(mContext, secretKeyRing);
         ProviderHelper.saveKeyRing(mContext, publicKeyRing);
