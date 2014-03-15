@@ -19,6 +19,7 @@ package org.thialfihar.android.apg.ui.adapter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.SparseArray;
 
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPPublicKey;
@@ -170,24 +171,36 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         revoked = pgpKeyRing.getPublicKey().isRevoked();
         fingerPrint = PgpKeyHelper.convertFingerprintToHex(pgpKeyRing.getPublicKey()
                 .getFingerprint(), true);
-        hexKeyId = "0x" + PgpKeyHelper.convertKeyIdToHex(keyId);
+        hexKeyId = PgpKeyHelper.convertKeyIdToHex(keyId);
         bitStrength = pgpKeyRing.getPublicKey().getBitStrength();
-        int algorithmId = pgpKeyRing.getPublicKey().getAlgorithm();
-        if (algorithmId == PGPPublicKey.RSA_ENCRYPT ||
-            algorithmId == PGPPublicKey.RSA_GENERAL ||
-            algorithmId == PGPPublicKey.RSA_SIGN) {
-            algorithm = "RSA";
-        } else if (algorithmId == PGPPublicKey.DSA) {
-            algorithm = "DSA";
-        } else if (algorithmId == PGPPublicKey.ELGAMAL_ENCRYPT ||
-                   algorithmId == PGPPublicKey.ELGAMAL_GENERAL) {
-            algorithm = "ElGamal";
-        } else if (algorithmId == PGPPublicKey.EC ||
-                   algorithmId == PGPPublicKey.ECDSA) {
-            algorithm = "ECC";
-        } else {
-            // TODO: with resources
-            algorithm = "unknown";
-        }
+        final int algorithmId = pgpKeyRing.getPublicKey().getAlgorithm();
+		algorithm = getAlgorithmFromId(algorithmId);
     }
+
+	/**
+	 * Based on <a href="http://tools.ietf.org/html/rfc2440#section-9.1">OpenPGP Message Format</a>
+	 */
+	private final static SparseArray<String> ALGORITHM_IDS = new SparseArray<String>() {{
+		put(-1, "unknown"); // TODO: with resources
+		put(0, "unencrypted");
+		put(PGPPublicKey.RSA_GENERAL, "RSA");
+		put(PGPPublicKey.RSA_ENCRYPT, "RSA");
+		put(PGPPublicKey.RSA_SIGN, "RSA");
+		put(PGPPublicKey.ELGAMAL_ENCRYPT, "ElGamal");
+		put(PGPPublicKey.ELGAMAL_GENERAL, "ElGamal");
+		put(PGPPublicKey.DSA, "DSA");
+		put(PGPPublicKey.EC, "ECC");
+		put(PGPPublicKey.ECDSA, "ECC");
+		put(PGPPublicKey.ECDH, "ECC");
+	}};
+
+	/**
+	 * Based on <a href="http://tools.ietf.org/html/rfc2440#section-9.1">OpenPGP Message Format</a>
+	 */
+	public static String getAlgorithmFromId(int algorithmId) {
+		return (ALGORITHM_IDS.get(algorithmId) != null ? ALGORITHM_IDS.get(algorithmId) : ALGORITHM_IDS.get(-1));
+	}
+
 }
+
+
