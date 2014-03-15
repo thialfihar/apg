@@ -53,13 +53,6 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * TODO:
- * rewrite to use machine readable output.
- * <p/>
- * see http://tools.ietf.org/html/draft-shaw-openpgp-hkp-00#section-5
- * https://github.com/openpgp-keychain/openpgp-keychain/issues/259
- */
 public class HkpKeyServer extends KeyServer {
     private static class HttpError extends Exception {
         private static final long serialVersionUID = 1718783705229428893L;
