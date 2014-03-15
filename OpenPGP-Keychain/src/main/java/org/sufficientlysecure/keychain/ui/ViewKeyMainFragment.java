@@ -250,7 +250,7 @@ public class ViewKeyMainFragment extends Fragment  implements
 
                 // Now create and return a CursorLoader that will take care of
                 // creating a Cursor for the data being displayed.
-                return new CursorLoader(getActivity(), baseUri, USER_IDS_PROJECTION, USER_IDS_SELECTION, null,
+                return new CursorLoader(getActivity(), baseUri, USER_IDS_PROJECTION, null, null,
                         USER_IDS_SORT_ORDER);
             }
             case LOADER_ID_KEYS: {
