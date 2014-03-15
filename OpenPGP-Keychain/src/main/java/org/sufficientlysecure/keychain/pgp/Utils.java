@@ -17,9 +17,6 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import java.security.DigestException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,18 +96,6 @@ public class Utils {
             return result;
         }
 
-        return result;
-    }
-
-
-    public static int[] getRgbForData(byte[] bytes) throws NoSuchAlgorithmException, DigestException {
-        MessageDigest md = MessageDigest.getInstance("SHA1");
-
-        md.update(bytes);
-        byte[] digest = md.digest();
-        int[] result = {((int) digest[0] + 256) % 256,
-                        ((int) digest[1] + 256) % 256,
-                        ((int) digest[2] + 256) % 256};
         return result;
     }
 }
