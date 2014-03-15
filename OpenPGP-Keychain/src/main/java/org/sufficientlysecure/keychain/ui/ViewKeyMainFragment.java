@@ -215,7 +215,7 @@ public class ViewKeyMainFragment extends Fragment implements
     static final String USER_IDS_SELECTION =
         KeychainDatabase.Tables.USER_IDS + "." + KeychainContract.UserIds.RANK + " > 0 ";
     static final String USER_IDS_SORT_ORDER =
-        KeychainContract.UserIds.USER_ID + " COLLATE LOCALIZED ASC";
+        KeychainDatabase.Tables.USER_IDS + "." + KeychainContract.UserIds.RANK + " COLLATE LOCALIZED ASC";
 
     static final String[] KEYS_PROJECTION = new String[] {
         KeychainContract.Keys._ID,

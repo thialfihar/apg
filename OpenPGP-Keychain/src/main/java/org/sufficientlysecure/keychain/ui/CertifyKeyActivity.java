@@ -47,12 +47,15 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.adapter.ViewKeyUserIdsAdapter;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -171,7 +174,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                     KeychainContract.KeyRings._ID,
                     KeychainContract.KeyRings.MASTER_KEY_ID,
                     KeychainContract.Keys.FINGERPRINT,
-                    KeychainContract.UserIds.USER_ID
+                    KeychainContract.UserIds.USER_ID,
             };
     static final int INDEX_MASTER_KEY_ID = 1;
     static final int INDEX_FINGERPRINT = 2;
@@ -181,10 +184,11 @@ public class CertifyKeyActivity extends ActionBarActivity implements
             new String[] {
                     KeychainContract.UserIds._ID,
                     KeychainContract.UserIds.USER_ID,
-                    KeychainContract.UserIds.RANK
+                    KeychainContract.UserIds.RANK,
+                    "verified"
             };
     static final String USER_IDS_SORT_ORDER =
-            KeychainContract.UserIds.RANK + " ASC";
+            KeychainDatabase.Tables.USER_IDS + "." + KeychainContract.UserIds.RANK + " ASC";
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
