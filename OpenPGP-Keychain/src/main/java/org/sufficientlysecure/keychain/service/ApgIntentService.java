@@ -774,7 +774,8 @@ public class ApgIntentService extends IntentService implements Progressable {
 
                                     entry.setBytes(newKeyring.getEncoded());
                                 } else {
-                                    Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!", new Exception());
+                                    Log.e(Constants.TAG, "Object not recognized as PGPKeyRing!",
+                                            new Exception());
                                 }
                             }
                         }
