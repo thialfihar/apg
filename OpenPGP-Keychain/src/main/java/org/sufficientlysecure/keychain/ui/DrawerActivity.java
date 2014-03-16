@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
 
 public class DrawerActivity extends ActionBarActivity {
@@ -48,6 +50,7 @@ public class DrawerActivity extends ActionBarActivity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private boolean mIsDrawerLocked = false;
 
     private static Class[] sItemsClass = new Class[] {
         KeyListActivity.class,
@@ -65,10 +68,22 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerTitle = getString(R.string.app_name);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        ViewGroup viewGroup = (ViewGroup) findViewById(R.id.content_frame);
+        int leftMarginLoaded = ((ViewGroup.MarginLayoutParams) viewGroup.getLayoutParams()).leftMargin;
+        int leftMarginInTablets = (int) getResources().getDimension(R.dimen.drawer_size);
+        int errorInMarginAllowed = 5;
 
-        // set a custom shadow that overlays the main content when the drawer
-        // opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // if the left margin of the loaded layout is close to the
+        // one used in tablets then set drawer as open and locked
+        if( Math.abs(leftMarginLoaded - leftMarginInTablets) < errorInMarginAllowed) {
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, mDrawerList);
+            mDrawerLayout.setScrimColor(Color.TRANSPARENT);
+            mIsDrawerLocked = true;
+        } else {
+            // set a custom shadow that overlays the main content when the drawer opens
+            mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+            mIsDrawerLocked = false;
+        }
 
         NavItem mItemIconTexts[] = new NavItem[] {
                 new NavItem("fa-user", getString(R.string.nav_contacts)),
@@ -83,8 +98,11 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        // if the drawer is not locked
+        if ( !mIsDrawerLocked ) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -96,19 +114,8 @@ public class DrawerActivity extends ActionBarActivity {
         ) {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
-                // creates call to onPrepareOptionsMenu()
-                supportInvalidateOptionsMenu();
 
-                // call intent activity if selected
-                if (mSelectedItem != null) {
-                    finish();
-                    overridePendingTransition(0, 0);
-
-                    Intent intent = new Intent(DrawerActivity.this, mSelectedItem);
-                    startActivity(intent);
-                    // disable animation of activity start
-                    overridePendingTransition(0, 0);
-                }
+                callIntentForSelectedItem();
             }
 
             public void onDrawerOpened(View drawerView) {
@@ -118,11 +125,35 @@ public class DrawerActivity extends ActionBarActivity {
                 supportInvalidateOptionsMenu();
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        if ( !mIsDrawerLocked ) {
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
 
+        if ( mIsDrawerLocked ) {
+            // If the drawer is locked open make it un-focusable
+            // so that it doesn't consume all the Back button presses
+            mDrawerLayout.setFocusableInTouchMode(false);
+        }
         // if (savedInstanceState == null) {
         // selectItem(0);
         // }
+    }
+
+    private void callIntentForSelectedItem() {
+        // creates call to onPrepareOptionsMenu()
+        supportInvalidateOptionsMenu();
+
+        // call intent activity if selected
+        if (mSelectedItem != null) {
+            finish();
+            overridePendingTransition(0, 0);
+
+            Intent intent = new Intent(this, mSelectedItem);
+            startActivity(intent);
+
+            // disable animation of activity start
+            overridePendingTransition(0, 0);
+        }
     }
 
     @Override
@@ -195,10 +226,18 @@ public class DrawerActivity extends ActionBarActivity {
     private void selectItem(int position) {
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        // setTitle(mDrawerTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
         // set selected class
         mSelectedItem = sItemsClass[position];
+
+        // setTitle(mDrawerTitles[position]);
+        // If drawer isn't locked just close the drawer and
+        // it will move to the selected item by itself (via drawer toggle listener)
+        if ( !mIsDrawerLocked ) {
+            mDrawerLayout.closeDrawer(mDrawerList);
+        // else move to the selected item yourself
+        } else {
+            callIntentForSelectedItem();
+        }
     }
 
     /**
