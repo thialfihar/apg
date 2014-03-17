@@ -556,7 +556,7 @@ public class ProviderHelper implements PgpKeyProvider {
         values.put(Certs.VERIFIED, verified);
         values.put(Certs.KEY_DATA, cert.getEncoded());
 
-        Uri uri = Certs.buildCertsUri(Long.toString(keyRingRowId));
+        Uri uri = Certs.buildCertsByKeyRowIdUri(Long.toString(keyRingRowId));
 
         return ContentProviderOperation.newInsert(uri).withValues(values).build();
     }

@@ -31,14 +31,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract;
@@ -65,14 +64,14 @@ public class ViewKeyCertsFragment extends Fragment
 
     // sort by our user id,
     static final String SORT_ORDER =
-              KeychainDatabase.Tables.USER_IDS + "." + KeychainContract.UserIds.USER_ID + " ASC, "
+              KeychainDatabase.Tables.USER_IDS + "." + KeychainContract.UserIds.RANK + " ASC, "
             + KeychainDatabase.Tables.CERTS + "." + KeychainContract.Certs.VERIFIED + " DESC, "
             + "signer_uid ASC";
 
     public static final String ARG_KEYRING_ROW_ID = "row_id";
 
     private StickyListHeadersListView mStickyList;
-    private CheckBox mShowUnknown;
+    private Spinner mSpinner;
 
     private CertListAdapter mAdapter;
     private boolean mUnknownShown = false;
@@ -86,11 +85,18 @@ public class ViewKeyCertsFragment extends Fragment
         return view;
     }
 
-    private void toggleShowUnknown(boolean shown) {
-        if(shown)
-            mDataUri = mBaseUri.buildUpon().appendPath("all").build();
-        else
-            mDataUri = mBaseUri;
+    private void changeShowState(int type) {
+        switch(type) {
+            case 0:
+                mDataUri = mBaseUri.buildUpon().appendPath("has_secret").build();
+                break;
+            case 1:
+                mDataUri = mBaseUri;
+                break;
+            case 2:
+                mDataUri = mBaseUri.buildUpon().appendPath("all").build();
+                break;
+        }
         getLoaderManager().restartLoader(0, null, this);
     }
 
@@ -98,11 +104,24 @@ public class ViewKeyCertsFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mShowUnknown = (CheckBox) getActivity().findViewById(R.id.showUnknown);
-        mShowUnknown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mSpinner = (Spinner) getActivity().findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, new String[] {
+                getResources().getString(R.string.certs_list_known_secret),
+                getResources().getString(R.string.certs_list_known),
+                getResources().getString(R.string.certs_list_all)
+            } );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setSelection(1);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                toggleShowUnknown(b);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                changeShowState(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
 
