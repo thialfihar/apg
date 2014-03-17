@@ -50,7 +50,7 @@ public class DrawerActivity extends ActionBarActivity {
     private CharSequence mTitle;
 
     private static Class[] sItemsClass = new Class[] {
-        KeyListPublicActivity.class,
+        KeyListActivity.class,
         EncryptActivity.class,
         DecryptActivity.class,
         ImportKeysActivity.class,
