@@ -535,7 +535,9 @@ public class DecryptActivity extends DrawerActivity {
                         AppMsg.STYLE_ALERT).show();
             } finally {
                 try {
-                    if (inStream != null) inStream.close();
+                    if (inStream != null) {
+                        inStream.close();
+                    }
                 } catch (Exception e){ }
             }
         } else {

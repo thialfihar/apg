@@ -48,7 +48,6 @@ import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**

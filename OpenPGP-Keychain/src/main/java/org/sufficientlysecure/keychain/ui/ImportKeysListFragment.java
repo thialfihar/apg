@@ -226,7 +226,7 @@ public class ImportKeysListFragment extends ListFragment implements
         switch (loader.getId()) {
             case LOADER_ID_BYTES:
 
-                if(error == null){
+                if (error == null){
                     // No error
                 } else if (error instanceof ImportKeysListLoader.FileHasNoContent) {
                     AppMsg.makeText(getActivity(), R.string.error_import_file_no_content,

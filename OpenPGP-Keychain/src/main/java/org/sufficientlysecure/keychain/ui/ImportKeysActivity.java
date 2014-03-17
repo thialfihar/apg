@@ -401,7 +401,8 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
                     AppMsg.makeText(ImportKeysActivity.this, toastMessage, AppMsg.STYLE_INFO)
                             .show();
                     if (bad > 0) {
-                        BadImportKeyDialogFragment badImportKeyDialogFragment = BadImportKeyDialogFragment.newInstance(bad);
+                        BadImportKeyDialogFragment badImportKeyDialogFragment =
+                            BadImportKeyDialogFragment.newInstance(bad);
                         badImportKeyDialogFragment.show(getSupportFragmentManager(), "badKeyDialog");
                     }
                 }

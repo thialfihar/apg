@@ -33,7 +33,6 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.util.Choice;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class CreateKeyDialogFragment extends DialogFragment {
 

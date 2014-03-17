@@ -31,7 +31,6 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.DialogFragmentWorkaround;
-import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
@@ -137,7 +136,8 @@ public class ExportHelper {
 
         // Message is received after exporting is done in ApgService
         ApgIntentServiceHandler exportHandler = new ApgIntentServiceHandler(mActivity,
-                mActivity.getString(R.string.progress_exporting), ProgressDialog.STYLE_HORIZONTAL, true, new DialogInterface.OnCancelListener() {
+                mActivity.getString(R.string.progress_exporting),
+                ProgressDialog.STYLE_HORIZONTAL, true, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 mActivity.stopService(intent);

@@ -25,14 +25,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.AutoCompleteTextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import org.thialfihar.android.apg.helper.ContactHelper;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ContactHelper;
 import org.thialfihar.android.apg.pgp.Utils;
 
 import java.util.regex.Matcher;
@@ -104,7 +104,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mEmail.setAdapter(
                 new ArrayAdapter<String>
                         (this.getContext(), android.R.layout.simple_dropdown_item_1line,
-                                                                    ContactHelper.getMailAccounts(getContext())
+                                                ContactHelper.getMailAccounts(getContext())
                         ));
         mEmail.addTextChangedListener(new TextWatcher(){
             @Override

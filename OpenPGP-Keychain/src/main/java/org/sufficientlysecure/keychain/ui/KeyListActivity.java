@@ -17,18 +17,17 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ExportHelper;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class KeyListActivity extends DrawerActivity {
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ExportHelper;
 
+public class KeyListActivity extends DrawerActivity {
     ExportHelper mExportHelper;
 
     @Override
@@ -53,29 +52,36 @@ public class KeyListActivity extends DrawerActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_key_list_import:
+            case R.id.menu_key_list_import: {
                 Intent intentImport = new Intent(this, ImportKeysActivity.class);
                 startActivityForResult(intentImport, 0);
 
                 return true;
-            case R.id.menu_key_list_export:
+            }
+            case R.id.menu_key_list_export: {
                 // TODO fix this for unified keylist
                 mExportHelper.showExportKeysDialog(null, Id.type.public_key, Constants.path.APP_DIR_FILE_PUB);
 
                 return true;
-            case R.id.menu_key_list_create:
+            }
+            case R.id.menu_key_list_create: {
                 createKey();
 
                 return true;
-            case R.id.menu_key_list_create_expert:
+            }
+            case R.id.menu_key_list_create_expert: {
                 createKeyExpert();
 
                 return true;
-            case R.id.menu_key_list_secret_export:
+            }
+            case R.id.menu_key_list_secret_export: {
                 mExportHelper.showExportKeysDialog(null, Id.type.secret_key, Constants.path.APP_DIR_FILE_SEC);
 
-            default:
+                return true;
+            }
+            default: {
                 return super.onOptionsItemSelected(item);
+            }
         }
     }
 

@@ -88,7 +88,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
             final byte[] packageSignature = extras.getByteArray(EXTRA_PACKAGE_SIGNATURE);
 
             // Inflate a "Done"/"Cancel" custom action bar view
-            ActionBarHelper.setTwoButtonView(getSupportActionBar(), R.string.api_register_allow, R.drawable.ic_action_done,
+            ActionBarHelper.setTwoButtonView(getSupportActionBar(), R.string.api_register_allow,
+                                                R.drawable.ic_action_done,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -108,7 +109,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
                                 RemoteServiceActivity.this.finish();
                             }
                         }
-                    }, R.string.api_register_disallow, R.drawable.ic_action_cancel, new View.OnClickListener() {
+                    }, R.string.api_register_disallow, R.drawable.ic_action_cancel,
+                    new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // Disallow
@@ -161,7 +163,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
             }
 
             // Inflate a "Done"/"Cancel" custom action bar view
-            ActionBarHelper.setTwoButtonView(getSupportActionBar(), R.string.btn_okay, R.drawable.ic_action_done,
+            ActionBarHelper.setTwoButtonView(getSupportActionBar(), R.string.btn_okay,
+                    R.drawable.ic_action_done,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -214,7 +217,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
             String text = "<font color=\"red\">" + errorMessage + "</font>";
 
             // Inflate a "Done" custom action bar view
-            ActionBarHelper.setOneButtonView(getSupportActionBar(), R.string.btn_okay, R.drawable.ic_action_done,
+            ActionBarHelper.setOneButtonView(getSupportActionBar(), R.string.btn_okay,
+                    R.drawable.ic_action_done,
                     new View.OnClickListener() {
 
                         @Override

@@ -32,10 +32,6 @@ import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-
 public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter {
 
     protected int mKeyType;

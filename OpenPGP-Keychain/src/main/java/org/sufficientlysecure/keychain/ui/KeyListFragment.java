@@ -17,31 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.Utils;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyTypes;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
-import org.thialfihar.android.apg.ui.adapter.KeyListAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
-import org.thialfihar.android.apg.util.Log;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -58,11 +33,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,6 +49,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.ExportHelper;
+import org.thialfihar.android.apg.pgp.Utils;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyTypes;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
+import org.thialfihar.android.apg.ui.adapter.KeyListAdapter;
+import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
+import org.thialfihar.android.apg.util.Log;
+
+import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Public key list with sticky list headers. It does _not_ extend ListFragment because it uses
@@ -157,7 +150,7 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             mStickyList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
             mStickyList.getWrappedList().setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
-                private int count = 0;
+                private int mCount = 0;
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -191,8 +184,10 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                         case R.id.menu_key_list_multi_export: {
                             // todo: public/secret needs to be handled differently here
                             ids = mStickyList.getWrappedList().getCheckedItemIds();
-                            ExportHelper mExportHelper = new ExportHelper((ActionBarActivity) getActivity());
-                            mExportHelper.showExportKeysDialog(ids, Id.type.public_key, Constants.path.APP_DIR_FILE_PUB);
+                            ExportHelper mExportHelper =
+                                new ExportHelper((ActionBarActivity) getActivity());
+                            mExportHelper.showExportKeysDialog(ids, Id.type.public_key,
+                                                                Constants.path.APP_DIR_FILE_PUB);
                             break;
                         }
                         case R.id.menu_key_list_multi_select_all: {
@@ -208,7 +203,7 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
 
                 @Override
                 public void onDestroyActionMode(ActionMode mode) {
-                    count = 0;
+                    mCount = 0;
                     mAdapter.clearSelection();
                 }
 
@@ -216,15 +211,15 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                 public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
                                                       boolean checked) {
                     if (checked) {
-                        count++;
+                        mCount++;
                         mAdapter.setNewSelection(position, checked);
                     } else {
-                        count--;
+                        mCount--;
                         mAdapter.removeSelection(position);
                     }
 
                     String keysSelected = getResources().getQuantityString(
-                            R.plurals.key_list_selected_keys, count, count);
+                            R.plurals.key_list_selected_keys, mCount, mCount);
                     mode.setTitle(keysSelected);
                 }
 
@@ -311,7 +306,8 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
         } else {
             viewIntent = new Intent(getActivity(), ViewKeyActivityJB.class);
         }
-        viewIntent.setData(KeychainContract.KeyRings.buildPublicKeyRingsByMasterKeyIdUri(Long.toString(mAdapter.getMasterKeyId(position))));
+        viewIntent.setData(KeychainContract.KeyRings.buildPublicKeyRingsByMasterKeyIdUri(
+            Long.toString(mAdapter.getMasterKeyId(position))));
         startActivity(viewIntent);
     }
 
@@ -348,9 +344,11 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                         for (String userId : notDeleted) {
                             notDeletedMsg += userId + "\n";
                         }
-                        Toast.makeText(getActivity(), getString(R.string.error_can_not_delete_contacts, notDeletedMsg)
-                                + getResources().getQuantityString(R.plurals.error_can_not_delete_info, notDeleted.size()),
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),
+                            getString(R.string.error_can_not_delete_contacts, notDeletedMsg) +
+                                getResources().getQuantityString(R.plurals.error_can_not_delete_info,
+                                                                    notDeleted.size()),
+                            Toast.LENGTH_LONG).show();
 
                         mode.finish();
                     }
@@ -426,7 +424,8 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
                     button.setOnClickListener(new OnClickListener() {
                         public void onClick(View view) {
                             Intent editIntent = new Intent(getActivity(), EditKeyActivity.class);
-                            editIntent.setData(KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(Long.toString(id)));
+                            editIntent.setData(KeychainContract.KeyRings
+                                .buildSecretKeyRingsByMasterKeyIdUri(Long.toString(id)));
                             editIntent.setAction(EditKeyActivity.ACTION_EDIT_KEY);
                             startActivityForResult(editIntent, 0);
                         }
@@ -486,7 +485,8 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             }
 
             if (mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
-                { // set contact count
+                {
+                    // set contact count
                     int num = mCursor.getCount();
                     String contactsTotal = getResources().getQuantityString(R.plurals.n_contacts, num, num);
                     holder.count.setText(contactsTotal);
@@ -501,7 +501,8 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             String userId = mCursor.getString(KeyListFragment.INDEX_USER_ID);
             String headerText = convertView.getResources().getString(R.string.user_id_no_name);
             if (userId != null && userId.length() > 0) {
-                headerText = "" + mCursor.getString(KeyListFragment.INDEX_USER_ID).subSequence(0, 1).charAt(0);
+                headerText = "" + mCursor.getString(KeyListFragment.INDEX_USER_ID)
+                                    .subSequence(0, 1).charAt(0);
             }
             holder.text.setText(headerText);
             holder.count.setVisibility(View.GONE);
@@ -524,8 +525,9 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             }
 
             // early breakout: all secret keys are assigned id 0
-            if (mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET)
+            if (mCursor.getInt(KeyListFragment.INDEX_TYPE) == KeyTypes.SECRET) {
                 return 1L;
+            }
 
             // otherwise, return the first character of the name as ID
             String userId = mCursor.getString(KeyListFragment.INDEX_USER_ID);
@@ -537,8 +539,8 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
         }
 
         class HeaderViewHolder {
-            TextView text;
-            TextView count;
+            public TextView text;
+            public TextView count;
         }
 
         /**
@@ -558,8 +560,10 @@ public class KeyListFragment extends Fragment implements AdapterView.OnItemClick
             long[] ids = new long[mSelection.size()];
             int i = 0;
             // get master key ids
-            for (int pos : mSelection.keySet())
-                ids[i++] = mAdapter.getItemId(pos);
+            for (int pos : mSelection.keySet()) {
+                ids[i] = mAdapter.getItemId(pos);
+                ++i;
+            }
             return ids;
         }
 

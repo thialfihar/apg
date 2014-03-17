@@ -42,8 +42,6 @@ import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.KeychainServiceListener;
 import org.thialfihar.android.apg.util.Log;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -187,7 +185,7 @@ public class PgpImportExport {
                 if (secretKeyRing != null) {
                     secretKeyRing.encode(arOutStream);
                 }
-                if(mKeychainServiceListener.hasServiceStopped()){
+                if (mKeychainServiceListener.hasServiceStopped()){
                     arOutStream.close();
                     return null;
                 }
@@ -200,7 +198,7 @@ public class PgpImportExport {
                     publicKeyRing.encode(arOutStream);
                 }
 
-                if(mKeychainServiceListener.hasServiceStopped()){
+                if (mKeychainServiceListener.hasServiceStopped()){
                     arOutStream.close();
                     return null;
                 }

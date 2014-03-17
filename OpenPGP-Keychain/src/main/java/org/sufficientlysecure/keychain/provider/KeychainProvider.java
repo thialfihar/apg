@@ -482,7 +482,8 @@ public class KeychainProvider extends ContentProvider {
                 groupBy = Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID;
 
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = KeyRings.TYPE + " DESC, " + Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
+                    sortOrder = KeyRings.TYPE + " DESC, " + Tables.USER_IDS + "." +
+                                UserIdsColumns.USER_ID + " ASC";
                 }
 
                 break;

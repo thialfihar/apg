@@ -127,7 +127,7 @@ public class ViewKeyMainFragment extends Fragment  implements
 
         { // label whether secret key is available, and edit button if it is
             final long masterKeyId = ProviderHelper.getMasterKeyId(getActivity(), mDataUri);
-            if(ProviderHelper.hasSecretKeyByMasterKeyId(getActivity(), masterKeyId)) {
+            if (ProviderHelper.hasSecretKeyByMasterKeyId(getActivity(), masterKeyId)) {
                 // set this attribute. this is a LITTLE unclean, but we have the info available
                 // right here, so why not.
                 mSecretKey.setTextColor(getResources().getColor(R.color.emphasis));
@@ -138,7 +138,8 @@ public class ViewKeyMainFragment extends Fragment  implements
                 mActionEdit.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         Intent editIntent = new Intent(getActivity(), EditKeyActivity.class);
-                        editIntent.setData(KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(Long.toString(masterKeyId)));
+                        editIntent.setData(KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
+                            Long.toString(masterKeyId)));
                         editIntent.setAction(EditKeyActivity.ACTION_EDIT_KEY);
                         startActivityForResult(editIntent, 0);
                     }

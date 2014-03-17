@@ -609,7 +609,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 int keysTotal = 2;
                 int keysCreated = 0;
                 setProgress(
-                        getApplicationContext().getResources().getQuantityString(R.plurals.progress_generating, keysTotal),
+                        getApplicationContext().getResources()
+                            .getQuantityString(R.plurals.progress_generating, keysTotal),
                         keysCreated,
                         keysTotal);
                 PgpKeyOperation keyOperations = new PgpKeyOperation(this, this);
@@ -711,7 +712,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                         keyRingRowIds = ProviderHelper.getSecretKeyRingsRowIds(this);
                     }
                 } else {
-                    for(long rowId : rowIds) {
+                    for (long rowId : rowIds) {
                         keyRingRowIds.add(rowId);
                     }
                 }

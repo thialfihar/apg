@@ -602,10 +602,10 @@ public class ProviderHelper implements PgpKeyProvider {
 
         ArrayList<Long> rowIds = new ArrayList<Long>();
         if (cursor != null) {
-            int IdCol = cursor.getColumnIndex(KeyRings._ID);
+            int columnIndex = cursor.getColumnIndex(KeyRings._ID);
             if (cursor.moveToFirst()) {
                 do {
-                    rowIds.add(cursor.getLong(IdCol));
+                    rowIds.add(cursor.getLong(columnIndex));
                 } while (cursor.moveToNext());
             }
         }

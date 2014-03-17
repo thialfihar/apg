@@ -32,12 +32,9 @@ import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.util.Log;
 
-import java.util.HashMap;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+
+import java.util.HashMap;
 
 /**
  * Implements StickyListHeadersAdapter from library
@@ -183,7 +180,7 @@ public class KeyListAdapter extends HighlightQueryCursorAdapter
     }
 
     class HeaderViewHolder {
-        TextView text;
+        public TextView text;
     }
 
     /**
