@@ -141,19 +141,19 @@ public class ImportKeysListLoader
             }
         } catch (Exception e) {
             Log.e(Constants.TAG, "Exception on parsing key file!", e);
-            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(data, e);
+            mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mData, e);
             nonPgpCounter = 0;
         }
 
         if (isEmpty) {
             Log.e(Constants.TAG, "File has no content!", new FileHasNoContent());
-            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
-                    (data, new FileHasNoContent());
+            mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
+                    (mData, new FileHasNoContent());
         }
 
         if (nonPgpCounter > 0) {
-            entryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
-                    (data, new NonPgpPartException(nonPgpCounter));
+            mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>
+                    (mData, new NonPgpPartException(nonPgpCounter));
         }
     }
 
