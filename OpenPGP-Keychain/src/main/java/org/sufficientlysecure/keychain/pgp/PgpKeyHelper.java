@@ -26,6 +26,7 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureSubpacketVector;
+import org.spongycastle.util.encoders.Hex;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;

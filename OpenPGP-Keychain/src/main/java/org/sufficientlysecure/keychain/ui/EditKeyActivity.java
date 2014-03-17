@@ -264,7 +264,7 @@ public class EditKeyActivity extends ActionBarActivity {
             Log.d(Constants.TAG, "uri: " + mDataUri);
 
             // get master key id using row id
-            KeyRing keyRing = mProvider.getKeyRing(keyRingRowId);
+            KeyRing keyRing = mProvider.getKeyRing(mDataUri);
             Key masterKey = keyRing.getMasterKey();
             long masterKeyId = masterKey.getKeyId();
             mMasterCanSign = masterKey.isSigningKey();

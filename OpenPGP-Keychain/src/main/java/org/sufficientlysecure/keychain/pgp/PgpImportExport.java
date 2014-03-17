@@ -39,6 +39,7 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.KeychainServiceListener;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -60,7 +61,8 @@ public class PgpImportExport {
         this.mProgress = progress;
     }
 
-    public PgpImportExport(Context context, ProgressDialogUpdater progress, KeychainServiceListener keychainListener){
+    public PgpImportExport(Context context, Progressable progress,
+                KeychainServiceListener keychainListener) {
         super();
         this.mContext = context;
         this.mProgress = progress;

@@ -137,10 +137,10 @@ public class ExportHelper {
 
         // Message is received after exporting is done in ApgService
         ApgIntentServiceHandler exportHandler = new ApgIntentServiceHandler(mActivity,
-                activity.getString(R.string.progress_exporting), ProgressDialog.STYLE_HORIZONTAL, true, new DialogInterface.OnCancelListener() {
+                mActivity.getString(R.string.progress_exporting), ProgressDialog.STYLE_HORIZONTAL, true, new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-                activity.stopService(intent);
+                mActivity.stopService(intent);
             }
         }) {
             public void handleMessage(Message message) {

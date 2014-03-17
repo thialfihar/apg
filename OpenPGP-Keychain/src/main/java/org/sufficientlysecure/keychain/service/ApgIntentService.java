@@ -44,7 +44,6 @@ import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpImportExport;
-import org.thialfihar.android.apg.pgp.PgpImportExport.KeychainServiceListener;
 import org.thialfihar.android.apg.pgp.PgpKeyOperation;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.Progressable;
@@ -54,6 +53,7 @@ import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.KeychainServiceListener;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.BufferedInputStream;

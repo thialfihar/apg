@@ -367,22 +367,21 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
      */
     public void importKeys() {
         // Message is received after importing is done in ApgService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(
+        ApgIntentServiceHandler mSaveHandler = new ApgIntentServiceHandler(
                 this,
                 getString(R.string.progress_importing),
                 ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
-                // handle messages by standard KeychainIntentServiceHandler first
+                // handle messages by standard ApgIntentServiceHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get returned data bundle
                     Bundle returnData = message.getData();
 
-                    int added = returnData.getInt(KeychainIntentService.RESULT_IMPORT_ADDED);
-                    int updated = returnData
-                            .getInt(KeychainIntentService.RESULT_IMPORT_UPDATED);
-                    int bad = returnData.getInt(KeychainIntentService.RESULT_IMPORT_BAD);
+                    int added = returnData.getInt(ApgIntentService.RESULT_IMPORT_ADDED);
+                    int updated = returnData.getInt(ApgIntentService.RESULT_IMPORT_UPDATED);
+                    int bad = returnData.getInt(ApgIntentService.RESULT_IMPORT_BAD);
                     String toastMessage;
                     if (added > 0 && updated > 0) {
                         String addedStr = getResources().getQuantityString(

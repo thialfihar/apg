@@ -20,11 +20,14 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.AutoCompleteTextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import org.thialfihar.android.apg.helper.ContactHelper;

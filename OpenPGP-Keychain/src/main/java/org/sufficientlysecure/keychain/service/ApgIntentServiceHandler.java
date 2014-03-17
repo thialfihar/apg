@@ -56,12 +56,13 @@ public class ApgIntentServiceHandler extends Handler {
         this.mProgressDialogFragment = progressDialogFragment;
     }
 
-    public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId,
+    public ApgIntentServiceHandler(Activity activity, String progressDialogMessage,
                                     int progressDialogStyle) {
         this(activity, progressDialogMessage, progressDialogStyle, false, null);
     }
 
-    public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId, int progressDialogStyle) {
+    public ApgIntentServiceHandler(Activity activity, int progressDialogMessageId,
+                                    int progressDialogStyle) {
         this(activity, progressDialogMessageId, progressDialogStyle, false, null);
     }
 

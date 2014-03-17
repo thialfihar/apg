@@ -37,6 +37,7 @@ import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
@@ -128,7 +129,7 @@ public class ViewKeyActivity extends ActionBarActivity {
                 return true;
             case R.id.menu_key_view_export_file:
                 long[] ids = new long[]{Long.valueOf(mDataUri.getLastPathSegment())};
-                mExportHelper.showExportKeysDialog(ids, Id.type.public_key, Constants.Path.APP_DIR_FILE_PUB);
+                mExportHelper.showExportKeysDialog(ids, Id.type.public_key, Constants.path.APP_DIR_FILE_PUB);
                 return true;
             case R.id.menu_key_view_share_default_fingerprint:
                 shareKey(mDataUri, true);
