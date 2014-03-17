@@ -10,7 +10,7 @@
 
         <fragment
             android:id="@+id/key_list_fragment"
-            android:name="org.sufficientlysecure.keychain.ui.KeyListFragment"
+            android:name="org.thialfihar.android.apg.ui.KeyListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
