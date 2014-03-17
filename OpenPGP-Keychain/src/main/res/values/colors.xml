@@ -4,5 +4,6 @@
     <color name="emphasis">#31b6e7</color>
     <color name="bg_gray">#909090</color>
     <color name="html_text_color">#ddd</color>
+    <color name="transparent">#00000000</color>
 
 </resources>
