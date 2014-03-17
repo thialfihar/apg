@@ -17,17 +17,10 @@
 
 package org.thialfihar.android.apg.ui.adapter;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.support.v4.widget.CursorAdapter;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,19 +42,18 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 /**
  * Implements StickyListHeadersAdapter from library
  */
-public class KeyListAdapter extends CursorAdapter implements StickyListHeadersAdapter {
+public class KeyListAdapter extends HighlightQueryCursorAdapter
+        implements StickyListHeadersAdapter {
     private LayoutInflater mInflater;
     private int mSectionColumnIndex;
     private int mIndexUserId;
     private int mIndexIsRevoked;
-    private String mCurQuery;
 
     @SuppressLint("UseSparseArrays")
     private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
 
     public KeyListAdapter(Context context, Cursor c, int flags, int sectionColumnIndex) {
         super(context, c, flags);
-        mCurQuery = null;
         mInflater = LayoutInflater.from(context);
         mSectionColumnIndex = sectionColumnIndex;
         initIndex(c);
@@ -85,10 +77,6 @@ public class KeyListAdapter extends CursorAdapter implements StickyListHeadersAd
             mIndexUserId = cursor.getColumnIndexOrThrow(KeychainContract.UserIds.USER_ID);
             mIndexIsRevoked = cursor.getColumnIndexOrThrow(KeychainContract.Keys.IS_REVOKED);
         }
-    }
-
-    public void setSearchQuery(String searchQuery){
-        mCurQuery = searchQuery;
     }
 
     /**
@@ -123,7 +111,9 @@ public class KeyListAdapter extends CursorAdapter implements StickyListHeadersAd
         } else {
             revoked.setVisibility(View.GONE);
         }
-        if(mCurQuery != null){
+        String query = getSearchQuery();
+
+        if(query != null){
             mainUserId.setText(highlightSearchKey(userIdSplit[0]));
             mainUserIdRest.setText(highlightSearchKey(userIdSplit[1]));
         }
@@ -244,25 +234,6 @@ public class KeyListAdapter extends CursorAdapter implements StickyListHeadersAd
             v.setBackgroundColor(parent.getResources().getColor(R.color.emphasis));
         }
         return v;
-    }
-    private Spannable highlightSearchKey(String text) {
-        Spannable  highlight;
-        Pattern pattern;
-        Matcher matcher;
-        String     orig_str;
-
-        orig_str  = Html.fromHtml(text).toString();
-        highlight  = (Spannable) Html.fromHtml(text);
-        pattern = Pattern.compile("(?i)" + mCurQuery);
-        matcher = pattern.matcher(orig_str);
-        if (matcher.find()) {
-            highlight.setSpan(
-                new ForegroundColorSpan(0xFF33B5E5),
-                matcher.start(),
-                matcher.end(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return highlight;
     }
 
 }

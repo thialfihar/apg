@@ -19,10 +19,6 @@ package org.thialfihar.android.apg.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +35,8 @@ import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SelectKeyCursorAdapter extends CursorAdapter {
+
+public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter {
 
     protected int mKeyType;
 
@@ -50,7 +47,6 @@ public class SelectKeyCursorAdapter extends CursorAdapter {
     private int mIndexMasterKeyId;
     private int mIndexProjectionValid;
     private int mIndexProjectionAvailable;
-    private String mCurQuery;
 
     public static final String PROJECTION_ROW_AVAILABLE = "available";
     public static final String PROJECTION_ROW_VALID = "valid";
@@ -62,7 +58,6 @@ public class SelectKeyCursorAdapter extends CursorAdapter {
         mInflater = LayoutInflater.from(context);
         mListView = listView;
         mKeyType = keyType;
-        mCurQuery = null;
         initIndex(c);
     }
 
@@ -165,8 +160,8 @@ public class SelectKeyCursorAdapter extends CursorAdapter {
         mainUserIdRest.setEnabled(valid);
         keyId.setEnabled(valid);
         status.setEnabled(valid);
-
-        if(mCurQuery != null){
+        String query = getSearchQuery();
+        if(query != null){
             mainUserId.setText(highlightSearchKey(userIdSplit[0]));
             mainUserIdRest.setText(highlightSearchKey(userIdSplit[1]));
         }
@@ -175,29 +170,5 @@ public class SelectKeyCursorAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return mInflater.inflate(R.layout.select_key_item, null);
-    }
-
-    public void setSearchQuery(String searchQuery){
-        mCurQuery = searchQuery;
-    }
-
-    private Spannable highlightSearchKey(String text) {
-        Spannable  highlight;
-        Pattern pattern;
-        Matcher matcher;
-        String     orig_str;
-
-        orig_str  = Html.fromHtml(text).toString();
-        highlight  = (Spannable) Html.fromHtml(text);
-        pattern = Pattern.compile("(?i)" + mCurQuery);
-        matcher = pattern.matcher(orig_str);
-        if (matcher.find()) {
-            highlight.setSpan(
-                    new ForegroundColorSpan(0xFF33B5E5),
-                    matcher.start(),
-                    matcher.end(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return highlight;
     }
 }
