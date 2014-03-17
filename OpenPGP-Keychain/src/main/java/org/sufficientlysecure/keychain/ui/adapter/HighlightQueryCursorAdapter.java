@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.adapter;
+package org.thialfihar.android.apg.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -23,7 +23,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

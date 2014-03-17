@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
-import org.sufficientlysecure.keychain.helper.ContactHelper;
+import org.thialfihar.android.apg.helper.ContactHelper;
 
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Utils;

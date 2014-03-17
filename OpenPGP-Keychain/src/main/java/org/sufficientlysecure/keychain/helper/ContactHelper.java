@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.sufficientlysecure.keychain.helper;
+package org.thialfihar.android.apg.helper;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
