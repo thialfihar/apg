@@ -58,7 +58,6 @@
             android:visibility="visible"
             android:enabled="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
             android:text="@string/edit" />
 
         <TextView
