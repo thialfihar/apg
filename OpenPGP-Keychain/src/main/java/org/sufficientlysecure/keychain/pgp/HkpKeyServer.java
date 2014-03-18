@@ -224,9 +224,9 @@ public class HkpKeyServer extends KeyServer {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
-        String request = "/pks/lookup?op=index&search=" + encodedQuery + "&options=mr";
+        String request = "/pks/lookup?op=index&options=mr&search=" + encodedQuery;
 
-        String data = null;
+        String data;
         try {
             data = query(request);
         } catch (HttpError e) {
@@ -287,7 +287,7 @@ public class HkpKeyServer extends KeyServer {
         HttpClient client = new DefaultHttpClient();
         try {
             HttpGet get = new HttpGet("http://" + mHost + ":" + mPort
-                    + "/pks/lookup?op=get&search=" + PgpKeyHelper.convertKeyIdToHex(keyId) + "&options=mr");
+                    + "/pks/lookup?op=get&options=mr&search=" + PgpKeyHelper.convertKeyIdToHex(keyId));
 
             HttpResponse response = client.execute(get);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
