@@ -125,6 +125,7 @@ public class DecryptActivity extends DrawerActivity {
     private boolean mDecryptImmediately = false;
 
     private BootstrapButton mDecryptButton;
+    private boolean mLegacyMode;
 
     private void initView() {
         mSource = (ViewFlipper) findViewById(R.id.source);
@@ -326,6 +327,32 @@ public class DecryptActivity extends DrawerActivity {
         }
 
         String textData = extras.getString(EXTRA_TEXT);
+
+        mLegacyMode = false;
+        if ("org.thialfihar.android.apg.intent.DECRYPT_AND_RETURN".equals(action)) {
+            mLegacyMode = true;
+            Matcher matcher = PgpHelper.PGP_MESSAGE.matcher(textData);
+            if (matcher.matches()) {
+                Log.d(Constants.TAG, "PGP_MESSAGE matched");
+                textData = matcher.group(1);
+                // replace non breakable spaces
+                textData = textData.replaceAll("\\xa0", " ");
+                mMessage.setText(textData);
+            } else {
+                matcher = PgpHelper.PGP_SIGNED_MESSAGE.matcher(textData);
+                if (matcher.matches()) {
+                    Log.d(Constants.TAG, "PGP_SIGNED_MESSAGE matched");
+                    textData = matcher.group(1);
+                    // replace non breakable spaces
+                    textData = textData.replaceAll("\\xa0", " ");
+                    mMessage.setText(textData);
+                } else {
+                    Log.d(Constants.TAG, "Nothing matched!");
+                }
+            }
+            mReturnResult = true;
+            mDecryptImmediately = true;
+        }
 
         /**
          * Main Actions
@@ -671,7 +698,26 @@ public class DecryptActivity extends DrawerActivity {
                             AppMsg.STYLE_INFO).show();
                     if (mReturnResult) {
                         Intent intent = new Intent();
-                        intent.putExtras(returnData);
+                        if (mLegacyMode) {
+                            PgpDecryptVerifyResult decryptVerifyResult =
+                                returnData.getParcelable(ApgIntentService.RESULT_DECRYPT_VERIFY_RESULT);
+
+                            OpenPgpSignatureResult signatureResult = decryptVerifyResult.getSignatureResult();
+                            if (signatureResult != null) {
+                                intent.putExtra("signatureUserId", signatureResult.getUserId());
+                                intent.putExtra("signatureKeyId", signatureResult.getKeyId());
+                                intent.putExtra("signatureSuccess",
+                                    signatureResult.getStatus() ==
+                                        OpenPgpSignatureResult.SIGNATURE_SUCCESS_UNCERTIFIED);
+                                intent.putExtra("signatureUnknown",
+                                    signatureResult.getStatus() ==
+                                        OpenPgpSignatureResult.SIGNATURE_UNKNOWN_PUB_KEY);
+                            }
+                            intent.putExtra("decryptedMessage",
+                                returnData.getString(ApgIntentService.RESULT_DECRYPTED_STRING));
+                        } else {
+                            intent.putExtras(returnData);
+                        }
                         setResult(RESULT_OK, intent);
                         finish();
                         return;

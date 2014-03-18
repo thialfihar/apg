@@ -244,7 +244,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
         String action = intent.getAction();
 
         // executeServiceMethod action from extra bundle
-        if (ACTION_ENCRYPT_SIGN.equals(action)) {
+        if (ACTION_ENCRYPT_SIGN.equals(action) ||
+            "org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN".equals(action)) {
             try {
                 /* Input */
                 int target = data.getInt(TARGET);
@@ -721,10 +722,10 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 PgpImportExport pgpImportExport = new PgpImportExport(this, this, this);
 
-                resultData = pgpImportExport
-                        .exportKeyRings(keyRingRowIds, keyType, outStream);
+                resultData = pgpImportExport.exportKeyRings(keyRingRowIds, keyType, outStream);
+                outStream.close();
 
-                if (mIsCanceled){
+                if (mIsCanceled) {
                    new File(outputFile).delete();
                 }
 

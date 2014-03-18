@@ -137,6 +137,8 @@ public class EncryptActivity extends DrawerActivity {
     private BootstrapButton mEncryptClipboard;
     private BootstrapButton mEncryptFile;
 
+    private boolean mLegacyMode;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,6 +212,21 @@ public class EncryptActivity extends DrawerActivity {
 
         long signatureKeyId = extras.getLong(EXTRA_SIGNATURE_KEY_ID);
         long[] encryptionKeyIds = extras.getLongArray(EXTRA_ENCRYPTION_KEY_IDS);
+
+        mLegacyMode = false;
+        if ("org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN".equals(action)) {
+            mLegacyMode = true;
+            encryptionKeyIds = extras.getLongArray("encryptionKeyIds");
+            signatureKeyId = extras.getLong("signatureKeyId");
+            preselectKeys(signatureKeyId, encryptionKeyIds);
+            mMessage.setText(textData);
+            mSource.setInAnimation(null);
+            mSource.setOutAnimation(null);
+            while (mSource.getCurrentView().getId() != R.id.sourceMessage) {
+                mSource.showNext();
+            }
+            encryptToClipboardClicked();
+        }
 
         // preselect keys given by intent
         preselectKeys(signatureKeyId, encryptionKeyIds);
@@ -630,6 +647,14 @@ public class EncryptActivity extends DrawerActivity {
                     String output;
                     switch (mEncryptTarget) {
                         case Id.target.clipboard:
+                            if (mLegacyMode) {
+                                Intent result = new Intent();
+                                result.putExtra("encryptedMessage",
+                                    data.getString(ApgIntentService.RESULT_ENCRYPTED_STRING));
+                                EncryptActivity.this.setResult(EncryptActivity.RESULT_OK, result);
+                                EncryptActivity.this.finish();
+                                return;
+                            }
                             output = data.getString(ApgIntentService.RESULT_ENCRYPTED_STRING);
                             Log.d(Constants.TAG, "output: " + output);
                             ClipboardReflection.copyToClipboard(EncryptActivity.this, output);

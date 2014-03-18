@@ -125,6 +125,10 @@ public class SelectPublicKeyActivity extends ActionBarActivity {
 
         // preselected master keys
         mSelectedMasterKeyIds = intent.getLongArrayExtra(EXTRA_SELECTED_MASTER_KEY_IDS);
+        long[] keys = intent.getLongArrayExtra("selection");
+        if (keys != null) {
+            mSelectedMasterKeyIds = keys;
+        }
     }
 
     private void cancelClicked() {
@@ -136,6 +140,7 @@ public class SelectPublicKeyActivity extends ActionBarActivity {
         Intent data = new Intent();
         data.putExtra(RESULT_EXTRA_MASTER_KEY_IDS, mSelectFragment.getSelectedMasterKeyIds());
         data.putExtra(RESULT_EXTRA_USER_IDS, mSelectFragment.getSelectedUserIds());
+        data.putExtra("selection", mSelectFragment.getSelectedMasterKeyIds());
         setResult(RESULT_OK, data);
         finish();
     }

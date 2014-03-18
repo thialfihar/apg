@@ -98,6 +98,8 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
         Intent data = new Intent();
         data.putExtra(RESULT_EXTRA_MASTER_KEY_ID, masterKeyId);
         data.putExtra(RESULT_EXTRA_USER_ID, (String) userId);
+        data.putExtra("keyId", masterKeyId);
+        data.putExtra("userId", (String) userId);
         setResult(RESULT_OK, data);
         finish();
     }

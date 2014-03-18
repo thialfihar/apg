@@ -38,7 +38,7 @@ public final class Constants {
     public static final String SC = BouncyCastleProvider.PROVIDER_NAME;
     public static final String BOUNCY_CASTLE_PROVIDER_NAME = SC;
 
-    public static final String INTENT_PREFIX = PACKAGE_NAME + ".action.";
+    public static final String INTENT_PREFIX = PACKAGE_NAME + ".intent.";
 
     public static final class Path {
         public static final String APP_DIR = Environment.getExternalStorageDirectory() + "/APG";
