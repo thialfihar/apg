@@ -40,13 +40,13 @@ public final class Constants {
 
     public static final String INTENT_PREFIX = PACKAGE_NAME + ".action.";
 
-    public static final class path {
+    public static final class Path {
         public static final String APP_DIR = Environment.getExternalStorageDirectory() + "/APG";
         public static final String APP_DIR_FILE_SEC = APP_DIR + "/secexport.asc";
         public static final String APP_DIR_FILE_PUB = APP_DIR + "/pubexport.asc";
     }
 
-    public static final class pref {
+    public static final class Pref {
         public static final String DEFAULT_ENCRYPTION_ALGORITHM = "defaultEncryptionAlgorithm";
         public static final String DEFAULT_HASH_ALGORITHM = "defaultHashAlgorithm";
         public static final String DEFAULT_ASCII_ARMOR = "defaultAsciiArmor";
@@ -58,7 +58,7 @@ public final class Constants {
         public static final String KEY_SERVERS = "keyServers";
     }
 
-    public static final class defaults {
+    public static final class Defaults {
         public static final String KEY_SERVERS = "pool.sks-keyservers.net, subkeys.pgp.net, pgp.mit.edu";
     }
 
