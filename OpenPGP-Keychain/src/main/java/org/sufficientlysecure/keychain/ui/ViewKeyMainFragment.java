@@ -219,6 +219,7 @@ public class ViewKeyMainFragment extends Fragment  implements
         KeychainContract.Keys.CAN_CERTIFY,
         KeychainContract.Keys.CAN_SIGN,
         KeychainContract.Keys.CAN_ENCRYPT,
+        KeychainContract.Keys.IS_REVOKED,
         KeychainContract.Keys.CREATION,
         KeychainContract.Keys.EXPIRY,
         KeychainContract.Keys.FINGERPRINT,
@@ -232,9 +233,10 @@ public class ViewKeyMainFragment extends Fragment  implements
     static final int KEYS_INDEX_CAN_CERTIFY = 5;
     static final int KEYS_INDEX_CAN_SIGN = 6;
     static final int KEYS_INDEX_CAN_ENCRYPT = 7;
-    static final int KEYS_INDEX_CREATION = 8;
-    static final int KEYS_INDEX_EXPIRY = 9;
-    static final int KEYS_INDEX_FINGERPRINT = 10;
+    static final int KEY_INDEX_IS_REVOKED = 8;
+    static final int KEYS_INDEX_CREATION = 9;
+    static final int KEYS_INDEX_EXPIRY = 10;
+    static final int KEYS_INDEX_FINGERPRINT = 11;
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
