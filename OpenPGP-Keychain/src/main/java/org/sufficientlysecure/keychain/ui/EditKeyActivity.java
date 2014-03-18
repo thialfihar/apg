@@ -373,8 +373,8 @@ public class EditKeyActivity extends ActionBarActivity {
 
         mCurrentPassphrase = "";
 
-        buildLayout();
         mIsPassphraseSet = PassphraseCacheService.hasPassphrase(this, masterKeyId);
+        buildLayout();
         if (!mIsPassphraseSet) {
             // check "no passphrase" checkbox and remove button
             mNoPassphrase.setChecked(true);
@@ -429,11 +429,14 @@ public class EditKeyActivity extends ActionBarActivity {
         // find views
         mChangePassphrase = (BootstrapButton) findViewById(R.id.edit_key_btn_change_passphrase);
         mNoPassphrase = (CheckBox) findViewById(R.id.edit_key_no_passphrase);
-
         // Build layout based on given userIds and keys
+
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         LinearLayout container = (LinearLayout) findViewById(R.id.edit_key_container);
+        if(mIsPassphraseSet){
+            mChangePassphrase.setText(getString(R.string.btn_change_passphrase));
+        }
         mUserIdsView = (SectionView) inflater.inflate(R.layout.edit_key_section, container, false);
         mUserIdsView.setType(Id.type.user_id);
         mUserIdsView.setCanBeEdited(mMasterCanSign);
