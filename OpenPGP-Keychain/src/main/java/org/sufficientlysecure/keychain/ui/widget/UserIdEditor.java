@@ -17,7 +17,10 @@
 package org.sufficientlysecure.keychain.ui.widget;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -37,14 +40,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     private EditText mName;
     private AutoCompleteTextView mEmail;
     private EditText mComment;
-
-    // see http://www.regular-expressions.info/email.html
-    // RFC 2822 if we omit the syntax using double quotes and square brackets
-    // android.util.Patterns.EMAIL_ADDRESS is only available as of Android 2.2+
-    private static final Pattern EMAIL_PATTERN = Pattern
-            .compile(
-                    "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-                    Pattern.CASE_INSENSITIVE);
 
     public static class NoNameException extends Exception {
         static final long serialVersionUID = 0xf812773343L;
@@ -109,6 +104,31 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
                         (this.getContext(), android.R.layout.simple_dropdown_item_1line,
                                 ContactHelper.getMailAccounts(getContext())
                         ));
+        mEmail.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String email = editable.toString();
+                if (email.length() > 0) {
+                    Matcher emailMatcher = Patterns.EMAIL_ADDRESS.matcher(email);
+                    if (emailMatcher.matches()) {
+                        mEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+                                    android.R.drawable.presence_online, 0);
+                    } else {
+                        mEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+                                    android.R.drawable.presence_offline, 0);
+                    }
+                } else {
+                    // remove drawable if email is empty
+                    mEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
+            }
+        });
 
         super.onFinishInflate();
     }
@@ -136,18 +156,10 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         }
     }
 
-    public String getValue() throws NoNameException, NoEmailException, InvalidEmailException {
+    public String getValue() throws NoNameException, NoEmailException {
         String name = ("" + mName.getText()).trim();
         String email = ("" + mEmail.getText()).trim();
         String comment = ("" + mComment.getText()).trim();
-
-        if (email.length() > 0) {
-            Matcher emailMatcher = EMAIL_PATTERN.matcher(email);
-            if (!emailMatcher.matches()) {
-                throw new InvalidEmailException(getContext().getString(R.string.error_invalid_email,
-                        email));
-            }
-        }
 
         String userId = name;
         if (comment.length() > 0) {
