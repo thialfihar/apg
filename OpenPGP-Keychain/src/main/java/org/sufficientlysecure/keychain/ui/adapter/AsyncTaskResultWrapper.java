@@ -28,7 +28,7 @@ public class AsyncTaskResultWrapper<T> {
     private final T mResult;
     private final Exception mError;
 
-    public AsyncTaskResultWrapper(T result, Exception error){
+    public AsyncTaskResultWrapper(T result, Exception error) {
         mResult = result;
         mError = error;
     }

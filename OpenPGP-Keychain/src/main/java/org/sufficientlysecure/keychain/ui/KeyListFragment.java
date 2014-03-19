@@ -259,7 +259,7 @@ public class KeyListFragment extends Fragment
     }
 
     // These are the rows that we will retrieve.
-    static final String[] PROJECTION = new String[]{
+    static final String[] PROJECTION = new String[] {
             KeychainContract.KeyRings._ID,
             KeychainContract.KeyRings.TYPE,
             KeychainContract.KeyRings.MASTER_KEY_ID,
@@ -287,7 +287,7 @@ public class KeyListFragment extends Fragment
         String whereArgs[] = null;
         if (mCurQuery != null) {
             where = KeychainContract.UserIds.USER_ID + " LIKE ?";
-            whereArgs = new String[]{"%" + mCurQuery + "%"};
+            whereArgs = new String[] {"%" + mCurQuery + "%"};
         }
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.

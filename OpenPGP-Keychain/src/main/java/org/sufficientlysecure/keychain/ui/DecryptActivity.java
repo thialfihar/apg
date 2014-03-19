@@ -565,7 +565,7 @@ public class DecryptActivity extends DrawerActivity {
                     if (inStream != null) {
                         inStream.close();
                     }
-                } catch (Exception e){ }
+                } catch (Exception e) { }
             }
         } else {
             inStream = new ByteArrayInputStream(mMessage.getText().toString().getBytes());
@@ -608,7 +608,7 @@ public class DecryptActivity extends DrawerActivity {
         data = "\n\n" + data;
         intent.putExtra(EncryptActivity.EXTRA_TEXT, data);
         intent.putExtra(EncryptActivity.EXTRA_SIGNATURE_KEY_ID, mSecretKeyId);
-        intent.putExtra(EncryptActivity.EXTRA_ENCRYPTION_KEY_IDS, new long[]{mSignatureKeyId});
+        intent.putExtra(EncryptActivity.EXTRA_ENCRYPTION_KEY_IDS, new long[] {mSignatureKeyId});
         startActivity(intent);
     }
 

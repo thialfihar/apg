@@ -488,7 +488,8 @@ public class PgpKeyHelper {
      * @return
      */
     public static String convertKeyIdToHex(long keyId) {
-        return "0x" + ((keyId >> 32) > 0 ? convertKeyIdToHex32bit(keyId >> 32) : "") + convertKeyIdToHex32bit(keyId);
+        return "0x" + ((keyId >> 32) > 0 ? convertKeyIdToHex32bit(keyId >> 32) : "") +
+                convertKeyIdToHex32bit(keyId);
     }
 
     private static String convertKeyIdToHex32bit(long keyId) {
@@ -519,7 +520,7 @@ public class PgpKeyHelper {
      * @return array with naming (0), email (1), comment (2)
      */
     public static String[] splitUserId(String userId) {
-        String[] result = new String[]{null, null, null};
+        String[] result = new String[] {null, null, null};
 
         if (userId == null || userId.equals("")) {
             return result;

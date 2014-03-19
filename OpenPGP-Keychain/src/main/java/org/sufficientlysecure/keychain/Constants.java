@@ -74,7 +74,7 @@ public final class Constants {
         public static final Class DECRYPT = DecryptActivity.class;
         public static final Class IMPORT_KEYS = ImportKeysActivity.class;
         public static final Class REGISTERED_APPS_LIST = RegisteredAppsListActivity.class;
-        public static final Class[] ARRAY = new Class[]{KEY_LIST, ENCRYPT, DECRYPT,
+        public static final Class[] ARRAY = new Class[] {KEY_LIST, ENCRYPT, DECRYPT,
                                                 IMPORT_KEYS, REGISTERED_APPS_LIST};
     }
 }

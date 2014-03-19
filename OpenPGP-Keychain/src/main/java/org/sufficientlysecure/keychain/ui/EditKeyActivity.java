@@ -326,7 +326,7 @@ public class EditKeyActivity extends ActionBarActivity {
             cancelClicked();
             return true;
         case R.id.menu_key_edit_export_file:
-            long[] ids = new long[]{Long.valueOf(mDataUri.getLastPathSegment())};
+            long[] ids = new long[] {Long.valueOf(mDataUri.getLastPathSegment())};
             mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC);
             return true;
         case R.id.menu_key_edit_delete: {
@@ -434,7 +434,7 @@ public class EditKeyActivity extends ActionBarActivity {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         LinearLayout container = (LinearLayout) findViewById(R.id.edit_key_container);
-        if(mIsPassphraseSet){
+        if (mIsPassphraseSet) {
             mChangePassphrase.setText(getString(R.string.btn_change_passphrase));
         }
         mUserIdsView = (SectionView) inflater.inflate(R.layout.edit_key_section, container, false);

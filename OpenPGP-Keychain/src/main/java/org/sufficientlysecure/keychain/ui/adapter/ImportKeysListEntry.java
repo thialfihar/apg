@@ -180,7 +180,7 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     /**
      * Based on <a href="http://tools.ietf.org/html/rfc2440#section-9.1">OpenPGP Message Format</a>
      */
-    private final static SparseArray<String> ALGORITHM_IDS = new SparseArray<String>() {{
+    private static final SparseArray<String> ALGORITHM_IDS = new SparseArray<String>() {{
         put(-1, "unknown"); // TODO: with resources
         put(0, "unencrypted");
         put(PGPPublicKey.RSA_GENERAL, "RSA");
@@ -198,6 +198,8 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
      * Based on <a href="http://tools.ietf.org/html/rfc2440#section-9.1">OpenPGP Message Format</a>
      */
     public static String getAlgorithmFromId(int algorithmId) {
-        return (ALGORITHM_IDS.get(algorithmId) != null ? ALGORITHM_IDS.get(algorithmId) : ALGORITHM_IDS.get(-1));
+        return (ALGORITHM_IDS.get(algorithmId) != null ?
+                    ALGORITHM_IDS.get(algorithmId) :
+                    ALGORITHM_IDS.get(-1));
     }
 }

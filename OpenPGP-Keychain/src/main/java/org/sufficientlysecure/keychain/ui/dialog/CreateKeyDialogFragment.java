@@ -148,5 +148,4 @@ public class CreateKeyDialogFragment extends DialogFragment {
 
         return dialog.create();
     }
-
 }

@@ -106,7 +106,7 @@ public class DeleteKeyDialogFragment extends DialogFragment {
 
                 if (keyType == Id.type.public_key) {
                     Uri queryUri = KeychainContract.KeyRings.buildPublicKeyRingsUri();
-                    String[] projection = new String[]{
+                    String[] projection = new String[] {
                             KeychainContract.KeyRings._ID, // 0
                             KeychainContract.KeyRings.MASTER_KEY_ID, // 1
                             KeychainContract.UserIds.USER_ID // 2

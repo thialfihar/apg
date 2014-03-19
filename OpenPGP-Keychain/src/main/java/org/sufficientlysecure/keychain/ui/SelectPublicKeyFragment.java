@@ -260,7 +260,7 @@ public class SelectPublicKeyFragment extends ListFragmentWorkaround implements T
 
         // These are the rows that we will retrieve.
         long now = new Date().getTime() / 1000;
-        String[] projection = new String[]{
+        String[] projection = new String[] {
                 KeyRings._ID,
                 KeyRings.MASTER_KEY_ID,
                 UserIds.USER_ID,

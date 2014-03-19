@@ -269,24 +269,28 @@ public class PgpKeyOperation {
                     // re-add certs for this uid, take a note if self-signed cert is in there
                     boolean foundSelfSign = false;
                     Iterator<PGPSignature> it = tmpKey.getSignaturesForID(userId);
-                    if(it != null) for(PGPSignature sig : new IterableIterator<PGPSignature>(it)) {
-                        if(sig.getKeyID() == masterPublicKey.getKeyID()) {
-                            // already have a self sign? skip this other one, then.
-                            // note: PGPKeyRingGenerator adds one cert for the main user id, which
-                            // will lead to duplicates. unfortunately, if we add any other here
-                            // first, that will change the main user id order...
-                            if(foundSelfSign)
-                                continue;
-                            foundSelfSign = true;
+                    if (it != null) {
+                        for (PGPSignature sig : new IterableIterator<PGPSignature>(it)) {
+                            if (sig.getKeyID() == masterPublicKey.getKeyID()) {
+                                // already have a self sign? skip this other one, then.
+                                // note: PGPKeyRingGenerator adds one cert for the main user id, which
+                                // will lead to duplicates. unfortunately, if we add any other here
+                                // first, that will change the main user id order...
+                                if (foundSelfSign) {
+                                    continue;
+                                }
+                                foundSelfSign = true;
+                            }
+                            Log.d(Constants.TAG, "adding old sig for " + userId + " from "
+                                    + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()));
+                            masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, sig);
                         }
-                        Log.d(Constants.TAG, "adding old sig for " + userId + " from "
-                                + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()));
-                        masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, sig);
                     }
 
                     // there was an old self-signed certificate for this uid
-                    if(foundSelfSign)
+                    if (foundSelfSign) {
                         continue;
+                    }
 
                     Log.d(Constants.TAG, "generating self-signed cert for " + userId);
 
@@ -441,12 +445,13 @@ public class PgpKeyOperation {
         // re-add certificates from old public key
         // TODO: this only takes care of user id certificates, what about others?
         PGPPublicKey pubkey = publicKeyRing.getPublicKey();
-        for(String uid : new IterableIterator<String>(pubkey.getUserIDs())) {
-            for(PGPSignature sig : new IterableIterator<PGPSignature>(
+        for (String uid : new IterableIterator<String>(pubkey.getUserIDs())) {
+            for (PGPSignature sig : new IterableIterator<PGPSignature>(
                     oldPublicKey.getPublicKey().getSignaturesForID(uid), true)) {
                 // but skip self certificates
-                if(sig.getKeyID() == pubkey.getKeyID())
+                if (sig.getKeyID() == pubkey.getKeyID()) {
                     continue;
+                }
                 pubkey = PGPPublicKey.addCertification(pubkey, uid, sig);
             }
         }
@@ -456,15 +461,19 @@ public class PgpKeyOperation {
 
         /* additional handy debug info
         Log.d(Constants.TAG, " ------- in private key -------");
-        for(String uid : new IterableIterator<String>(secretKeyRing.getPublicKey().getUserIDs())) {
-            for(PGPSignature sig : new IterableIterator<PGPSignature>(secretKeyRing.getPublicKey().getSignaturesForID(uid))) {
-                Log.d(Constants.TAG, "sig: " + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()) + " for " + uid);
+        for (String uid : new IterableIterator<String>(secretKeyRing.getPublicKey().getUserIDs())) {
+            for (PGPSignature sig : new IterableIterator<PGPSignature>(i
+                secretKeyRing.getPublicKey().getSignaturesForID(uid))) {
+                Log.d(Constants.TAG, "sig: " + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()) + i
+                        " for " + uid);
             }
         }
         Log.d(Constants.TAG, " ------- in public key -------");
-        for(String uid : new IterableIterator<String>(publicKeyRing.getPublicKey().getUserIDs())) {
-            for(PGPSignature sig : new IterableIterator<PGPSignature>(publicKeyRing.getPublicKey().getSignaturesForID(uid))) {
-                Log.d(Constants.TAG, "sig: " + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()) + " for " + uid);
+        for (String uid : new IterableIterator<String>(publicKeyRing.getPublicKey().getUserIDs())) {
+            for (PGPSignature sig : new IterableIterator<PGPSignature>(
+                publicKeyRing.getPublicKey().getSignaturesForID(uid))) {
+                Log.d(Constants.TAG, "sig: " + PgpKeyHelper.convertKeyIdToHex(sig.getKeyID()) +
+                        " for " + uid);
             }
         }
         */

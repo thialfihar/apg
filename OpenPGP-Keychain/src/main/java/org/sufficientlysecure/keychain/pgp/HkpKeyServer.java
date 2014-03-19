@@ -18,8 +18,6 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import android.text.Html;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -80,19 +78,24 @@ public class HkpKeyServer extends KeyServer {
     /**
      * pub:%keyid%:%algo%:%keylen%:%creationdate%:%expirationdate%:%flags%
      * <ul>
-     *     <li>%<b>keyid</b>% = this is either the fingerprint or the key ID of the key. Either the 16-digit or 8-digit
+     *     <li>%<b>keyid</b>% = this is either the fingerprint or the key ID of the key. Either
+     *          the 16-digit or 8-digit
      *          key IDs are acceptable, but obviously the fingerprint is best.</li>
      *     <li>%<b>algo</b>% = the algorithm number, (i.e. 1==RSA, 17==DSA, etc).
      *          See <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a></li>
      *     <li>%<b>keylen</b>% = the key length (i.e. 1024, 2048, 4096, etc.)</li>
      *     <li>%<b>creationdate</b>% = creation date of the key in standard
-     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e. number of seconds since
+     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e.
+     *          number of seconds since
      *          1/1/1970 UTC time)</li>
      *     <li>%<b>expirationdate</b>% = expiration date of the key in standard
-     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e. number of seconds since
+     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e.
+     *          number of seconds since
      *          1/1/1970 UTC time)</li>
-     *     <li>%<b>flags</b>% = letter codes to indicate details of the key, if any. Flags may be in any order. The
-     *          meaning of "disabled" is implementation-specific. Note that individual flags may be unimplemented, so
+     *     <li>%<b>flags</b>% = letter codes to indicate details of the key, if any. Flags may be
+     *          in any order. The
+     *          meaning of "disabled" is implementation-specific. Note that individual flags may be
+     *          unimplemented, so
      *          the absence of a given flag does not necessarily mean the absence of the detail.
      *          <ul>
      *              <li>r == revoked</li>
@@ -102,7 +105,8 @@ public class HkpKeyServer extends KeyServer {
      *     </li>
      * </ul>
      *
-     * @see <a href="http://tools.ietf.org/html/draft-shaw-openpgp-hkp-00#section-5.2">5.2. Machine Readable Indexes</a>
+     * @see <a href="http://tools.ietf.org/html/draft-shaw-openpgp-hkp-00#section-5.2">5.2. Machine
+     *  Readable Indexes</a>
      * in Internet-Draft OpenPGP HTTP Keyserver Protocol Document
      */
     public static final Pattern PUB_KEY_LINE = Pattern
@@ -113,16 +117,22 @@ public class HkpKeyServer extends KeyServer {
     /**
      * uid:%escaped uid string%:%creationdate%:%expirationdate%:%flags%
      * <ul>
-     *      <li>%<b>escaped uid string</b>% = the user ID string, with HTTP %-escaping for anything that isn't 7-bit
-     *          safe as well as for the ":" character.  Any other characters may be escaped, as desired.</li>
+     *      <li>%<b>escaped uid string</b>% = the user ID string, with HTTP %-escaping for anything
+     *          that isn't 7-bit
+     *          safe as well as for the ":" character.  Any other characters may be escaped, as
+     *          desired.</li>
      *      <li>%<b>creationdate</b>% = creation date of the key in standard
-     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e. number of seconds since
+     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e.
+     *          number of seconds since
      *          1/1/1970 UTC time)</li>
      *      <li>%<b>expirationdate</b>% = expiration date of the key in standard
-     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e. number of seconds since
+     *          <a href="http://tools.ietf.org/html/rfc2440#section-9.1">RFC-2440</a> form (i.e.
+     *          number of seconds since
      *          1/1/1970 UTC time)</li>
-     *      <li>%<b>flags</b>% = letter codes to indicate details of the key, if any. Flags may be in any order. The
-     *          meaning of "disabled" is implementation-specific. Note that individual flags may be unimplemented, so
+     *      <li>%<b>flags</b>% = letter codes to indicate details of the key, if any. Flags may be
+     *          in any order. The
+     *          meaning of "disabled" is implementation-specific. Note that individual flags may be
+     *          unimplemented, so
      *          the absence of a given flag does not necessarily mean the absence of the detail.
      *          <ul>
      *              <li>r == revoked</li>
@@ -140,8 +150,10 @@ public class HkpKeyServer extends KeyServer {
 
     /**
      * @param hostAndPort may be just
-     *                    "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then it will
-     *                    connect using {@link #PORT_DEFAULT}. However, port may be specified after colon
+     *                    "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then
+     *                      it will
+     *                    connect using {@link #PORT_DEFAULT}. However, port may be specified after
+     *                      colon
      *                    ("<code>hostname:port</code>", eg. "<code>p80.pool.sks-keyservers.net:80</code>").
      */
     public HkpKeyServer(String hostAndPort) {

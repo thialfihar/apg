@@ -65,7 +65,7 @@ public class ProviderHelper implements PgpKeyProvider {
      */
     public KeyRing getKeyRing(Uri queryUri) {
         Cursor cursor = mContext.getContentResolver().query(queryUri,
-                new String[]{KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
+                new String[] {KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
 
         KeyRing keyRing = null;
         if (cursor != null && cursor.moveToFirst()) {
@@ -222,7 +222,7 @@ public class ProviderHelper implements PgpKeyProvider {
      */
     public static PGPKeyRing getPGPKeyRing(Context context, Uri queryUri) {
         Cursor cursor = context.getContentResolver().query(queryUri,
-                new String[]{KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
+                new String[] {KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
 
         KeyRing keyRing = null;
         if (cursor != null && cursor.moveToFirst()) {
@@ -574,7 +574,7 @@ public class ProviderHelper implements PgpKeyProvider {
      */
     private static ArrayList<Long> getKeyRingsMasterKeyIds(Context context, Uri queryUri) {
         Cursor cursor = context.getContentResolver().query(queryUri,
-                new String[]{KeyRings.MASTER_KEY_ID}, null, null, null);
+                new String[] {KeyRings.MASTER_KEY_ID}, null, null, null);
 
         ArrayList<Long> masterKeyIds = new ArrayList<Long>();
         if (cursor != null) {
@@ -598,7 +598,7 @@ public class ProviderHelper implements PgpKeyProvider {
      */
     private static ArrayList<Long> getKeyRingsRowIds(Context context, Uri queryUri) {
         Cursor cursor = context.getContentResolver().query(queryUri,
-                new String[]{KeyRings._ID}, null, null, null);
+                new String[] {KeyRings._ID}, null, null, null);
 
         ArrayList<Long> rowIds = new ArrayList<Long>();
         if (cursor != null) {
@@ -723,7 +723,7 @@ public class ProviderHelper implements PgpKeyProvider {
      * Get master key id of key
      */
     public static long getMasterKeyId(Context context, Uri queryUri) {
-        String[] projection = new String[]{KeyRings.MASTER_KEY_ID};
+        String[] projection = new String[] {KeyRings.MASTER_KEY_ID};
         Cursor cursor = context.getContentResolver().query(queryUri, projection, null, null, null);
 
         long masterKeyId = 0;
@@ -743,7 +743,7 @@ public class ProviderHelper implements PgpKeyProvider {
     }
 
     public static long getRowId(Context context, Uri queryUri) {
-        String[] projection = new String[]{KeyRings._ID};
+        String[] projection = new String[] {KeyRings._ID};
         Cursor cursor = context.getContentResolver().query(queryUri, projection, null, null, null);
 
         long rowId = 0;
@@ -766,7 +766,7 @@ public class ProviderHelper implements PgpKeyProvider {
      * Get fingerprint of key
      */
     public static byte[] getFingerprint(Context context, Uri queryUri) {
-        String[] projection = new String[]{Keys.FINGERPRINT};
+        String[] projection = new String[] {Keys.FINGERPRINT};
         Cursor cursor = context.getContentResolver().query(queryUri, projection, null, null, null);
 
         byte[] fingerprint = null;
@@ -788,7 +788,7 @@ public class ProviderHelper implements PgpKeyProvider {
             Log.d(Constants.TAG, "FALLBACK: fingerprint is not in database, get it from key blob!");
 
             // get master key id
-            projection = new String[]{KeyRings.MASTER_KEY_ID};
+            projection = new String[] {KeyRings.MASTER_KEY_ID};
             cursor = context.getContentResolver().query(queryUri, projection, null, null, null);
             long masterKeyId = 0;
             try {
@@ -821,7 +821,7 @@ public class ProviderHelper implements PgpKeyProvider {
     }
 
     public static String getUserId(Context context, Uri queryUri) {
-        String[] projection = new String[]{UserIds.USER_ID};
+        String[] projection = new String[] {UserIds.USER_ID};
         Cursor cursor = context.getContentResolver().query(queryUri, projection, null, null, null);
 
         String userId = null;
@@ -890,7 +890,7 @@ public class ProviderHelper implements PgpKeyProvider {
             inMasterKeyList += ")";
 
             cursor = context.getContentResolver().query(baseUri,
-                    new String[]{KeyRings._ID, KeyRings.MASTER_KEY_ID, KeyRings.KEY_RING_DATA},
+                    new String[] {KeyRings._ID, KeyRings.MASTER_KEY_ID, KeyRings.KEY_RING_DATA},
                     inMasterKeyList, null, null);
         }
 
@@ -967,7 +967,7 @@ public class ProviderHelper implements PgpKeyProvider {
     public static byte[] getApiAppSignature(Context context, String packageName) {
         Uri queryUri = KeychainContract.ApiApps.buildByPackageNameUri(packageName);
 
-        String[] projection = new String[]{ApiApps.PACKAGE_SIGNATURE};
+        String[] projection = new String[] {ApiApps.PACKAGE_SIGNATURE};
 
         ContentResolver cr = context.getContentResolver();
         Cursor cursor = cr.query(queryUri, projection, null, null, null);

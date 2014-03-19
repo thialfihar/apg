@@ -185,7 +185,7 @@ public class PgpImportExport {
                 if (secretKeyRing != null) {
                     secretKeyRing.encode(arOutStream);
                 }
-                if (mKeychainServiceListener.hasServiceStopped()){
+                if (mKeychainServiceListener.hasServiceStopped()) {
                     arOutStream.close();
                     return null;
                 }
@@ -198,7 +198,7 @@ public class PgpImportExport {
                     publicKeyRing.encode(arOutStream);
                 }
 
-                if (mKeychainServiceListener.hasServiceStopped()){
+                if (mKeychainServiceListener.hasServiceStopped()) {
                     arOutStream.close();
                     return null;
                 }

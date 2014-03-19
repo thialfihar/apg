@@ -80,7 +80,7 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
     private Fragment mCurrentFragment;
     private BootstrapButton mImportButton;
 
-    private static final Class[] NAVIGATION_CLASSES = new Class[]{
+    private static final Class[] NAVIGATION_CLASSES = new Class[] {
             ImportKeysServerFragment.class,
             ImportKeysFileFragment.class,
             ImportKeysQrCodeFragment.class,

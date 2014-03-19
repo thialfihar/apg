@@ -39,7 +39,6 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.Utils;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ViewKeyKeysAdapter;
@@ -368,7 +367,7 @@ public class ViewKeyMainFragment extends Fragment  implements
     private void encryptToContact(Uri dataUri) {
         long keyId = ProviderHelper.getMasterKeyId(getActivity(), dataUri);
 
-        long[] encryptionKeyIds = new long[]{keyId};
+        long[] encryptionKeyIds = new long[] {keyId};
         Intent intent = new Intent(getActivity(), EncryptActivity.class);
         intent.setAction(EncryptActivity.ACTION_ENCRYPT);
         intent.putExtra(EncryptActivity.EXTRA_ENCRYPTION_KEY_IDS, encryptionKeyIds);
