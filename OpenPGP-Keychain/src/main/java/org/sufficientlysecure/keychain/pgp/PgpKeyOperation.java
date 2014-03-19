@@ -305,10 +305,12 @@ public class PgpKeyOperation {
                     GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
                     creationDate.setTime(masterPublicKey.getCreationTime());
                     GregorianCalendar expiryDate = keysExpiryDates.get(0);
-                    //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
-                    //here we purposefully ignore partial days in each date - long type has no fractional part!
+                    // note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
+                    // here we purposefully ignore partial days in each date - long type has no
+                    // fractional part!
                     long numDays =
-                            (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
+                            (expiryDate.getTimeInMillis() / 86400000) -
+                            (creationDate.getTimeInMillis() / 86400000);
                     if (numDays <= 0) {
                         throw new PgpGeneralException(
                                 mContext.getString(R.string.error_expiry_must_come_after_creation));
@@ -427,7 +429,8 @@ public class PgpKeyOperation {
      * @param passphrase Passphrase of the secret key
      * @return A keyring with added certifications
      */
-    public PGPPublicKeyRing certifyKey(long masterKeyId, long pubKeyId, List<String> userIds, String passphrase)
+    public PGPPublicKeyRing certifyKey(long masterKeyId, long pubKeyId, List<String> userIds,
+                                        String passphrase)
             throws PgpGeneralException, NoSuchAlgorithmException, NoSuchProviderException,
             PGPException, SignatureException {
         if (passphrase == null) {
@@ -469,7 +472,7 @@ public class PgpKeyOperation {
             PGPPublicKeyRing pubring = ProviderHelper
                     .getPGPPublicKeyRingByKeyId(mContext, pubKeyId);
             PGPPublicKey signedKey = pubring.getPublicKey(pubKeyId);
-            for(String userId : new IterableIterator<String>(userIds.iterator())) {
+            for (String userId : new IterableIterator<String>(userIds.iterator())) {
                 PGPSignature sig = signatureGenerator.generateCertification(userId, signedKey);
                 signedKey = PGPPublicKey.addCertification(signedKey, userId, sig);
             }
