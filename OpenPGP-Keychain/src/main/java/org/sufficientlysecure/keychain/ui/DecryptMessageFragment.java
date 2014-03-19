@@ -39,7 +39,7 @@ public class DecryptMessageFragment extends Fragment {
         public void guessOutputFilename(EditText v);
         public void showPassphraseDialog(View v);
         public void askForOutputFilename(View v, int code);
-        public void decryptClicked(View fragment_view, int code);
+        public void decryptClicked(View fragmentView, int code);
         public void decryptStart(View view, int code);
         public void mSignatureLayout_OnClick();
         public void lookupUnknownKey(long id);
@@ -59,7 +59,7 @@ public class DecryptMessageFragment extends Fragment {
     public static final String ACTION_DECRYPT = Constants.INTENT_PREFIX + "DECRYPT";
     private BootstrapButton mLookupKey = null;
     private BootstrapButton mDecryptButton;
-
+    private BootstrapButton mPastefromClipboard;
     private EditText mMessage = null;
     private long mSignatureKeyId = 0;
     private final int mDecryptTarget = Id.target.message;
@@ -72,12 +72,17 @@ public class DecryptMessageFragment extends Fragment {
 
         mMessage = (EditText)mMainView.findViewById(R.id.message);
         mSignatureLayout = (LinearLayout) mMainView.findViewById(R.id.signature);
+        mLookupKey = (BootstrapButton) mMainView.findViewById(R.id.lookup_key);
         mSignatureLayout.setVisibility(View.GONE);
         mSignatureStatusImage = (ImageView) mMainView.findViewById(R.id.ic_signature_status);
         mUserId = (TextView) mMainView.findViewById(R.id.mainUserId);
         mUserIdRest = (TextView) mMainView.findViewById(R.id.mainUserIdRest);
-
-
+        mPastefromClipboard = (BootstrapButton) mMainView.findViewById(R.id.decrypt_paste_from_clipboard);
+        mPastefromClipboard.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                PasteContentfromClipboard();
+            }
+        });
         mLookupKey = (BootstrapButton) mMainView.findViewById(R.id.lookup_key);
         mLookupKey.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +120,7 @@ public class DecryptMessageFragment extends Fragment {
             handleArguments(getArguments());
         }
         initView();
-        checkforClipboardContent();
+
         return mMainView;
     }
 
@@ -197,7 +202,7 @@ public class DecryptMessageFragment extends Fragment {
 
     }
 
-    private void checkforClipboardContent(){
+    private void PasteContentfromClipboard(){
         CharSequence clipboardText = ClipboardReflection.getClipboardText(getActivity());
 
         String data = "";
@@ -211,8 +216,11 @@ public class DecryptMessageFragment extends Fragment {
                 mMessage.setText(data);
                 AppMsg.makeText(getActivity(), R.string.using_clipboard_content, AppMsg.STYLE_INFO)
                         .show();
+
+                decryptionfunctions.decryptClicked(mMainView, mDecryptTarget);
             }
         }
+
 
 
     }
