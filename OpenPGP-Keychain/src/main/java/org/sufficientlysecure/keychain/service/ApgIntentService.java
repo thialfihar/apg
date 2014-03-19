@@ -407,7 +407,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -534,7 +534,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -573,7 +573,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);
 
                 /* Output */
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -595,7 +595,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -635,7 +635,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -656,7 +656,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 }
 
                 /* Output */
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -669,7 +669,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 PgpImportExport pgpImportExport = new PgpImportExport(this, this);
                 resultData = pgpImportExport.importKeyRings(entries);
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY, resultData);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -753,7 +753,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     }
                 }
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -842,7 +842,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     throw new PgpGeneralException("Failed to store signed key in local cache");
                 }
 
-                sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_OKAY);
+                sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }
@@ -859,8 +859,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
         e.printStackTrace();
 
         Bundle data = new Bundle();
-        data.putString(KeychainIntentServiceHandler.DATA_ERROR, e.getMessage());
-        sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_EXCEPTION, null, data);
+        data.putString(ApgIntentServiceHandler.DATA_ERROR, e.getMessage());
+        sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_EXCEPTION, null, data);
     }
 
     private void sendMessageToHandler(Integer arg1, Integer arg2, Bundle data) {
@@ -904,12 +904,12 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
         Bundle data = new Bundle();
         if (message != null) {
-            data.putString(KeychainIntentServiceHandler.DATA_MESSAGE, message);
+            data.putString(ApgIntentServiceHandler.DATA_MESSAGE, message);
         }
-        data.putInt(KeychainIntentServiceHandler.DATA_PROGRESS, progress);
-        data.putInt(KeychainIntentServiceHandler.DATA_PROGRESS_MAX, max);
+        data.putInt(ApgIntentServiceHandler.DATA_PROGRESS, progress);
+        data.putInt(ApgIntentServiceHandler.DATA_PROGRESS_MAX, max);
 
-        sendMessageToHandler(KeychainIntentServiceHandler.MESSAGE_UPDATE_PROGRESS, null, data);
+        sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_UPDATE_PROGRESS, null, data);
     }
 
     public void setProgress(int resourceId, int progress, int max) {
