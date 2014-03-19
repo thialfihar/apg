@@ -32,8 +32,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.v4.util.LongSparseArray;
 import android.util.Log;
-import android.util.LongSparseArray;
 
 import org.spongycastle.openpgp.PGPException;
 import org.spongycastle.openpgp.PGPPrivateKey;
