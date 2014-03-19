@@ -30,7 +30,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -62,7 +61,6 @@ import org.thialfihar.android.apg.ui.adapter.ViewKeyUserIdsAdapter;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
-import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -223,7 +221,8 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                         fingerprintBlob = ProviderHelper.getFingerprint(this, mDataUri);
                     }
                     String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, true);
-                    ((TextView) findViewById(R.id.fingerprint)).setText(OtherHelper.colorizeFingerprint(fingerprint));
+                    ((TextView) findViewById(R.id.fingerprint)).setText(
+                            OtherHelper.colorizeFingerprint(fingerprint));
                 }
                 break;
             case LOADER_ID_USER_IDS:
