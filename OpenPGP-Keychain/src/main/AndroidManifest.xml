@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.thialfihar.android.apg"
+    package="org.sufficientlysecure.keychain"
     android:installLocation="auto"
-    android:versionCode="11000"
-    android:versionName="1.1.0 beta 00">
+    android:versionCode="23104"
+    android:versionName="2.3.1 beta4">
 
     <!--
         General remarks
         ===============
         - Last APG 1 version was 10900 (1.0.9 beta 00)
         - Keychain starting with versionCode 20000!
-
+        
         Association of file types to Keychain
         =====================================
         General remarks about file ending conventions:
-        - *.gpg for binary files
+        - *.gpg for binary files 
         - *.asc for ascii armored files The actual content can be anything.
-
+        
         The file ending only shows if it is binary or ascii encoded.
-
+        
         Remarks about the ugly android:pathPattern:
         - We are matching all files with a specific file ending.
         This is done in an ugly way because of Android limitations.
@@ -29,6 +29,10 @@
         Cyanogenmod's file manager will only show Keychain for gpg files if no mimeType is set!
         For OI Filemanager it makes no difference, gpg files can't be associated
     -->
+
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="19" />
 
     <uses-feature
         android:name="android.hardware.wifi"
@@ -50,11 +54,11 @@
 
     <!-- android:allowBackup="false": Don't allow backup over adb backup or other apps! -->
     <application
-        android:name=".ApgApplication"
+        android:name=".KeychainApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher"
-        android:theme="@style/ApgTheme"
+        android:icon="@drawable/icon"
+        android:theme="@style/KeychainTheme"
         android:label="@string/app_name">
         <activity
             android:name=".ui.KeyListActivity"
@@ -95,22 +99,12 @@
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_select_recipients"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.SELECT_PUBLIC_KEYS" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.SelectSecretKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_select_secret_key"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.SELECT_SECRET_KEY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.EncryptActivity"
@@ -121,19 +115,13 @@
             <!-- Keychain's own Actions -->
             <!-- ENCRYPT with text as extra -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.ENCRYPT" />
+                <action android:name="org.sufficientlysecure.keychain.action.ENCRYPT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-             </intent-filter>
-             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
             </intent-filter>
             <!-- ENCRYPT with data Uri -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.ENCRYPT" />
+                <action android:name="org.sufficientlysecure.keychain.action.ENCRYPT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <!-- TODO: accept other schemes! -->
@@ -177,19 +165,13 @@
             <!-- Keychain's own Actions -->
             <!-- DECRYPT with text as extra -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.DECRYPT" />
+                <action android:name="org.sufficientlysecure.keychain.action.DECRYPT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.DECRYPT_AND_RETURN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
             </intent-filter>
             <!-- DECRYPT with data Uri -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.DECRYPT" />
+                <action android:name="org.sufficientlysecure.keychain.action.DECRYPT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <!-- TODO: accept other schemes! -->
@@ -256,11 +238,11 @@
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_preferences" >
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.ui.PREFS_GEN" />
+                <action android:name="org.sufficientlysecure.keychain.ui.PREFS_GEN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.ui.PREFS_ADV" />
+                <action android:name="org.sufficientlysecure.keychain.ui.PREFS_ADV" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -359,7 +341,7 @@
             <!-- Keychain's own Actions -->
             <!-- IMPORT_KEY with files TODO: does this work? -->
             <intent-filter android:label="@string/intent_import_key">
-                <action android:name="org.thialfihar.android.apg.intent.IMPORT_KEY" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -367,7 +349,7 @@
             </intent-filter>
             <!-- IMPORT_KEY with mimeType 'application/pgp-keys' -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.intent.IMPORT_KEY" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <!-- mime type as defined in http://tools.ietf.org/html/rfc3156, section 7 -->
@@ -375,9 +357,9 @@
             </intent-filter>
             <!-- IMPORT_KEY without mimeType to allow import with extras Bundle -->
             <intent-filter android:label="@string/intent_import_key">
-                <action android:name="org.thialfihar.android.apg.intent.IMPORT_KEY" />
-                <action android:name="org.thialfihar.android.apg.intent.IMPORT_KEY_FROM_QR_CODE" />
-                <action android:name="org.thialfihar.android.apg.intent.IMPORT_KEY_FROM_KEYSERVER" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY_FROM_QR_CODE" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY_FROM_KEYSERVER" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -392,34 +374,34 @@
             android:exported="false"
             android:process=":passphrase_cache" />
         <service
-            android:name="org.thialfihar.android.apg.service.ApgIntentService"
+            android:name="org.sufficientlysecure.keychain.service.KeychainIntentService"
             android:exported="false" />
 
         <provider
-            android:name="org.thialfihar.android.apg.provider.KeychainProvider"
-            android:authorities="org.thialfihar.android.apg.provider"
+            android:name="org.sufficientlysecure.keychain.provider.KeychainProvider"
+            android:authorities="org.sufficientlysecure.keychain.provider"
             android:exported="false" />
 
         <!-- Internal classes of the remote APIs (not exported) -->
         <activity
-            android:name="org.thialfihar.android.apg.service.remote.RemoteServiceActivity"
+            android:name="org.sufficientlysecure.keychain.service.remote.RemoteServiceActivity"
             android:exported="false"
             android:label="@string/app_name" />
         <!--android:launchMode="singleTop"-->
         <!--android:process=":remote_api"-->
         <activity
-            android:name="org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity"
+            android:name="org.sufficientlysecure.keychain.service.remote.RegisteredAppsListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:exported="false"
             android:label="@string/title_api_registered_apps" />
         <activity
-            android:name="org.thialfihar.android.apg.service.remote.AppSettingsActivity"
+            android:name="org.sufficientlysecure.keychain.service.remote.AppSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:exported="false" />
 
         <!-- OpenPGP Remote API -->
         <service
-            android:name="org.thialfihar.android.apg.service.remote.OpenPgpService"
+            android:name="org.sufficientlysecure.keychain.service.remote.OpenPgpService"
             android:enabled="true"
             android:exported="true"
             android:process=":remote_api">
@@ -434,20 +416,20 @@
 
         <!-- Extended Remote API -->
         <!--<service-->
-        <!--android:name="org.thialfihar.android.apg.service.remote.ExtendedApiService"-->
+        <!--android:name="org.sufficientlysecure.keychain.service.remote.ExtendedApiService"-->
         <!--android:enabled="true"-->
         <!--android:exported="true"-->
         <!--android:process=":remote_api">-->
         <!--<intent-filter>-->
-        <!--<action android:name="org.thialfihar.android.apg.service.remote.IExtendedApiService" />-->
+        <!--<action android:name="org.sufficientlysecure.keychain.service.remote.IExtendedApiService" />-->
         <!--</intent-filter>-->
         <!--</service>-->
 
         <!-- TODO: authority! Make this API with content provider uris -->
         <!-- <provider -->
-        <!-- android:name="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
-        <!-- android:authorities="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
-        <!-- android:permission="org.thialfihar.android.apg.permission.ACCESS_API" /> -->
+        <!-- android:name="org.sufficientlysecure.keychain.provider.KeychainServiceBlobProvider" -->
+        <!-- android:authorities="org.sufficientlysecure.keychain.provider.KeychainServiceBlobProvider" -->
+        <!-- android:permission="org.sufficientlysecure.keychain.permission.ACCESS_API" /> -->
     </application>
 
 </manifest>
