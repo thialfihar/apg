@@ -57,7 +57,7 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -76,7 +76,7 @@ public class PgpDecryptVerify {
     private InputData data;
     private OutputStream outStream;
 
-    private ProgressDialogUpdater progressDialogUpdater;
+    private Progressable progressDialogUpdater;
     private boolean assumeSymmetric;
     private String passphrase;
     private long enforcedKeyId;
@@ -100,7 +100,7 @@ public class PgpDecryptVerify {
         private OutputStream outStream;
 
         // optional
-        private ProgressDialogUpdater progressDialogUpdater = null;
+        private Progressable progressDialogUpdater = null;
         private boolean assumeSymmetric = false;
         private String passphrase = "";
         private long enforcedKeyId = 0;
@@ -111,7 +111,7 @@ public class PgpDecryptVerify {
             this.outStream = outStream;
         }
 
-        public Builder progressDialogUpdater(ProgressDialogUpdater progressDialogUpdater) {
+        public Builder progressDialogUpdater(Progressable progressDialogUpdater) {
             this.progressDialogUpdater = progressDialogUpdater;
             return this;
         }

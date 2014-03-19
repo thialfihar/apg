@@ -40,7 +40,7 @@ import org.thialfihar.android.apg.pgp.exception.NoAsymmetricEncryptionException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -196,7 +196,7 @@ public class PgpHelper {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static void deleteFileSecurely(Context context, ProgressDialogUpdater progress, File file)
+    public static void deleteFileSecurely(Context context, Progressable progress, File file)
             throws FileNotFoundException, IOException {
         long length = file.length();
         SecureRandom random = new SecureRandom();

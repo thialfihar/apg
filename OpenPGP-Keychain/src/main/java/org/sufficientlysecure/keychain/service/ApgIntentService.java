@@ -1,4 +1,4 @@
-/*
+/*core
  * Copyright (C) 2012-2013 Dominik Schürmann <dominik@dominikschuermann.de>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -53,10 +53,10 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.pgp.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -72,7 +72,7 @@ import android.os.RemoteException;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class ApgIntentService extends IntentService implements ProgressDialogUpdater {
+public class ApgIntentService extends IntentService implements Progressable {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";
