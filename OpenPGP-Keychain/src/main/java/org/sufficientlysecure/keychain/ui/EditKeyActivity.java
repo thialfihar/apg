@@ -32,8 +32,8 @@ import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -175,18 +175,18 @@ public class EditKeyActivity extends ActionBarActivity {
                 if (generateDefaultKeys) {
 
                     // Send all information needed to service generate keys in other thread
-                    final Intent serviceIntent = new Intent(this, KeychainIntentService.class);
-                    serviceIntent.setAction(KeychainIntentService.ACTION_GENERATE_DEFAULT_RSA_KEYS);
+                    final Intent serviceIntent = new Intent(this, ApgIntentService.class);
+                    serviceIntent.setAction(ApgIntentService.ACTION_GENERATE_DEFAULT_RSA_KEYS);
 
                     // fill values for this action
                     Bundle data = new Bundle();
-                    data.putString(KeychainIntentService.GENERATE_KEY_SYMMETRIC_PASSPHRASE,
+                    data.putString(ApgIntentService.GENERATE_KEY_SYMMETRIC_PASSPHRASE,
                             mCurrentPassphrase);
 
-                    serviceIntent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+                    serviceIntent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
                     // Message is received after generating is done in ApgService
-                    KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(
+                    ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(
                             this, R.string.progress_generating, ProgressDialog.STYLE_SPINNER, true,
 
                             new DialogInterface.OnCancelListener() {
@@ -204,15 +204,15 @@ public class EditKeyActivity extends ActionBarActivity {
                             // handle messages by standard ApgHandler first
                             super.handleMessage(message);
 
-                            if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                            if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                                 // get new key from data bundle returned from service
                                 Bundle data = message.getData();
                                 PGPSecretKey masterKey = (PGPSecretKey) PgpConversionHelper
                                         .BytesToPGPSecretKey(data
-                                                .getByteArray(KeychainIntentService.RESULT_NEW_KEY));
+                                                .getByteArray(ApgIntentService.RESULT_NEW_KEY));
                                 PGPSecretKey subKey = (PGPSecretKey) PgpConversionHelper
                                         .BytesToPGPSecretKey(data
-                                                .getByteArray(KeychainIntentService.RESULT_NEW_KEY2));
+                                                .getByteArray(ApgIntentService.RESULT_NEW_KEY2));
 
                                 // add master key
                                 mKeys.add(masterKey);
@@ -229,7 +229,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
                     // Create a new Messenger for the communication back
                     Messenger messenger = new Messenger(saveHandler);
-                    serviceIntent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+                    serviceIntent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
                     saveHandler.showProgressDialog(this);
 
@@ -518,37 +518,37 @@ public class EditKeyActivity extends ActionBarActivity {
     private void finallySaveClicked() {
         try {
             // Send all information needed to service to edit key in other thread
-            Intent intent = new Intent(this, KeychainIntentService.class);
+            Intent intent = new Intent(this, ApgIntentService.class);
 
-            intent.setAction(KeychainIntentService.ACTION_SAVE_KEYRING);
+            intent.setAction(ApgIntentService.ACTION_SAVE_KEYRING);
 
             // fill values for this action
             Bundle data = new Bundle();
-            data.putString(KeychainIntentService.SAVE_KEYRING_CURRENT_PASSPHRASE,
+            data.putString(ApgIntentService.SAVE_KEYRING_CURRENT_PASSPHRASE,
                     mCurrentPassphrase);
-            data.putString(KeychainIntentService.SAVE_KEYRING_NEW_PASSPHRASE, mNewPassPhrase);
-            data.putStringArrayList(KeychainIntentService.SAVE_KEYRING_USER_IDS,
+            data.putString(ApgIntentService.SAVE_KEYRING_NEW_PASSPHRASE, mNewPassPhrase);
+            data.putStringArrayList(ApgIntentService.SAVE_KEYRING_USER_IDS,
                     getUserIds(mUserIdsView));
             ArrayList<PGPSecretKey> keys = getKeys(mKeysView);
-            data.putByteArray(KeychainIntentService.SAVE_KEYRING_KEYS,
+            data.putByteArray(ApgIntentService.SAVE_KEYRING_KEYS,
                     PgpConversionHelper.PGPSecretKeyArrayListToBytes(keys));
-            data.putIntegerArrayList(KeychainIntentService.SAVE_KEYRING_KEYS_USAGES,
+            data.putIntegerArrayList(ApgIntentService.SAVE_KEYRING_KEYS_USAGES,
                     getKeysUsages(mKeysView));
-            data.putSerializable(KeychainIntentService.SAVE_KEYRING_KEYS_EXPIRY_DATES,
+            data.putSerializable(ApgIntentService.SAVE_KEYRING_KEYS_EXPIRY_DATES,
                     getKeysExpiryDates(mKeysView));
-            data.putLong(KeychainIntentService.SAVE_KEYRING_MASTER_KEY_ID, getMasterKeyId());
-            data.putBoolean(KeychainIntentService.SAVE_KEYRING_CAN_SIGN, masterCanSign);
+            data.putLong(ApgIntentService.SAVE_KEYRING_MASTER_KEY_ID, getMasterKeyId());
+            data.putBoolean(ApgIntentService.SAVE_KEYRING_CAN_SIGN, masterCanSign);
 
-            intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+            intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Message is received after saving is done in ApgService
-            KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(this,
+            ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
                     R.string.progress_saving, ProgressDialog.STYLE_HORIZONTAL) {
                 public void handleMessage(Message message) {
                     // handle messages by standard ApgHandler first
                     super.handleMessage(message);
 
-                    if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                    if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                         Intent data = new Intent();
                         data.putExtra(RESULT_EXTRA_MASTER_KEY_ID, getMasterKeyId());
                         ArrayList<String> userIds = null;
@@ -566,7 +566,7 @@ public class EditKeyActivity extends ActionBarActivity {
 
             // Create a new Messenger for the communication back
             Messenger messenger = new Messenger(saveHandler);
-            intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+            intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             saveHandler.showProgressDialog(this);
 

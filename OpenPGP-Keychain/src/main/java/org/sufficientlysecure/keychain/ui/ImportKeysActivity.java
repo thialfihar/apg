@@ -41,8 +41,8 @@ import com.devspark.appmsg.AppMsg;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.ui.dialog.BadImportKeyDialogFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -361,20 +361,20 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
 
 
     // Message is received after importing is done in ApgService
-    KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(this,
+    ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
             R.string.progress_importing, ProgressDialog.STYLE_HORIZONTAL) {
         public void handleMessage(Message message) {
             // handle messages by standard ApgHandler first
             super.handleMessage(message);
 
-            if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+            if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                 // get returned data bundle
                 Bundle returnData = message.getData();
 
-                int added = returnData.getInt(KeychainIntentService.RESULT_IMPORT_ADDED);
+                int added = returnData.getInt(ApgIntentService.RESULT_IMPORT_ADDED);
                 int updated = returnData
-                        .getInt(KeychainIntentService.RESULT_IMPORT_UPDATED);
-                int bad = returnData.getInt(KeychainIntentService.RESULT_IMPORT_BAD);
+                        .getInt(ApgIntentService.RESULT_IMPORT_UPDATED);
+                int bad = returnData.getInt(ApgIntentService.RESULT_IMPORT_BAD);
                 String toastMessage;
                 if (added > 0 && updated > 0) {
                     String addedStr = getResources().getQuantityString(
@@ -409,22 +409,22 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
             Log.d(Constants.TAG, "importKeys started");
 
             // Send all information needed to service to import key in other thread
-            Intent intent = new Intent(this, KeychainIntentService.class);
+            Intent intent = new Intent(this, ApgIntentService.class);
 
-            intent.setAction(KeychainIntentService.ACTION_IMPORT_KEYRING);
+            intent.setAction(ApgIntentService.ACTION_IMPORT_KEYRING);
 
             // fill values for this action
             Bundle data = new Bundle();
 
             // get selected key entries
             ArrayList<ImportKeysListEntry> selectedEntries = mListFragment.getSelectedData();
-            data.putParcelableArrayList(KeychainIntentService.IMPORT_KEY_LIST, selectedEntries);
+            data.putParcelableArrayList(ApgIntentService.IMPORT_KEY_LIST, selectedEntries);
 
-            intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+            intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
             Messenger messenger = new Messenger(saveHandler);
-            intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+            intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
             saveHandler.showProgressDialog(this);
@@ -433,24 +433,24 @@ public class ImportKeysActivity extends DrawerActivity implements ActionBar.OnNa
             startService(intent);
         } else if (mListFragment.getServerQuery() != null) {
             // Send all information needed to service to query keys in other thread
-            Intent intent = new Intent(this, KeychainIntentService.class);
+            Intent intent = new Intent(this, ApgIntentService.class);
 
-            intent.setAction(KeychainIntentService.ACTION_DOWNLOAD_AND_IMPORT_KEYS);
+            intent.setAction(ApgIntentService.ACTION_DOWNLOAD_AND_IMPORT_KEYS);
 
             // fill values for this action
             Bundle data = new Bundle();
 
-            data.putString(KeychainIntentService.DOWNLOAD_KEY_SERVER, mListFragment.getKeyServer());
+            data.putString(ApgIntentService.DOWNLOAD_KEY_SERVER, mListFragment.getKeyServer());
 
             // get selected key entries
             ArrayList<ImportKeysListEntry> selectedEntries = mListFragment.getSelectedData();
-            data.putParcelableArrayList(KeychainIntentService.DOWNLOAD_KEY_LIST, selectedEntries);
+            data.putParcelableArrayList(ApgIntentService.DOWNLOAD_KEY_LIST, selectedEntries);
 
-            intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+            intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
             Messenger messenger = new Messenger(saveHandler);
-            intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+            intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
             saveHandler.showProgressDialog(this);

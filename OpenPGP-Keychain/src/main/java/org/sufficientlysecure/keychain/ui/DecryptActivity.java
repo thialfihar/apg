@@ -40,8 +40,8 @@ import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.exception.NoAsymmetricEncryptionException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
@@ -610,48 +610,48 @@ public class DecryptActivity extends DrawerActivity {
         Log.d(Constants.TAG, "decryptStart");
 
         // Send all information needed to service to decrypt in other thread
-        Intent intent = new Intent(this, KeychainIntentService.class);
+        Intent intent = new Intent(this, ApgIntentService.class);
 
         // fill values for this action
         Bundle data = new Bundle();
 
-        intent.setAction(KeychainIntentService.ACTION_DECRYPT_VERIFY);
+        intent.setAction(ApgIntentService.ACTION_DECRYPT_VERIFY);
 
         // choose action based on input: decrypt stream, file or bytes
         if (mContentUri != null) {
-            data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_STREAM);
+            data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_STREAM);
 
-            data.putParcelable(KeychainIntentService.ENCRYPT_PROVIDER_URI, mContentUri);
+            data.putParcelable(ApgIntentService.ENCRYPT_PROVIDER_URI, mContentUri);
         } else if (mDecryptTarget == Id.target.file) {
-            data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_URI);
+            data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_URI);
 
             Log.d(Constants.TAG, "mInputFilename=" + mInputFilename + ", mOutputFilename="
                     + mOutputFilename);
 
-            data.putString(KeychainIntentService.ENCRYPT_INPUT_FILE, mInputFilename);
-            data.putString(KeychainIntentService.ENCRYPT_OUTPUT_FILE, mOutputFilename);
+            data.putString(ApgIntentService.ENCRYPT_INPUT_FILE, mInputFilename);
+            data.putString(ApgIntentService.ENCRYPT_OUTPUT_FILE, mOutputFilename);
         } else {
-            data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_BYTES);
+            data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_BYTES);
 
             String message = mMessage.getText().toString();
-            data.putByteArray(KeychainIntentService.DECRYPT_CIPHERTEXT_BYTES, message.getBytes());
+            data.putByteArray(ApgIntentService.DECRYPT_CIPHERTEXT_BYTES, message.getBytes());
         }
 
-        data.putLong(KeychainIntentService.ENCRYPT_SECRET_KEY_ID, mSecretKeyId);
+        data.putLong(ApgIntentService.ENCRYPT_SECRET_KEY_ID, mSecretKeyId);
 
-        data.putBoolean(KeychainIntentService.DECRYPT_RETURN_BYTES, mReturnBinary);
-        data.putBoolean(KeychainIntentService.DECRYPT_ASSUME_SYMMETRIC, mAssumeSymmetricEncryption);
+        data.putBoolean(ApgIntentService.DECRYPT_RETURN_BYTES, mReturnBinary);
+        data.putBoolean(ApgIntentService.DECRYPT_ASSUME_SYMMETRIC, mAssumeSymmetricEncryption);
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // Message is received after encrypting is done in ApgService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(this,
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
                 R.string.progress_decrypting, ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get returned data bundle
                     Bundle returnData = message.getData();
 
@@ -671,7 +671,7 @@ public class DecryptActivity extends DrawerActivity {
                     switch (mDecryptTarget) {
                         case Id.target.message:
                             String decryptedMessage = returnData
-                                    .getString(KeychainIntentService.RESULT_DECRYPTED_STRING);
+                                    .getString(ApgIntentService.RESULT_DECRYPTED_STRING);
                             mMessage.setText(decryptedMessage);
                             mMessage.setHorizontallyScrolling(false);
 
@@ -693,7 +693,7 @@ public class DecryptActivity extends DrawerActivity {
                     }
 
                     PgpDecryptVerifyResult decryptVerifyResult =
-                            returnData.getParcelable(KeychainIntentService.RESULT_DECRYPT_VERIFY_RESULT);
+                            returnData.getParcelable(ApgIntentService.RESULT_DECRYPT_VERIFY_RESULT);
 
                     OpenPgpSignatureResult signatureResult = decryptVerifyResult.getSignatureResult();
 
@@ -750,7 +750,7 @@ public class DecryptActivity extends DrawerActivity {
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(saveHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
         saveHandler.showProgressDialog(this);

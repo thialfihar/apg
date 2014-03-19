@@ -21,8 +21,8 @@ import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.DialogFragmentWorkaround;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -116,39 +116,39 @@ public class ExportHelper {
         Log.d(Constants.TAG, "exportKeys started");
 
         // Send all information needed to service to export key in other thread
-        Intent intent = new Intent(activity, KeychainIntentService.class);
+        Intent intent = new Intent(activity, ApgIntentService.class);
 
-        intent.setAction(KeychainIntentService.ACTION_EXPORT_KEYRING);
+        intent.setAction(ApgIntentService.ACTION_EXPORT_KEYRING);
 
         // fill values for this action
         Bundle data = new Bundle();
 
-        data.putString(KeychainIntentService.EXPORT_FILENAME, mExportFilename);
-        data.putInt(KeychainIntentService.EXPORT_KEY_TYPE, keyType);
+        data.putString(ApgIntentService.EXPORT_FILENAME, mExportFilename);
+        data.putInt(ApgIntentService.EXPORT_KEY_TYPE, keyType);
 
         if (dataUri == null) {
-            data.putBoolean(KeychainIntentService.EXPORT_ALL, true);
+            data.putBoolean(ApgIntentService.EXPORT_ALL, true);
         } else {
             // TODO: put data uri into service???
             long keyRingMasterKeyId = ProviderHelper.getMasterKeyId(activity, dataUri);
 
-            data.putLong(KeychainIntentService.EXPORT_KEY_RING_MASTER_KEY_ID, keyRingMasterKeyId);
+            data.putLong(ApgIntentService.EXPORT_KEY_RING_MASTER_KEY_ID, keyRingMasterKeyId);
         }
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // Message is received after exporting is done in ApgService
-        KeychainIntentServiceHandler exportHandler = new KeychainIntentServiceHandler(activity,
+        ApgIntentServiceHandler exportHandler = new ApgIntentServiceHandler(activity,
                 R.string.progress_exporting, ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get returned data bundle
                     Bundle returnData = message.getData();
 
-                    int exported = returnData.getInt(KeychainIntentService.RESULT_EXPORT);
+                    int exported = returnData.getInt(ApgIntentService.RESULT_EXPORT);
                     String toastMessage;
                     if (exported == 1) {
                         toastMessage = activity.getString(R.string.key_exported);
@@ -165,7 +165,7 @@ public class ExportHelper {
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(exportHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
         exportHandler.showProgressDialog(activity);

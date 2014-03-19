@@ -34,8 +34,8 @@ import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
@@ -538,7 +538,7 @@ public class EncryptActivity extends DrawerActivity {
 
     private void encryptStart() {
         // Send all information needed to service to edit key in other thread
-        Intent intent = new Intent(this, KeychainIntentService.class);
+        Intent intent = new Intent(this, ApgIntentService.class);
 
         // fill values for this action
         Bundle data = new Bundle();
@@ -555,69 +555,69 @@ public class EncryptActivity extends DrawerActivity {
             if (passphrase.length() == 0) {
                 passphrase = null;
             }
-            data.putString(KeychainIntentService.GENERATE_KEY_SYMMETRIC_PASSPHRASE, passphrase);
+            data.putString(ApgIntentService.GENERATE_KEY_SYMMETRIC_PASSPHRASE, passphrase);
         } else {
             mSecretKeyIdToPass = mSecretKeyId;
             encryptionKeyIds = mEncryptionKeyIds;
             signOnly = (mEncryptionKeyIds == null || mEncryptionKeyIds.length == 0);
         }
 
-        intent.setAction(KeychainIntentService.ACTION_ENCRYPT_SIGN);
+        intent.setAction(ApgIntentService.ACTION_ENCRYPT_SIGN);
 
         // choose default settings, target and data bundle by target
         if (mEncryptTarget == Id.target.file) {
             useAsciiArmor = mAsciiArmor.isChecked();
             compressionId = ((Choice) mFileCompression.getSelectedItem()).getId();
 
-            data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_URI);
+            data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_URI);
 
             Log.d(Constants.TAG, "mInputFilename=" + mInputFilename + ", mOutputFilename="
                     + mOutputFilename);
 
-            data.putString(KeychainIntentService.ENCRYPT_INPUT_FILE, mInputFilename);
-            data.putString(KeychainIntentService.ENCRYPT_OUTPUT_FILE, mOutputFilename);
+            data.putString(ApgIntentService.ENCRYPT_INPUT_FILE, mInputFilename);
+            data.putString(ApgIntentService.ENCRYPT_OUTPUT_FILE, mOutputFilename);
 
         } else {
             useAsciiArmor = true;
             compressionId = Preferences.getPreferences(this).getDefaultMessageCompression();
 
-            data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_BYTES);
+            data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_BYTES);
 
             String message = mMessage.getText().toString();
             if (signOnly) {
                 fixBadCharactersForGmail(message);
             }
-            data.putByteArray(KeychainIntentService.ENCRYPT_MESSAGE_BYTES, message.getBytes());
+            data.putByteArray(ApgIntentService.ENCRYPT_MESSAGE_BYTES, message.getBytes());
         }
 
         if (mOverrideAsciiArmor) {
             useAsciiArmor = mAsciiArmorDemand;
         }
 
-        data.putLong(KeychainIntentService.ENCRYPT_SECRET_KEY_ID, mSecretKeyIdToPass);
-        data.putBoolean(KeychainIntentService.ENCRYPT_USE_ASCII_ARMOR, useAsciiArmor);
-        data.putLongArray(KeychainIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS, encryptionKeyIds);
-        data.putInt(KeychainIntentService.ENCRYPT_COMPRESSION_ID, compressionId);
-        data.putBoolean(KeychainIntentService.ENCRYPT_GENERATE_SIGNATURE, mGenerateSignature);
-        data.putBoolean(KeychainIntentService.ENCRYPT_SIGN_ONLY, signOnly);
+        data.putLong(ApgIntentService.ENCRYPT_SECRET_KEY_ID, mSecretKeyIdToPass);
+        data.putBoolean(ApgIntentService.ENCRYPT_USE_ASCII_ARMOR, useAsciiArmor);
+        data.putLongArray(ApgIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS, encryptionKeyIds);
+        data.putInt(ApgIntentService.ENCRYPT_COMPRESSION_ID, compressionId);
+        data.putBoolean(ApgIntentService.ENCRYPT_GENERATE_SIGNATURE, mGenerateSignature);
+        data.putBoolean(ApgIntentService.ENCRYPT_SIGN_ONLY, signOnly);
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // Message is received after encrypting is done in ApgService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(this,
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
                 R.string.progress_encrypting, ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get returned data bundle
                     Bundle data = message.getData();
 
                     String output;
                     switch (mEncryptTarget) {
                         case Id.target.clipboard:
-                            output = data.getString(KeychainIntentService.RESULT_ENCRYPTED_STRING);
+                            output = data.getString(ApgIntentService.RESULT_ENCRYPTED_STRING);
                             Log.d(Constants.TAG, "output: " + output);
                             ClipboardReflection.copyToClipboard(EncryptActivity.this, output);
                             AppMsg.makeText(EncryptActivity.this,
@@ -627,7 +627,7 @@ public class EncryptActivity extends DrawerActivity {
 
                         case Id.target.email:
 
-                            output = data.getString(KeychainIntentService.RESULT_ENCRYPTED_STRING);
+                            output = data.getString(ApgIntentService.RESULT_ENCRYPTED_STRING);
                             Log.d(Constants.TAG, "output: " + output);
 
                             Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -675,7 +675,7 @@ public class EncryptActivity extends DrawerActivity {
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(saveHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
         saveHandler.showProgressDialog(this);
