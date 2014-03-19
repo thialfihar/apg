@@ -72,7 +72,7 @@ import android.os.RemoteException;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class KeychainIntentService extends IntentService implements ProgressDialogUpdater {
+public class ApgIntentService extends IntentService implements ProgressDialogUpdater {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";
@@ -200,8 +200,8 @@ public class KeychainIntentService extends IntentService implements ProgressDial
 
     private boolean mIsCanceled;
 
-    public KeychainIntentService() {
-        super("KeychainIntentService");
+    public ApgIntentService() {
+        super("ApgIntentService");
     }
 
     @Override
@@ -776,7 +776,7 @@ public class KeychainIntentService extends IntentService implements ProgressDial
                     }
                 }
 
-                Intent importIntent = new Intent(this, KeychainIntentService.class);
+                Intent importIntent = new Intent(this, ApgIntentService.class);
                 importIntent.setAction(ACTION_IMPORT_KEYRING);
                 Bundle importData = new Bundle();
                 importData.putParcelableArrayList(IMPORT_KEY_LIST, entries);
