@@ -30,7 +30,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -199,6 +201,7 @@ public class HkpKeyServer extends KeyServer {
         for (int i = 0; i < ips.length; ++i) {
             try {
                 String url = "http://" + ips[i].getHostAddress() + ":" + mPort + request;
+                Log.d(Constants.TAG, "hkp keyserver query: " + url);
                 URL realUrl = new URL(url);
                 HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
                 conn.setConnectTimeout(5000);
@@ -297,9 +300,10 @@ public class HkpKeyServer extends KeyServer {
     public String get(long keyId) throws QueryException {
         HttpClient client = new DefaultHttpClient();
         try {
-            HttpGet get = new HttpGet("http://" + mHost + ":" + mPort
-                    + "/pks/lookup?op=get&options=mr&search=" + PgpKeyHelper.convertKeyIdToHex(keyId));
-
+            String query = "http://" + mHost + ":" + mPort +
+                "/pks/lookup?op=get&options=mr&search=" + PgpKeyHelper.convertKeyIdToHex(keyId);
+            Log.d(Constants.TAG, "hkp keyserver get: " + query);
+            HttpGet get = new HttpGet(query);
             HttpResponse response = client.execute(get);
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw new QueryException("not found");
@@ -325,8 +329,9 @@ public class HkpKeyServer extends KeyServer {
     public void add(String armoredText) throws AddKeyException {
         HttpClient client = new DefaultHttpClient();
         try {
-            HttpPost post = new HttpPost("http://" + mHost + ":" + mPort + "/pks/add");
-
+            String query = "http://" + mHost + ":" + mPort + "/pks/add";
+            HttpPost post = new HttpPost(query);
+            Log.d(Constants.TAG, "hkp keyserver add: " + query);
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("keytext", armoredText));
             post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
