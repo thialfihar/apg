@@ -47,7 +47,6 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
@@ -221,7 +220,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                     }
                     String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, true);
                     ((TextView) findViewById(R.id.fingerprint)).setText(
-                            OtherHelper.colorizeFingerprint(fingerprint));
+                            PgpKeyHelper.colorizeFingerprint(fingerprint));
                 }
                 break;
             case LOADER_ID_USER_IDS:

@@ -36,7 +36,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
@@ -330,7 +329,7 @@ public class ViewKeyMainFragment extends Fragment  implements
                     }
                     String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob, true);
 
-                    mFingerprint.setText(OtherHelper.colorizeFingerprint(fingerprint));
+                    mFingerprint.setText(PgpKeyHelper.colorizeFingerprint(fingerprint));
                 }
 
                 mKeysAdapter.swapCursor(data);
