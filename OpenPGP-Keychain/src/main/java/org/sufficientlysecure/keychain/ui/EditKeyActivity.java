@@ -50,6 +50,7 @@ import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
@@ -329,9 +330,13 @@ public class EditKeyActivity extends ActionBarActivity {
                 long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
                 long[] ids = new long[] {masterKeyId};
                 mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC,
-                                                            null);
+                        null);
                 return true;
             case R.id.menu_key_edit_delete: {
+                //Convert the uri to one based on rowId
+                long rowId= ProviderHelper.getRowId(this,mDataUri);
+                Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
+
                 // Message is received after key is deleted
                 Handler returnHandler = new Handler() {
                     @Override
@@ -343,7 +348,7 @@ public class EditKeyActivity extends ActionBarActivity {
                     }
                 };
 
-                mExportHelper.deleteKey(mDataUri, Id.type.secret_key, returnHandler);
+                mExportHelper.deleteKey(convertUri, returnHandler);
                 return true;
             }
         }

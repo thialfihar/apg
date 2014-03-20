@@ -48,14 +48,14 @@ public class ExportHelper {
         mActivity = activity;
     }
 
-    public void deleteKey(Uri dataUri, final int keyType, Handler deleteHandler) {
+    public void deleteKey(Uri dataUri, Handler deleteHandler) {
         long keyRingRowId = Long.valueOf(dataUri.getLastPathSegment());
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(deleteHandler);
 
         DeleteKeyDialogFragment deleteKeyDialog = DeleteKeyDialogFragment.newInstance(messenger,
-                new long[] { keyRingRowId }, keyType);
+                new long[] { keyRingRowId });
 
         deleteKeyDialog.show(mActivity.getSupportFragmentManager(), "deleteKeyDialog");
     }
