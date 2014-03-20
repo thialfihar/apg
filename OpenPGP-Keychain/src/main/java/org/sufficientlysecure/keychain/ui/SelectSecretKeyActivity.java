@@ -77,9 +77,7 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
         Intent data = new Intent();
         data.setData(selectedUri);
 
-        // TODO: deprecate RESULT_EXTRA_MASTER_KEY_ID!
         long masterKeyId = Long.valueOf(selectedUri.getLastPathSegment());
-        data.putExtra(RESULT_EXTRA_MASTER_KEY_ID, masterKeyId);
         data.putExtra("keyId", masterKeyId);
         data.putExtra("userId", (String) userId);
         setResult(RESULT_OK, data);

@@ -43,6 +43,7 @@ import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
+import org.thialfihar.android.apg.pgp.PgpImportExport;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyOperation;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
