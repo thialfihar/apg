@@ -39,10 +39,11 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     public ArrayList<String> userIds;
 
     public long keyId;
+    public String keyIdHex;
+
     public boolean revoked;
     public Date date; // TODO: not displayed
-    public String fingerPrint;
-    public String hexKeyId;
+    public String fingerPrintHex;
     public int bitStrength;
     public String algorithm;
     public boolean secretKey;
@@ -51,18 +52,17 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     private boolean mSelected;
 
     public ImportKeysListEntry(ImportKeysListEntry b) {
-        userIds = b.userIds;
-        keyId = b.keyId;
-        revoked = b.revoked;
-        date = b.date;
-        fingerPrint = b.fingerPrint;
-        hexKeyId = b.hexKeyId;
-        bitStrength = b.bitStrength;
-        algorithm = b.algorithm;
-        secretKey = b.secretKey;
-
-        mSelected = b.isSelected();
-        mBytes = b.getBytes();
+        this.userIds = b.userIds;
+        this.keyId = b.keyId;
+        this.revoked = b.revoked;
+        this.date = b.date;
+        this.fingerPrintHex = b.fingerPrintHex;
+        this.keyIdHex = b.keyIdHex;
+        this.bitStrength = b.bitStrength;
+        this.algorithm = b.algorithm;
+        this.secretKey = b.secretKey;
+        this.mSelected = b.mSelected;
+        this.mBytes = b.mBytes;
     }
 
     public int describeContents() {
@@ -75,8 +75,8 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         dest.writeLong(keyId);
         dest.writeByte((byte) (revoked ? 1 : 0));
         dest.writeSerializable(date);
-        dest.writeString(fingerPrint);
-        dest.writeString(hexKeyId);
+        dest.writeString(fingerPrintHex);
+        dest.writeString(keyIdHex);
         dest.writeInt(bitStrength);
         dest.writeString(algorithm);
         dest.writeByte((byte) (secretKey ? 1 : 0));
@@ -93,8 +93,8 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
             vr.keyId = source.readLong();
             vr.revoked = source.readByte() == 1;
             vr.date = (Date) source.readSerializable();
-            vr.fingerPrint = source.readString();
-            vr.hexKeyId = source.readString();
+            vr.fingerPrintHex = source.readString();
+            vr.keyIdHex = source.readString();
             vr.bitStrength = source.readInt();
             vr.algorithm = source.readString();
             vr.secretKey = source.readByte() == 1;
@@ -110,8 +110,8 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         }
     };
 
-    public long getKeyId() {
-        return keyId;
+    public String getKeyIdHex() {
+        return keyIdHex;
     }
 
     public byte[] getBytes() {
@@ -120,6 +120,14 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
 
     public void setBytes(byte[] bytes) {
         mBytes = bytes;
+    }
+
+    public boolean isSelected() {
+        return mSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.mSelected = selected;
     }
 
     /**
@@ -131,14 +139,6 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         // do not select by default
         mSelected = false;
         userIds = new ArrayList<String>();
-    }
-
-    public boolean isSelected() {
-        return mSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        mSelected = selected;
     }
 
     /**
@@ -166,12 +166,13 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
         for (String userId : new IterableIterator<String>(pgpKeyRing.getPublicKey().getUserIDs())) {
             userIds.add(userId);
         }
-        keyId = pgpKeyRing.getPublicKey().getKeyID();
 
-        revoked = pgpKeyRing.getPublicKey().isRevoked();
-        fingerPrint = PgpKeyHelper.convertFingerprintToHex(pgpKeyRing.getPublicKey()
+        this.keyId = pgpKeyRing.getPublicKey().getKeyID();
+        this.keyIdHex = PgpKeyHelper.convertKeyIdToHex(keyId);
+
+        this.revoked = pgpKeyRing.getPublicKey().isRevoked();
+        this.fingerPrintHex = PgpKeyHelper.convertFingerprintToHex(pgpKeyRing.getPublicKey()
                 .getFingerprint(), true);
-        this.hexKeyId = PgpKeyHelper.convertKeyIdToHex(keyId);
         this.bitStrength = pgpKeyRing.getPublicKey().getBitStrength();
         final int algorithmId = pgpKeyRing.getPublicKey().getAlgorithm();
         this.algorithm = getAlgorithmFromId(algorithmId);

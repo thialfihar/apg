@@ -769,7 +769,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 HkpKeyServer server = new HkpKeyServer(keyServer);
 
                 for (ImportKeysListEntry entry : entries) {
-                    byte[] downloadedKey = server.get(entry.getKeyId()).getBytes();
+                    byte[] downloadedKey = server.get(entry.getKeyIdHex()).getBytes();
 
                     /**
                      * TODO: copied from ImportKeysListLoader

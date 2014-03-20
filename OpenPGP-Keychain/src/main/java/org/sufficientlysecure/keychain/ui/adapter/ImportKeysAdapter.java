@@ -134,10 +134,11 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
             holder.mainUserIdRest.setVisibility(View.GONE);
         }
 
-        holder.keyId.setText(entry.hexKeyId);
+        holder.keyId.setText(entry.keyIdHex);
 
-        if (entry.fingerPrint != null) {
-            holder.fingerprint.setText(mActivity.getString(R.string.fingerprint) + " " + entry.fingerPrint);
+        if (entry.fingerPrintHex != null) {
+            holder.fingerprint.setText(mActivity.getString(R.string.fingerprint) + " " +
+                entry.fingerPrintHex);
             holder.fingerprint.setVisibility(View.VISIBLE);
         } else {
             holder.fingerprint.setVisibility(View.GONE);
