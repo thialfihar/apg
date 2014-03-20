@@ -271,8 +271,7 @@ public class HkpKeyServer extends KeyServer {
             // see http://bit.ly/1d4bxbk and http://bit.ly/1gD1wwr
             String fingerprintOrKeyId = matcher.group(1);
             if (fingerprintOrKeyId.length() > 16) {
-                entry.setFingerPrintHex(PgpKeyHelper.splitFingerprintHex(
-                        fingerprintOrKeyId.toLowerCase(Locale.US)));
+                entry.setFingerPrintHex(fingerprintOrKeyId.toLowerCase(Locale.US));
                 entry.setKeyIdHex("0x" + fingerprintOrKeyId.substring(fingerprintOrKeyId.length()
                         - 16, fingerprintOrKeyId.length()));
             } else {
