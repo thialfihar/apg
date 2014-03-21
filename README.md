@@ -19,3 +19,7 @@ APG definitely has some catching up to do. :)
 > git submodule update --init --recursive
 > ./gradlew build
 ```
+
+### Travis CI Build Status
+
+[![Build Status](https://travis-ci.org/thialfihar/apg.png?branch=master)](https://travis-ci.org/thialfihar/apg)
