@@ -40,7 +40,6 @@ import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
 import org.thialfihar.android.apg.util.Log;

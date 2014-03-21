@@ -334,7 +334,7 @@ public class EditKeyActivity extends ActionBarActivity {
                 return true;
             case R.id.menu_key_edit_delete: {
                 //Convert the uri to one based on rowId
-                long rowId= ProviderHelper.getRowId(this,mDataUri);
+                long rowId = ProviderHelper.getRowId(this, mDataUri);
                 Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
 
                 // Message is received after key is deleted
