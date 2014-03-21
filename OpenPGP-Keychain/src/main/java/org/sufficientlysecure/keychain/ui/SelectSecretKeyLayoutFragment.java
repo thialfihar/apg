@@ -58,10 +58,12 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
 
     //The Projection we will retrieve, Master Key ID is for convenience sake,
     //to avoid having to pass the Key Around
-    final String[] PROJECTION = new String[]{KeychainContract.UserIds.USER_ID
-            , KeychainContract.KeyRings.MASTER_KEY_ID};
-    final int INDEX_USER_ID = 0;
-    final int INDEX_MASTER_KEY_ID = 1;
+    static final String[] PROJECTION = new String[] {
+        KeychainContract.UserIds.USER_ID,
+        KeychainContract.KeyRings.MASTER_KEY_ID
+    };
+    static final int INDEX_USER_ID = 0;
+    static final int INDEX_MASTER_KEY_ID = 1;
 
     public interface SelectSecretKeyCallback {
         void onKeySelected(long secretKeyId);
@@ -128,8 +130,9 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
 
     //For AppSettingsFragment
     public void selectKey(long masterKeyId){
-        Uri buildUri = KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(String.valueOf(masterKeyId));
-        mReceivedUri=buildUri;
+        Uri buildUri = KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
+                            String.valueOf(masterKeyId));
+        mReceivedUri = buildUri;
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
