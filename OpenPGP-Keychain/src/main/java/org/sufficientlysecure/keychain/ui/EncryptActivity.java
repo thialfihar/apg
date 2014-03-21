@@ -1039,8 +1039,8 @@ public class EncryptActivity extends DrawerActivity {
 
             case Id.request.secret_keys: {
                 if (resultCode == RESULT_OK) {
-                    Uri uri_master_key = data.getData();
-                    mSecretKeyId = Long.valueOf(uri_master_key.getLastPathSegment());
+                    Uri uriMasterKey = data.getData();
+                    mSecretKeyId = Long.valueOf(uriMasterKey.getLastPathSegment());
                 } else {
                     mSecretKeyId = Id.key.none;
                 }

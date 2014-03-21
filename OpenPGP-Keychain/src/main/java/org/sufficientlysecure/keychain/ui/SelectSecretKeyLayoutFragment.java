@@ -52,7 +52,7 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
     private SelectSecretKeyCallback mCallback;
 
     private static final int REQUEST_CODE_SELECT_KEY = 8882;
-        
+
     private static final int LOADER_ID = 0;
 
     //The Projection we will retrieve, Master Key ID is for convenience sake,
@@ -127,7 +127,7 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
     }
 
     //For AppSettingsFragment
-    public void selectKey(long masterKeyId){
+    public void selectKey(long masterKeyId) {
         Uri buildUri = KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
                             String.valueOf(masterKeyId));
         mReceivedUri = buildUri;
