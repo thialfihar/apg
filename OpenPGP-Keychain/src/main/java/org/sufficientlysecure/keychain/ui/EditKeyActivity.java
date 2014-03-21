@@ -501,11 +501,10 @@ public class EditKeyActivity extends ActionBarActivity {
 
     private void saveClicked() {
         long masterKeyId = getMasterKeyId();
-        try {
-            if (!isPassphraseSet()) {
-                throw new PgpGeneralException(this.getString(R.string.set_a_passphrase));
-            }
-
+        if (!isPassphraseSet()) {
+            Log.e(Constants.TAG, "No passphrase has been set");
+            Toast.makeText(this, R.string.set_a_passphrase, Toast.LENGTH_LONG).show();
+        } else {
             String passphrase = null;
             if (mIsPassphraseSet) {
                 passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
@@ -519,9 +518,6 @@ public class EditKeyActivity extends ActionBarActivity {
                 mCurrentPassphrase = passphrase;
                 finallySaveClicked();
             }
-        } catch (PgpGeneralException e) {
-            //Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
-            //        Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -582,6 +578,7 @@ public class EditKeyActivity extends ActionBarActivity {
             // start service with intent
             startService(intent);
         } catch (PgpGeneralException e) {
+            Log.e(Constants.TAG, getString(R.string.error_message, e.getMessage()));
             Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
                     Toast.LENGTH_SHORT).show();
         }
