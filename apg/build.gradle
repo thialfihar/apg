@@ -2,11 +2,13 @@ apply plugin: 'android'
 
 dependencies {
     compile 'com.android.support:support-v4:19.0.1'
+    compile 'com.android.support:support-v13:19.0.1'
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.github.johnkil.android-appmsg:appmsg:1.2.0'
     compile 'se.emilsjolander:stickylistheaders:2.1.5'
     compile 'com.google.zxing:core:2.2'
     compile 'com.google.zxing:android-integration:3.0.0'
+    compile 'com.google.guava:guava:16.0.1'
     compile project(':libs:AndroidBootstrap:AndroidBootstrap')
     compile project(':libs:bc:core')
     compile project(':libs:bc:pg')
@@ -30,6 +32,29 @@ android {
             runProguard true
             proguardFile file('../proguard.cfg')
             proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    dexOptions {
+        jumboMode = true
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java',
+                            '../libs/email/src',
+                            '../libs/email/unified_src',
+                            '../libs/ex/chips/src',
+                            '../libs/ex/common/java',
+                            '../libs/photoviewer/appcompat/src',
+                            '../libs/photoviewer/src',
+                          ]
+            res.srcDirs = ['src/main/res',
+                           '../libs/email/res',
+                           '../libs/ex/chips/res',
+                           '../libs/photoviewer/appcompat/res',
+                           '../libs/photoviewer/res',
+                          ]
         }
     }
 

@@ -7,3 +7,15 @@
 [submodule "libs/HtmlTextView"]
 	path = libs/HtmlTextView
 	url = git://github.com/thialfihar/html-textview
+[submodule "libs/email"]
+	path = libs/email
+	url = https://github.com/thialfihar/android-email
+	branch = master
+[submodule "libs/ex"]
+	path = libs/ex
+	url = https://github.com/thialfihar/android-ex
+	branch = master
+[submodule "libs/photoviewer"]
+	path = libs/photoviewer
+	url = https://github.com/thialfihar/android-photoviewer
+	branch = master
