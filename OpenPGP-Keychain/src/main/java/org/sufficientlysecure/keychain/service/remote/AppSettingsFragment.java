@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -56,8 +55,6 @@ public class AppSettingsFragment extends Fragment implements
     private AppSettings mAppSettings;
 
     // view
-    private LinearLayout mAdvancedSettingsContainer;
-    private BootstrapButton mAdvancedSettingsButton;
     private TextView mAppNameView;
     private ImageView mAppIconView;
     private Spinner mEncryptionAlgorithm;
@@ -123,11 +120,6 @@ public class AppSettingsFragment extends Fragment implements
                 R.id.api_app_settings_select_key_fragment);
         mSelectKeyFragment.setCallback(this);
 
-        mAdvancedSettingsButton = (BootstrapButton) view
-                .findViewById(R.id.api_app_settings_advanced_button);
-        mAdvancedSettingsContainer = (LinearLayout) view
-                .findViewById(R.id.api_app_settings_advanced);
-
         mAppNameView = (TextView) view.findViewById(R.id.api_app_settings_app_name);
         mAppIconView = (ImageView) view.findViewById(R.id.api_app_settings_app_icon);
         mEncryptionAlgorithm = (Spinner) view
@@ -180,35 +172,6 @@ public class AppSettingsFragment extends Fragment implements
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        final Animation visibleAnimation = new AlphaAnimation(0.0f, 1.0f);
-        visibleAnimation.setDuration(250);
-        final Animation invisibleAnimation = new AlphaAnimation(1.0f, 0.0f);
-        invisibleAnimation.setDuration(250);
-
-        // TODO: Better: collapse/expand animation
-        // final Animation animation2 = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-        // Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f,
-        // Animation.RELATIVE_TO_SELF, 0.0f);u
-        // animation2.setDuration(150);
-
-        mAdvancedSettingsButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mAdvancedSettingsContainer.getVisibility() == View.VISIBLE) {
-                    mAdvancedSettingsContainer.startAnimation(invisibleAnimation);
-                    mAdvancedSettingsContainer.setVisibility(View.GONE);
-                    mAdvancedSettingsButton.setText(getString(R.string.api_settings_show_advanced));
-                    mAdvancedSettingsButton.setLeftIcon("fa-caret-up");
-                } else {
-                    mAdvancedSettingsContainer.startAnimation(visibleAnimation);
-                    mAdvancedSettingsContainer.setVisibility(View.VISIBLE);
-                    mAdvancedSettingsButton.setText(getString(R.string.api_settings_hide_advanced));
-                    mAdvancedSettingsButton.setLeftIcon("fa-caret-down");
-                }
             }
         });
     }
