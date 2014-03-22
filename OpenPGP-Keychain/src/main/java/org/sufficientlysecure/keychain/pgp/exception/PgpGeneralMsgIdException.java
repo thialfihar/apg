@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2011 Thialfihar <thi@thialfihar.org>
+ * Copyright (C) 2012-2013 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2010 Thialfihar <thi@thialfihar.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +17,19 @@
 
 package org.thialfihar.android.apg.pgp.exception;
 
-public class PgpGeneralException extends Exception {
-    static final long serialVersionUID = 0xf812773342L;
+import android.content.Context;
 
-    public PgpGeneralException(String message) {
-        super(message);
+public class PgpGeneralMsgIdException extends Exception {
+    static final long serialVersionUID = 0xf812773343L;
+
+    private final int msgId;
+
+    public PgpGeneralMsgIdException(int msgId) {
+        super("msg[" + msgId + "]");
+        this.msgId = msgId;
     }
-    public PgpGeneralException(String message, Throwable cause) {
-        super(message, cause);
+
+    public PgpGeneralException getContextualized(Context context) {
+        return new PgpGeneralException(context.getString(msgId), this);
     }
 }
