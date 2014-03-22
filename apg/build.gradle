@@ -25,6 +25,14 @@ android {
         targetSdkVersion 19
     }
 
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile file('../proguard.cfg')
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
     if (project.hasProperty('signingStoreLocation') &&
         project.hasProperty('signingStorePassword') &&
         project.hasProperty('signingKeyAlias') &&
