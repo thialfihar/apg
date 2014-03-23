@@ -297,7 +297,7 @@
   <string name="error_keyserver_query">Збій сервера ключа запиту</string>
   <string name="error_keyserver_too_many_responses">Забагато відповідей</string>
   <string name="error_import_file_no_content">Файл не має вмісту</string>
-  <string name="error_generic_report_bug">Трапилася загальна помилка, будь ласка, створіть новий звіт про помилку для OpenKeychain.</string>
+  <string name="error_generic_report_bug">Трапилася загальна помилка, будь ласка, створіть новий звіт про помилку для APG.</string>
   <plurals name="error_can_not_delete_info">
     <item quantity="one">Будь ласка, вилучіть його з екрану „Мої ключі“!</item>
     <item quantity="few">Будь ласка, вилучіть їх з екрану „Мої ключі“!</item>
@@ -383,10 +383,10 @@
   <string name="import_nfc_help_button">Довідка</string>
   <string name="import_clipboard_button">Отримати ключ з буфера обміну</string>
   <!--Intent labels-->
-  <string name="intent_decrypt_file">Розшифрувати файл з OpenKeychain</string>
-  <string name="intent_import_key">Імпортувати ключ з OpenKeychain</string>
-  <string name="intent_send_encrypt">Зашифрувати з OpenKeychain</string>
-  <string name="intent_send_decrypt">Розшифрувати з OpenKeychain</string>
+  <string name="intent_decrypt_file">Розшифрувати файл з APG</string>
+  <string name="intent_import_key">Імпортувати ключ з APG</string>
+  <string name="intent_send_encrypt">Зашифрувати з APG</string>
+  <string name="intent_send_decrypt">Розшифрувати з APG</string>
   <!--Remote API-->
   <string name="api_no_apps">Нема зареєстрованих програм!\n\nСтороні програми можуть вимагати доступ до APG. Після надання доступу вони будуть наведені тут.</string>
   <string name="api_settings_show_advanced">Показати додаткові налаштування</string>
@@ -405,7 +405,7 @@
   <string name="api_select_pub_keys_missing_text">Не знайдено публічних ключів для цих ІД  користувачів:</string>
   <string name="api_select_pub_keys_dublicates_text">Більше ніж один публічний ключ існує для цих ІД користувачів:</string>
   <string name="api_select_pub_keys_text">Будь ласка, перевірте список одержувачів!</string>
-  <string name="api_error_wrong_signature">Перевірка підпису пакету не вдалася! Може ви встановили програму з іншого джерела? Якщо ви впевнені, що це не атака, то відкличте реєстрацію програми у OpenKeychain та знову зареєструйте її.</string>
+  <string name="api_error_wrong_signature">Перевірка підпису пакету не вдалася! Може ви встановили програму з іншого джерела? Якщо ви впевнені, що це не атака, то відкличте реєстрацію програми у APG та знову зареєструйте її.</string>
   <!--Share-->
   <string name="share_qr_code_dialog_title">Відправити як штрих-код</string>
   <string name="share_qr_code_dialog_start">Пройдіть через усі штрих-коди за допомогою \"Далі\", а також проскануйте їх по одному.</string>

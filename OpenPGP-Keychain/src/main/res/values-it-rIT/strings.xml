@@ -288,7 +288,7 @@
   <string name="error_keyserver_query">Interrogazione del server delle chiavi fallita</string>
   <string name="error_keyserver_too_many_responses">Troppi responsi</string>
   <string name="error_import_file_no_content">Il File non ha contenuti</string>
-  <string name="error_generic_report_bug">Si è verificato un errore generico, si prega di creare una nuova segnalazione di errore per OpenKeychain.</string>
+  <string name="error_generic_report_bug">Si è verificato un errore generico, si prega di creare una nuova segnalazione di errore per APG.</string>
   <plurals name="error_can_not_delete_info">
     <item quantity="one">Per favore cancellala dalla schermata \'Mie Chavi\'</item>
     <item quantity="other">Per favore cancellatele dalla schermata \'Mie Chavi\'</item>
@@ -369,12 +369,12 @@
   <string name="import_nfc_help_button">Aiuto</string>
   <string name="import_clipboard_button">Ottieni chiave dagli appunti</string>
   <!--Intent labels-->
-  <string name="intent_decrypt_file">Decodifica File con OpenKeychain</string>
-  <string name="intent_import_key">Importa Chiave con OpenKeychain</string>
-  <string name="intent_send_encrypt">Codifica con OpenKeychain</string>
-  <string name="intent_send_decrypt">Decodifica con OpenKeychain</string>
+  <string name="intent_decrypt_file">Decodifica File con APG</string>
+  <string name="intent_import_key">Importa Chiave con APG</string>
+  <string name="intent_send_encrypt">Codifica con APG</string>
+  <string name="intent_send_decrypt">Decodifica con APG</string>
   <!--Remote API-->
-  <string name="api_no_apps">Nessuna app registrata!\n\nApp di terza parti possono richiedere accesso a OpenKeychain. Dopo aver concesso l\'accesso, saranno elencate qui.</string>
+  <string name="api_no_apps">Nessuna app registrata!\n\nApp di terza parti possono richiedere accesso a APG. Dopo aver concesso l\'accesso, saranno elencate qui.</string>
   <string name="api_settings_show_advanced">Mostra impostazioni avanzate</string>
   <string name="api_settings_hide_advanced">Nascondi impostazioni avanzate</string>
   <string name="api_settings_no_key">Nessuna chiave selezionata</string>
@@ -384,14 +384,14 @@
   <string name="api_settings_revoke">Revoca accesso</string>
   <string name="api_settings_package_name">Nome Pacchetto</string>
   <string name="api_settings_package_signature">SHA-256 della Firma del Pacchetto</string>
-  <string name="api_register_text">Le app visualizzate hanno richiesto l\'accesso a OpenKeychain.\nPermetti accesso?\n\nATTENZIONE: Se non sai perche\' questo schermata e\' apparsa, nega l\'accesso! Puoi revocare l\'accesso dopo, usando la schermata \'App Registrate\'.</string>
+  <string name="api_register_text">Le app visualizzate hanno richiesto l\'accesso a APG.\nPermetti accesso?\n\nATTENZIONE: Se non sai perche\' questo schermata e\' apparsa, nega l\'accesso! Puoi revocare l\'accesso dopo, usando la schermata \'App Registrate\'.</string>
   <string name="api_register_allow">Permetti accesso</string>
   <string name="api_register_disallow">Nega accesso</string>
   <string name="api_register_error_select_key">Per favore selezionare una chiave!</string>
   <string name="api_select_pub_keys_missing_text">Nessuna chiave pubblica trovata per id utente:</string>
   <string name="api_select_pub_keys_dublicates_text">Esistono piu\' di una chiave pubblica per gli id utenti:</string>
   <string name="api_select_pub_keys_text">Per favore ricontrolla la lista destinatari!</string>
-  <string name="api_error_wrong_signature">Controllo della firma fallito! Hai installato questa app da una fonte diversa? Se sei sicuro che non sia un attacco, revoca la registrazione di questa app in OpenKeychain e dopo registra di nuovo l\'app.</string>
+  <string name="api_error_wrong_signature">Controllo della firma fallito! Hai installato questa app da una fonte diversa? Se sei sicuro che non sia un attacco, revoca la registrazione di questa app in APG e dopo registra di nuovo l\'app.</string>
   <!--Share-->
   <string name="share_qr_code_dialog_title">Condividi tramite Codice QR</string>
   <string name="share_qr_code_dialog_start">Scorri tutti i Codici QR usando \'Prossimo\', a scansionali uno ad uno.</string>
