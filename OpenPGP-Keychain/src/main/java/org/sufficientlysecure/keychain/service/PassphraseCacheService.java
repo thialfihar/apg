@@ -39,11 +39,11 @@ import org.spongycastle.openpgp.PGPException;
 import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
-import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
-import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 
@@ -213,11 +213,11 @@ public class PassphraseCacheService extends Service {
         try {
             PGPSecretKeyRing secRing = ProviderHelper
                     .getPGPSecretKeyRingByKeyId(context, secretKeyId);
-            PGPSecretKey secretKey = null;
+            Key secretKey = null;
             boolean foundValidKey = false;
             for (Iterator keys = secRing.getSecretKeys(); keys.hasNext();) {
-                secretKey = (PGPSecretKey) keys.next();
-                if (!secretKey.isPrivateKeyEmpty()) {
+                secretKey = new Key((PGPSecretKey) keys.next());
+                if (!secretKey.getSecretKey().isPrivateKeyEmpty()) {
                     foundValidKey = true;
                     break;
                 }
@@ -227,9 +227,7 @@ public class PassphraseCacheService extends Service {
                 return false;
             }
 
-            PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
-                    "SC").build("".toCharArray());
-            PGPPrivateKey testKey = secretKey.extractPrivateKey(keyDecryptor);
+            PGPPrivateKey testKey = secretKey.extractPrivateKey("");
             if (testKey != null) {
                 return false;
             }
