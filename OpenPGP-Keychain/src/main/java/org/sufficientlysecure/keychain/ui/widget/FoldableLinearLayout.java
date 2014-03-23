@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui.widget;
+package org.thialfihar.android.apg.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -27,7 +27,7 @@ import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.beardedhen.androidbootstrap.FontAwesomeText;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 /**
  * Class representing a LinearLayout that can fold and hide it's content when pressed
