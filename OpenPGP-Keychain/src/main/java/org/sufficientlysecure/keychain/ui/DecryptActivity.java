@@ -486,7 +486,8 @@ public class DecryptActivity extends DrawerActivity {
         getDecryptionKeyFromInputStream();
 
         // if we need a symmetric passphrase or a passphrase to use a secret key ask for it
-        if (mAssumeSymmetricEncryption || PassphraseCacheService.getCachedPassphrase(this, mSecretKeyId) == null) {
+        if (mAssumeSymmetricEncryption ||
+            PassphraseCacheService.getCachedPassphrase(this, mSecretKeyId) == null) {
             showPassphraseDialog();
         } else {
             if (mDecryptTarget == Id.target.file) {
