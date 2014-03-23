@@ -17,8 +17,9 @@ APG definitely has some catching up to do. :)
 ### Command line
 ```
 > git submodule update --init --recursive
-> ./gradlew build
+> ./gradlew build -Dandroid.sdk=$ANDROID_HOME
 ```
+android.sdk is only needed for ProGuard. assembleDebug can be run without it.
 
 ### Travis CI Build Status
 
