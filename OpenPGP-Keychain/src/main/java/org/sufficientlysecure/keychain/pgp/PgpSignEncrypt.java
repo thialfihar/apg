@@ -103,7 +103,7 @@ public class PgpSignEncrypt {
         private Progressable mProgressable = null;
         private boolean mEnableAsciiArmorOutput = false;
         private int mCompressionId = Id.choice.compression.none;
-        private long[] mEncryptionKeyIds = new long[0];
+        private long[] mEncryptionKeyIds = null;
         private String mEncryptionPassphrase = null;
         private int mSymmetricEncryptionAlgorithm = 0;
         private long mSignatureKeyId = Id.key.none;
@@ -201,7 +201,8 @@ public class PgpSignEncrypt {
             NoSuchAlgorithmException, SignatureException {
 
         boolean enableSignature = mSignatureKeyId != Id.key.none;
-        boolean enableEncryption = (mEncryptionKeyIds.length != 0 || mEncryptionPassphrase != null);
+        boolean enableEncryption = ((mEncryptionKeyIds != null && mEncryptionKeyIds.length != 0) ||
+                                        mEncryptionPassphrase != null);
         boolean enableCompression = (enableEncryption && mCompressionId != Id.choice.compression.none);
 
         Log.d(Constants.TAG, "enableSignature:" + enableSignature
@@ -264,7 +265,7 @@ public class PgpSignEncrypt {
 
             cPk = new PGPEncryptedDataGenerator(encryptorBuilder);
 
-            if (mEncryptionKeyIds.length == 0) {
+            if (mEncryptionKeyIds == null || mEncryptionKeyIds.length == 0) {
                 // Symmetric encryption
                 Log.d(Constants.TAG, "mEncryptionKeyIds length is 0 -> symmetric encryption");
 
