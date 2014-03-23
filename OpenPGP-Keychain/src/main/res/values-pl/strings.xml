@@ -237,7 +237,6 @@
   <string name="keys_exported">Pomyślnie wyeksportowano %d kluczy.</string>
   <string name="no_keys_exported">Nie wyeksportowano żadnych kluczy.</string>
   <string name="key_creation_el_gamal_info">Uwaga: algorytm EnGamal jest obsługiwany tylko przez podklucze i użyty zostanie najbliższy rozmiar klucza z podanych: 1536, 2048, 3072, 4096, 8192.</string>
-  <string name="key_creation_weak_rsa_info">Uwaga: generowanie klucza RSA o długości 1024 bity i mniejszej jest uważane za niebezpieczne i wyłączone dla tworzenia nowych kluczy.</string>
   <string name="key_not_found">Nie można znaleźć klucza %08X.</string>
   <plurals name="keys_found">
     <item quantity="one">Znaleziono %d klucz.</item>

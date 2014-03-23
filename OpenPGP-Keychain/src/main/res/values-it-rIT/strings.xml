@@ -230,7 +230,6 @@
   <string name="keys_exported">%d chiavi esportate correttamente.</string>
   <string name="no_keys_exported">Nessuna chiave esportata.</string>
   <string name="key_creation_el_gamal_info">Nota: solo le sottochiavi supportano ElGamal, e per ElGamal verra\' usata la grandezza chiave piu\' vicina a 1536, 2048, 3072, 4096 o 8192.</string>
-  <string name="key_creation_weak_rsa_info">Nota: la generazione di chiavi RSA con lunghezza pari a 1024 bit o inferiore è considerata non sicura ed è disabilitata per la generazione di nuove chiavi.</string>
   <string name="key_not_found">Impossibile trovare la chiave %08X.</string>
   <plurals name="keys_found">
     <item quantity="one">Trovata %d chiave.</item>

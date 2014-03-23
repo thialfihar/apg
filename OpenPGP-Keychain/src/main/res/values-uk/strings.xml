@@ -237,7 +237,6 @@
   <string name="keys_exported">Успішно експортовано %d ключів.</string>
   <string name="no_keys_exported">Жодного ключа не експортовано.</string>
   <string name="key_creation_el_gamal_info">Примітка: тільки підключі підтримують ElGamal, а для ElGamal буде використаний найближчий розмір ключа з 1536, 2048, 3072, 4096, або 8192.</string>
-  <string name="key_creation_weak_rsa_info">Примітка: генерація ключа RSA з довжиною 1024 біти і менше вважається небезпечною і вона вимкнена для генерації нових ключів.</string>
   <string name="key_not_found">Не можливо знайти ключ %08X.</string>
   <plurals name="keys_found">
     <item quantity="one">Знайдено %d ключ.</item>

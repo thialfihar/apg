@@ -230,7 +230,6 @@
   <string name="keys_exported">%d claves exportadas satisfactoriamente.</string>
   <string name="no_keys_exported">No se han exportado claves.</string>
   <string name="key_creation_el_gamal_info">Nota: solo las subclaves son compatibles con ElGamal, y para ElGamal debe usarse el tamaño de clave más próximo de 1536, 2048, 3072, 4096, o 8192.</string>
-  <string name="key_creation_weak_rsa_info">Nota: generar una clave RSA de longitud 1024-bit o menos está considerado inseguro y desactivado para generar nuevas claves.</string>
   <string name="key_not_found">No se puede encontrar la clave %08X.</string>
   <plurals name="keys_found">
     <item quantity="one">Se ha encontrado %d clave.</item>

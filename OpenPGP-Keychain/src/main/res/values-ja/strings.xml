@@ -223,7 +223,6 @@
   <string name="keys_exported">%d の鍵をエクスポートしました。</string>
   <string name="no_keys_exported">鍵をエクスポートしていません。</string>
   <string name="key_creation_el_gamal_info">備考: 副鍵として ElGamalだけがサポートされ, ElGamal は鍵サイズとして1536, 2048, 3072, 4096, 8192 だけが使えます。</string>
-  <string name="key_creation_weak_rsa_info">付記: 長さ1024bitかそれ以下で生成されたRSA鍵は安全とはみなされず、新な鍵の生成は無効にされています。</string>
   <string name="key_not_found">鍵 %08X は見付かりませんでした。</string>
   <plurals name="keys_found">
     <item quantity="other">%d の鍵を発見。</item>

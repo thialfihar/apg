@@ -230,7 +230,6 @@
   <string name="keys_exported">%d Schlüssel erfolgreich exportiert.</string>
   <string name="no_keys_exported">Keine Schlüssel exportiert.</string>
   <string name="key_creation_el_gamal_info">Beachte: nur Unterschlüssel unterstützen ElGamal. Für ElGamal wird die am nächsten liegende Schlüssellänge von 1536, 2048, 3072, 4096 oder 8192 verwendet.</string>
-  <string name="key_creation_weak_rsa_info">Beachte: RSA-Schlüssel mit einer Schlüssellänge von 1024-Bits oder weniger werden als unsicher angesehen und können daher nicht für neue Schlüssel erstellt werden.</string>
   <string name="key_not_found">Schlüssel %08X konnte nicht gefunden werden.</string>
   <plurals name="keys_found">
     <item quantity="one">%d Schlüssel gefunden.</item>
