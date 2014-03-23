@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012-2013 Dominik Schürmann <dominik@dominikschuermann.de>
+ * Copyright (C) 2012-2014 Dominik Schürmann <dominik@dominikschuermann.de>
  * Copyright (C) 2010-2014 Thialfihar <thi@thialfihar.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -78,9 +78,15 @@ public class KeychainProvider extends ContentProvider {
     private static final int SECRET_KEY_RING_USER_ID = 221;
     private static final int SECRET_KEY_RING_USER_ID_BY_ROW_ID = 222;
 
-    private static final int API_APPS = 301;
-    private static final int API_APPS_BY_ROW_ID = 302;
-    private static final int API_APPS_BY_PACKAGE_NAME = 303;
+    private static final int API = 301;
+    private static final int API_BY_ROW_ID = 302;
+    private static final int API_BY_PACKAGE_NAME = 303;
+    private static final int API_APPS = 304;
+    private static final int API_APPS_BY_ROW_ID = 305;
+    private static final int API_APPS_BY_PACKAGE_NAME = 306;
+    private static final int API_ACCOUNTS = 307;
+    private static final int API_ACCOUNTS_BY_ROW_ID = 308;
+    private static final int API_ACCOUNTS_BY_PACKAGE_NAME = 309;
 
     private static final int UNIFIED_KEY_RING = 401;
 
@@ -243,10 +249,26 @@ public class KeychainProvider extends ContentProvider {
         /**
          * API apps
          */
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS, API_APPS);
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS + "/#", API_APPS_BY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS + "/"
+        matcher.addURI(authority, KeychainContract.BASE_API, API);
+        matcher.addURI(authority, KeychainContract.BASE_API + "/#", API_BY_ROW_ID);
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_BY_PACKAGE_NAME + "/*", API_BY_PACKAGE_NAME);
+
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_APPS, API_APPS);
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_APPS + "/#", API_APPS_BY_ROW_ID);
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_APPS + "/"
                 + KeychainContract.PATH_BY_PACKAGE_NAME + "/*", API_APPS_BY_PACKAGE_NAME);
+
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_ACCOUNTS, API_ACCOUNTS);
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_ACCOUNTS + "/#", API_ACCOUNTS_BY_ROW_ID);
+        matcher.addURI(authority, KeychainContract.BASE_API + "/"
+                + KeychainContract.PATH_ACCOUNTS + "/"
+                + KeychainContract.PATH_BY_PACKAGE_NAME + "/*", API_ACCOUNTS_BY_PACKAGE_NAME);
 
         /**
          * data stream
@@ -322,12 +344,26 @@ public class KeychainProvider extends ContentProvider {
             case SECRET_KEY_RING_USER_ID_BY_ROW_ID:
                 return UserIds.CONTENT_ITEM_TYPE;
 
+            case API:
+                return Api.CONTENT_TYPE;
+
+            case API_BY_ROW_ID:
+            case API_BY_PACKAGE_NAME:
+                return Api.CONTENT_ITEM_TYPE;
+
             case API_APPS:
                 return ApiApps.CONTENT_TYPE;
 
             case API_APPS_BY_ROW_ID:
             case API_APPS_BY_PACKAGE_NAME:
                 return ApiApps.CONTENT_ITEM_TYPE;
+
+            case API_ACCOUNTS:
+                return ApiAccounts.CONTENT_TYPE;
+
+            case API_ACCOUNTS_BY_ROW_ID:
+            case API_ACCOUNTS_BY_PACKAGE_NAME:
+                return ApiAccounts.CONTENT_ITEM_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -544,7 +580,6 @@ public class KeychainProvider extends ContentProvider {
                 }
 
                 break;
-
             case PUBLIC_KEY_RING:
             case SECRET_KEY_RING:
                 qb = buildKeyRingQuery(qb, match);
@@ -554,7 +589,6 @@ public class KeychainProvider extends ContentProvider {
                 }
 
                 break;
-
             case PUBLIC_KEY_RING_BY_ROW_ID:
             case SECRET_KEY_RING_BY_ROW_ID:
                 qb = buildKeyRingQuery(qb, match);
@@ -567,7 +601,6 @@ public class KeychainProvider extends ContentProvider {
                 }
 
                 break;
-
             case PUBLIC_KEY_RING_BY_MASTER_KEY_ID:
             case SECRET_KEY_RING_BY_MASTER_KEY_ID:
                 qb = buildKeyRingQuery(qb, match);
@@ -580,7 +613,6 @@ public class KeychainProvider extends ContentProvider {
                 }
 
                 break;
-
             case SECRET_KEY_RING_BY_KEY_ID:
             case PUBLIC_KEY_RING_BY_KEY_ID:
             case LEGACY_SECRET_KEY_RING_BY_KEY_ID:
@@ -595,7 +627,6 @@ public class KeychainProvider extends ContentProvider {
                 }
 
                 break;
-
             case SECRET_KEY_RING_BY_EMAILS:
             case PUBLIC_KEY_RING_BY_EMAILS:
             case LEGACY_SECRET_KEY_RING_BY_EMAILS:
@@ -627,7 +658,6 @@ public class KeychainProvider extends ContentProvider {
                 }
 
                 break;
-
             case SECRET_KEY_RING_BY_LIKE_EMAIL:
             case PUBLIC_KEY_RING_BY_LIKE_EMAIL:
                 qb = buildKeyRingQuery(qb, match);
@@ -643,7 +673,6 @@ public class KeychainProvider extends ContentProvider {
                         + "))");
 
                 break;
-
             case PUBLIC_KEY_RING_KEY:
             case SECRET_KEY_RING_KEY:
                 qb.setTables(Tables.KEYS);
@@ -656,7 +685,6 @@ public class KeychainProvider extends ContentProvider {
                 qb.setProjectionMap(getProjectionMapForKeys());
 
                 break;
-
             case PUBLIC_KEY_RING_KEY_BY_ROW_ID:
             case SECRET_KEY_RING_KEY_BY_ROW_ID:
                 qb.setTables(Tables.KEYS);
@@ -672,7 +700,6 @@ public class KeychainProvider extends ContentProvider {
                 qb.setProjectionMap(getProjectionMapForKeys());
 
                 break;
-
             case PUBLIC_KEY_RING_BY_MASTER_KEY_ID_USER_ID:
                 qb.setTables(Tables.USER_IDS + " INNER JOIN " + Tables.KEY_RINGS + " ON " + "("
                         + Tables.KEY_RINGS + "." + BaseColumns._ID + " = " + Tables.USER_IDS + "."
@@ -683,7 +710,6 @@ public class KeychainProvider extends ContentProvider {
                 qb.setProjectionMap(getProjectionMapForUserIds());
 
                 break;
-
             case PUBLIC_KEY_RING_USER_ID:
             case SECRET_KEY_RING_USER_ID:
                 qb.setTables(Tables.USER_IDS);
@@ -691,7 +717,6 @@ public class KeychainProvider extends ContentProvider {
                 qb.appendWhereEscapeString(uri.getPathSegments().get(2));
 
                 break;
-
             case PUBLIC_KEY_RING_USER_ID_BY_ROW_ID:
             case SECRET_KEY_RING_USER_ID_BY_ROW_ID:
                 qb.setTables(Tables.USER_IDS);
@@ -702,7 +727,28 @@ public class KeychainProvider extends ContentProvider {
                 qb.appendWhereEscapeString(uri.getLastPathSegment());
 
                 break;
+            case API:
+                qb.setTables(Tables.API_ACCOUNTS + " INNER JOIN " + Tables.API_APPS + " ON " + "("
+                        + Tables.API_APPS + "." + ApiApps.PACKAGE_NAME + " = " + Tables.API_ACCOUNTS + "."
+                        + ApiAccounts.PACKAGE_NAME_FK + " )");
 
+                break;
+            case API_BY_ROW_ID:
+                qb.setTables(Tables.API_ACCOUNTS + " INNER JOIN " + Tables.API_APPS + " ON " + "("
+                        + Tables.API_APPS + "." + ApiApps.PACKAGE_NAME + " = " + Tables.API_ACCOUNTS + "."
+                        + ApiAccounts.PACKAGE_NAME_FK + " )");
+                qb.appendWhere(Tables.API_APPS + "." + BaseColumns._ID + " = ");
+                qb.appendWhereEscapeString(uri.getLastPathSegment());
+
+                break;
+            case API_BY_PACKAGE_NAME:
+                qb.setTables(Tables.API_ACCOUNTS + " INNER JOIN " + Tables.API_APPS + " ON " + "("
+                        + Tables.API_APPS + "." + ApiApps.PACKAGE_NAME + " = " + Tables.API_ACCOUNTS + "."
+                        + ApiAccounts.PACKAGE_NAME_FK + " )");
+                qb.appendWhere(Tables.API_APPS + "." + ApiApps.PACKAGE_NAME + " = ");
+                qb.appendWhereEscapeString(uri.getLastPathSegment());
+
+                break;
             case API_APPS:
                 qb.setTables(Tables.API_APPS);
 
@@ -717,10 +763,26 @@ public class KeychainProvider extends ContentProvider {
             case API_APPS_BY_PACKAGE_NAME:
                 qb.setTables(Tables.API_APPS);
                 qb.appendWhere(ApiApps.PACKAGE_NAME + " = ");
-                qb.appendWhereEscapeString(uri.getPathSegments().get(2));
+                qb.appendWhereEscapeString(uri.getLastPathSegment());
 
                 break;
+            case API_ACCOUNTS:
+                qb.setTables(Tables.API_ACCOUNTS);
 
+                break;
+            case API_ACCOUNTS_BY_ROW_ID:
+                qb.setTables(Tables.API_ACCOUNTS);
+
+                qb.appendWhere(BaseColumns._ID + " = ");
+                qb.appendWhereEscapeString(uri.getLastPathSegment());
+
+                break;
+            case API_ACCOUNTS_BY_PACKAGE_NAME:
+                qb.setTables(Tables.API_ACCOUNTS);
+                qb.appendWhere(ApiAppsAccountsColumns.PACKAGE_NAME_FK + " = ");
+                qb.appendWhereEscapeString(uri.getLastPathSegment());
+
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
 
@@ -810,6 +872,11 @@ public class KeychainProvider extends ContentProvider {
                     rowUri = ApiApps.buildIdUri(Long.toString(rowId));
 
                     break;
+                case API_ACCOUNTS:
+                    rowId = db.insertOrThrow(Tables.API_ACCOUNTS, null, values);
+                    rowUri = ApiAccounts.buildIdUri(Long.toString(rowId));
+
+                    break;
                 default:
                     throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
@@ -873,6 +940,14 @@ public class KeychainProvider extends ContentProvider {
                 break;
             case API_APPS_BY_PACKAGE_NAME:
                 count = db.delete(Tables.API_APPS, buildDefaultApiAppsSelection(uri, true, selection),
+                        selectionArgs);
+                break;
+            case API_ACCOUNTS_BY_ROW_ID:
+                count = db.delete(Tables.API_ACCOUNTS, buildDefaultApiAccountsSelection(uri, false, selection),
+                        selectionArgs);
+                break;
+            case API_ACCOUNTS_BY_PACKAGE_NAME:
+                count = db.delete(Tables.API_ACCOUNTS, buildDefaultApiAccountsSelection(uri, true, selection),
                         selectionArgs);
                 break;
             default:
@@ -944,6 +1019,14 @@ public class KeychainProvider extends ContentProvider {
                 case API_APPS_BY_PACKAGE_NAME:
                     count = db.update(Tables.API_APPS, values,
                             buildDefaultApiAppsSelection(uri, true, selection), selectionArgs);
+                    break;
+                case API_ACCOUNTS_BY_ROW_ID:
+                    count = db.update(Tables.API_ACCOUNTS, values,
+                            buildDefaultApiAccountsSelection(uri, false, selection), selectionArgs);
+                    break;
+                case API_ACCOUNTS_BY_PACKAGE_NAME:
+                    count = db.update(Tables.API_ACCOUNTS, values,
+                            buildDefaultApiAccountsSelection(uri, true, selection), selectionArgs);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -1052,6 +1135,21 @@ public class KeychainProvider extends ContentProvider {
 
         if (packageSelection) {
             return ApiApps.PACKAGE_NAME + "=" + lastPathSegment + andSelection;
+        } else {
+            return BaseColumns._ID + "=" + lastPathSegment + andSelection;
+        }
+    }
+
+    private String buildDefaultApiAccountsSelection(Uri uri, boolean packageSelection, String selection) {
+        String lastPathSegment = uri.getLastPathSegment();
+
+        String andSelection = "";
+        if (!TextUtils.isEmpty(selection)) {
+            andSelection = " AND (" + selection + ")";
+        }
+
+        if (packageSelection) {
+            return ApiAccounts.PACKAGE_NAME_FK + "=" + lastPathSegment + andSelection;
         } else {
             return BaseColumns._ID + "=" + lastPathSegment + andSelection;
         }
