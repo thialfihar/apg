@@ -33,7 +33,57 @@ public class KeychainDatabase extends SQLiteOpenHelper {
         String KEYS = "keys";
         String USER_IDS = "user_ids";
         String API_APPS = "api_apps";
+        String API_APPS_ACCOUNTS = "api_apps_accounts";
     }
+
+    private static final String CREATE_KEY_RINGS = "CREATE TABLE IF NOT EXISTS " + Tables.KEY_RINGS
+            + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + KeyRingsColumns.MASTER_KEY_ID + " INT64, "
+            + KeyRingsColumns.TYPE + " INTEGER, "
+            + KeyRingsColumns.KEY_RING_DATA + " BLOB)";
+
+    private static final String CREATE_KEYS = "CREATE TABLE IF NOT EXISTS " + Tables.KEYS + " ("
+            + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + KeysColumns.KEY_ID + " INT64, "
+            + KeysColumns.TYPE + " INTEGER, "
+            + KeysColumns.IS_MASTER_KEY + " INTEGER, "
+            + KeysColumns.ALGORITHM + " INTEGER, "
+            + KeysColumns.KEY_SIZE + " INTEGER, "
+            + KeysColumns.CAN_CERTIFY + " INTEGER, "
+            + KeysColumns.CAN_SIGN + " INTEGER, "
+            + KeysColumns.CAN_ENCRYPT + " INTEGER, "
+            + KeysColumns.IS_REVOKED + " INTEGER, "
+            + KeysColumns.CREATION + " INTEGER, "
+            + KeysColumns.EXPIRY + " INTEGER, "
+            + KeysColumns.KEY_DATA + " BLOB,"
+            + KeysColumns.RANK + " INTEGER, "
+            + KeysColumns.FINGERPRINT + " BLOB, "
+            + KeysColumns.KEY_RING_ROW_ID + " INTEGER NOT NULL, FOREIGN KEY("
+            + KeysColumns.KEY_RING_ROW_ID + ") REFERENCES " + Tables.KEY_RINGS + "("
+            + BaseColumns._ID + ") ON DELETE CASCADE)";
+
+    private static final String CREATE_USER_IDS = "CREATE TABLE IF NOT EXISTS " + Tables.USER_IDS
+            + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + UserIdsColumns.USER_ID + " TEXT, "
+            + UserIdsColumns.RANK + " INTEGER, "
+            + UserIdsColumns.KEY_RING_ROW_ID + " INTEGER NOT NULL, FOREIGN KEY("
+            + UserIdsColumns.KEY_RING_ROW_ID + ") REFERENCES " + Tables.KEY_RINGS + "("
+            + BaseColumns._ID + ") ON DELETE CASCADE)";
+
+    private static final String CREATE_API_APPS = "CREATE TABLE IF NOT EXISTS " + Tables.API_APPS
+            + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + ApiAppsColumns.PACKAGE_NAME + " TEXT UNIQUE, "
+            + ApiAppsColumns.PACKAGE_SIGNATURE + " BLOB)";
+
+    private static final String CREATE_API_APPS_ACCOUNTS = "CREATE TABLE IF NOT EXISTS " + Tables.API_APPS_ACCOUNTS
+            + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + ApiAppsAccountsColumns.KEY_ID + " INT64, "
+            + ApiAppsAccountsColumns.ENCRYPTION_ALGORITHM + " INTEGER, "
+            + ApiAppsAccountsColumns.HASH_ALORITHM + " INTEGER, "
+            + ApiAppsAccountsColumns.COMPRESSION + " INTEGER"
+            + ApiAppsAccountsColumns.PACKAGE_NAME + " TEXT NOT NULL, FOREIGN KEY("
+            + ApiAppsAccountsColumns.PACKAGE_NAME + ") REFERENCES " + Tables.API_APPS + "("
+            + ApiAppsColumns.PACKAGE_NAME + ") ON DELETE CASCADE)";
 
     KeychainDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -83,6 +133,8 @@ public class KeychainDatabase extends SQLiteOpenHelper {
             "encryption_algorithm INTEGER, " +
             "hash_algorithm INTEGER, " +
             "compression INTEGER)");
+
+        db.execSQL(CREATE_API_APPS_ACCOUNTS);
     }
 
     @Override
@@ -189,6 +241,12 @@ public class KeychainDatabase extends SQLiteOpenHelper {
                     } finally {
                         db.endTransaction();
                     }
+                    break;
+                case 7:
+                    // new db layout for api apps
+                    db.execSQL("DROP TABLE IF EXISTS " + Tables.API_APPS);
+                    db.execSQL(CREATE_API_APPS);
+                    db.execSQL(CREATE_API_APPS_ACCOUNTS);
                     break;
                 default:
                     break;
