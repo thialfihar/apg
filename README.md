@@ -20,6 +20,7 @@ APG definitely has some catching up to do. :)
 > ./gradlew build -Dandroid.sdk=$ANDROID_HOME
 ```
 android.sdk is only needed for ProGuard. assembleDebug can be run without it.
+Alternatively `android.sdk=...` can be put into `<project.dir>/gradle.properties` or `~/.gradle/gradle.properties`, then it won't be needed in the command.
 
 ### Travis CI Build Status
 
