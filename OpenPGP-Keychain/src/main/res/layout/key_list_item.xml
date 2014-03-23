@@ -39,6 +39,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/divider"
         android:layout_width="1dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
