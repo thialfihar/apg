@@ -570,7 +570,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                             oldPassphrase, newPassphrase);
                 } else {
                     Key pubKey = null;
-                    for(Key key : keys) {
+                    for (Key key : keys) {
                         Key tempKey = new Key(key.getPublicKey());
                         if (tempKey.getKeyId() == masterKeyId) {
                             pubKey = tempKey;
