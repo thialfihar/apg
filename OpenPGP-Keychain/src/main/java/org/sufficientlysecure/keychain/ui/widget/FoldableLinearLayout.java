@@ -33,7 +33,7 @@ import org.thialfihar.android.apg.R;
  * Class representing a LinearLayout that can fold and hide it's content when pressed
  * To use just add the following to your xml layout
 
- <org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout
+ <org.thialfihar.android.apg.ui.widget.FoldableLinearLayout
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      custom:foldedLabel="@string/TEXT_TO_DISPLAY_WHEN_FOLDED"
@@ -43,7 +43,7 @@ import org.thialfihar.android.apg.R;
 
     <include layout="@layout/ELEMENTS_TO_BE_FOLDED"/>
 
- </org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout>
+ </org.thialfihar.android.apg.ui.widget.FoldableLinearLayout>
 
  */
 public class FoldableLinearLayout extends LinearLayout {
