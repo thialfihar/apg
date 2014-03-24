@@ -257,7 +257,6 @@ public class KeychainProvider extends ContentProvider {
          */
         // matcher.addURI(authority, KeychainContract.BASE_DATA + "/*", DATA_STREAM);
 
-
         // legacy uris
         matcher.addURI(authority, "key_rings/public/key_id/*", LEGACY_PUBLIC_KEY_RING_BY_KEY_ID);
         matcher.addURI(authority, "key_rings/public/emails/*", LEGACY_PUBLIC_KEY_RING_BY_EMAILS);
