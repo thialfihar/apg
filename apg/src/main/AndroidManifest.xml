@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="com.fsck.k9.permission.READ_ATTACHMENT" />
 
     <!-- android:allowBackup="false": Don't allow backup over adb backup or other apps! -->
     <application
@@ -373,7 +374,8 @@
         <provider
             android:name="org.thialfihar.android.apg.provider.KeychainProvider"
             android:authorities="org.thialfihar.android.apg.provider"
-            android:exported="false" />
+            android:readPermission="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"
+            android:exported="true"/>
 
         <!-- Internal classes of the remote APIs (not exported) -->
         <activity
@@ -423,6 +425,11 @@
         <!-- android:name="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
         <!-- android:authorities="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
         <!-- android:permission="org.thialfihar.android.apg.permission.ACCESS_API" /> -->
+
     </application>
+    <permission android:name="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"
+                android:protectionLevel="dangerous"
+                android:label="@string/permission_read_key_details_label"
+                android:description="@string/permission_read_key_details_description"/>
 
 </manifest>

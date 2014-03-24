@@ -86,6 +86,11 @@ public class KeychainProvider extends ContentProvider {
 
     // private static final int DATA_STREAM = 401;
 
+    public static final int LEGACY_SECRET_KEY_RING_BY_KEY_ID = 501;
+    public static final int LEGACY_SECRET_KEY_RING_BY_EMAILS = 502;
+    public static final int LEGACY_PUBLIC_KEY_RING_BY_KEY_ID = 503;
+    public static final int LEGACY_PUBLIC_KEY_RING_BY_EMAILS = 504;
+
     protected UriMatcher mUriMatcher;
 
     /**
@@ -252,6 +257,13 @@ public class KeychainProvider extends ContentProvider {
          */
         // matcher.addURI(authority, KeychainContract.BASE_DATA + "/*", DATA_STREAM);
 
+
+        // legacy uris
+        matcher.addURI(authority, "key_rings/public/key_id/*", LEGACY_PUBLIC_KEY_RING_BY_KEY_ID);
+        matcher.addURI(authority, "key_rings/public/emails/*", LEGACY_PUBLIC_KEY_RING_BY_EMAILS);
+        matcher.addURI(authority, "key_rings/secret/key_id/*", LEGACY_SECRET_KEY_RING_BY_KEY_ID);
+        matcher.addURI(authority, "key_rings/secret/emails/*", LEGACY_SECRET_KEY_RING_BY_EMAILS);
+
         return matcher;
     }
 
@@ -280,6 +292,8 @@ public class KeychainProvider extends ContentProvider {
             case SECRET_KEY_RING:
             case SECRET_KEY_RING_BY_EMAILS:
             case SECRET_KEY_RING_BY_LIKE_EMAIL:
+            case LEGACY_PUBLIC_KEY_RING_BY_EMAILS:
+            case LEGACY_SECRET_KEY_RING_BY_EMAILS:
                 return KeyRings.CONTENT_TYPE;
 
             case PUBLIC_KEY_RING_BY_ROW_ID:
@@ -288,6 +302,8 @@ public class KeychainProvider extends ContentProvider {
             case SECRET_KEY_RING_BY_ROW_ID:
             case SECRET_KEY_RING_BY_MASTER_KEY_ID:
             case SECRET_KEY_RING_BY_KEY_ID:
+            case LEGACY_PUBLIC_KEY_RING_BY_KEY_ID:
+            case LEGACY_SECRET_KEY_RING_BY_KEY_ID:
                 return KeyRings.CONTENT_ITEM_TYPE;
 
             case PUBLIC_KEY_RING_KEY:
@@ -339,6 +355,8 @@ public class KeychainProvider extends ContentProvider {
             case PUBLIC_KEY_RING_USER_ID:
             case PUBLIC_KEY_RING_BY_MASTER_KEY_ID_USER_ID:
             case PUBLIC_KEY_RING_USER_ID_BY_ROW_ID:
+            case LEGACY_PUBLIC_KEY_RING_BY_EMAILS:
+            case LEGACY_PUBLIC_KEY_RING_BY_KEY_ID:
                 type = KeyTypes.PUBLIC;
                 break;
 
@@ -352,6 +370,8 @@ public class KeychainProvider extends ContentProvider {
             case SECRET_KEY_RING_KEY_BY_ROW_ID:
             case SECRET_KEY_RING_USER_ID:
             case SECRET_KEY_RING_USER_ID_BY_ROW_ID:
+            case LEGACY_SECRET_KEY_RING_BY_EMAILS:
+            case LEGACY_SECRET_KEY_RING_BY_KEY_ID:
                 type = KeyTypes.SECRET;
                 break;
 
@@ -370,11 +390,17 @@ public class KeychainProvider extends ContentProvider {
      * @return
      */
     private HashMap<String, String> getProjectionMapForKeyRings() {
+        return getProjectionMapForKeyRings(true);
+    }
+
+    private HashMap<String, String> getProjectionMapForKeyRings(boolean withData) {
         HashMap<String, String> projectionMap = new HashMap<String, String>();
 
         projectionMap.put(BaseColumns._ID, Tables.KEY_RINGS + "." + BaseColumns._ID);
-        projectionMap.put(KeyRingsColumns.KEY_RING_DATA,
-                          Tables.KEY_RINGS + "." + KeyRingsColumns.KEY_RING_DATA);
+        if (withData) {
+            projectionMap.put(KeyRingsColumns.KEY_RING_DATA,
+                              Tables.KEY_RINGS + "." + KeyRingsColumns.KEY_RING_DATA);
+        }
         projectionMap.put(KeyRingsColumns.MASTER_KEY_ID,
                           Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID);
 
@@ -454,7 +480,14 @@ public class KeychainProvider extends ContentProvider {
                 + UserIdsColumns.KEY_RING_ROW_ID + " AND " + Tables.USER_IDS + "."
                 + UserIdsColumns.RANK + " = '0')");
 
-        qb.setProjectionMap(getProjectionMapForKeyRings());
+        if (match == LEGACY_SECRET_KEY_RING_BY_EMAILS ||
+            match == LEGACY_SECRET_KEY_RING_BY_KEY_ID ||
+            match == LEGACY_PUBLIC_KEY_RING_BY_EMAILS ||
+            match == LEGACY_PUBLIC_KEY_RING_BY_KEY_ID) {
+            qb.setProjectionMap(getProjectionMapForKeyRings(false));
+        } else {
+            qb.setProjectionMap(getProjectionMapForKeyRings());
+        }
 
         return qb;
     }
@@ -551,6 +584,8 @@ public class KeychainProvider extends ContentProvider {
 
             case SECRET_KEY_RING_BY_KEY_ID:
             case PUBLIC_KEY_RING_BY_KEY_ID:
+            case LEGACY_SECRET_KEY_RING_BY_KEY_ID:
+            case LEGACY_PUBLIC_KEY_RING_BY_KEY_ID:
                 qb = buildKeyRingQueryWithSpecificKey(qb, match);
 
                 qb.appendWhere(" AND " + Tables.KEYS + "." + KeysColumns.KEY_ID + " = ");
@@ -564,6 +599,8 @@ public class KeychainProvider extends ContentProvider {
 
             case SECRET_KEY_RING_BY_EMAILS:
             case PUBLIC_KEY_RING_BY_EMAILS:
+            case LEGACY_SECRET_KEY_RING_BY_EMAILS:
+            case LEGACY_PUBLIC_KEY_RING_BY_EMAILS:
                 qb = buildKeyRingQuery(qb, match);
 
                 String emails = uri.getLastPathSegment();

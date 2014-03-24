@@ -476,4 +476,7 @@
     <!-- hints -->
     <string name="encrypt_content_edit_text_hint">Write message here to encrypt…</string>
 
+    <string name="permission_read_key_details_label">Read key details from APG.</string>
+    <string name="permission_read_key_details_description">Read key details of public and secret keys stored in APG, such as key ID and user IDs. The keys themselves can NOT be read.</string>
+
 </resources>

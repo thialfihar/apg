@@ -76,8 +76,8 @@ public class KeychainContract {
     public static final String BASE_KEY_RINGS = "key_rings";
     public static final String BASE_DATA = "data";
 
-    public static final String PATH_PUBLIC = "public";
-    public static final String PATH_SECRET = "secret";
+    public static final String PATH_PUBLIC = "full_public";
+    public static final String PATH_SECRET = "full_secret";
 
     public static final String PATH_BY_MASTER_KEY_ID = "master_key_id";
     public static final String PATH_BY_KEY_ID = "key_id";
