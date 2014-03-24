@@ -378,7 +378,7 @@ public class PgpKeyOperation {
         }
 
         /*
-        IDs -
+        IDs - NB This might not need to happen later, if we change the way the primary ID is chosen
             remove deleted ids
             if the primary ID changed we need to:
                 remove all of the IDs from the keyring, saving their certifications
@@ -391,8 +391,6 @@ public class PgpKeyOperation {
             if a key is modified, re-sign it
                 do we need to remove and add in?
          */
-
-        //todo: flag changes of master key if IDs changed maybe?
 
         for (PGPSecretKey dKey : saveParcel.deletedKeys) {
             mKR = PGPSecretKeyRing.removeSecretKey(mKR, dKey);
@@ -416,7 +414,9 @@ public class PgpKeyOperation {
         }
 
         int user_id_index = 0;
+        boolean anyIDChanged = false;
         if (saveParcel.primaryIDChanged) {
+            anyIDChanged = true;
             ArrayList<Pair<String, PGPSignature>> sigList = new ArrayList<Pair<String, PGPSignature>>();
             for (String userId : saveParcel.userIDs) {
                 String orig_id = saveParcel.originalIDs.get(user_id_index);
@@ -447,6 +447,7 @@ public class PgpKeyOperation {
             for (String userId : saveParcel.userIDs) {
                 String orig_id = saveParcel.originalIDs.get(user_id_index);
                 if (!orig_id.equals(userId)) {
+                    anyIDChanged = true;
                     PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
                             masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
                             .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
@@ -462,11 +463,13 @@ public class PgpKeyOperation {
             }
         }
 
-            // define hashing and signing algos
-            PGPDigestCalculator sha1Calc = new JcaPGPDigestCalculatorProviderBuilder().build().get(
-                    HashAlgorithmTags.SHA1);
-            PGPContentSignerBuilder certificationSignerBuilder = new JcaPGPContentSignerBuilder(
-                    masterKeyPair.getPublicKey().getAlgorithm(), HashAlgorithmTags.SHA1);
+        //update the keyring with the new ID information
+        if (anyIDChanged) {
+            pKR = PGPPublicKeyRing.insertPublicKey(pKR, masterPublicKey);
+            mKR = PGPSecretKeyRing.replacePublicKeys(mKR, pKR);
+        }
+
+        PGPKeyPair masterKeyPair = new PGPKeyPair(masterPublicKey, masterPrivateKey);
 
             // Build key encrypter based on passphrase
             PBESecretKeyEncryptor keyEncryptor = new JcePBESecretKeyEncryptorBuilder(
