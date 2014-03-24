@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.thialfihar.android.apg"
     android:installLocation="auto"
-    android:versionCode="11199"
-    android:versionName="1.1.1">
+    android:versionCode="11200"
+    android:versionName="1.1.2 beta 00">
 
     <uses-feature
         android:name="android.hardware.wifi"
