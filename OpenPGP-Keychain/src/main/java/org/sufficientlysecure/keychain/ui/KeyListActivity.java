@@ -53,7 +53,7 @@ public class KeyListActivity extends DrawerActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_key_list_import: {
-                callIntentForDrawerItem(Constants.DrawerItems.IMPORT_KEYS);
+                callIntentForDrawerItem(ImportKeysActivity.class);
 
                 return true;
             }

@@ -18,15 +18,7 @@ package org.thialfihar.android.apg;
 
 import android.os.Environment;
 
-import com.android.mail.ui.MailActivity;
-
 import org.spongycastle.jce.provider.BouncyCastleProvider;
-
-import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
-import org.thialfihar.android.apg.ui.DecryptActivity;
-import org.thialfihar.android.apg.ui.EncryptActivity;
-import org.thialfihar.android.apg.ui.ImportKeysActivity;
-import org.thialfihar.android.apg.ui.KeyListActivity;
 
 public final class Constants {
 
@@ -68,16 +60,5 @@ public final class Constants {
 
     public static final class Defaults {
         public static final String KEY_SERVERS = "pool.sks-keyservers.net, subkeys.pgp.net, pgp.mit.edu";
-    }
-
-    public static final class DrawerItems {
-        public static final Class KEY_LIST = KeyListActivity.class;
-        public static final Class ENCRYPT = EncryptActivity.class;
-        public static final Class DECRYPT = DecryptActivity.class;
-        public static final Class IMPORT_KEYS = ImportKeysActivity.class;
-        public static final Class REGISTERED_APPS_LIST = RegisteredAppsListActivity.class;
-        public static final Class MAIL = MailActivity.class;
-        public static final Class[] ARRAY = new Class[] {KEY_LIST, ENCRYPT, DECRYPT,
-                                                IMPORT_KEYS, REGISTERED_APPS_LIST, MAIL};
     }
 }
