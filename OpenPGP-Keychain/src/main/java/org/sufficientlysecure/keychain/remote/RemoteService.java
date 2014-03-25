@@ -48,7 +48,6 @@ public abstract class RemoteService extends Service {
     private static final int PRIVATE_REQUEST_CODE_REGISTER = 651;
     private static final int PRIVATE_REQUEST_CODE_ERROR = 652;
 
-
     public Context getContext() {
         return mContext;
     }
@@ -56,13 +55,9 @@ public abstract class RemoteService extends Service {
     protected Intent isAllowed(Intent data) {
         try {
             if (isCallerAllowed(false)) {
-
                 return null;
             } else {
-                String[] callingPackages = getPackageManager().getPackagesForUid(
-                        Binder.getCallingUid());
-                // TODO: currently simply uses first entry
-                String packageName = callingPackages[0];
+                String packageName = getCurrentCallingPackage();
 
                 byte[] packageSignature;
                 try {
@@ -126,27 +121,56 @@ public abstract class RemoteService extends Service {
     }
 
     /**
-     * Retrieves AppSettings from database for the application calling this remote service
+     * Returns package name associated with the UID, which is assigned to the process that sent you the
+     * current transaction that is being processed :)
+     *
+     * @return package name
+     */
+    private String getCurrentCallingPackage() {
+        // TODO:
+        // callingPackages contains more than one entry when sharedUserId has been used...
+        String[] callingPackages = getPackageManager().getPackagesForUid(Binder.getCallingUid());
+        String currentPkg = callingPackages[0];
+        Log.d(Constants.TAG, "currentPkg: " + currentPkg);
+
+        return currentPkg;
+    }
+
+    /**
+     * Retrieves AccountSettings from database for the application calling this remote service
      *
      * @return
      */
     protected AccountSettings getAccSettings(String accountName) {
-        String[] callingPackages = getPackageManager().getPackagesForUid(Binder.getCallingUid());
+        String currentPkg = getCurrentCallingPackage();
+        Log.d(Constants.TAG, "accountName: " + accountName);
 
-        // get app settings for this package
-        for (int i = 0; i < callingPackages.length; i++) {
-            String currentPkg = callingPackages[i];
+        Uri uri = KeychainContract.ApiAccounts.buildByPackageAndAccountUri(currentPkg, accountName);
 
-            Uri uri = KeychainContract.ApiAccounts.buildByPackageAndAccountUri(currentPkg, accountName);
+        AccountSettings settings = ProviderHelper.getApiAccountSettings(this, uri);
 
-            AccountSettings settings = ProviderHelper.getApiAccountSettings(this, uri);
+        return settings; // can be null!
+    }
 
-            if (settings != null) {
-                return settings;
-            }
-        }
+    protected Intent getCreateAccountIntent(Intent data, String accountName) {
+        String packageName = getCurrentCallingPackage();
+        Log.d(Constants.TAG, "accountName: " + accountName);
 
-        return null;
+        Intent intent = new Intent(getBaseContext(), RemoteServiceActivity.class);
+        intent.setAction(RemoteServiceActivity.ACTION_CREATE_ACCOUNT);
+        intent.putExtra(RemoteServiceActivity.EXTRA_PACKAGE_NAME, packageName);
+        intent.putExtra(RemoteServiceActivity.EXTRA_ACC_NAME, accountName);
+        intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
+
+        PendingIntent pi = PendingIntent.getActivity(getBaseContext(),
+                PRIVATE_REQUEST_CODE_REGISTER, intent, 0);
+
+        // return PendingIntent to be executed by client
+        Intent result = new Intent();
+        result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED);
+        result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
+
+        return result;
     }
 
     /**
