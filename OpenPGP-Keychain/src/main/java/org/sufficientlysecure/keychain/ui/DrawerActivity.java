@@ -41,6 +41,7 @@ import com.beardedhen.androidbootstrap.FontAwesomeText;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
 
 public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
@@ -78,11 +79,12 @@ public class DrawerActivity extends ActionBarActivity {
         }
 
         NavItem mItemIconTexts[] = new NavItem[] {
-                new NavItem("fa-user", getString(R.string.nav_contacts)),
-                new NavItem("fa-lock", getString(R.string.nav_encrypt)),
-                new NavItem("fa-unlock", getString(R.string.nav_decrypt)),
-                new NavItem("fa-download", getString(R.string.nav_import)),
-                new NavItem("fa-android", getString(R.string.nav_apps)) };
+                new NavItem("fa-user", getString(R.string.nav_contacts), KeyListActivity.class),
+                new NavItem("fa-lock", getString(R.string.nav_encrypt), EncryptActivity.class),
+                new NavItem("fa-unlock", getString(R.string.nav_decrypt), DecryptActivity.class),
+                new NavItem("fa-download", getString(R.string.nav_import), ImportKeysActivity.class),
+                new NavItem("fa-android", getString(R.string.nav_apps), RegisteredAppsListActivity.class),
+        };
 
         mDrawerList.setAdapter(new NavigationDrawerAdapter(this, R.layout.drawer_list_item,
                 mItemIconTexts));
@@ -222,7 +224,8 @@ public class DrawerActivity extends ActionBarActivity {
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         // set selected class
-        mSelectedItem = Constants.DrawerItems.ARRAY[position];
+        NavItem item = (NavItem) mDrawerList.getAdapter().getItem(position);
+        mSelectedItem = item.class_;
 
         // setTitle(mDrawerTitles[position]);
         // If drawer isn't locked just close the drawer and
@@ -253,18 +256,20 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private class NavItem {
+    public static class NavItem {
         public String icon;
         public String title;
+        public Class class_;
 
-        public NavItem(String icon, String title) {
+        public NavItem(String icon, String title, Class class_) {
             super();
             this.icon = icon;
             this.title = title;
+            this.class_ = class_;
         }
     }
 
-    private class NavigationDrawerAdapter extends ArrayAdapter<NavItem> {
+    public static class NavigationDrawerAdapter extends ArrayAdapter<NavItem> {
         private Context mContext;
         private int mLayoutResourceId;
         private NavItem mData[] = null;
