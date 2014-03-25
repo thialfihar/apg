@@ -30,11 +30,14 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.remote.AppSettings;
 
 public class AppSettingsActivity extends ActionBarActivity {
     private Uri mAppUri;
 
     private AppSettingsFragment mSettingsFragment;
+    private AccountsListFragment mAccountsListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class AppSettingsActivity extends ActionBarActivity {
             return;
         } else {
             Log.d(Constants.TAG, "uri: " + mAppUri);
-            loadData(mAppUri);
+            loadData(savedInstanceState, mAppUri);
         }
     }
 
@@ -88,9 +91,34 @@ public class AppSettingsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadData(Uri appUri) {
+    private void loadData(Bundle savedInstanceState, Uri appUri) {
+        // TODO: load this also like other fragment with newInstance arguments?
         AppSettings settings = ProviderHelper.getApiAppSettings(this, appUri);
         mSettingsFragment.setAppSettings(settings);
+
+        Uri accountsUri = appUri.buildUpon().appendPath(KeychainContract.PATH_ACCOUNTS).build();
+        Log.d(Constants.TAG, "accountsUri: " + accountsUri);
+        startListFragment(savedInstanceState, accountsUri);
+    }
+
+    private void startListFragment(Bundle savedInstanceState, Uri dataUri) {
+        // However, if we're being restored from a previous state,
+        // then we don't need to do anything and should return or else
+        // we could end up with overlapping fragments.
+        if (savedInstanceState != null) {
+            return;
+        }
+
+        // Create an instance of the fragment
+        mAccountsListFragment = AccountsListFragment.newInstance(dataUri);
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        // NOTE: We use commitAllowingStateLoss() to prevent weird crashes!
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.api_accounts_list_fragment, mAccountsListFragment)
+                .commitAllowingStateLoss();
+        // do it immediately!
+        getSupportFragmentManager().executePendingTransactions();
     }
 
     private void revokeAccess() {

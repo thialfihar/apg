@@ -17,7 +17,6 @@
 
 package org.thialfihar.android.apg.service.remote;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -41,6 +40,7 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.util.Log;
 
 public class AppsListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -55,9 +55,10 @@ public class AppsListFragment extends ListFragment implements
         getListView().setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                String selectedPackageName = mAdapter.getItemPackageName(position);
                 // edit app settings
                 Intent intent = new Intent(getActivity(), AppSettingsActivity.class);
-                intent.setData(ContentUris.withAppendedId(KeychainContract.ApiApps.CONTENT_URI, id));
+                intent.setData(KeychainContract.ApiApps.buildByPackageNameUri(selectedPackageName));
                 startActivity(intent);
             }
         });
@@ -79,7 +80,10 @@ public class AppsListFragment extends ListFragment implements
     }
 
     // These are the Contacts rows that we will retrieve.
-    static final String[] PROJECTION = new String[] { ApiApps._ID, ApiApps.PACKAGE_NAME };
+    static final String[] PROJECTION = new String[] {
+            ApiApps._ID,  // 0
+            ApiApps.PACKAGE_NAME // 1
+    };
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // This is called when a new Loader needs to be created. This
@@ -117,6 +121,25 @@ public class AppsListFragment extends ListFragment implements
 
             mInflater = LayoutInflater.from(context);
             mPM = context.getApplicationContext().getPackageManager();
+        }
+
+        /**
+         * Similar to CursorAdapter.getItemId().
+         * Required to build Uris for api app view, which is not based on row ids
+         *
+         * @param position
+         * @return
+         */
+        public String getItemPackageName(int position) {
+            if (mDataValid && mCursor != null) {
+                if (mCursor.moveToPosition(position)) {
+                    return mCursor.getString(1);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
         }
 
         @Override
