@@ -16,16 +16,16 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/api_app_settings_app_icon"
+            android:id="@+id/api_account_settings_app_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="6dp"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/icon" />
 
         <TextView
-            android:id="@+id/api_app_settings_app_name"
+            android:id="@+id/api_account_settings_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -36,7 +36,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RelativeLayout>
 
-    <org.thialfihar.android.apg.ui.widget.FoldableLinearLayout
+    <fragment
+        android:id="@+id/api_account_settings_select_key_fragment"
+        android:name="org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/select_secret_key_layout_fragment" />
+
+    <org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         custom:foldedLabel="@string/btn_encryption_advanced_settings_show"
@@ -47,11 +54,44 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/label_encryption_algorithm"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/api_account_settings_encryption_algorithm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_hash_algorithm"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/api_account_settings_hash_algorithm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_message_compression"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Spinner
+            android:id="@+id/api_account_settings_compression"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/api_settings_package_name"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/api_app_settings_package_name"
+            android:id="@+id/api_account_settings_package_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="com.example"
@@ -64,12 +104,12 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/api_app_settings_package_signature"
+            android:id="@+id/api_account_settings_package_signature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Base64 encoded signature"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    </org.thialfihar.android.apg.ui.widget.FoldableLinearLayout>
+    </org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout>
 
 </LinearLayout>

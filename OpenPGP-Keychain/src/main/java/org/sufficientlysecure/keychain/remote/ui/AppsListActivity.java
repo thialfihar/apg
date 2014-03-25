@@ -22,7 +22,7 @@ import android.os.Bundle;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.ui.DrawerActivity;
 
-public class RegisteredAppsListActivity extends DrawerActivity {
+public class AppsListActivity extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

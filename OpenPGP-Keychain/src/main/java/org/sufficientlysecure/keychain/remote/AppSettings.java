@@ -24,10 +24,6 @@ import org.thialfihar.android.apg.Id;
 public class AppSettings {
     private String mPackageName;
     private byte[] mPackageSignature;
-    private long mKeyId;
-    private int mEncryptionAlgorithm;
-    private int mHashAlgorithm;
-    private int mCompression;
 
     public AppSettings() {
 
@@ -35,14 +31,8 @@ public class AppSettings {
 
     public AppSettings(String packageName, byte[] packageSignature) {
         super();
-        mPackageName = packageName;
-        mPackageSignature = packageSignature;
-        // defaults:
-        mEncryptionAlgorithm = PGPEncryptedData.AES_256;
-        mHashAlgorithm = HashAlgorithmTags.SHA512;
-        mCompression = Id.choice.compression.zlib;
-
-        mKeyId = Id.key.none;
+        this.mPackageName = packageName;
+        this.mPackageSignature = packageSignature;
     }
 
     public String getPackageName() {
@@ -59,37 +49,5 @@ public class AppSettings {
 
     public void setPackageSignature(byte[] packageSignature) {
         mPackageSignature = packageSignature;
-    }
-
-    public long getKeyId() {
-        return mKeyId;
-    }
-
-    public void setKeyId(long keyId) {
-        mKeyId = keyId;
-    }
-
-    public int getEncryptionAlgorithm() {
-        return mEncryptionAlgorithm;
-    }
-
-    public void setEncryptionAlgorithm(int encryptionAlgorithm) {
-        mEncryptionAlgorithm = encryptionAlgorithm;
-    }
-
-    public int getHashAlgorithm() {
-        return mHashAlgorithm;
-    }
-
-    public void setHashAlgorithm(int hashAlgorithm) {
-        mHashAlgorithm = hashAlgorithm;
-    }
-
-    public int getCompression() {
-        return mCompression;
-    }
-
-    public void setCompression(int compression) {
-        mCompression = compression;
     }
 }

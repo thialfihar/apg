@@ -41,7 +41,7 @@ import com.beardedhen.androidbootstrap.FontAwesomeText;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity;
+import org.thialfihar.android.apg.remote.AppsListActivity;
 
 public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
@@ -83,7 +83,7 @@ public class DrawerActivity extends ActionBarActivity {
                 new NavItem("fa-lock", getString(R.string.nav_encrypt), EncryptActivity.class),
                 new NavItem("fa-unlock", getString(R.string.nav_decrypt), DecryptActivity.class),
                 new NavItem("fa-download", getString(R.string.nav_import), ImportKeysActivity.class),
-                new NavItem("fa-android", getString(R.string.nav_apps), RegisteredAppsListActivity.class),
+                new NavItem("fa-android", getString(R.string.nav_apps), AppsListActivity.class),
         };
 
         mDrawerList.setAdapter(new NavigationDrawerAdapter(this, R.layout.drawer_list_item,
