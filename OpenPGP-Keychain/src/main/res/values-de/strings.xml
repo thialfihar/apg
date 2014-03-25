@@ -413,7 +413,7 @@
   <string name="key_view_action_encrypt">Für diesen Kontakt verschlüsseln</string>
   <string name="key_view_action_certify">Schlüssel dieses Kontakts beglaubigen</string>
   <string name="key_view_tab_main">Info</string>
-  <string name="key_view_tab_certs">Zertifikationen</string>
+  <string name="key_view_tab_certs">Zertifizierungen</string>
   <!--Navigation Drawer-->
   <string name="nav_contacts">Kontakte</string>
   <string name="nav_encrypt">Verschlüsseln</string>
