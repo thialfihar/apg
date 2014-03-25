@@ -23,6 +23,13 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="com.fsck.k9.permission.READ_ATTACHMENT" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- Allows mail to access the user's contacts, for email address auto-completion -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!-- Allows access to EmailProvider (EAS/IMAP/POP3) -->
+    <uses-permission android:name="com.android.email.permission.ACCESS_PROVIDER"/>
+    <uses-permission android:name="com.android.email.permission.READ_ATTACHMENT"/>
+    <uses-permission android:name="android.permission.NFC" />
 
     <!-- android:allowBackup="false": Don't allow backup over adb backup or other apps! -->
     <application
@@ -425,6 +432,146 @@
         <!-- android:name="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
         <!-- android:authorities="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
         <!-- android:permission="org.thialfihar.android.apg.permission.ACCESS_API" /> -->
+
+        <!-- mail stuff -->
+
+        <!-- Enable search in all activities -->
+        <activity
+            android:label="@string/app_name"
+            android:name="com.android.mail.ui.MailActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/PlainUnifiedEmailTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content"/>
+                <data android:mimeType="application/mail-ls" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
+        </activity>
+        <activity android:name="com.android.mail.compose.ComposeActivity"
+            android:theme="@style/ComposeTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SENDTO" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mailto" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="mailto" />
+           </intent-filter>
+
+            <intent-filter android:label="@string/compose">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <intent-filter android:label="@string/compose">
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.android.mail.ui.CreateShortcutActivity"
+            android:theme="@style/ShortcutWidgetTheme"
+            android:label="@string/activity_folder_selection" />
+
+        <activity android:name="com.android.mail.ui.FolderSelectionActivity"
+            android:theme="@style/ShortcutWidgetTheme"
+            android:label="@string/activity_folder_selection" />
+
+        <activity android:name="com.android.mail.ui.MailboxSelectionActivity"
+            android:theme="@style/InvisibleShortcutWidgetTheme"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.android.mail.photo.MailPhotoViewActivity"
+            android:label="@string/app_name"
+            android:theme="@style/PhotoViewTheme" >
+        </activity>
+        <activity
+                android:name="com.android.mail.browse.EmlViewerActivity"
+                android:label="@string/app_name"
+                android:theme="@style/UnifiedEmailTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="message/rfc822" />
+                <data android:mimeType="application/eml" />
+            </intent-filter>
+        </activity>
+
+        <provider
+                android:authorities="com.android.mail.accountcache"
+                android:label="@string/account_cache_provider"
+                android:multiprocess="false"
+                android:name="com.android.mail.providers.UnifiedAccountCacheProvider" >
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
+        <provider
+            android:authorities="com.android.mail.mockprovider"
+            android:label="@string/mock_content_provider"
+            android:multiprocess="false"
+            android:name="com.android.mail.providers.protos.mock.MockUiProvider" >
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
+        <provider
+            android:authorities="com.android.mail.conversation.provider"
+            android:label="@string/conversation_content_provider"
+            android:multiprocess="false"
+            android:name="com.android.mail.browse.UnifiedConversationProvider" >
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
+        <provider
+                android:authorities="@string/eml_attachment_provider"
+                android:multiprocess="false"
+                android:exported="false"
+                android:name="com.android.mail.providers.EmlAttachmentProvider" >
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
+        <!-- The android:name is the name of the Provider class which is stored in
+          UnifiedEmail, and has package name com.android.mail.providers and the class is
+          called SuggestionsProvider. The authority name is specified in the MailAppProvider
+          which is specific to the two apps separately. -->
+        <provider android:name="com.android.mail.providers.SuggestionsProvider"
+            android:authorities="com.android.mail.suggestionsprovider" />
+
+        <service android:name="com.android.mail.compose.EmptyService"/>
+
+        <!-- Widget -->
+        <receiver android:name="com.android.mail.widget.WidgetProvider" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.android.mail.ACTION_NOTIFY_DATASET_CHANGED" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/widget_info" />
+        </receiver>
+        <service android:name="com.android.mail.widget.WidgetService"
+                 android:permission="android.permission.BIND_REMOTEVIEWS"
+                 android:exported="false" />
+        <service android:name="com.android.mail.MailLogService"/>
+        <service android:name="com.android.mail.browse.EmlTempFileDeletionService" />
 
     </application>
     <permission android:name="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"

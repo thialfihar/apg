@@ -20,6 +20,11 @@ package org.thialfihar.android.apg;
 import android.app.Application;
 import android.os.Environment;
 
+import com.android.mail.preferences.BasePreferenceMigrator;
+import com.android.mail.preferences.PreferenceMigrator;
+import com.android.mail.preferences.PreferenceMigratorHolder;
+import com.android.mail.preferences.PreferenceMigratorHolder.PreferenceMigratorCreator;
+
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.PRNGFixes;
@@ -29,6 +34,14 @@ import java.security.Provider;
 import java.security.Security;
 
 public class ApgApplication extends Application {
+    static {
+        PreferenceMigratorHolder.setPreferenceMigratorCreator(new PreferenceMigratorCreator() {
+            @Override
+            public BasePreferenceMigrator createPreferenceMigrator() {
+                return new PreferenceMigrator();
+            }
+        });
+    }
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects

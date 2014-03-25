@@ -82,7 +82,9 @@ public class DrawerActivity extends ActionBarActivity {
                 new NavItem("fa-lock", getString(R.string.nav_encrypt)),
                 new NavItem("fa-unlock", getString(R.string.nav_decrypt)),
                 new NavItem("fa-download", getString(R.string.nav_import)),
-                new NavItem("fa-android", getString(R.string.nav_apps)) };
+                new NavItem("fa-android", getString(R.string.nav_apps)),
+                new NavItem("fa-envelope", "Mail"),
+        };
 
         mDrawerList.setAdapter(new NavigationDrawerAdapter(this, R.layout.drawer_list_item,
                 mItemIconTexts));
