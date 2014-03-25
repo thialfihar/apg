@@ -82,11 +82,11 @@ public class DrawerActivity extends ActionBarActivity {
 
         NavItem mItemIconTexts[] = new NavItem[] {
                 new NavItem("fa-user", getString(R.string.nav_contacts), KeyListActivity.class),
+                new NavItem("fa-envelope", getString(R.string.nav_mail), MailActivity.class),
                 new NavItem("fa-lock", getString(R.string.nav_encrypt), EncryptActivity.class),
                 new NavItem("fa-unlock", getString(R.string.nav_decrypt), DecryptActivity.class),
                 new NavItem("fa-download", getString(R.string.nav_import), ImportKeysActivity.class),
                 new NavItem("fa-android", getString(R.string.nav_apps), RegisteredAppsListActivity.class),
-                new NavItem("fa-envelope", "Mail", MailActivity.class),
         };
 
         mDrawerList.setAdapter(new NavigationDrawerAdapter(this, R.layout.drawer_list_item,

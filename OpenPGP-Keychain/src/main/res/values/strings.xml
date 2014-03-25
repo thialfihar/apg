@@ -458,6 +458,7 @@
 
     <!-- Navigation Drawer -->
     <string name="nav_contacts">Contacts</string>
+    <string name="nav_mail">Mail</string>
     <string name="nav_encrypt">Encrypt</string>
     <string name="nav_decrypt">Decrypt</string>
     <string name="nav_import">Import Keys</string>
