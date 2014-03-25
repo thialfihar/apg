@@ -787,14 +787,14 @@ public class KeychainProvider extends ContentProvider {
 
                     rowId = db.insertOrThrow(Tables.KEYS, null, values);
                     // TODO: this is wrong:
-//                    rowUri = Keys.buildPublicKeysUri(Long.toString(rowId));
+                    rowUri = Keys.buildPublicKeysUri(Long.toString(rowId));
                     sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
 
                     break;
                 case PUBLIC_KEY_RING_USER_ID:
                     rowId = db.insertOrThrow(Tables.USER_IDS, null, values);
                     // TODO: this is wrong:
-//                    rowUri = UserIds.buildPublicUserIdsUri(Long.toString(rowId));
+                    rowUri = UserIds.buildPublicUserIdsUri(Long.toString(rowId));
                     sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
 
                     break;
@@ -811,14 +811,14 @@ public class KeychainProvider extends ContentProvider {
 
                     rowId = db.insertOrThrow(Tables.KEYS, null, values);
                     // TODO: this is wrong:
-//                    rowUri = Keys.buildSecretKeysUri(Long.toString(rowId));
+                    rowUri = Keys.buildSecretKeysUri(Long.toString(rowId));
                     sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
 
                     break;
                 case SECRET_KEY_RING_USER_ID:
                     rowId = db.insertOrThrow(Tables.USER_IDS, null, values);
                     // TODO: this is wrong:
-//                    rowUri = UserIds.buildSecretUserIdsUri(Long.toString(rowId));
+                    rowUri = UserIds.buildSecretUserIdsUri(Long.toString(rowId));
 
                     break;
                 case API_APPS:
