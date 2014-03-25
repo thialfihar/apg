@@ -45,7 +45,6 @@ import org.thialfihar.android.apg.util.Log;
 
 import java.util.Date;
 
-
 public class ViewKeyMainFragment extends Fragment  implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -140,8 +139,10 @@ public class ViewKeyMainFragment extends Fragment  implements
                 mActionEdit.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         Intent editIntent = new Intent(getActivity(), EditKeyActivity.class);
-                        editIntent.setData(KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
-                            Long.toString(masterKeyId)));
+                        editIntent.setData(
+                                KeychainContract
+                                        .KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
+                                        Long.toString(masterKeyId)));
                         editIntent.setAction(EditKeyActivity.ACTION_EDIT_KEY);
                         startActivityForResult(editIntent, 0);
                     }
@@ -201,8 +202,6 @@ public class ViewKeyMainFragment extends Fragment  implements
         KeychainContract.UserIds.USER_ID,
         KeychainContract.UserIds.RANK,
     };
-    // not the main user id
-    static final String USER_IDS_SELECTION = KeychainContract.UserIds.RANK + " > 0 ";
     static final String USER_IDS_SORT_ORDER =
         KeychainContract.UserIds.USER_ID + " COLLATE LOCALIZED ASC";
 
@@ -220,6 +219,7 @@ public class ViewKeyMainFragment extends Fragment  implements
         KeychainContract.Keys.EXPIRY,
         KeychainContract.Keys.FINGERPRINT,
     };
+
     static final String KEYS_SORT_ORDER = KeychainContract.Keys.RANK + " ASC";
     static final int KEYS_INDEX_ID = 0;
     static final int KEYS_INDEX_KEY_ID = 1;
@@ -331,17 +331,20 @@ public class ViewKeyMainFragment extends Fragment  implements
 
                     mFingerprint.setText(PgpKeyHelper.colorizeFingerprint(fingerprint));
                 }
-                int valid_keys = 0;
+
+                // hide encrypt button if no encryption key is available
+                boolean canEncrypt = false;
                 data.moveToFirst();
-                do{
-                    if(data.getInt(KEYS_INDEX_CAN_ENCRYPT) == 1){
-                        valid_keys++;
+                do {
+                    if (data.getInt(KEYS_INDEX_CAN_ENCRYPT) == 1) {
+                        canEncrypt = true;
+                        break;
                     }
-                }while(data.moveToNext());
-                if(valid_keys == 0){
+                } while (data.moveToNext());
+                if (!canEncrypt) {
                     mActionEncrypt.setVisibility(View.GONE);
                 }
-                Log.i("Valid Encryption keys", Integer.toString(valid_keys));
+
                 mKeysAdapter.swapCursor(data);
                 break;
 
