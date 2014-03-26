@@ -26,10 +26,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.spongycastle.util.encoders.Hex;
@@ -99,14 +96,14 @@ public class AppSettingsFragment extends Fragment {
         PackageManager pm = getActivity().getApplicationContext().getPackageManager();
 
         // get application name and icon from package manager
-        String appName = null;
+        String appName;
         Drawable appIcon = null;
         try {
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
 
             appName = (String) pm.getApplicationLabel(ai);
             appIcon = pm.getApplicationIcon(ai);
-        } catch (final NameNotFoundException e) {
+        } catch (NameNotFoundException e) {
             // fallback
             appName = packageName;
         }

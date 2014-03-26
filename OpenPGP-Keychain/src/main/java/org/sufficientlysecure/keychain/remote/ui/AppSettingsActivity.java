@@ -18,12 +18,14 @@
 package org.thialfihar.android.apg.service.remote;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
@@ -43,16 +45,11 @@ public class AppSettingsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Inflate a "Done" custom action bar
-        ActionBarHelper.setOneButtonView(getSupportActionBar(), R.string.api_settings_save,
-                R.drawable.ic_action_done,
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // "Done"
-                        save();
-                    }
-                });
+        // let the actionbar look like Android's contact app
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setIcon(android.R.color.transparent);
+        actionBar.setHomeButtonEnabled(true);
 
         setContentView(R.layout.api_app_settings_activity);
 
@@ -96,6 +93,18 @@ public class AppSettingsActivity extends ActionBarActivity {
         AppSettings settings = ProviderHelper.getApiAppSettings(this, appUri);
         mSettingsFragment.setAppSettings(settings);
 
+        String appName;
+        PackageManager pm = getPackageManager();
+        try {
+            ApplicationInfo ai = pm.getApplicationInfo(settings.getPackageName(), 0);
+            appName = (String) pm.getApplicationLabel(ai);
+        } catch (PackageManager.NameNotFoundException e) {
+            // fallback
+            appName = settings.getPackageName();
+        }
+        setTitle(appName);
+
+
         Uri accountsUri = appUri.buildUpon().appendPath(KeychainContract.PATH_ACCOUNTS).build();
         Log.d(Constants.TAG, "accountsUri: " + accountsUri);
         startListFragment(savedInstanceState, accountsUri);
@@ -125,12 +134,6 @@ public class AppSettingsActivity extends ActionBarActivity {
         if (getContentResolver().delete(mAppUri, null, null) <= 0) {
             throw new RuntimeException();
         }
-        finish();
-    }
-
-    private void save() {
-        ProviderHelper.updateApiApp(this, mSettingsFragment.getAppSettings(), mAppUri);
-
         finish();
     }
 
