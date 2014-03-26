@@ -18,6 +18,9 @@
 package org.thialfihar.android.apg.helper;
 
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.util.Log;
@@ -56,5 +59,11 @@ public class OtherHelper {
                 Log.d(Constants.TAG, "Bundle " + bundleName + ": null");
             }
         }
+    }
+
+    public static SpannableStringBuilder strikeOutText(CharSequence text) {
+        SpannableStringBuilder sb = new SpannableStringBuilder(text);
+        sb.setSpan(new StrikethroughSpan(), 0, text.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return sb;
     }
 }

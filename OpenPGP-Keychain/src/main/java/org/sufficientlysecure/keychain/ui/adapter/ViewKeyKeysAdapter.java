@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract.Keys;
 
@@ -127,27 +128,41 @@ public class ViewKeyKeysAdapter extends CursorAdapter {
             signIcon.setVisibility(View.VISIBLE);
         }
 
+        boolean valid = true;
         if (cursor.getInt(mIndexRevokedKey) > 0) {
             revokedKeyIcon.setVisibility(View.VISIBLE);
+
             keyId.setTextColor(Color.RED);
             keyDetails.setTextColor(Color.RED);
+            keyExpiry.setTextColor(Color.RED);
+
+            valid = false;
         } else {
             keyId.setTextColor(mDefaultTextColor);
             keyDetails.setTextColor(mDefaultTextColor);
+            keyExpiry.setTextColor(mDefaultTextColor);
+
             revokedKeyIcon.setVisibility(View.GONE);
         }
 
-        boolean valid = true;
         if (!cursor.isNull(mIndexExpiry)) {
             Date expiryDate = new Date(cursor.getLong(mIndexExpiry) * 1000);
-            valid = expiryDate.after(new Date());
+
+            valid = valid && expiryDate.after(new Date());
             keyExpiry.setText("(" +
-                context.getString(R.string.label_expiry) + ": " +
-                DateFormat.getDateFormat(context).format(expiryDate) + ")");
+                    context.getString(R.string.label_expiry) + ": " +
+                    DateFormat.getDateFormat(context).format(expiryDate) + ")");
+
             keyExpiry.setVisibility(View.VISIBLE);
         }
         else {
             keyExpiry.setVisibility(View.GONE);
+        }
+        // if key is expired or revoked, strike through text
+        if (!valid) {
+            keyId.setText(OtherHelper.strikeOutText(keyId.getText()));
+            keyDetails.setText(OtherHelper.strikeOutText(keyDetails.getText()));
+            keyExpiry.setText(OtherHelper.strikeOutText(keyExpiry.getText()));
         }
         keyId.setEnabled(valid);
         keyDetails.setEnabled(valid);
