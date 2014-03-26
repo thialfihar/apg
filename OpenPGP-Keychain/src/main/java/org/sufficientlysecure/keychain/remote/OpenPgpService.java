@@ -47,10 +47,6 @@ import java.util.ArrayList;
 
 public class OpenPgpService extends RemoteService {
 
-    private static final int PRIVATE_REQUEST_CODE_PASSPHRASE = 551;
-    private static final int PRIVATE_REQUEST_CODE_USER_IDS = 552;
-    private static final int PRIVATE_REQUEST_CODE_GET_KEYS = 553;
-
     /**
      * Search database for key ids based on emails.
      *
@@ -100,12 +96,13 @@ public class OpenPgpService extends RemoteService {
             intent.putExtra(RemoteServiceActivity.EXTRA_DUBLICATE_USER_IDS, dublicateUserIds);
             intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
 
-            PendingIntent pendingIntent =
-                PendingIntent.getActivity(getBaseContext(), PRIVATE_REQUEST_CODE_USER_IDS, intent, 0);
+            PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
+                    intent,
+                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
             // return PendingIntent to be executed by client
             Intent result = new Intent();
-            result.putExtra(OpenPgpApi.RESULT_INTENT, pendingIntent);
+            result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
             result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED);
             return result;
         }
@@ -127,12 +124,13 @@ public class OpenPgpService extends RemoteService {
         intent.putExtra(RemoteServiceActivity.EXTRA_SECRET_KEY_ID, keyId);
         // pass params through to activity that it can be returned again later to repeat pgp operation
         intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
-        PendingIntent pendingIntent =
-            PendingIntent.getActivity(getBaseContext(), PRIVATE_REQUEST_CODE_PASSPHRASE, intent, 0);
+        PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
         // return PendingIntent to be executed by client
         Intent result = new Intent();
-        result.putExtra(OpenPgpApi.RESULT_INTENT, pendingIntent);
+        result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
         result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED);
         return result;
     }
@@ -211,8 +209,8 @@ public class OpenPgpService extends RemoteService {
             } else {
                 Intent result = new Intent();
                 result.putExtra(OpenPgpApi.RESULT_ERROR,
-                                    new OpenPgpError(OpenPgpError.GENERIC_ERROR,
-                                    "Missing parameter user_ids or key_ids!"));
+                        new OpenPgpError(OpenPgpError.GENERIC_ERROR,
+                                "Missing parameter user_ids or key_ids!"));
                 result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
                 return result;
             }
@@ -321,10 +319,11 @@ public class OpenPgpService extends RemoteService {
                         intent.putExtra(RemoteServiceActivity.EXTRA_ERROR_MESSAGE, "todo");
                         intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
 
-                        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(),
-                                PRIVATE_REQUEST_CODE_GET_KEYS, intent, 0);
+                        PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
+                                intent,
+                                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
-                        result.putExtra(OpenPgpApi.RESULT_INTENT, pendingIntent);
+                        result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
                     }
 
                     result.putExtra(OpenPgpApi.RESULT_SIGNATURE, signatureResult);
@@ -361,10 +360,11 @@ public class OpenPgpService extends RemoteService {
                 intent.putExtra(RemoteServiceActivity.EXTRA_ERROR_MESSAGE, "todo");
                 intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(),
-                        PRIVATE_REQUEST_CODE_GET_KEYS, intent, 0);
+                PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
+                        intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
-                result.putExtra(OpenPgpApi.RESULT_INTENT, pendingIntent);
+                result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
                 result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED);
                 return result;
             } else {
@@ -410,8 +410,8 @@ public class OpenPgpService extends RemoteService {
         // version code is required and needs to correspond to version code of service!
         if (data.getIntExtra(OpenPgpApi.EXTRA_API_VERSION, -1) != OpenPgpApi.API_VERSION) {
             Intent result = new Intent();
-            OpenPgpError error = new OpenPgpError(OpenPgpError.INCOMPATIBLE_API_VERSIONS,
-                                                    "Incompatible API versions!");
+            OpenPgpError error = new OpenPgpError
+                    (OpenPgpError.INCOMPATIBLE_API_VERSIONS, "Incompatible API versions!");
             result.putExtra(OpenPgpApi.RESULT_ERROR, error);
             result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
             return result;

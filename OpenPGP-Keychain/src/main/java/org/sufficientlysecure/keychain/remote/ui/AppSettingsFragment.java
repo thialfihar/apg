@@ -56,21 +56,9 @@ public class AppSettingsFragment extends Fragment {
         return mAppSettings;
     }
 
-    public void setAppSettings(AppSettings mAppSettings) {
-        this.mAppSettings = mAppSettings;
-        setPackage(mAppSettings.getPackageName());
-        mPackageName.setText(mAppSettings.getPackageName());
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(mAppSettings.getPackageSignature());
-            byte[] digest = md.digest();
-            String signature = new String(Hex.encode(digest));
-
-            mPackageSignature.setText(signature);
-        } catch (NoSuchAlgorithmException e) {
-            Log.e(Constants.TAG, "Should not happen!", e);
-        }
+    public void setAppSettings(AppSettings appSettings) {
+        this.mAppSettings = appSettings;
+        updateView(appSettings);
     }
 
     /**
@@ -79,35 +67,43 @@ public class AppSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.api_app_settings_fragment, container, false);
-        initView(view);
+        mAppNameView = (TextView) view.findViewById(R.id.api_app_settings_app_name);
+        mAppIconView = (ImageView) view.findViewById(R.id.api_app_settings_app_icon);
+        mPackageName = (TextView) view.findViewById(R.id.api_app_settings_package_name);
+        mPackageSignature = (TextView) view.findViewById(R.id.api_app_settings_package_signature);
         return view;
     }
 
-
-    private void initView(View view) {
-        mAppNameView = (TextView) view.findViewById(R.id.api_app_settings_app_name);
-        mAppIconView = (ImageView) view.findViewById(R.id.api_app_settings_app_icon);
-
-        mPackageName = (TextView) view.findViewById(R.id.api_app_settings_package_name);
-        mPackageSignature = (TextView) view.findViewById(R.id.api_app_settings_package_signature);
-    }
-
-    private void setPackage(String packageName) {
-        PackageManager pm = getActivity().getApplicationContext().getPackageManager();
-
+    private void updateView(AppSettings appSettings) {
         // get application name and icon from package manager
         String appName;
         Drawable appIcon = null;
+        PackageManager pm = getActivity().getApplicationContext().getPackageManager();
         try {
-            ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
+            ApplicationInfo ai = pm.getApplicationInfo(appSettings.getPackageName(), 0);
 
             appName = (String) pm.getApplicationLabel(ai);
             appIcon = pm.getApplicationIcon(ai);
         } catch (NameNotFoundException e) {
             // fallback
-            appName = packageName;
+            appName = appSettings.getPackageName();
         }
         mAppNameView.setText(appName);
         mAppIconView.setImageDrawable(appIcon);
+
+        // advanced info: package name
+        mPackageName.setText(appSettings.getPackageName());
+
+        // advanced info: package signature SHA-256
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(appSettings.getPackageSignature());
+            byte[] digest = md.digest();
+            String signature = new String(Hex.encode(digest));
+
+            mPackageSignature.setText(signature);
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(Constants.TAG, "Should not happen!", e);
+        }
     }
 }
