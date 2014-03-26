@@ -37,7 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.mail.ui.MailActivity;
+import com.android.email2.ui.MailActivityEmail;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 
@@ -82,7 +82,7 @@ public class DrawerActivity extends ActionBarActivity {
 
         NavItem mItemIconTexts[] = new NavItem[] {
                 new NavItem("fa-user", getString(R.string.nav_contacts), KeyListActivity.class),
-                new NavItem("fa-envelope", getString(R.string.nav_mail), MailActivity.class),
+                new NavItem("fa-envelope", getString(R.string.nav_mail), MailActivityEmail.class),
                 new NavItem("fa-lock", getString(R.string.nav_encrypt), EncryptActivity.class),
                 new NavItem("fa-unlock", getString(R.string.nav_decrypt), DecryptActivity.class),
                 new NavItem("fa-download", getString(R.string.nav_import), ImportKeysActivity.class),

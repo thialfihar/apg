@@ -23,7 +23,7 @@ android {
     buildToolsVersion "19.0.3"
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 19
     }
 
@@ -42,15 +42,16 @@ android {
     sourceSets {
         main {
             java.srcDirs = ['src/main/java',
-                            '../libs/email/src',
-                            '../libs/email/unified_src',
+                            '../libs/email2/src',
+                            '../libs/email2/emailcommon/src',
                             '../libs/ex/chips/src',
                             '../libs/ex/common/java',
                             '../libs/photoviewer/appcompat/src',
                             '../libs/photoviewer/src',
                           ]
             res.srcDirs = ['src/main/res',
-                           '../libs/email/res',
+                           '../libs/email2/res',
+                           '../libs/email2/emailcommon/res',
                            '../libs/ex/chips/res',
                            '../libs/photoviewer/appcompat/res',
                            '../libs/photoviewer/res',
