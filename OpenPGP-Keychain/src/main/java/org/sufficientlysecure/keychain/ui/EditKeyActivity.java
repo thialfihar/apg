@@ -594,6 +594,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             saveParams.oldPassPhrase = mCurrentPassPhrase;
             saveParams.newKeys = toPrimitiveArray(mKeysView.getNewKeysArray());
             saveParams.keys = getKeys(mKeysView);
+            saveParams.originalPrimaryID = mUserIdsView.getOriginalPrimaryID();
 
             // fill values for this action
             Bundle data = new Bundle();
