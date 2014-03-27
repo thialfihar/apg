@@ -14,6 +14,11 @@ dependencies {
     compile project(':libs:HtmlTextView')
     compile project(':OpenPGP-Keychain-API:libraries:openpgp-api-library')
     compile project(':OpenPGP-Keychain-API:libraries:openkeychain-api-library')
+
+    compile project(':libs:k-9:plugins:Android-PullToRefresh:library')
+    compile project(':libs:k-9:plugins:ckChangeLog:library')
+    compile project(':libs:k-9:plugins:HoloColorPicker')
+    compile fileTree(dir: '../libs/k-9/libs', include: '*.jar')
 }
 
 android {
@@ -25,11 +30,28 @@ android {
         targetSdkVersion 19
     }
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
     buildTypes {
         release {
             runProguard true
             proguardFile file('../proguard.cfg')
             proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java',
+                            '../libs/k-9/src',
+                          ]
+            res.srcDirs = ['src/main/res',
+                           '../libs/k-9/res',
+                          ]
         }
     }
 
