@@ -39,10 +39,14 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 
+import com.fsck.k9.activity.Accounts;
+
+import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.remote.AppsListActivity;
 
 public class DrawerActivity extends ActionBarActivity {
+    protected boolean mIsMailActivity = false;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -55,6 +59,7 @@ public class DrawerActivity extends ActionBarActivity {
 
     private static final int MENU_ID_PREFERENCE = 222;
     private static final int MENU_ID_HELP = 223;
+    private static final int MENU_ID_APG = 224;
 
     protected void setupDrawerNavigation(Bundle savedInstanceState) {
         mDrawerTitle = getString(R.string.app_name);
@@ -79,6 +84,7 @@ public class DrawerActivity extends ActionBarActivity {
 
         NavItem mItemIconTexts[] = new NavItem[] {
                 new NavItem("fa-user", getString(R.string.nav_contacts), KeyListActivity.class),
+                new NavItem("fa-envelope", getString(R.string.nav_mail), Accounts.class),
                 new NavItem("fa-lock", getString(R.string.nav_encrypt), EncryptActivity.class),
                 new NavItem("fa-unlock", getString(R.string.nav_decrypt), DecryptActivity.class),
                 new NavItem("fa-download", getString(R.string.nav_import), ImportKeysActivity.class),
@@ -154,8 +160,12 @@ public class DrawerActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(42, MENU_ID_PREFERENCE, 100, R.string.menu_preferences);
-        menu.add(42, MENU_ID_HELP, 101, R.string.menu_help);
+        if (!mIsMailActivity) {
+            menu.add(42, MENU_ID_PREFERENCE, 100, R.string.menu_preferences);
+            menu.add(42, MENU_ID_HELP, 101, R.string.menu_help);
+        } else {
+            menu.add(42, MENU_ID_APG, 102, R.string.menu_apg);
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -165,7 +175,7 @@ public class DrawerActivity extends ActionBarActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content
         // view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         // menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -174,7 +184,7 @@ public class DrawerActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -186,6 +196,11 @@ public class DrawerActivity extends ActionBarActivity {
         }
         case MENU_ID_HELP: {
             Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        case MENU_ID_APG: {
+            Intent intent = new Intent(this, KeyListActivity.class);
             startActivity(intent);
             return true;
         }
@@ -220,6 +235,9 @@ public class DrawerActivity extends ActionBarActivity {
     }
 
     private void selectItem(int position) {
+        if (mDrawerList == null) {
+            return;
+        }
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         // set selected class
@@ -244,15 +262,19 @@ public class DrawerActivity extends ActionBarActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            // Sync the toggle state after onRestoreInstanceState has occurred.
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            // Pass any configuration change to the drawer toggles
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     public static class NavItem {

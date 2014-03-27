@@ -20,6 +20,8 @@ package org.thialfihar.android.apg;
 import android.app.Application;
 import android.os.Environment;
 
+import com.fsck.k9.K9;
+
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.PRNGFixes;
@@ -28,7 +30,7 @@ import java.io.File;
 import java.security.Provider;
 import java.security.Security;
 
-public class ApgApplication extends Application {
+public class ApgApplication extends K9 {
 
     /**
      * Called when the application is starting, before any activity, service, or receiver objects
