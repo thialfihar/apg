@@ -209,6 +209,9 @@ public class PassphraseCacheService extends Service {
      * @return true if it has a passphrase
      */
     public static boolean hasPassphrase(Context context, long secretKeyId) {
+        if (secretKeyId == Id.key.symmetric) {
+            return true;
+        }
         // check if the key has no passphrase
         try {
             PGPSecretKeyRing secRing = ProviderHelper
