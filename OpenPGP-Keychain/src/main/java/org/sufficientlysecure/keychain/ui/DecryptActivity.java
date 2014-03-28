@@ -544,24 +544,15 @@ public class DecryptActivity extends DrawerActivity {
 
         // get decryption key for this inStream
         try {
-            try {
-                if (inStream.markSupported()) {
-                    inStream.mark(200); // should probably set this to the max size of two pgpF
-                    // objects, if it even needs to be anything other than 0.
-                }
-                mSecretKeyId = PgpHelper.getDecryptionKeyId(this, inStream);
-                if (mSecretKeyId == Id.key.none) {
-                    throw new PgpGeneralException(getString(R.string.error_no_secret_key_found));
-                }
-            } catch (NoAsymmetricEncryptionException e) {
-                if (inStream.markSupported()) {
-                    inStream.reset();
-                }
-                mSecretKeyId = Id.key.symmetric;
-                if (!PgpDecryptVerify.hasSymmetricEncryption(this, inStream)) {
-                    throw new PgpGeneralException(
-                            getString(R.string.error_no_known_encryption_found));
-                }
+            if (inStream.markSupported()) {
+                inStream.mark(200); // should probably set this to the max size of two pgpF
+                // objects, if it even needs to be anything other than 0.
+            }
+            mSecretKeyId = PgpHelper.getDecryptionKeyId(this, inStream);
+            if (mSecretKeyId == Id.key.none) {
+                throw new PgpGeneralException(getString(R.string.error_no_known_encryption_found));
+            }
+            if (mSecretKeyId == Id.key.symmetric) {
                 mAssumeSymmetricEncryption = true;
             }
         } catch (Exception e) {

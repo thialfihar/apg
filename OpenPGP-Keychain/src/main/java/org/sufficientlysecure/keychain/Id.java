@@ -175,6 +175,7 @@ public final class Id {
     public static final class key {
         public static final int none = 0;
         public static final int symmetric = -1;
+        public static final int not_required = -2;
     }
 
     public static final class content {
