@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import org.spongycastle.bcpg.ArmoredInputStream;
 import org.spongycastle.openpgp.PGPEncryptedDataList;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKeyEncryptedData;
@@ -78,6 +79,15 @@ public class PgpHelper {
     public static long getDecryptionKeyId(Context context, InputStream inputStream)
             throws PgpGeneralException, NoAsymmetricEncryptionException, IOException {
         InputStream in = PGPUtil.getDecoderStream(inputStream);
+        if (in instanceof ArmoredInputStream) {
+            ArmoredInputStream aIn = (ArmoredInputStream) in;
+            // it is ascii armored
+            if (aIn.isClearText()) {
+                // a cleartext signature, verify it with the other method
+                return 0;
+            }
+        }
+
         PGPObjectFactory pgpF = new PGPObjectFactory(in);
         PGPEncryptedDataList enc;
         Object o = pgpF.nextObject();
