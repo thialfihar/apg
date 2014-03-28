@@ -52,7 +52,6 @@ import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
@@ -482,9 +481,20 @@ public class EncryptActivity extends DrawerActivity {
                 return;
             }
 
-            if (mSecretKeyId != 0
-                    && PassphraseCacheService.getCachedPassphrase(this, mSecretKeyId) == null) {
-                showPassphraseDialog();
+            if (mSecretKeyId != 0 &&
+                    PassphraseCacheService.getCachedPassphrase(this, mSecretKeyId) == null) {
+                PassphraseDialogFragment.show(this, mSecretKeyId, new Handler() {
+                    @Override
+                    public void handleMessage(Message message) {
+                        if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
+                            if (mEncryptTarget == Id.target.file) {
+                                showOutputFileDialog();
+                            } else {
+                                encryptStart();
+                            }
+                        }
+                    }
+                });
 
                 return;
             }
@@ -494,40 +504,6 @@ public class EncryptActivity extends DrawerActivity {
             showOutputFileDialog();
         } else {
             encryptStart();
-        }
-    }
-
-    /**
-     * Shows passphrase dialog to cache a new passphrase the user enters for using it later for
-     * encryption
-     */
-    private void showPassphraseDialog() {
-        // Message is received after passphrase is cached
-        Handler returnHandler = new Handler() {
-            @Override
-            public void handleMessage(Message message) {
-                if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
-                    if (mEncryptTarget == Id.target.file) {
-                        showOutputFileDialog();
-                    } else {
-                        encryptStart();
-                    }
-                }
-            }
-        };
-
-        // Create a new Messenger for the communication back
-        Messenger messenger = new Messenger(returnHandler);
-
-        try {
-            PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(
-                    EncryptActivity.this, messenger, mSecretKeyId);
-
-            passphraseDialog.show(getSupportFragmentManager(), "passphraseDialog");
-        } catch (PgpGeneralException e) {
-            Log.d(Constants.TAG, "No passphrase for this secret key, encrypt directly!");
-            // send message to handler to start encryption directly
-            returnHandler.sendEmptyMessage(PassphraseDialogFragment.MESSAGE_OKAY);
         }
     }
 

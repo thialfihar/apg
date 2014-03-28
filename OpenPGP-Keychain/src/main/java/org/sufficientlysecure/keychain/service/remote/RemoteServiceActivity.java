@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Messenger;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
@@ -31,7 +30,6 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.SelectPublicKeyFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -129,9 +127,21 @@ public class RemoteServiceActivity extends ActionBarActivity {
             mSettingsFragment.setAppSettings(settings);
         } else if (ACTION_CACHE_PASSPHRASE.equals(action)) {
             long secretKeyId = extras.getLong(EXTRA_SECRET_KEY_ID);
-            Intent resultData = extras.getParcelable(EXTRA_DATA);
+            final Intent resultData = extras.getParcelable(EXTRA_DATA);
 
-            showPassphraseDialog(resultData, secretKeyId);
+            PassphraseDialogFragment.show(this, secretKeyId, new Handler() {
+                @Override
+                public void handleMessage(Message message) {
+                    if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
+                        // return given params again, for calling the service method again
+                        RemoteServiceActivity.this.setResult(RESULT_OK, resultData);
+                    } else {
+                        RemoteServiceActivity.this.setResult(RESULT_CANCELED);
+                    }
+
+                    RemoteServiceActivity.this.finish();
+                }
+            });
         } else if (ACTION_SELECT_PUB_KEYS.equals(action)) {
             long[] selectedMasterKeyIds = intent.getLongArrayExtra(EXTRA_SELECTED_MASTER_KEY_IDS);
             ArrayList<String> missingUserIds = intent
@@ -236,43 +246,6 @@ public class RemoteServiceActivity extends ActionBarActivity {
         } else {
             Log.e(Constants.TAG, "Action does not exist!");
             setResult(RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    /**
-     * Shows passphrase dialog to cache a new passphrase the user enters for using it later for
-     * encryption. Based on mSecretKeyId it asks for a passphrase to open a private key or it asks
-     * for a symmetric passphrase
-     */
-    private void showPassphraseDialog(final Intent data, long secretKeyId) {
-        // Message is received after passphrase is cached
-        Handler returnHandler = new Handler() {
-            @Override
-            public void handleMessage(Message message) {
-                if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
-                    // return given params again, for calling the service method again
-                    RemoteServiceActivity.this.setResult(RESULT_OK, data);
-                } else {
-                    RemoteServiceActivity.this.setResult(RESULT_CANCELED);
-                }
-
-                RemoteServiceActivity.this.finish();
-            }
-        };
-
-        // Create a new Messenger for the communication back
-        Messenger messenger = new Messenger(returnHandler);
-
-        try {
-            PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(this,
-                    messenger, secretKeyId);
-
-            passphraseDialog.show(getSupportFragmentManager(), "passphraseDialog");
-        } catch (PgpGeneralException e) {
-            Log.d(Constants.TAG, "No passphrase for this secret key, do pgp operation directly!");
-            // return given params again, for calling the service method again
-            setResult(RESULT_OK, data);
             finish();
         }
     }

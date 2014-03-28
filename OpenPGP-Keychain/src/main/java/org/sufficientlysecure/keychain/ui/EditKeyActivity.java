@@ -274,35 +274,6 @@ public class EditKeyActivity extends ActionBarActivity {
         }
     }
 
-    private void showPassphraseDialog(final long masterKeyId, final boolean mMasterCanSign) {
-        // Message is received after passphrase is cached
-        Handler returnHandler = new Handler() {
-            @Override
-            public void handleMessage(Message message) {
-                if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
-                    String passphrase = PassphraseCacheService.getCachedPassphrase(
-                            EditKeyActivity.this, masterKeyId);
-                    mCurrentPassphrase = passphrase;
-                    finallySaveClicked();
-                }
-            }
-        };
-
-        // Create a new Messenger for the communication back
-        Messenger messenger = new Messenger(returnHandler);
-
-        try {
-            PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(
-                    EditKeyActivity.this, messenger, masterKeyId);
-
-            passphraseDialog.show(getSupportFragmentManager(), "passphraseDialog");
-        } catch (PgpGeneralException e) {
-            Log.d(Constants.TAG, "No passphrase for this secret key!");
-            // send message to handler to start encryption directly
-            returnHandler.sendEmptyMessage(PassphraseDialogFragment.MESSAGE_OKAY);
-        }
-    }
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // show menu only on edit
@@ -500,7 +471,7 @@ public class EditKeyActivity extends ActionBarActivity {
     }
 
     private void saveClicked() {
-        long masterKeyId = getMasterKeyId();
+        final long masterKeyId = getMasterKeyId();
         if (!isPassphraseSet()) {
             Log.e(Constants.TAG, "No passphrase has been set");
             Toast.makeText(this, R.string.set_a_passphrase, Toast.LENGTH_LONG).show();
@@ -513,7 +484,17 @@ public class EditKeyActivity extends ActionBarActivity {
             }
 
             if (passphrase == null) {
-                showPassphraseDialog(masterKeyId, mMasterCanSign);
+                PassphraseDialogFragment.show(this, masterKeyId, new Handler() {
+                    @Override
+                    public void handleMessage(Message message) {
+                        if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
+                            String passphrase = PassphraseCacheService.getCachedPassphrase(
+                                    EditKeyActivity.this, masterKeyId);
+                            mCurrentPassphrase = passphrase;
+                            finallySaveClicked();
+                        }
+                    }
+                });
             } else {
                 mCurrentPassphrase = passphrase;
                 finallySaveClicked();
