@@ -210,5 +210,4 @@ public class DecryptActivity extends DrawerActivity {
                     "Include the extra 'text' or an Uri with setData() in your Intent!");
         }
     }
-
 }

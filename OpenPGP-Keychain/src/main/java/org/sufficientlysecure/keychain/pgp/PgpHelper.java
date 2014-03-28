@@ -29,9 +29,11 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.exception.NoAsymmetricEncryptionException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
@@ -77,14 +79,13 @@ public class PgpHelper {
     }
 
     public static long getDecryptionKeyId(Context context, InputStream inputStream)
-            throws PgpGeneralException, NoAsymmetricEncryptionException, IOException {
+            throws PgpGeneralException, IOException {
         InputStream in = PGPUtil.getDecoderStream(inputStream);
         if (in instanceof ArmoredInputStream) {
             ArmoredInputStream aIn = (ArmoredInputStream) in;
             // it is ascii armored
             if (aIn.isClearText()) {
-                // a cleartext signature, verify it with the other method
-                return 0;
+                return Id.key.not_required;
             }
         }
 
@@ -121,7 +122,10 @@ public class PgpHelper {
         }
 
         if (!gotAsymmetricEncryption) {
-            throw new NoAsymmetricEncryptionException();
+            inputStream.reset();
+            if (PgpDecryptVerify.hasSymmetricEncryption(context, inputStream)) {
+                return Id.key.symmetric;
+            }
         }
 
         if (secretKey == null) {
