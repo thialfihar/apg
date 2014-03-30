@@ -603,7 +603,7 @@ public class EncryptActivity extends DrawerActivity {
 
             String message = mMessage.getText().toString();
             if (signOnly) {
-                fixBadCharactersForGmail(message);
+                message = fixBadCharactersForGmail(message);
             }
             data.putByteArray(ApgIntentService.ENCRYPT_MESSAGE_BYTES, message.getBytes());
         }
