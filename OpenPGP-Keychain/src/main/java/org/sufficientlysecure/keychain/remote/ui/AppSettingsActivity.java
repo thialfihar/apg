@@ -78,12 +78,9 @@ public class AppSettingsActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.menu_api_settings_revoke:
-            revokeAccess();
-            return true;
-        case R.id.menu_api_settings_cancel:
-            finish();
-            return true;
+            case R.id.menu_api_settings_revoke:
+                revokeAccess();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
