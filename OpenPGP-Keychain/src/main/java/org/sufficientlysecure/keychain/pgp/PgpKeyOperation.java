@@ -229,7 +229,7 @@ public class PgpKeyOperation {
         PGPPrivateKey masterPrivateKey = masterKey.extractPrivateKey(keyDecryptor);
 
         updateProgress(R.string.progress_certifying_master_key, 20, 100);
-        int user_id_index = 0;
+
         for (String userId : userIds) {
                 PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
                         masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
@@ -238,9 +238,8 @@ public class PgpKeyOperation {
 
                 sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
 
-                PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
-                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, certification);
-            user_id_index++;
+            PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
+            masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, certification);
         }
 
         PGPKeyPair masterKeyPair = new PGPKeyPair(masterPublicKey, masterPrivateKey);
@@ -424,7 +423,7 @@ public class PgpKeyOperation {
             masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, delID);
         }
 
-        int user_id_index = 0;
+        int userIDIndex = 0;
 
         PGPSignatureSubpacketGenerator hashedPacketsGen = new PGPSignatureSubpacketGenerator();
         PGPSignatureSubpacketGenerator unhashedPacketsGen = new PGPSignatureSubpacketGenerator();
@@ -454,12 +453,12 @@ public class PgpKeyOperation {
             anyIDChanged = true;
             ArrayList<Pair<String, PGPSignature>> sigList = new ArrayList<Pair<String, PGPSignature>>();
             for (String userId : saveParcel.userIDs) {
-                String orig_id = saveParcel.originalIDs.get(user_id_index);
-                if (orig_id.equals(userId) && !userId.equals(saveParcel.originalPrimaryID) && user_id_index != 0) {
-                    Iterator<PGPSignature> orig_sigs = masterPublicKey.getSignaturesForID(orig_id); //TODO: make sure this iterator only has signatures we are interested in
-                    while (orig_sigs.hasNext()) {
-                        PGPSignature orig_sig = orig_sigs.next();
-                        sigList.add(new Pair<String, PGPSignature>(orig_id, orig_sig));
+                String origID = saveParcel.originalIDs.get(userIDIndex);
+                if (origID.equals(userId) && !userId.equals(saveParcel.originalPrimaryID) && userIDIndex != 0) {
+                    Iterator<PGPSignature> origSigs = masterPublicKey.getSignaturesForID(origID); //TODO: make sure this iterator only has signatures we are interested in
+                    while (origSigs.hasNext()) {
+                        PGPSignature origSig = origSigs.next();
+                        sigList.add(new Pair<String, PGPSignature>(origID, origSig));
                     }
                 } else {
                     PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
@@ -468,25 +467,25 @@ public class PgpKeyOperation {
                     PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
 
                     sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
-                    if (user_id_index == 0) {
+                    if (userIDIndex == 0) {
                         sGen.setHashedSubpackets(hashedPacketsGen.generate());
                         sGen.setUnhashedSubpackets(unhashedPacketsGen.generate());
                     }
                     PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
                     sigList.add(new Pair<String, PGPSignature>(userId, certification));
                 }
-                if (!orig_id.equals("")) {
-                    masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, orig_id);
+                if (!origID.equals("")) {
+                    masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, origID);
                 }
-                user_id_index++;
+                userIDIndex++;
             }
-            for (Pair<String, PGPSignature> to_add : sigList) {
-                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, to_add.first, to_add.second);
+            for (Pair<String, PGPSignature> toAdd : sigList) {
+                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, toAdd.first, toAdd.second);
             }
         } else {
             for (String userId : saveParcel.userIDs) {
-                String orig_id = saveParcel.originalIDs.get(user_id_index);
-                if (!orig_id.equals(userId)) {
+                String origID = saveParcel.originalIDs.get(userIDIndex);
+                if (!origID.equals(userId)) {
                     anyIDChanged = true;
                     PGPContentSignerBuilder signerBuilder = new JcaPGPContentSignerBuilder(
                             masterPublicKey.getAlgorithm(), HashAlgorithmTags.SHA1)
@@ -494,26 +493,26 @@ public class PgpKeyOperation {
                     PGPSignatureGenerator sGen = new PGPSignatureGenerator(signerBuilder);
 
                     sGen.init(PGPSignature.POSITIVE_CERTIFICATION, masterPrivateKey);
-                    if (user_id_index == 0) {
+                    if (userIDIndex == 0) {
                         sGen.setHashedSubpackets(hashedPacketsGen.generate());
                         sGen.setUnhashedSubpackets(unhashedPacketsGen.generate());
                     }
                     PGPSignature certification = sGen.generateCertification(userId, masterPublicKey);
-                    if (!orig_id.equals("")) {
-                        masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, orig_id);
+                    if (!origID.equals("")) {
+                        masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, origID);
                     }
                     masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, userId, certification);
                 }
-                user_id_index++;
+                userIDIndex++;
             }
         }
 
         ArrayList<Pair<String, PGPSignature>> sigList = new ArrayList<Pair<String, PGPSignature>>();
         if (saveParcel.moddedKeys[0]) {
-            user_id_index = 0;
+            userIDIndex = 0;
             for (String userId : saveParcel.userIDs) {
-                String orig_id = saveParcel.originalIDs.get(user_id_index);
-                if (!(orig_id.equals(saveParcel.originalPrimaryID) && !saveParcel.primaryIDChanged)) {
+                String origID = saveParcel.originalIDs.get(userIDIndex);
+                if (!(origID.equals(saveParcel.originalPrimaryID) && !saveParcel.primaryIDChanged)) {
                     Iterator<PGPSignature> sigs = masterPublicKey.getSignaturesForID(userId); //TODO: make sure this iterator only has signatures we are interested in
                     while (sigs.hasNext()) {
                         PGPSignature sig = sigs.next();
@@ -523,7 +522,7 @@ public class PgpKeyOperation {
                 if (!userId.equals("")) {
                     masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, userId);
                 }
-                user_id_index++;
+                userIDIndex++;
             }
             anyIDChanged = true;
         }
@@ -635,8 +634,8 @@ public class PgpKeyOperation {
         //replace lost IDs
         if (saveParcel.moddedKeys[0]) {
             masterPublicKey = mKR.getPublicKey();
-            for (Pair<String, PGPSignature> to_add : sigList) {
-                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, to_add.first, to_add.second);
+            for (Pair<String, PGPSignature> toAdd : sigList) {
+                masterPublicKey = PGPPublicKey.addCertification(masterPublicKey, toAdd.first, toAdd.second);
             }
             pKR = PGPPublicKeyRing.insertPublicKey(pKR, masterPublicKey);
             mKR = PGPSecretKeyRing.replacePublicKeys(mKR, pKR);
