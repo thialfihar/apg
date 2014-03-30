@@ -50,7 +50,7 @@ public class PgpHelper {
     public static final Pattern PGP_MESSAGE = Pattern.compile(
             ".*?(-----BEGIN PGP MESSAGE-----.*?-----END PGP MESSAGE-----).*", Pattern.DOTALL);
 
-    public static final Pattern PGP_SIGNED_MESSAGE = Pattern
+    public static final Pattern PGP_CLEARTEXT_SIGNATURE = Pattern
             .compile(
                     ".*?(-----BEGIN PGP SIGNED MESSAGE-----.*?-----BEGIN PGP SIGNATURE-----.*?" +
                         "-----END PGP SIGNATURE-----).*",

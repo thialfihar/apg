@@ -17,8 +17,6 @@
 
 package org.thialfihar.android.apg.ui;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,7 +74,8 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 
 //@SuppressLint("NewApi")
-public class DecryptActivity extends DrawerActivity {
+public class DecryptActivity extends DrawerActivity implements DecryptSignatureResultDisplay {
+
 
     /* Intents */
     // without permission
@@ -135,43 +134,13 @@ public class DecryptActivity extends DrawerActivity {
     ViewPager mViewPager;
     PagerTabStrip mPagerTabStrip;
     PageTabStripAdapter mTabsAdapter;
-    DecryptMessageFragment mMessageFragment;
-    DecryptFileFragment mFileFragment;
+
+
+    private static final int PAGER_TAB_MESSAGE = 0;
+    private static final int PAGER_TAB_FILE = 1;
+
 
     private void initView() {
-//        mSource = (ViewFlipper) findViewById(R.id.source);
-//        mSourceLabel = (TextView) findViewById(R.id.sourceLabel);
-//        mSourcePrevious = (ImageView) findViewById(R.id.sourcePrevious);
-//        mSourceNext = (ImageView) findViewById(R.id.sourceNext);
-//
-//        mSourcePrevious.setClickable(true);
-//        mSourcePrevious.setOnClickListener(new OnClickListener() {
-//            public void onClick(View v) {
-//                mSource.setInAnimation(AnimationUtils.loadAnimation(DecryptActivity.this,
-//                        R.anim.push_right_in));
-//                mSource.setOutAnimation(AnimationUtils.loadAnimation(DecryptActivity.this,
-//                        R.anim.push_right_out));
-//                mSource.showPrevious();
-//                updateSource();
-//            }
-//        });
-//
-//        mSourceNext.setClickable(true);
-//        OnClickListener nextSourceClickListener = new OnClickListener() {
-//            public void onClick(View v) {
-//                mSource.setInAnimation(AnimationUtils.loadAnimation(DecryptActivity.this,
-//                        R.anim.push_left_in));
-//                mSource.setOutAnimation(AnimationUtils.loadAnimation(DecryptActivity.this,
-//                        R.anim.push_left_out));
-//                mSource.showNext();
-//                updateSource();
-//            }
-//        };
-//        mSourceNext.setOnClickListener(nextSourceClickListener);
-//
-//        mSourceLabel.setClickable(true);
-//        mSourceLabel.setOnClickListener(nextSourceClickListener);
-
         mSignatureLayout = (RelativeLayout) findViewById(R.id.signature);
         mSignatureStatusImage = (ImageView) findViewById(R.id.ic_signature_status);
         mUserId = (TextView) findViewById(R.id.mainUserId);
@@ -184,24 +153,24 @@ public class DecryptActivity extends DrawerActivity {
 //        int height = tmp.getMeasuredHeight();
 //        mMessage.setMinimumHeight(height);
 
-        mFilename = (EditText) findViewById(R.id.filename);
-        mBrowse = (BootstrapButton) findViewById(R.id.btn_browse);
-        mBrowse.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FileHelper.openFile(DecryptActivity.this, mFilename.getText().toString(), "*/*",
-                        RESULT_CODE_FILE);
-            }
-        });
-
-        mLookupKey = (BootstrapButton) findViewById(R.id.lookup_key);
-        mLookupKey.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lookupUnknownKey(mSignatureKeyId);
-            }
-        });
-
-        mDeleteAfter = (CheckBox) findViewById(R.id.deleteAfterDecryption);
+//        mFilename = (EditText) findViewById(R.id.filename);
+//        mBrowse = (BootstrapButton) findViewById(R.id.btn_browse);
+//        mBrowse.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                FileHelper.openFile(DecryptActivity.this, mFilename.getText().toString(), "*/*",
+//                        RESULT_CODE_FILE);
+//            }
+//        });
+//
+//        mLookupKey = (BootstrapButton) findViewById(R.id.lookup_key);
+//        mLookupKey.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                lookupUnknownKey(mSignatureKeyId);
+//            }
+//        });
+//
+//        mDeleteAfter = (CheckBox) findViewById(R.id.deleteAfterDecryption);
 
         // default: message source
 //        mSource.setInAnimation(null);
@@ -210,23 +179,19 @@ public class DecryptActivity extends DrawerActivity {
 //            mSource.showNext();
 //        }
 
-        mDecryptButton = (BootstrapButton) findViewById(R.id.action_decrypt);
-        mDecryptButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                decryptClicked();
-            }
-        });
+//        mDecryptButton = (BootstrapButton) findViewById(R.id.action_decrypt);
+//        mDecryptButton.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                decryptClicked();
+//            }
+//        });
 
+
+        // Pager
         mViewPager = (ViewPager) findViewById(R.id.decrypt_pager);
         mPagerTabStrip = (PagerTabStrip) findViewById(R.id.decrypt_pager_tab_strip);
-        initPager();
-    }
 
-    private static final int PAGER_TAB_MESSAGE = 0;
-    private static final int PAGER_TAB_FILE = 1;
-
-    private void initPager() {
         mTabsAdapter = new PageTabStripAdapter(this);
         mViewPager.setAdapter(mTabsAdapter);
 
@@ -235,19 +200,8 @@ public class DecryptActivity extends DrawerActivity {
 
         Bundle fileBundle = new Bundle();
         mTabsAdapter.addTab(DecryptFileFragment.class, fileBundle, getString(R.string.label_file));
-
-//        mPagerTabStrip.
-        getSupportFragmentManager().executePendingTransactions();
-//        for (Fragment f : getSupportFragmentManager().getFragments()) {
-//            Log.d(Constants.TAG, "f: "+f.getTag());
-//        }
-
-        DecryptMessageFragment messageFragment = (DecryptMessageFragment) getFragmentByPosition(PAGER_TAB_MESSAGE);
-//        mFileFragment = (DecryptFileFragment) getFragmentByPosition(PAGER_TAB_FILE);
-
-//        Log.d(Constants.TAG, fr.getTag());
-//
     }
+
 
     /**
      * find fragment
@@ -278,26 +232,6 @@ public class DecryptActivity extends DrawerActivity {
         // Handle intent actions
         handleActions(getIntent());
 
-//        if (mSource.getCurrentView().getId() == R.id.sourceMessage
-//                && mMessage.getText().length() == 0) {
-//
-//            CharSequence clipboardText = ClipboardReflection.getClipboardText(this);
-//
-//            String data = "";
-//            if (clipboardText != null) {
-//                Matcher matcher = PgpHelper.PGP_MESSAGE.matcher(clipboardText);
-//                if (!matcher.matches()) {
-//                    matcher = PgpHelper.PGP_SIGNED_MESSAGE.matcher(clipboardText);
-//                }
-//                if (matcher.matches()) {
-//                    data = matcher.group(1);
-//                    mMessage.setText(data);
-//                    AppMsg.makeText(this, R.string.using_clipboard_content, AppMsg.STYLE_INFO)
-//                            .show();
-//                }
-//            }
-//        }
-
         mSignatureLayout.setVisibility(View.GONE);
         mSignatureLayout.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -314,27 +248,6 @@ public class DecryptActivity extends DrawerActivity {
                 }
             }
         });
-
-//        if (mReturnResult) {
-//            mSourcePrevious.setClickable(false);
-//            mSourcePrevious.setEnabled(false);
-//            mSourcePrevious.setVisibility(View.INVISIBLE);
-//
-//            mSourceNext.setClickable(false);
-//            mSourceNext.setEnabled(false);
-//            mSourceNext.setVisibility(View.INVISIBLE);
-//
-//            mSourceLabel.setClickable(false);
-//            mSourceLabel.setEnabled(false);
-//        }
-//
-//        updateSource();
-
-//        if (mDecryptImmediately
-//                || (mSource.getCurrentView().getId() == R.id.sourceMessage && (mMessage.getText()
-//                .length() > 0 || mContentUri != null))) {
-//            decryptClicked();
-//        }
     }
 
 
@@ -420,20 +333,20 @@ public class DecryptActivity extends DrawerActivity {
                 // replace non breakable spaces
                 textData = textData.replaceAll("\\xa0", " ");
 
-                mViewPager.setCurrentItem(PAGER_TAB_MESSAGE, false);
-                mMessageFragment.setText(textData);
+//                mViewPager.setCurrentItem(PAGER_TAB_MESSAGE, false);
+//                mMessageFragment.setText(textData);
 //                mMessage.setText(textData);
             } else {
-                matcher = PgpHelper.PGP_SIGNED_MESSAGE.matcher(textData);
+                matcher = PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(textData);
                 if (matcher.matches()) {
-                    Log.d(Constants.TAG, "PGP_SIGNED_MESSAGE matched");
+                    Log.d(Constants.TAG, "PGP_CLEARTEXT_SIGNATURE matched");
                     textData = matcher.group(1);
                     // replace non breakable spaces
                     textData = textData.replaceAll("\\xa0", " ");
 //                    mMessage.setText(textData);
-                    mViewPager.setCurrentItem(PAGER_TAB_MESSAGE, false);
-                    mMessageFragment = (DecryptMessageFragment) getFragmentByPosition(mViewPager.getCurrentItem());
-                    mMessageFragment.setText(textData);
+//                    mViewPager.setCurrentItem(PAGER_TAB_MESSAGE, false);
+//                    mMessageFragment = (DecryptMessageFragment) getFragmentByPosition(mViewPager.getCurrentItem());
+//                    mMessageFragment.setText(textData);
                 } else {
                     Log.d(Constants.TAG, "Nothing matched!");
                 }
@@ -466,34 +379,14 @@ public class DecryptActivity extends DrawerActivity {
         }
     }
 
-    private void guessOutputFilename() {
-        mInputFilename = mFilename.getText().toString();
-        File file = new File(mInputFilename);
-        String filename = file.getName();
-        if (filename.endsWith(".asc") || filename.endsWith(".gpg") || filename.endsWith(".pgp")) {
-            filename = filename.substring(0, filename.length() - 4);
-        }
-        mOutputFilename = Constants.Path.APP_DIR + "/" + filename;
-    }
-
-//    private void updateSource() {
-//        switch (mSource.getCurrentView().getId()) {
-//            case R.id.sourceFile: {
-//                mSourceLabel.setText(R.string.label_file);
-//                mDecryptButton.setText(getString(R.string.btn_decrypt));
-//                break;
-//            }
-//
-//            case R.id.sourceMessage: {
-//                mSourceLabel.setText(R.string.label_message);
-//                mDecryptButton.setText(getString(R.string.btn_decrypt));
-//                break;
-//            }
-//
-//            default: {
-//                break;
-//            }
+//    private void guessOutputFilename() {
+//        mInputFilename = mFilename.getText().toString();
+//        File file = new File(mInputFilename);
+//        String filename = file.getName();
+//        if (filename.endsWith(".asc") || filename.endsWith(".gpg") || filename.endsWith(".pgp")) {
+//            filename = filename.substring(0, filename.length() - 4);
 //        }
+//        mOutputFilename = Constants.Path.APP_DIR + "/" + filename;
 //    }
 
     private void decryptClicked() {
@@ -532,7 +425,7 @@ public class DecryptActivity extends DrawerActivity {
 
         if (mDecryptTarget == Id.target.message) {
 //            String messageData = mMessage.getText().toString();
-//            Matcher matcher = PgpHelper.PGP_SIGNED_MESSAGE.matcher(messageData);
+//            Matcher matcher = PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(messageData);
 //            if (matcher.matches()) {
 //                mSignedOnly = true;
 //                decryptStart();
@@ -553,7 +446,7 @@ public class DecryptActivity extends DrawerActivity {
             if (mDecryptTarget == Id.target.file) {
                 askForOutputFilename();
             } else { // mDecryptTarget == Id.target.message
-                decryptStart();
+//                decryptStart();
             }
         }
     }
@@ -572,7 +465,7 @@ public class DecryptActivity extends DrawerActivity {
                     if (mDecryptTarget == Id.target.file) {
                         askForOutputFilename();
                     } else {
-                        decryptStart();
+//                        decryptStart();
                     }
                 }
             }
@@ -664,7 +557,7 @@ public class DecryptActivity extends DrawerActivity {
                 if (message.what == FileDialogFragment.MESSAGE_OKAY) {
                     Bundle data = message.getData();
                     mOutputFilename = data.getString(FileDialogFragment.MESSAGE_DATA_FILENAME);
-                    decryptStart();
+//                    decryptStart();
                 }
             }
         };
@@ -880,7 +773,7 @@ public class DecryptActivity extends DrawerActivity {
                 Log.d(Constants.TAG, "Returning from Lookup Key...");
                 if (resultCode == RESULT_OK) {
                     // decrypt again
-                    decryptStart();
+//                    decryptStart();
                 }
                 return;
             }
@@ -893,4 +786,55 @@ public class DecryptActivity extends DrawerActivity {
         }
     }
 
+    @Override
+    public void onSignatureResult(OpenPgpSignatureResult signatureResult) {
+
+        mSignatureKeyId = 0;
+        mSignatureLayout.setVisibility(View.GONE);
+        if (signatureResult != null) {
+
+            String userId = signatureResult.getUserId();
+            mSignatureKeyId = signatureResult.getKeyId();
+            mUserIdRest.setText("id: "
+                    + PgpKeyHelper.convertKeyIdToHex(mSignatureKeyId));
+            if (userId == null) {
+                userId = getResources().getString(R.string.user_id_no_name);
+            }
+            String chunks[] = userId.split(" <", 2);
+            userId = chunks[0];
+            if (chunks.length > 1) {
+                mUserIdRest.setText("<" + chunks[1]);
+            }
+            mUserId.setText(userId);
+
+            switch (signatureResult.getStatus()) {
+                case OpenPgpSignatureResult.SIGNATURE_SUCCESS_UNCERTIFIED: {
+                    mSignatureStatusImage.setImageResource(R.drawable.overlay_ok);
+                    mLookupKey.setVisibility(View.GONE);
+                    break;
+                }
+
+                // TODO!
+//                            case OpenPgpSignatureResult.SIGNATURE_SUCCESS_CERTIFIED: {
+//                                break;
+//                            }
+
+                case OpenPgpSignatureResult.SIGNATURE_UNKNOWN_PUB_KEY: {
+                    mSignatureStatusImage.setImageResource(R.drawable.overlay_error);
+                    mLookupKey.setVisibility(View.VISIBLE);
+                    AppMsg.makeText(DecryptActivity.this,
+                            R.string.unknown_signature,
+                            AppMsg.STYLE_ALERT).show();
+                    break;
+                }
+
+                default: {
+                    mSignatureStatusImage.setImageResource(R.drawable.overlay_error);
+                    mLookupKey.setVisibility(View.GONE);
+                    break;
+                }
+            }
+            mSignatureLayout.setVisibility(View.VISIBLE);
+        }
+    }
 }
