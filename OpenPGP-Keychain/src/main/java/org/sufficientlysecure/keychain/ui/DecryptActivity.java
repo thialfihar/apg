@@ -358,7 +358,7 @@ public class DecryptActivity extends DrawerActivity implements DecryptSignatureR
             if (path != null) {
                 mInputFilename = path;
                 mFilename.setText(mInputFilename);
-                guessOutputFilename();
+//                guessOutputFilename();
 //                mSource.setInAnimation(null);
 //                mSource.setOutAnimation(null);
 //                while (mSource.getCurrentView().getId() != R.id.sourceFile) {
@@ -402,7 +402,7 @@ public class DecryptActivity extends DrawerActivity implements DecryptSignatureR
         if (mDecryptTarget == Id.target.file) {
             String currentFilename = mFilename.getText().toString();
             if (mInputFilename == null || !mInputFilename.equals(currentFilename)) {
-                guessOutputFilename();
+//                guessOutputFilename();
             }
 
             if (mInputFilename.equals("")) {
