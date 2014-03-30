@@ -98,7 +98,7 @@ public class OpenPgpService extends RemoteService {
 
             PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
                     intent,
-                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                    PendingIntent.FLAG_CANCEL_CURRENT);
 
             // return PendingIntent to be executed by client
             Intent result = new Intent();
@@ -126,7 +126,7 @@ public class OpenPgpService extends RemoteService {
         intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
         PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
                 intent,
-                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
         // return PendingIntent to be executed by client
         Intent result = new Intent();
@@ -321,7 +321,7 @@ public class OpenPgpService extends RemoteService {
 
                         PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
                                 intent,
-                                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                                PendingIntent.FLAG_CANCEL_CURRENT);
 
                         result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
                     }
@@ -362,7 +362,7 @@ public class OpenPgpService extends RemoteService {
 
                 PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
                         intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                        PendingIntent.FLAG_CANCEL_CURRENT);
 
                 result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
                 result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED);
