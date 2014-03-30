@@ -27,6 +27,7 @@ android {
 
     buildTypes {
         release {
+            zipAlign true
             runProguard true
             proguardFile file('../proguard.cfg')
             proguardFile getDefaultProguardFile('proguard-android.txt')
