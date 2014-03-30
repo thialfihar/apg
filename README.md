@@ -25,3 +25,12 @@ Alternatively `android.sdk=...` can be put into `<project.dir>/gradle.properties
 ### Travis CI Build Status
 
 [![Build Status](https://travis-ci.org/thialfihar/apg.png?branch=master)](https://travis-ci.org/thialfihar/apg)
+
+### Available APKs
+
+* [APG 1.1.1 release](https://drive.google.com/file/d/0Bwa3Mtxgis35aENjVHBOQzl4dXM/edit?usp=sharing)
+* [APG 1.1.0 release](https://drive.google.com/file/d/0Bwa3Mtxgis35SkpHSmtWU05SSEU/edit?usp=sharing)
+
+Legacy builds (before OpenKeychain features):
+
+* [APG 1.0.9 release](https://drive.google.com/file/d/0Bwa3Mtxgis35OTdXNnVnaXBpMVU/edit?usp=sharing)
