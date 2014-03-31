@@ -232,18 +232,20 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                             if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                                 // get new key from data bundle returned from service
                                 Bundle data = message.getData();
-                                Key masterKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY);
-                                Key subKey = (Key) data.getSerializable(ApgIntentService.RESULT_NEW_KEY2);
 
-                                //We must set the key flags here as they are not set when we make the
-                                //key pair. Because we are not generating hashed packets there...
-                                // add master key
-                                mKeys.add(masterKey);
-                                mKeysUsages.add(KeyFlags.CERTIFY_OTHER);
+                                ArrayList<PGPSecretKey> newKeys =
+                                        PgpConversionHelper.BytesToPGPSecretKeyList(data
+                                                .getByteArray(KeychainIntentService.RESULT_NEW_KEY));
 
-                                // add sub key
-                                mKeys.add(subKey);
-                                mKeysUsages.add(KeyFlags.ENCRYPT_COMMS + KeyFlags.ENCRYPT_STORAGE);
+                                ArrayList<Integer> keyUsageFlags = data.getIntegerArrayList(
+                                        KeychainIntentService.RESULT_KEY_USAGES);
+
+                                if (newKeys.size() == keyUsageFlags.size()) {
+                                    for (int i = 0; i < newKeys.size(); ++i) {
+                                        mKeys.add(newKeys.get(i));
+                                        mKeysUsages.add(keyUsageFlags.get(i));
+                                    }
+                                }
 
                                 buildLayout(true);
                             }

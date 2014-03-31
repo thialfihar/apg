@@ -170,7 +170,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
      */
     // keys
     public static final String RESULT_NEW_KEY = "new_key";
-    public static final String RESULT_NEW_KEY2 = "new_key2";
+    public static final String RESULT_KEY_USAGES = "new_key_usages";
 
     // encrypt
     public static final String RESULT_SIGNATURE_BYTES = "signature_data";
@@ -598,6 +598,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
             try {
                 /* Input */
                 String passphrase = data.getString(GENERATE_KEY_SYMMETRIC_PASSPHRASE);
+                ArrayList<PGPSecretKey> newKeys = new ArrayList<PGPSecretKey>();
+                ArrayList<Integer> keyUsageList = new ArrayList<Integer>();
 
                 /* Operation */
                 int keysTotal = 2;
@@ -611,11 +613,15 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 Key masterKey = keyOperations.createKey(Id.choice.algorithm.rsa,
                         4096, passphrase, true);
+                newKeys.add(masterKey);
+                keyUsageList.add(KeyFlags.CERTIFY_OTHER);
                 keysCreated++;
                 setProgress(keysCreated, keysTotal);
 
                 Key subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
                         4096, passphrase, false);
+                newKeys.add(subKey);
+                keyUsageList.add(KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE);
                 keysCreated++;
                 setProgress(keysCreated, keysTotal);
 
@@ -623,9 +629,11 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 //       for sign
 
                 /* Output */
+
                 Bundle resultData = new Bundle();
-                resultData.putSerializable(RESULT_NEW_KEY, masterKey);
-                resultData.putSerializable(RESULT_NEW_KEY2, subKey);
+                resultData.putByteArray(RESULT_NEW_KEY,
+                        PgpConversionHelper.PGPSecretKeyArrayListToBytes(newKeys));
+                resultData.putIntegerArrayList(RESULT_KEY_USAGES, keyUsageList);
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
