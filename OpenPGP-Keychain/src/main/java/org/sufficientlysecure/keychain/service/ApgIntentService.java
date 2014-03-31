@@ -602,7 +602,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 ArrayList<Integer> keyUsageList = new ArrayList<Integer>();
 
                 /* Operation */
-                int keysTotal = 2;
+                int keysTotal = 3;
                 int keysCreated = 0;
                 setProgress(
                         getApplicationContext().getResources()
@@ -622,6 +622,13 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                         4096, passphrase, false);
                 newKeys.add(subKey);
                 keyUsageList.add(KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE);
+                keysCreated++;
+                setProgress(keysCreated, keysTotal);
+
+                subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
+                        4096, passphrase, false);
+                newKeys.add(subKey);
+                keyUsageList.add(KeyFlags.SIGN_DATA);
                 keysCreated++;
                 setProgress(keysCreated, keysTotal);
 
