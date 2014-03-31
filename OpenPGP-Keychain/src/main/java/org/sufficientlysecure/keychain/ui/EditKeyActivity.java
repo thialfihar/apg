@@ -43,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
@@ -100,7 +101,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     private boolean mIsPassphraseSet;
     private boolean mNeedsSaving;
     private boolean mIsBrandNewKeyring = false;
-    private MenuItem mSaveButton;
 
     private BootstrapButton mChangePassphrase;
 
@@ -322,8 +322,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.key_edit, menu);
-        mSaveButton = menu.findItem(R.id.menu_key_edit_save);
-        mSaveButton.setEnabled(needsSaving());
         //totally get rid of some actions for new keys
         if (mDataUri == null) {
             MenuItem mButton = menu.findItem(R.id.menu_key_edit_export_file);
@@ -564,6 +562,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
                         Toast.LENGTH_SHORT).show();
             }
+        } else {
+            AppMsg.makeText(this, R.string.error_change_something_first, AppMsg.STYLE_ALERT).show();
         }
     }
 
