@@ -182,9 +182,6 @@ public class DecryptFileFragment extends DecryptFragment {
 
         data.putString(ApgIntentService.DECRYPT_PASSPHRASE, passphrase);
 
-        // TODO
-        data.putBoolean(ApgIntentService.DECRYPT_ASSUME_SYMMETRIC, false);
-
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
         // Message is received after encrypting is done in ApgIntentService
