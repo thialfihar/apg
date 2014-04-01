@@ -53,6 +53,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProviderHelper implements PgpKeyProvider {
     Context mContext;
@@ -990,10 +992,10 @@ public class ProviderHelper implements PgpKeyProvider {
         return settings;
     }
 
-    public static AccountSettings getApiAccountSettings(Context context, Uri uri) {
+    public static AccountSettings getApiAccountSettings(Context context, Uri accountUri) {
         AccountSettings settings = null;
 
-        Cursor cur = context.getContentResolver().query(uri, null, null, null, null);
+        Cursor cur = context.getContentResolver().query(accountUri, null, null, null, null);
         if (cur != null && cur.moveToFirst()) {
             settings = new AccountSettings();
 
@@ -1010,6 +1012,20 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         return settings;
+    }
+
+    public static Set<Long> getAllKeyIdsForApp(Context context, Uri uri) {
+        Set<Long> keyIds = new HashSet<Long>();
+
+        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            int keyIdColumn = cursor.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID);
+            while (cursor.moveToNext()) {
+                keyIds.add(cursor.getLong(keyIdColumn));
+            }
+        }
+
+        return keyIds;
     }
 
     public static byte[] getApiAppSignature(Context context, String packageName) {

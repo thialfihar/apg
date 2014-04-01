@@ -44,6 +44,7 @@ import org.thialfihar.android.apg.util.Log;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class OpenPgpService extends RemoteService {
 
@@ -278,7 +279,7 @@ public class OpenPgpService extends RemoteService {
     }
 
     private Intent decryptAndVerifyImpl(Intent data, ParcelFileDescriptor input,
-                                        ParcelFileDescriptor output, AccountSettings accSettings) {
+                                        ParcelFileDescriptor output, Set<Long> allowedKeyIds) {
         try {
             // Get Input- and OutputStream from ParcelFileDescriptor
             InputStream is = new ParcelFileDescriptor.AutoCloseInputStream(input);
@@ -295,7 +296,7 @@ public class OpenPgpService extends RemoteService {
                     new PgpDecryptVerify.Builder(this, inputData, os, new ProviderHelper(this));
                 builder.setAllowSymmetricDecryption(false)
                         // allow only the private key for this app for decryption
-                        .setEnforcedKeyId(accSettings.getKeyId())
+                        .setAllowedKeyIds(allowedKeyIds)
                         .setPassphrase(passphrase);
 
                 // TODO: currently does not support binary signed-only content
@@ -303,7 +304,7 @@ public class OpenPgpService extends RemoteService {
 
                 if (PgpDecryptVerifyResult.KEY_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
                     // get PendingIntent for passphrase input, add it to given params and return to client
-                    Intent passphraseBundle = getPassphraseBundleIntent(data, accSettings.getKeyId());
+                    Intent passphraseBundle = getPassphraseBundleIntent(data, decryptVerifyResult.getKeyIdPassphraseNeeded());
                     return passphraseBundle;
                 } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
                                 decryptVerifyResult.getStatus()) {
@@ -457,7 +458,10 @@ public class OpenPgpService extends RemoteService {
             } else if (OpenPgpApi.ACTION_SIGN_AND_ENCRYPT.equals(action)) {
                 return encryptAndSignImpl(data, input, output, accSettings, true);
             } else if (OpenPgpApi.ACTION_DECRYPT_VERIFY.equals(action)) {
-                return decryptAndVerifyImpl(data, input, output, accSettings);
+                String currentPkg = getCurrentCallingPackage();
+                Set<Long> allowedKeyIds =
+                        ProviderHelper.getAllKeyIdsForApp(mContext, KeychainContract.ApiAccounts.buildBaseUri(currentPkg));
+                return decryptAndVerifyImpl(data, input, output, allowedKeyIds);
             } else if (OpenPgpApi.ACTION_GET_KEY.equals(action)) {
                 return getKeyImpl(data);
             } else if (OpenPgpApi.ACTION_GET_KEY_IDS.equals(action)) {
