@@ -72,7 +72,6 @@ import java.util.regex.Matcher;
 public class DecryptActivity extends DrawerActivity {
 
     /* Intents */
-    // without permission
     public static final String ACTION_DECRYPT = Constants.INTENT_PREFIX + "DECRYPT";
 
     /* EXTRA keys for input */
@@ -89,9 +88,7 @@ public class DecryptActivity extends DrawerActivity {
     private static final int PAGER_TAB_MESSAGE = 0;
     private static final int PAGER_TAB_FILE = 1;
 
-
     private void initView() {
-        // Pager
         mViewPager = (ViewPager) findViewById(R.id.decrypt_pager);
         mPagerTabStrip = (PagerTabStrip) findViewById(R.id.decrypt_pager_tab_strip);
 
