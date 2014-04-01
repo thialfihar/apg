@@ -119,15 +119,13 @@ public class DeleteKeyDialogFragment extends DialogFragment {
             }
 
             String userId = ProviderHelper.getUserId(activity, dataUri);
-            // Hide the Checkbox and TextView since this is a single selection, user will be
-            // notified through message
+            // Hide the Checkbox and TextView since this is a single selection,
+            // user will be notified thru message
             mDeleteSecretKeyView.setVisibility(View.GONE);
             // Set message depending on which key it is.
             mMainMessage.setText(getString(keyType == Id.type.secret_key ?
-                        R.string.secret_key_deletion_confirmation
-                        : R.string.public_key_deletetion_confirmation, userId));
-
-
+                    R.string.secret_key_deletion_confirmation :
+                    R.string.public_key_deletetion_confirmation, userId));
         } else {
             mDeleteSecretKeyView.setVisibility(View.VISIBLE);
             mMainMessage.setText(R.string.key_deletion_confirmation_multi);
@@ -184,8 +182,10 @@ public class DeleteKeyDialogFragment extends DialogFragment {
                     }
 
                     //Check if the selected rows have actually been deleted
-                    cursor = activity.getContentResolver().query(queryUri, projection, selection, null, null);
-                    if (cursor == null || cursor.getCount() == 0 || !mCheckDeleteSecret.isChecked()) {
+                    cursor = activity.getContentResolver().query(
+                                queryUri, projection, selection, null, null);
+                    if (cursor == null || cursor.getCount() == 0 ||
+                        !mCheckDeleteSecret.isChecked()) {
                         isSuccessfullyDeleted = true;
                     }
                 } finally {
