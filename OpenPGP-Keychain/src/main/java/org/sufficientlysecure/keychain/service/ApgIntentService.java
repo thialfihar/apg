@@ -26,6 +26,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 
 import org.spongycastle.bcpg.sig.KeyFlags;
+import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKey;
@@ -126,6 +127,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String ENCRYPT_OUTPUT_FILE = "output_file";
     public static final String ENCRYPT_PROVIDER_URI = "provider_uri";
     public static final String ENCRYPT_SYMMETRIC_PASSPHRASE = "passphrase";
+    public static final String ENCRYPT_FOR_PGP_MIME = "for_pgp_mime";
 
     // decrypt/verify
     public static final String DECRYPT_CIPHERTEXT_BYTES = "ciphertext_bytes";
@@ -180,6 +182,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String RESULT_ENCRYPTED_STRING = "encrypted_message";
     public static final String RESULT_BYTES = "encrypted_data";
     public static final String RESULT_URI = "result_uri";
+    public static final String RESULT_MICALG = "result_micalg";
 
     // decrypt/verify
     public static final String RESULT_DECRYPTED_BYTES = "decrypted_data";
@@ -254,6 +257,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 long encryptionKeyIds[] = data.getLongArray(ENCRYPT_ENCRYPTION_KEYS_IDS);
                 int compressionId = data.getInt(ENCRYPT_COMPRESSION_ID);
                 boolean generateSignature = data.getBoolean(ENCRYPT_GENERATE_SIGNATURE);
+                boolean forPgpMime = data.getBoolean(ENCRYPT_FOR_PGP_MIME);
+
                 InputStream inStream;
                 long inLength;
                 InputData inputData;
@@ -320,18 +325,30 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 }
 
+                Bundle resultData = new Bundle();
+
                 /* Operation */
                 PgpSignEncrypt.Builder builder =
                     new PgpSignEncrypt.Builder(this, inputData, outStream, new ProviderHelper(this));
                 builder.setProgressable(this);
+
+                int hashAlgorithm = Preferences.getPreferences(this).getDefaultHashAlgorithm();
+                if (forPgpMime) {
+                    String micalg = PgpHelper.getHashAlgorithmMicAlgName(hashAlgorithm);
+                    if (micalg == null) {
+                        // use SHA-1 if the default algorithm isn't acceptable for PGP/MIME
+                        hashAlgorithm = HashAlgorithmTags.SHA1;
+                        micalg = PgpHelper.getHashAlgorithmMicAlgName(hashAlgorithm);
+                    }
+                    resultData.putString(RESULT_MICALG, micalg);
+                }
 
                 if (generateSignature) {
                     Log.d(Constants.TAG, "generating signature...");
                     builder.setEnableAsciiArmorOutput(useAsciiArmor)
                         .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
                         .setSignatureKeyId(signatureKeyId)
-                        .setSignatureHashAlgorithm(
-                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                        .setSignatureHashAlgorithm(hashAlgorithm)
                         .setSignaturePassphrase(
                             PassphraseCacheService.getCachedPassphrase(this, signatureKeyId));
 
@@ -346,8 +363,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                         .setEncryptionKeyIds(encryptionKeyIds)
                         .setSymmetricPassphrase(symmetricPassphrase)
                         .setSignatureKeyId(signatureKeyId)
-                        .setSignatureHashAlgorithm(
-                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                        .setSignatureHashAlgorithm(hashAlgorithm)
                         .setSignaturePassphrase(
                             PassphraseCacheService.getCachedPassphrase(this, signatureKeyId));
 
@@ -357,8 +373,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 outStream.close();
 
                 /* Output */
-
-                Bundle resultData = new Bundle();
 
                 switch (target) {
                     case TARGET_BYTES:

@@ -22,6 +22,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 import org.spongycastle.bcpg.ArmoredInputStream;
+import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedDataList;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKeyEncryptedData;
@@ -228,5 +229,14 @@ public class PgpHelper {
         }
         raf.close();
         file.delete();
+    }
+
+    public static String getHashAlgorithmMicAlgName(int hashAlgorithm) {
+        switch (hashAlgorithm) {
+            case HashAlgorithmTags.MD5: return "pgp-md5";
+            case HashAlgorithmTags.SHA1: return "pgp-sha1";
+            case HashAlgorithmTags.RIPEMD160: return "pgp-ripemd160";
+            default: return null;
+        }
     }
 }
