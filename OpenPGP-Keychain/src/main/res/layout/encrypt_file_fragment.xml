@@ -37,7 +37,7 @@
             bootstrapbutton:bb_type="default" />
     </LinearLayout>
 
-    <org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout
+    <org.thialfihar.android.apg.ui.widget.FoldableLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         custom:foldedLabel="@string/btn_encryption_advanced_settings_show"
@@ -47,7 +47,7 @@
 
         <include layout="@layout/encrypt_content_adv_settings" />
 
-    </org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout>
+    </org.thialfihar.android.apg.ui.widget.FoldableLinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

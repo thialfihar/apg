@@ -56,6 +56,7 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.adapter.PagerTabStripAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -84,6 +85,10 @@ public class DecryptActivity extends DrawerActivity {
     Bundle mMessageFragmentBundle = new Bundle();
     Bundle mFileFragmentBundle = new Bundle();
     int mSwitchToTab = PAGER_TAB_MESSAGE;
+
+    private boolean mLegacyMode = false;
+    private boolean mReturnResult = false;
+    private boolean mDecryptImmediately = false;
 
     private static final int PAGER_TAB_MESSAGE = 0;
     private static final int PAGER_TAB_FILE = 1;
@@ -171,15 +176,17 @@ public class DecryptActivity extends DrawerActivity {
                 textData = matcher.group(1);
                 // replace non breakable spaces
                 textData = textData.replaceAll("\\xa0", " ");
-                mMessage.setText(textData);
+                mMessageFragmentBundle.putString(DecryptMessageFragment.ARG_CIPHERTEXT, textData);
+                mSwitchToTab = PAGER_TAB_MESSAGE;
             } else {
-                matcher = PgpHelper.PGP_SIGNED_MESSAGE.matcher(textData);
+                matcher = PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(textData);
                 if (matcher.matches()) {
                     Log.d(Constants.TAG, "PGP_SIGNED_MESSAGE matched");
                     textData = matcher.group(1);
                     // replace non breakable spaces
                     textData = textData.replaceAll("\\xa0", " ");
-                    mMessage.setText(textData);
+                    mMessageFragmentBundle.putString(DecryptMessageFragment.ARG_CIPHERTEXT, textData);
+                    mSwitchToTab = PAGER_TAB_MESSAGE;
                 } else {
                     Log.d(Constants.TAG, "Nothing matched!");
                 }

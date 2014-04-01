@@ -38,8 +38,8 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -163,14 +163,14 @@ public class EncryptMessageFragment extends Fragment {
 
     private void encryptStart(final boolean toClipboard) {
         // Send all information needed to service to edit key in other thread
-        Intent intent = new Intent(getActivity(), KeychainIntentService.class);
+        Intent intent = new Intent(getActivity(), ApgIntentService.class);
 
-        intent.setAction(KeychainIntentService.ACTION_ENCRYPT_SIGN);
+        intent.setAction(ApgIntentService.ACTION_ENCRYPT_SIGN);
 
         // fill values for this action
         Bundle data = new Bundle();
 
-        data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_BYTES);
+        data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_BYTES);
 
         String message = mMessage.getText().toString();
 
@@ -180,10 +180,10 @@ public class EncryptMessageFragment extends Fragment {
             if (passphrase.length() == 0) {
                 passphrase = null;
             }
-            data.putString(KeychainIntentService.ENCRYPT_SYMMETRIC_PASSPHRASE, passphrase);
+            data.putString(ApgIntentService.ENCRYPT_SYMMETRIC_PASSPHRASE, passphrase);
         } else {
-            data.putLong(KeychainIntentService.ENCRYPT_SIGNATURE_KEY_ID, mEncryptInterface.getSignatureKey());
-            data.putLongArray(KeychainIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS, mEncryptInterface.getEncryptionKeys());
+            data.putLong(ApgIntentService.ENCRYPT_SIGNATURE_KEY_ID, mEncryptInterface.getSignatureKey());
+            data.putLongArray(ApgIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS, mEncryptInterface.getEncryptionKeys());
 
             boolean signOnly = (mEncryptInterface.getEncryptionKeys() == null
                     || mEncryptInterface.getEncryptionKeys().length == 0);
@@ -192,28 +192,28 @@ public class EncryptMessageFragment extends Fragment {
             }
         }
 
-        data.putByteArray(KeychainIntentService.ENCRYPT_MESSAGE_BYTES, message.getBytes());
+        data.putByteArray(ApgIntentService.ENCRYPT_MESSAGE_BYTES, message.getBytes());
 
-        data.putBoolean(KeychainIntentService.ENCRYPT_USE_ASCII_ARMOR, true);
+        data.putBoolean(ApgIntentService.ENCRYPT_USE_ASCII_ARMOR, true);
 
         int compressionId = Preferences.getPreferences(getActivity()).getDefaultMessageCompression();
-        data.putInt(KeychainIntentService.ENCRYPT_COMPRESSION_ID, compressionId);
-//        data.putBoolean(KeychainIntentService.ENCRYPT_GENERATE_SIGNATURE, mGenerateSignature);
+        data.putInt(ApgIntentService.ENCRYPT_COMPRESSION_ID, compressionId);
+//        data.putBoolean(ApgIntentService.ENCRYPT_GENERATE_SIGNATURE, mGenerateSignature);
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
-        // Message is received after encrypting is done in KeychainIntentService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(getActivity(),
+        // Message is received after encrypting is done in ApgIntentService
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(getActivity(),
                 getString(R.string.progress_encrypting), ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
-                // handle messages by standard KeychainIntentServiceHandler first
+                // handle messages by standard ApgIntentServiceHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get returned data bundle
                     Bundle data = message.getData();
 
-                    String output = new String(data.getByteArray(KeychainIntentService.RESULT_BYTES));
+                    String output = new String(data.getByteArray(ApgIntentService.RESULT_BYTES));
                     Log.d(Constants.TAG, "output: " + output);
 
                     if (toClipboard) {
@@ -238,7 +238,7 @@ public class EncryptMessageFragment extends Fragment {
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(saveHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
         saveHandler.showProgressDialog(getActivity());

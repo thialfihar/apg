@@ -34,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
+import org.spongycastle.openpgp.PGPKeyFlags;
+
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Key;
@@ -45,6 +47,8 @@ import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
 import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
 import org.thialfihar.android.apg.util.Choice;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class SectionView extends LinearLayout implements OnClickListener, EditorListener, Editor {
@@ -60,7 +64,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     private boolean mCanBeEdited = true;
     private boolean oldItemDeleted = false;
     private ArrayList<String> mDeletedIDs = new ArrayList<String>();
-    private ArrayList<PGPSecretKey> mDeletedKeys = new ArrayList<PGPSecretKey>();
+    private ArrayList<Key> mDeletedKeys = new ArrayList<Key>();
 
     private ActionBarActivity mActivity;
 
@@ -137,7 +141,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         oldItemDeleted |= !wasNewItem;
         if (oldItemDeleted) {
             if (mType == Id.type.user_id)
-                mDeletedIDs.add(((UserIdEditor)editor).getOriginalID());
+                mDeletedIDs.add(((UserIdEditor)editor).getOriginalId());
             else if (mType == Id.type.key)
                 mDeletedKeys.add(((KeyEditor)editor).getValue());
 
@@ -168,7 +172,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             Editor editor = (Editor) mEditors.getChildAt(i);
             ret |= editor.needsSaving();
             if (mType == Id.type.user_id)
-                ret |= ((UserIdEditor)editor).primarySwapped();
+                ret |= true; // todo: be smarter about this... for now always true
         }
         return ret;
     }
@@ -179,7 +183,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             Editor editor = (Editor) mEditors.getChildAt(i);
             if (mType == Id.type.user_id)
-                ret |= ((UserIdEditor)editor).primarySwapped();
+                ret |= true; // todo: fix this
         }
         return ret;
     }
@@ -191,24 +195,21 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             Editor editor = (Editor) mEditors.getChildAt(i);
             if (mType == Id.type.user_id) {
-                if(((UserIdEditor)editor).getIsOriginallyMainUserID()) {
+                /*if(((UserIdEditor)editor).getIsOriginallyMainUserID()) {
                     return ((UserIdEditor)editor).getOriginalID();
-                }
+                }*/
+                // todo: this isn't right, it might be gone, how to get the user id?
             }
         }
         return null;
     }
 
-    public ArrayList<String> getOriginalIDs()
-    {
+    public ArrayList<String> getOriginalIDs() {
         ArrayList<String> orig = new ArrayList<String>();
         if (mType == Id.type.user_id) {
             for (int i = 0; i < mEditors.getChildCount(); ++i) {
                 UserIdEditor editor = (UserIdEditor) mEditors.getChildAt(i);
-                if (editor.isMainUserId())
-                    orig.add(0, editor.getOriginalID());
-                else
-                    orig.add(editor.getOriginalID());
+                orig.add(editor.getOriginalId());
             }
             return orig;
         } else {
@@ -221,7 +222,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         return mDeletedIDs;
     }
 
-    public ArrayList<PGPSecretKey> getDeletedKeys()
+    public ArrayList<Key> getDeletedKeys()
     {
         return mDeletedKeys;
     }
@@ -401,8 +402,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         view.setEditorListener(SectionView.this);
         boolean isMasterKey = (mEditors.getChildCount() == 0);
         int usage = 0;
-        if (mEditors.getChildCount() == 0)
+        if (mEditors.getChildCount() == 0) {
             usage = PGPKeyFlags.CAN_CERTIFY;
+        }
         view.setValue(newKey, isMasterKey, usage, true);
         view.setValue(newKey, newKey.isMasterKey(), usage, true);
         mEditors.addView(view);

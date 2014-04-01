@@ -37,8 +37,8 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.regex.Matcher;
@@ -115,37 +115,37 @@ public class DecryptMessageFragment extends DecryptFragment {
         Log.d(Constants.TAG, "decryptStart");
 
         // Send all information needed to service to decrypt in other thread
-        Intent intent = new Intent(getActivity(), KeychainIntentService.class);
+        Intent intent = new Intent(getActivity(), ApgIntentService.class);
 
         // fill values for this action
         Bundle data = new Bundle();
 
-        intent.setAction(KeychainIntentService.ACTION_DECRYPT_VERIFY);
+        intent.setAction(ApgIntentService.ACTION_DECRYPT_VERIFY);
 
         // data
-        data.putInt(KeychainIntentService.TARGET, KeychainIntentService.TARGET_BYTES);
+        data.putInt(ApgIntentService.TARGET, ApgIntentService.TARGET_BYTES);
         String message = mMessage.getText().toString();
-        data.putByteArray(KeychainIntentService.DECRYPT_CIPHERTEXT_BYTES, message.getBytes());
-        data.putString(KeychainIntentService.DECRYPT_PASSPHRASE, passphrase);
+        data.putByteArray(ApgIntentService.DECRYPT_CIPHERTEXT_BYTES, message.getBytes());
+        data.putString(ApgIntentService.DECRYPT_PASSPHRASE, passphrase);
 
         // TODO
-        data.putBoolean(KeychainIntentService.DECRYPT_ASSUME_SYMMETRIC, false);
+        data.putBoolean(ApgIntentService.DECRYPT_ASSUME_SYMMETRIC, false);
 
-        intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+        intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
-        // Message is received after encrypting is done in KeychainIntentService
-        KeychainIntentServiceHandler saveHandler = new KeychainIntentServiceHandler(getActivity(),
+        // Message is received after encrypting is done in ApgIntentService
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(getActivity(),
                 getString(R.string.progress_decrypting), ProgressDialog.STYLE_HORIZONTAL) {
             public void handleMessage(Message message) {
-                // handle messages by standard KeychainIntentServiceHandler first
+                // handle messages by standard ApgIntentServiceHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     // get returned data bundle
                     Bundle returnData = message.getData();
 
                     PgpDecryptVerifyResult decryptVerifyResult =
-                            returnData.getParcelable(KeychainIntentService.RESULT_DECRYPT_VERIFY_RESULT);
+                            returnData.getParcelable(ApgIntentService.RESULT_DECRYPT_VERIFY_RESULT);
 
                     if (PgpDecryptVerifyResult.KEY_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
                         showPassphraseDialog(decryptVerifyResult.getKeyIdPassphraseNeeded());
@@ -154,7 +154,7 @@ public class DecryptMessageFragment extends DecryptFragment {
                                 AppMsg.STYLE_INFO).show();
 
                         byte[] decryptedMessage = returnData
-                                .getByteArray(KeychainIntentService.RESULT_DECRYPTED_BYTES);
+                                .getByteArray(ApgIntentService.RESULT_DECRYPTED_BYTES);
                         mMessage.setText(new String(decryptedMessage));
                         mMessage.setHorizontallyScrolling(false);
 
@@ -169,7 +169,7 @@ public class DecryptMessageFragment extends DecryptFragment {
 
         // Create a new Messenger for the communication back
         Messenger messenger = new Messenger(saveHandler);
-        intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+        intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
         // show progress dialog
         saveHandler.showProgressDialog(getActivity());

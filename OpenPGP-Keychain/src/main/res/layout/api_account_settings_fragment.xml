@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/api_account_settings_select_key_fragment"
-        android:name="org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment"
+        android:name="org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/select_secret_key_layout_fragment" />
@@ -56,7 +56,7 @@
         bootstrapbutton:bb_size="default"
         bootstrapbutton:bb_type="default" />
 
-    <org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout
+    <org.thialfihar.android.apg.ui.widget.FoldableLinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         custom:foldedLabel="@string/api_settings_show_advanced"
@@ -97,6 +97,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout>
+    </org.thialfihar.android.apg.ui.widget.FoldableLinearLayout>
 
 </LinearLayout>

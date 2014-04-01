@@ -58,6 +58,7 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.adapter.PagerTabStripAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -250,14 +251,10 @@ public class EncryptActivity extends DrawerActivity implements
             mLegacyMode = true;
             encryptionKeyIds = extras.getLongArray("encryptionKeyIds");
             signatureKeyId = extras.getLong("signatureKeyId");
-            preselectKeys(signatureKeyId, encryptionKeyIds);
-            mMessage.setText(textData);
-            mSource.setInAnimation(null);
-            mSource.setOutAnimation(null);
-            while (mSource.getCurrentView().getId() != R.id.sourceMessage) {
-                mSource.showNext();
-            }
-            encryptToClipboardClicked();
+            mSigningKeyId = signatureKeyId;
+            mEncryptionKeyIds = encryptionKeyIds;
+            mMessageFragmentBundle.putString(EncryptMessageFragment.ARG_TEXT, textData);
+            mSwitchToContent = PAGER_CONTENT_MESSAGE;
         }
 
         // preselect keys given by intent

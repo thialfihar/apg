@@ -20,7 +20,7 @@
 
         <fragment
             android:id="@+id/api_account_settings_fragment"
-            android:name="org.sufficientlysecure.keychain.remote.ui.AccountSettingsFragment"
+            android:name="org.thialfihar.android.apg.remote.ui.AccountSettingsFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:layout="@layout/api_app_settings_fragment" />

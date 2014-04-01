@@ -44,12 +44,11 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     private BootstrapButton mDeleteButton;
     private String mOriginalID;
     private EditText mName;
-    private EditText mEmail;
     private String mOriginalName;
+    private AutoCompleteTextView mEmail;
     private String mOriginalEmail;
     private EditText mComment;
     private String mOriginalComment;
-    private boolean mOriginallyMainUserID;
     private boolean mIsNewId;
 
     // see http://www.regular-expressions.info/email.html
@@ -113,7 +112,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
 
         mName = (EditText) findViewById(R.id.name);
         mName.addTextChangedListener(mTextWatcher);
-        mEmail = (EditText) findViewById(R.id.email);
+        mEmail = (AutoCompleteTextView) findViewById(R.id.email);
         mEmail.addTextChangedListener(mTextWatcher);
         mComment = (EditText) findViewById(R.id.comment);
         mComment.addTextChangedListener(mTextWatcher);
@@ -154,7 +153,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         super.onFinishInflate();
     }
 
-    public void setValue(String userId, boolean isMainID, boolean isNewId) {
+    public void setValue(String userId, boolean isMainId, boolean isNewId) {
 
         mName.setText("");
         mOriginalName = "";
@@ -165,7 +164,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mIsNewId = isNewId;
         mOriginalID = userId;
 
-        String[] result = PgpKeyHelper.splitUserId(userId);
+        String[] result = Utils.splitUserId(userId);
         if (result[0] != null) {
             mName.setText(result[0]);
             mOriginalName = result[0];
@@ -178,9 +177,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
             mComment.setText(result[2]);
             mOriginalComment = result[2];
         }
-
-        mOriginallyMainUserID = isMainID;
-        setIsMainUserId(isMainID);
     }
 
     public String getValue() {
@@ -211,22 +207,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
             if (mEditorListener != null) {
                 mEditorListener.onDeleted(this, mIsNewId);
             }
-            if (wasMainUserId && parent.getChildCount() > 0) {
-                UserIdEditor editor = (UserIdEditor) parent.getChildAt(0);
-                editor.setIsMainUserId(true);
-            }
-        } else if (v == mIsMainUserId) {
-            for (int i = 0; i < parent.getChildCount(); ++i) {
-                UserIdEditor editor = (UserIdEditor) parent.getChildAt(i);
-                if (editor == this) {
-                    editor.setIsMainUserId(true);
-                } else {
-                    editor.setIsMainUserId(false);
-                }
-            }
-            if (mEditorListener != null) {
-                mEditorListener.onEdited();
-            }
         }
     }
 
@@ -244,18 +224,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         return retval;
     }
 
-    public  boolean getIsOriginallyMainUserID()
-    {
-        return mOriginallyMainUserID;
-    }
-
-    public boolean primarySwapped()
-    {
-        return (mOriginallyMainUserID != isMainUserId());
-    }
-
-    public String getOriginalID()
-    {
+    public String getOriginalId() {
         return mOriginalID;
     }
 }

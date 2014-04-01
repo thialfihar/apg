@@ -51,6 +51,7 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract;
@@ -58,9 +59,12 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.SetPassphraseDialogFragment;
+import org.thialfihar.android.apg.ui.widget.Editor;
+import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
 import org.thialfihar.android.apg.ui.widget.KeyEditor;
 import org.thialfihar.android.apg.ui.widget.SectionView;
 import org.thialfihar.android.apg.ui.widget.UserIdEditor;
@@ -68,6 +72,7 @@ import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Vector;
 
 public class EditKeyActivity extends ActionBarActivity implements EditorListener {
@@ -234,12 +239,11 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                                 // get new key from data bundle returned from service
                                 Bundle data = message.getData();
 
-                                ArrayList<PGPSecretKey> newKeys =
-                                        PgpConversionHelper.BytesToPGPSecretKeyList(data
-                                                .getByteArray(KeychainIntentService.RESULT_NEW_KEY));
+                                ArrayList<Key> newKeys = (ArrayList<Key>)
+                                    data.getSerializable(ApgIntentService.RESULT_NEW_KEY);
 
                                 ArrayList<Integer> keyUsageFlags = data.getIntegerArrayList(
-                                        KeychainIntentService.RESULT_KEY_USAGES);
+                                        ApgIntentService.RESULT_KEY_USAGES);
 
                                 if (newKeys.size() == keyUsageFlags.size()) {
                                     for (int i = 0; i < newKeys.size(); ++i) {
@@ -609,8 +613,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
             // fill values for this action
             Bundle data = new Bundle();
-            data.putBoolean(KeychainIntentService.SAVE_KEYRING_CAN_SIGN, masterCanSign);
-            data.putParcelable(KeychainIntentService.SAVE_KEYRING_PARCEL, saveParams);
+            data.putBoolean(ApgIntentService.SAVE_KEYRING_CAN_SIGN, mMasterCanSign);
+            data.putParcelable(ApgIntentService.SAVE_KEYRING_PARCEL, saveParams);
 
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 

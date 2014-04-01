@@ -279,13 +279,14 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
                     ((usage & KeyFlags.ENCRYPT_STORAGE) == KeyFlags.ENCRYPT_STORAGE));
             mChkAuthenticate.setChecked((usage & KeyFlags.AUTHENTICATION) == KeyFlags.AUTHENTICATION);
         } else {
-            mUsage = PgpKeyHelper.getKeyUsage(key);
+            mUsage = key.getKeyUsage();
             mOriginalUsage = mUsage;
-            if (key.isMasterKey())
-                mChkCertify.setChecked(PgpKeyHelper.isCertificationKey(key));
-            mChkSign.setChecked(PgpKeyHelper.isSigningKey(key));
-            mChkEncrypt.setChecked(PgpKeyHelper.isEncryptionKey(key));
-            mChkAuthenticate.setChecked(PgpKeyHelper.isAuthenticationKey(key));
+            if (key.isMasterKey()) {
+                mChkCertify.setChecked(key.isCertificationKey());
+            }
+            mChkSign.setChecked(key.isSigningKey());
+            mChkEncrypt.setChecked(key.isEncryptionKey());
+            mChkAuthenticate.setChecked(key.isAuthenticationKey());
         }
 
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));

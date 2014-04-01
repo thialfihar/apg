@@ -253,6 +253,84 @@ public class Key implements Serializable {
         return false;
     }
 
+    public boolean isCertificationKey() {
+        if (mSecretKey.isPrivateKeyEmpty()) {
+            return false;
+        }
+
+        if (mPublicKey.getVersion() <= 3) {
+            return true;
+        }
+
+        for (PGPSignature sig : new IterableIterator<PGPSignature>(mPublicKey.getSignatures())) {
+            if (mPublicKey.isMasterKey() && sig.getKeyID() != mPublicKey.getKeyID()) {
+                continue;
+            }
+            PGPSignatureSubpacketVector hashed = sig.getHashedSubPackets();
+
+            if (hashed != null && (hashed.getKeyFlags() & KeyFlags.CERTIFY_OTHER) != 0) {
+                return true;
+            }
+
+            PGPSignatureSubpacketVector unhashed = sig.getUnhashedSubPackets();
+
+            if (unhashed != null && (unhashed.getKeyFlags() & KeyFlags.CERTIFY_OTHER) != 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isAuthenticationKey() {
+        if (mPublicKey.getVersion() <= 3) {
+            return true;
+        }
+
+        for (PGPSignature sig : new IterableIterator<PGPSignature>(mPublicKey.getSignatures())) {
+            if (mPublicKey.isMasterKey() && sig.getKeyID() != mPublicKey.getKeyID()) {
+                continue;
+            }
+            PGPSignatureSubpacketVector hashed = sig.getHashedSubPackets();
+
+            if (hashed != null && (hashed.getKeyFlags() & KeyFlags.AUTHENTICATION) != 0) {
+                return true;
+            }
+
+            PGPSignatureSubpacketVector unhashed = sig.getUnhashedSubPackets();
+
+            if (unhashed != null && (unhashed.getKeyFlags() & KeyFlags.AUTHENTICATION) != 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int getKeyUsage() {
+        if (mPublicKey.getVersion() <= 3) {
+            return 0;
+        }
+
+        int usage = 0;
+        for (PGPSignature sig : new IterableIterator<PGPSignature>(mPublicKey.getSignatures())) {
+            if (mPublicKey.isMasterKey() && sig.getKeyID() != mPublicKey.getKeyID()) {
+                continue;
+            }
+
+            PGPSignatureSubpacketVector hashed = sig.getHashedSubPackets();
+            if (hashed != null) {
+                usage |= hashed.getKeyFlags();
+            }
+
+            PGPSignatureSubpacketVector unhashed = sig.getUnhashedSubPackets();
+            if (unhashed != null) {
+                usage |= unhashed.getKeyFlags();
+            }
+        }
+        return usage;
+    }
+
     public int getAlgorithm() {
         return mPublicKey.getAlgorithm();
     }
