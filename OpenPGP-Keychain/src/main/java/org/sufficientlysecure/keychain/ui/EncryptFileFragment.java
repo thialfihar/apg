@@ -255,7 +255,7 @@ public class EncryptFileFragment extends Fragment {
 
             if (mEncryptInterface.getSignatureKey() != 0 &&
                 PassphraseCacheService.getCachedPassphrase(getActivity(),
-                        mEncryptInterface.getSignatureKey()) == null) {
+                    mEncryptInterface.getSignatureKey()) == null) {
                 showPassphraseDialog();
 
                 return;
@@ -285,9 +285,9 @@ public class EncryptFileFragment extends Fragment {
             data.putString(ApgIntentService.ENCRYPT_SYMMETRIC_PASSPHRASE, passphrase);
         } else {
             data.putLong(ApgIntentService.ENCRYPT_SIGNATURE_KEY_ID,
-                    mEncryptInterface.getSignatureKey());
+                mEncryptInterface.getSignatureKey());
             data.putLongArray(ApgIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS,
-                    mEncryptInterface.getEncryptionKeys());
+                mEncryptInterface.getEncryptionKeys());
         }
 
         Log.d(Constants.TAG, "mInputFilename=" + mInputFilename + ", mOutputFilename="

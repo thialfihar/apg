@@ -474,10 +474,8 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Build ContentProviderOperation to add PGPPublicKey to database corresponding to a keyRing
      */
-    private static ContentProviderOperation buildPublicKeyOperations(Context context,
-                                                                     long keyRingRowId,
-                                                                     PGPPublicKey key,
-                                                                     int rank) throws IOException {
+    private static ContentProviderOperation buildPublicKeyOperations(
+        Context context, long keyRingRowId, PGPPublicKey key, int rank) throws IOException {
         ContentValues values = new ContentValues();
         values.put(Keys.KEY_ID, key.getKeyID());
         values.put(Keys.IS_MASTER_KEY, key.isMasterKey());
@@ -504,9 +502,8 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Build ContentProviderOperation to add PublicUserIds to database corresponding to a keyRing
      */
-    private static ContentProviderOperation buildPublicUserIdOperations(Context context,
-                                                                        long keyRingRowId,
-                                                                        String userId, int rank) {
+    private static ContentProviderOperation buildPublicUserIdOperations(
+        Context context, long keyRingRowId, String userId, int rank) {
         ContentValues values = new ContentValues();
         values.put(UserIds.KEY_RING_ROW_ID, keyRingRowId);
         values.put(UserIds.USER_ID, userId);
@@ -520,10 +517,8 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Build ContentProviderOperation to add PGPSecretKey to database corresponding to a keyRing
      */
-    private static ContentProviderOperation buildSecretKeyOperations(Context context,
-                                                                     long keyRingRowId,
-                                                                     PGPSecretKey key,
-                                                                     int rank) throws IOException {
+    private static ContentProviderOperation buildSecretKeyOperations(
+        Context context, long keyRingRowId, PGPSecretKey key, int rank) throws IOException {
         ContentValues values = new ContentValues();
 
         boolean hasPrivate = true;
@@ -559,9 +554,8 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Build ContentProviderOperation to add SecretUserIds to database corresponding to a keyRing
      */
-    private static ContentProviderOperation buildSecretUserIdOperations(Context context,
-                                                                        long keyRingRowId,
-                                                                        String userId, int rank) {
+    private static ContentProviderOperation buildSecretUserIdOperations(
+        Context context, long keyRingRowId, String userId, int rank) {
         ContentValues values = new ContentValues();
         values.put(UserIds.KEY_RING_ROW_ID, keyRingRowId);
         values.put(UserIds.USER_ID, userId);

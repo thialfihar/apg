@@ -304,7 +304,8 @@ public class OpenPgpService extends RemoteService {
 
                 if (PgpDecryptVerifyResult.KEY_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
                     // get PendingIntent for passphrase input, add it to given params and return to client
-                    Intent passphraseBundle = getPassphraseBundleIntent(data, decryptVerifyResult.getKeyIdPassphraseNeeded());
+                    Intent passphraseBundle =
+                        getPassphraseBundleIntent(data, decryptVerifyResult.getKeyIdPassphraseNeeded());
                     return passphraseBundle;
                 } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
                                 decryptVerifyResult.getStatus()) {
@@ -460,7 +461,8 @@ public class OpenPgpService extends RemoteService {
             } else if (OpenPgpApi.ACTION_DECRYPT_VERIFY.equals(action)) {
                 String currentPkg = getCurrentCallingPackage();
                 Set<Long> allowedKeyIds =
-                        ProviderHelper.getAllKeyIdsForApp(mContext, KeychainContract.ApiAccounts.buildBaseUri(currentPkg));
+                    ProviderHelper.getAllKeyIdsForApp(mContext,
+                        KeychainContract.ApiAccounts.buildBaseUri(currentPkg));
                 return decryptAndVerifyImpl(data, input, output, allowedKeyIds);
             } else if (OpenPgpApi.ACTION_GET_KEY.equals(action)) {
                 return getKeyImpl(data);

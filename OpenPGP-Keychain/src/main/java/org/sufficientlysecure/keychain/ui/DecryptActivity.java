@@ -81,10 +81,10 @@ public class DecryptActivity extends DrawerActivity {
         // Handle intent actions, maybe changes the bundles
         handleActions(getIntent());
 
-        mTabsAdapter.addTab(DecryptMessageFragment.class, mMessageFragmentBundle,
-                getString(R.string.label_message));
-        mTabsAdapter.addTab(DecryptFileFragment.class, mFileFragmentBundle,
-                getString(R.string.label_file));
+        mTabsAdapter.addTab(DecryptMessageFragment.class,
+            mMessageFragmentBundle, getString(R.string.label_message));
+        mTabsAdapter.addTab(DecryptFileFragment.class,
+            mFileFragmentBundle, getString(R.string.label_file));
         mViewPager.setCurrentItem(mSwitchToTab);
     }
 

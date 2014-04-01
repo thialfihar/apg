@@ -157,16 +157,16 @@ public class EncryptActivity extends DrawerActivity implements
         // Handle intent actions
         handleActions(getIntent());
 
-        mTabsAdapterMode.addTab(EncryptAsymmetricFragment.class, mAsymmetricFragmentBundle,
-                getString(R.string.label_asymmetric));
-        mTabsAdapterMode.addTab(EncryptSymmetricFragment.class, mSymmetricFragmentBundle,
-                getString(R.string.label_symmetric));
+        mTabsAdapterMode.addTab(EncryptAsymmetricFragment.class,
+            mAsymmetricFragmentBundle, getString(R.string.label_asymmetric));
+        mTabsAdapterMode.addTab(EncryptSymmetricFragment.class,
+            mSymmetricFragmentBundle, getString(R.string.label_symmetric));
         mViewPagerMode.setCurrentItem(mSwitchToMode);
 
-        mTabsAdapterContent.addTab(EncryptMessageFragment.class, mMessageFragmentBundle,
-                getString(R.string.label_message));
-        mTabsAdapterContent.addTab(EncryptFileFragment.class, mFileFragmentBundle,
-                getString(R.string.label_file));
+        mTabsAdapterContent.addTab(EncryptMessageFragment.class,
+            mMessageFragmentBundle, getString(R.string.label_message));
+        mTabsAdapterContent.addTab(EncryptFileFragment.class,
+            mFileFragmentBundle, getString(R.string.label_file));
         mViewPagerContent.setCurrentItem(mSwitchToContent);
     }
 
@@ -230,9 +230,9 @@ public class EncryptActivity extends DrawerActivity implements
 
         // preselect keys given by intent
         mAsymmetricFragmentBundle.putLongArray(EncryptAsymmetricFragment.ARG_ENCRYPTION_KEY_IDS,
-                encryptionKeyIds);
+            encryptionKeyIds);
         mAsymmetricFragmentBundle.putLong(EncryptAsymmetricFragment.ARG_SIGNATURE_KEY_ID,
-                signatureKeyId);
+            signatureKeyId);
         mSwitchToMode = PAGER_MODE_ASYMMETRIC;
 
         /**
@@ -253,9 +253,10 @@ public class EncryptActivity extends DrawerActivity implements
                 mSwitchToContent = PAGER_CONTENT_FILE;
             } else {
                 Log.e(Constants.TAG,
-                        "Direct binary data without actual file in filesystem is not supported by " +
-                        "Intents. Please use the Remote Service API!");
-                Toast.makeText(this, R.string.error_only_files_are_supported, Toast.LENGTH_LONG).show();
+                        "Direct binary data without actual file in filesystem is not supported " +
+                        "by Intents. Please use the Remote Service API!");
+                Toast.makeText(this, R.string.error_only_files_are_supported, Toast.LENGTH_LONG)
+                        .show();
                 // end activity
                 finish();
             }

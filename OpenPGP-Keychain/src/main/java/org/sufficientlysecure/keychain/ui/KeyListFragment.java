@@ -214,7 +214,8 @@ public class KeyListFragment extends Fragment
                                         ProviderHelper.getSecretMasterKeyId(getActivity(), ids[i]);
                                 }
                             }
-                            ExportHelper mExportHelper = new ExportHelper((ActionBarActivity) getActivity());
+                            ExportHelper mExportHelper =
+                                new ExportHelper((ActionBarActivity) getActivity());
                             mExportHelper
                                     .showExportKeysDialog(masterKeyIds, Id.type.public_key,
                                             Constants.Path.APP_DIR_FILE_PUB,
