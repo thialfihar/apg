@@ -68,7 +68,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -123,6 +122,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String ENCRYPT_INPUT_FILE = "input_file";
     public static final String ENCRYPT_OUTPUT_FILE = "output_file";
     public static final String ENCRYPT_PROVIDER_URI = "provider_uri";
+    public static final String ENCRYPT_SYMMETRIC_PASSPHRASE = "passphrase";
 
     // decrypt/verify
     public static final String DECRYPT_CIPHERTEXT_BYTES = "ciphertext_bytes";
@@ -246,7 +246,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 int target = data.getInt(TARGET);
 
                 long secretKeyId = data.getLong(ENCRYPT_SECRET_KEY_ID);
-                String encryptionPassphrase = data.getString(GENERATE_KEY_SYMMETRIC_PASSPHRASE);
+                String symmetricPassphrase = data.getString(ENCRYPT_SYMMETRIC_PASSPHRASE);
 
                 boolean useAsciiArmor = data.getBoolean(ENCRYPT_USE_ASCII_ARMOR);
                 long encryptionKeyIds[] = data.getLongArray(ENCRYPT_ENCRYPTION_KEYS_IDS);
@@ -354,7 +354,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                             Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
                         .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
                         .setEncryptionKeyIds(encryptionKeyIds)
-                        .setEncryptionPassphrase(encryptionPassphrase)
+                        .setSymmetricPassphrase(symmetricPassphrase)
                         .setSignatureKeyId(secretKeyId)
                         .setSignatureHashAlgorithm(
                             Preferences.getPreferences(this).getDefaultHashAlgorithm())

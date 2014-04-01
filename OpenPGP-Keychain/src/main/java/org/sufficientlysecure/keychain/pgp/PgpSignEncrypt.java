@@ -66,7 +66,7 @@ public class PgpSignEncrypt {
     private boolean mEnableAsciiArmorOutput;
     private int mCompressionId;
     private long[] mEncryptionKeyIds;
-    private String mEncryptionPassphrase;
+    private String mSymmetricPassphrase;
     private int mSymmetricEncryptionAlgorithm;
     private long mSignatureKeyId;
     private int mSignatureHashAlgorithm;
@@ -84,7 +84,7 @@ public class PgpSignEncrypt {
         this.mEnableAsciiArmorOutput = builder.mEnableAsciiArmorOutput;
         this.mCompressionId = builder.mCompressionId;
         this.mEncryptionKeyIds = builder.mEncryptionKeyIds;
-        this.mEncryptionPassphrase = builder.mEncryptionPassphrase;
+        this.mSymmetricPassphrase = builder.mSymmetricPassphrase;
         this.mSymmetricEncryptionAlgorithm = builder.mSymmetricEncryptionAlgorithm;
         this.mSignatureKeyId = builder.mSignatureKeyId;
         this.mSignatureHashAlgorithm = builder.mSignatureHashAlgorithm;
@@ -104,7 +104,7 @@ public class PgpSignEncrypt {
         private boolean mEnableAsciiArmorOutput = false;
         private int mCompressionId = Id.choice.compression.none;
         private long[] mEncryptionKeyIds = null;
-        private String mEncryptionPassphrase = null;
+        private String mSymmetricPassphrase = null;
         private int mSymmetricEncryptionAlgorithm = 0;
         private long mSignatureKeyId = Id.key.none;
         private int mSignatureHashAlgorithm = 0;
@@ -139,8 +139,8 @@ public class PgpSignEncrypt {
             return this;
         }
 
-        public Builder setEncryptionPassphrase(String encryptionPassphrase) {
-            mEncryptionPassphrase = encryptionPassphrase;
+        public Builder setSymmetricPassphrase(String symmetricPassphrase) {
+            this.mSymmetricPassphrase = symmetricPassphrase;
             return this;
         }
 
@@ -201,8 +201,8 @@ public class PgpSignEncrypt {
             NoSuchAlgorithmException, SignatureException {
 
         boolean enableSignature = mSignatureKeyId != Id.key.none;
-        boolean enableEncryption = ((mEncryptionKeyIds != null && mEncryptionKeyIds.length != 0) ||
-                                        mEncryptionPassphrase != null);
+        boolean enableEncryption = ((mEncryptionKeyIds != null && mEncryptionKeyIds.length > 0)
+                || mSymmetricPassphrase != null);
         boolean enableCompression = (enableEncryption && mCompressionId != Id.choice.compression.none);
 
         Log.d(Constants.TAG, "enableSignature:" + enableSignature
@@ -265,12 +265,12 @@ public class PgpSignEncrypt {
 
             cPk = new PGPEncryptedDataGenerator(encryptorBuilder);
 
-            if (mEncryptionKeyIds == null || mEncryptionKeyIds.length == 0) {
+            if (mSymmetricPassphrase != null) {
                 // Symmetric encryption
                 Log.d(Constants.TAG, "mEncryptionKeyIds length is 0 -> symmetric encryption");
 
                 JcePBEKeyEncryptionMethodGenerator symmetricEncryptionGenerator =
-                        new JcePBEKeyEncryptionMethodGenerator(mEncryptionPassphrase.toCharArray());
+                        new JcePBEKeyEncryptionMethodGenerator(mSymmetricPassphrase.toCharArray());
                 cPk.addMethod(symmetricEncryptionGenerator);
             } else {
                 // Asymmetric encryption
