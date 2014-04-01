@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 public interface EncryptActivityInterface {
 

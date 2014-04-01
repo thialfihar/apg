@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -37,20 +37,20 @@ import android.widget.Spinner;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.FileHelper;
-import org.sufficientlysecure.keychain.helper.Preferences;
-import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
-import org.sufficientlysecure.keychain.service.KeychainIntentService;
-import org.sufficientlysecure.keychain.service.KeychainIntentServiceHandler;
-import org.sufficientlysecure.keychain.service.PassphraseCacheService;
-import org.sufficientlysecure.keychain.ui.dialog.DeleteFileDialogFragment;
-import org.sufficientlysecure.keychain.ui.dialog.FileDialogFragment;
-import org.sufficientlysecure.keychain.ui.dialog.PassphraseDialogFragment;
-import org.sufficientlysecure.keychain.util.Choice;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.FileHelper;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
+import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
+import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
+import org.thialfihar.android.apg.util.Choice;
+import org.thialfihar.android.apg.util.Log;
 
 import java.io.File;
 

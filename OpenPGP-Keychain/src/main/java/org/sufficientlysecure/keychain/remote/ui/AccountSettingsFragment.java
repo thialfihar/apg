@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.remote.ui;
+package org.thialfihar.android.apg.remote.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,12 +30,12 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.remote.AccountSettings;
-import org.sufficientlysecure.keychain.ui.EditKeyActivity;
-import org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment;
-import org.sufficientlysecure.keychain.ui.adapter.KeyValueSpinnerAdapter;
-import org.sufficientlysecure.keychain.util.AlgorithmNames;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.remote.AccountSettings;
+import org.thialfihar.android.apg.ui.EditKeyActivity;
+import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
+import org.thialfihar.android.apg.ui.adapter.KeyValueSpinnerAdapter;
+import org.thialfihar.android.apg.util.AlgorithmNames;
 
 public class AccountSettingsFragment extends Fragment implements
         SelectSecretKeyLayoutFragment.SelectSecretKeyCallback {

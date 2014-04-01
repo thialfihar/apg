@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 public class EncryptSymmetricFragment extends Fragment {
 

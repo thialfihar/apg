@@ -16,13 +16,13 @@
  */
 
 
-package org.sufficientlysecure.keychain.service;
+package org.thialfihar.android.apg.service;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.spongycastle.openpgp.PGPSecretKey;
-import org.sufficientlysecure.keychain.pgp.PgpConversionHelper;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;

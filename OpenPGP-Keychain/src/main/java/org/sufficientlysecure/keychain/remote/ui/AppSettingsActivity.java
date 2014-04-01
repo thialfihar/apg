@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.thialfihar.android.apg.service.remote;
+package org.thialfihar.android.apg.remote;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
