@@ -293,7 +293,7 @@ public class OpenPgpService extends RemoteService {
 
                 PgpDecryptVerify.Builder builder =
                     new PgpDecryptVerify.Builder(this, inputData, os, new ProviderHelper(this));
-                builder.setAssumeSymmetric(false)
+                builder.setAllowSymmetricDecryption(false)
                         // allow only the private key for this app for decryption
                         .setEnforcedKeyId(accSettings.getKeyId())
                         .setPassphrase(passphrase);

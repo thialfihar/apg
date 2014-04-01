@@ -124,7 +124,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
     // decrypt/verify
     public static final String DECRYPT_CIPHERTEXT_BYTES = "ciphertext_bytes";
-    public static final String DECRYPT_ASSUME_SYMMETRIC = "assume_symmetric";
     public static final String DECRYPT_PASSPHRASE = "passphrase";
 
     // save keyring
@@ -386,7 +385,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 int target = data.getInt(TARGET);
 
                 byte[] bytes = data.getByteArray(DECRYPT_CIPHERTEXT_BYTES);
-                boolean assumeSymmetricEncryption = data.getBoolean(DECRYPT_ASSUME_SYMMETRIC);
                 String passphrase = data.getString(DECRYPT_PASSPHRASE);
 
                 InputStream inStream;
@@ -467,7 +465,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     new PgpDecryptVerify.Builder(this, inputData, outStream, new ProviderHelper(this));
                 builder.setProgressable(this);
 
-                builder.setAssumeSymmetric(assumeSymmetricEncryption)
+                builder.setAllowSymmetricDecryption(true)
                         .setPassphrase(passphrase);
 
                 PgpDecryptVerifyResult decryptVerifyResult = builder.build().execute();

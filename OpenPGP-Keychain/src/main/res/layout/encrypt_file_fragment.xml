@@ -52,7 +52,7 @@
 
             <include layout="@layout/encrypt_content_adv_settings" />
 
-        </org.sufficientlysecure.keychain.ui.widget.FoldableLinearLayout>
+        </org.thialfihar.android.apg.ui.widget.FoldableLinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

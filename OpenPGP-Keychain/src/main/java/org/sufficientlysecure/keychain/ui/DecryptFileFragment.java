@@ -35,6 +35,7 @@ import com.devspark.appmsg.AppMsg;
 
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
@@ -202,6 +203,8 @@ public class DecryptFileFragment extends DecryptFragment {
 
                     if (PgpDecryptVerifyResult.KEY_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
                         showPassphraseDialog(decryptVerifyResult.getKeyIdPassphraseNeeded());
+                    } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
+                        showPassphraseDialog(Id.key.symmetric);
                     } else {
                         if (mDeleteAfter.isChecked()) {
                             // Create and show dialog to delete original file
