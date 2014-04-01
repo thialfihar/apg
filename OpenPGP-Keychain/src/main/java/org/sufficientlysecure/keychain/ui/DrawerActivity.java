@@ -231,7 +231,7 @@ public class DrawerActivity extends ActionBarActivity {
         // it will move to the selected item by itself (via drawer toggle listener)
         if (!mIsDrawerLocked) {
             mDrawerLayout.closeDrawer(mDrawerList);
-        // else move to the selected item yourself
+            // else move to the selected item yourself
         } else {
             callIntentForDrawerItem(mSelectedItem);
         }

@@ -146,6 +146,26 @@ public class CreateKeyDialogFragment extends DialogFragment {
                     }
                 });
 
-        return dialog.create();
+        final AlertDialog alertDialog = dialog.create();
+
+        final AdapterView.OnItemSelectedListener weakRsaListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final Choice selectedAlgorithm = (Choice) algorithm.getSelectedItem();
+                final int selectedKeySize = Integer.parseInt((String) keySize.getSelectedItem());
+                final boolean isWeakRsa = (selectedAlgorithm.getId() == Id.choice.algorithm.rsa &&
+                                            selectedKeySize <= 1024);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(!isWeakRsa);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+
+        keySize.setOnItemSelectedListener(weakRsaListener);
+        algorithm.setOnItemSelectedListener(weakRsaListener);
+
+        return alertDialog;
     }
 }

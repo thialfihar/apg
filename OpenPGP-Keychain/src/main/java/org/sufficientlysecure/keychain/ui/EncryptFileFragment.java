@@ -112,7 +112,7 @@ public class EncryptFileFragment extends Fragment {
         });
 
         mFileCompression = (Spinner) view.findViewById(R.id.fileCompression);
-        Choice[] choices = new Choice[]{
+        Choice[] choices = new Choice[] {
                 new Choice(Id.choice.compression.none, getString(R.string.choice_none) + " ("
                         + getString(R.string.compression_fast) + ")"),
                 new Choice(Id.choice.compression.zip, "ZIP ("

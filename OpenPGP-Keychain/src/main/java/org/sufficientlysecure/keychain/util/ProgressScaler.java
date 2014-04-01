@@ -38,7 +38,7 @@ public class ProgressScaler implements Progressable {
      * Set progressable by sending message to handler on UI thread
      */
     public void setProgress(String message, int progress, int max) {
-        mWrapped.setProgress(message, mFrom+ progress*(mTo-mFrom)/max, mMax);
+        mWrapped.setProgress(message, mFrom + progress * (mTo - mFrom) / max, mMax);
     }
 
     public void setProgress(int resourceId, int progress, int max) {
