@@ -214,6 +214,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                     ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(
                             this, getResources().getQuantityString(R.plurals.progress_generating, 1),
                             ProgressDialog.STYLE_HORIZONTAL, true,
+
                             new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {
@@ -285,7 +286,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             Key masterKey = keyRing.getMasterKey();
             long masterKeyId = masterKey.getKeyId();
 
-            mMasterCanSign = ProviderHelper.getSecretMasterKeyCanCertify(this, keyRingRowId);
+            mMasterCanSign = ProviderHelper.getMasterKeyCanCertify(this, mDataUri);
             finallyEdit(masterKeyId);
         }
     }
@@ -296,7 +297,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             @Override
             public void handleMessage(Message message) {
                 if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
-                    mCurrentPassPhrase = PassphraseCacheService.getCachedPassphrase(
+                    mCurrentPassphrase = PassphraseCacheService.getCachedPassphrase(
                             EditKeyActivity.this, masterKeyId);
                     finallySaveClicked();
                 }
@@ -345,11 +346,18 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             if (needsSaving()) {
                 Toast.makeText(this, R.string.error_save_first, Toast.LENGTH_LONG).show();
             } else {
-                mExportHelper.showExportKeysDialog(mDataUri, Id.type.secret_key, Constants.path.APP_DIR
-                        + "/secexport.asc");
+                long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
+                long[] ids = new long[]{masterKeyId};
+                mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC,
+                        null);
+                return true;
             }
             return true;
-        case R.id.menu_key_edit_delete: {
+
+        case R.id.menu_key_edit_delete:
+            long rowId= ProviderHelper.getRowId(this,mDataUri);
+            Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
+
             // Message is received after key is deleted
             Handler returnHandler = new Handler() {
                 @Override
@@ -358,11 +366,11 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                         setResult(RESULT_CANCELED);
                         finish();
                     }
-                };
-
-            mExportHelper.deleteKey(mDataUri, Id.type.secret_key, returnHandler);
+                }
+            };
+            mExportHelper.deleteKey(convertUri, returnHandler);
             return true;
-        }
+
         case R.id.menu_key_edit_save:
             saveClicked();
             return true;
@@ -530,9 +538,9 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     {
         if (mNoPassphrase != null) {
             if (mNoPassphrase.isChecked()) {
-                return mIsPassPhraseSet;
+                return mIsPassphraseSet;
             } else {
-                return (mNewPassPhrase != null && !mNewPassPhrase.equals(""));
+                return (mNewPassphrase != null && !mNewPassphrase.equals(""));
             }
         }else {
             return false;
@@ -548,14 +556,14 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 }
 
                 String passphrase;
-                if (mIsPassPhraseSet)
+                if (mIsPassphraseSet)
                     passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
                 else
                     passphrase = "";
                 if (passphrase == null) {
                     showPassphraseDialog(masterKeyId);
                 } else {
-                    mCurrentPassPhrase = passphrase;
+                    mCurrentPassphrase = passphrase;
                     finallySaveClicked();
                 }
             } catch (PgpGeneralException e) {
@@ -592,11 +600,12 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             saveParams.deletedKeys = mKeysView.getDeletedKeys();
             saveParams.keysExpiryDates = getKeysExpiryDates(mKeysView);
             saveParams.keysUsages = getKeysUsages(mKeysView);
-            saveParams.newPassPhrase = mNewPassPhrase;
-            saveParams.oldPassPhrase = mCurrentPassPhrase;
+            saveParams.newPassphrase = mNewPassphrase;
+            saveParams.oldPassphrase = mCurrentPassphrase;
             saveParams.newKeys = toPrimitiveArray(mKeysView.getNewKeysArray());
             saveParams.keys = getKeys(mKeysView);
             saveParams.originalPrimaryID = mUserIdsView.getOriginalPrimaryID();
+
 
             // fill values for this action
             Bundle data = new Bundle();
