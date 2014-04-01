@@ -31,6 +31,7 @@ public class SaveKeyringParcel implements Parcelable {
     public ArrayList<String> userIDs;
     public ArrayList<String> originalIDs;
     public ArrayList<String> deletedIDs;
+    public boolean[] newIDs;
     public boolean primaryIDChanged;
     public boolean[] moddedKeys;
     public ArrayList<Key> deletedKeys;
@@ -48,6 +49,7 @@ public class SaveKeyringParcel implements Parcelable {
         userIDs = (ArrayList<String>) source.readSerializable();
         originalIDs = (ArrayList<String>) source.readSerializable();
         deletedIDs = (ArrayList<String>) source.readSerializable();
+        newIDs = source.createBooleanArray();
         primaryIDChanged = source.readByte() != 0;
         moddedKeys = source.createBooleanArray();
         deletedKeys = (ArrayList<Key>) source.readSerializable();
@@ -65,6 +67,7 @@ public class SaveKeyringParcel implements Parcelable {
         destination.writeSerializable(userIDs); //might not be the best method to store.
         destination.writeSerializable(originalIDs);
         destination.writeSerializable(deletedIDs);
+        destination.writeBooleanArray(newIDs);
         destination.writeByte((byte) (primaryIDChanged ? 1 : 0));
         destination.writeBooleanArray(moddedKeys);
         destination.writeSerializable(deletedKeys);

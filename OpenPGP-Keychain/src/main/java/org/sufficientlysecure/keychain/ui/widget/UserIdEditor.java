@@ -226,4 +226,6 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     public String getOriginalId() {
         return mOriginalID;
     }
+
+    public boolean getIsNewID() { return mIsNewId; }
 }
