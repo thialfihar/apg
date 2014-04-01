@@ -689,13 +689,14 @@ public class ProviderHelper implements PgpKeyProvider {
      * Private helper method to get master key private empty status of keyring by its row id
      */
     public static boolean getMasterKeyCanCertify(Context context, Uri queryUri) {
-        String[] projection = new String[]{
+        String[] projection = new String[] {
                 KeyRings.MASTER_KEY_ID,
                 "(SELECT COUNT(sign_keys." + Keys._ID + ") FROM " + Tables.KEYS
                         + " AS sign_keys WHERE sign_keys." + Keys.KEY_RING_ROW_ID + " = "
                         + KeychainDatabase.Tables.KEY_RINGS + "." + KeyRings._ID
                         + " AND sign_keys." + Keys.CAN_CERTIFY + " = '1' AND " + Keys.IS_MASTER_KEY
-                        + " = 1) AS sign",};
+                        + " = 1) AS sign",
+        };
 
         ContentResolver cr = context.getContentResolver();
         Cursor cursor = cr.query(queryUri, projection, null, null, null);

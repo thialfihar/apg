@@ -16,22 +16,6 @@
 
 package org.thialfihar.android.apg.ui.widget;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-import java.util.Vector;
-
-import org.spongycastle.bcpg.sig.KeyFlags;
-import org.spongycastle.openpgp.PGPKeyFlags;
-import org.spongycastle.openpgp.PGPPublicKey;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.util.Choice;
-
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -52,7 +36,8 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.Id;
+import org.spongycastle.bcpg.sig.KeyFlags;
+
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.Utils;
@@ -122,11 +107,13 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
                 GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
                 date.set(year, monthOfYear, dayOfMonth);
                 if (mOriginalExpiryDate != null) {
-                    long numDays = (date.getTimeInMillis() / 86400000) - (mOriginalExpiryDate.getTimeInMillis() / 86400000);
-                    if (numDays == 0)
+                    long numDays = (date.getTimeInMillis() / 86400000) -
+                            (mOriginalExpiryDate.getTimeInMillis() / 86400000);
+                    if (numDays == 0) {
                         setExpiryDate(mOriginalExpiryDate);
-                    else
+                    } else {
                         setExpiryDate(date);
+                    }
                 } else {
                     setExpiryDate(date);
                 }
@@ -249,23 +236,23 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         boolean isDSAKey = (key.getAlgorithm() == Key.DSA);
         if (isElGamalKey) {
             mChkSign.setVisibility(View.INVISIBLE);
-            TableLayout table = (TableLayout)findViewById(R.id.table_keylayout);
-            TableRow row = (TableRow)findViewById(R.id.row_sign);
+            TableLayout table = (TableLayout) findViewById(R.id.table_keylayout);
+            TableRow row = (TableRow) findViewById(R.id.row_sign);
             table.removeView(row);
         }
         if (isDSAKey) {
             mChkEncrypt.setVisibility(View.INVISIBLE);
-            TableLayout table = (TableLayout)findViewById(R.id.table_keylayout);
-            TableRow row = (TableRow)findViewById(R.id.row_encrypt);
+            TableLayout table = (TableLayout) findViewById(R.id.table_keylayout);
+            TableRow row = (TableRow) findViewById(R.id.row_encrypt);
             table.removeView(row);
         }
         if (!mIsMasterKey) {
             mChkCertify.setVisibility(View.INVISIBLE);
-            TableLayout table = (TableLayout)findViewById(R.id.table_keylayout);
-            TableRow row = (TableRow)findViewById(R.id.row_certify);
+            TableLayout table = (TableLayout) findViewById(R.id.table_keylayout);
+            TableRow row = (TableRow) findViewById(R.id.row_certify);
             table.removeView(row);
         } else {
-            TextView mLabelUsage2= (TextView) findViewById(R.id.label_usage2);
+            TextView mLabelUsage2 = (TextView) findViewById(R.id.label_usage2);
             mLabelUsage2.setVisibility(View.INVISIBLE);
         }
 
@@ -345,19 +332,24 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     }
 
     public int getUsage() {
-        mUsage  = (mUsage & ~KeyFlags.CERTIFY_OTHER) | (mChkCertify.isChecked() ? KeyFlags.CERTIFY_OTHER : 0);
-        mUsage  = (mUsage & ~KeyFlags.SIGN_DATA) | (mChkSign.isChecked() ? KeyFlags.SIGN_DATA : 0);
-        mUsage  = (mUsage & ~KeyFlags.ENCRYPT_COMMS) | (mChkEncrypt.isChecked() ? KeyFlags.ENCRYPT_COMMS : 0);
-        mUsage  = (mUsage & ~KeyFlags.ENCRYPT_STORAGE) | (mChkEncrypt.isChecked() ? KeyFlags.ENCRYPT_STORAGE : 0);
-        mUsage  = (mUsage & ~KeyFlags.AUTHENTICATION) | (mChkAuthenticate.isChecked() ? KeyFlags.AUTHENTICATION : 0);
+        mUsage  = (mUsage & ~KeyFlags.CERTIFY_OTHER) |
+                    (mChkCertify.isChecked() ? KeyFlags.CERTIFY_OTHER : 0);
+        mUsage  = (mUsage & ~KeyFlags.SIGN_DATA) |
+                    (mChkSign.isChecked() ? KeyFlags.SIGN_DATA : 0);
+        mUsage  = (mUsage & ~KeyFlags.ENCRYPT_COMMS) |
+                    (mChkEncrypt.isChecked() ? KeyFlags.ENCRYPT_COMMS : 0);
+        mUsage  = (mUsage & ~KeyFlags.ENCRYPT_STORAGE) |
+                    (mChkEncrypt.isChecked() ? KeyFlags.ENCRYPT_STORAGE : 0);
+        mUsage  = (mUsage & ~KeyFlags.AUTHENTICATION) |
+                    (mChkAuthenticate.isChecked() ? KeyFlags.AUTHENTICATION : 0);
 
         return mUsage;
     }
 
-    public boolean needsSaving()
-    {
-        if (mIsNewKey)
+    public boolean needsSaving() {
+        if (mIsNewKey) {
             return true;
+        }
 
         boolean retval = (getUsage() != mOriginalUsage);
 
@@ -367,18 +359,19 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         if (mOEDNull != mEDNull) {
             dateChanged = true;
         } else {
-            if(mOEDNull) //both null, no change
+            if (mOEDNull) {
+                //both null, no change
                 dateChanged = false;
-            else
+            } else {
                 dateChanged = ((mExpiryDate.compareTo(mOriginalExpiryDate)) != 0);
+            }
         }
         retval |= dateChanged;
 
         return retval;
     }
 
-    public boolean getIsNewKey()
-    {
+    public boolean getIsNewKey() {
         return mIsNewKey;
     }
 }

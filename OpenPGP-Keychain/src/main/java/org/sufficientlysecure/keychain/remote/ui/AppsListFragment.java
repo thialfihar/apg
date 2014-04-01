@@ -40,7 +40,6 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
-import org.thialfihar.android.apg.util.Log;
 
 public class AppsListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {

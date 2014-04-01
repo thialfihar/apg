@@ -94,8 +94,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         }
 
         @Override
-        public void afterTextChanged(Editable s)
-        {
+        public void afterTextChanged(Editable s) {
             if (mEditorListener != null) {
                 mEditorListener.onEdited();
             }
@@ -217,9 +216,9 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     @Override
     public boolean needsSaving() {
         boolean retval = false; //(mOriginallyMainUserID != isMainUserId());
-        retval |= !(mOriginalName.equals( ("" + mName.getText()).trim() ) );
-        retval |= !(mOriginalEmail.equals( ("" + mEmail.getText()).trim() ) );
-        retval |= !(mOriginalComment.equals( ("" + mComment.getText()).trim() ) );
+        retval |= !(mOriginalName.equals(("" + mName.getText()).trim()));
+        retval |= !(mOriginalEmail.equals(("" + mEmail.getText()).trim()));
+        retval |= !(mOriginalComment.equals(("" + mComment.getText()).trim()));
         retval |= mIsNewId;
         return retval;
     }

@@ -50,7 +50,6 @@ import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.PublicKeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract.DataStream;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.InputData;
@@ -526,7 +525,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                             ProviderHelper.getPGPSecretKeyRingByKeyId(this, masterKeyId),
                             oldPassphrase, newPassphrase);
                 } else {
-                    //TODO: Workaround due to ProviderHelper.getPGPPublicKeyByKeyId can not resolve public key of master-key id with uri/cursor
+                    // TODO: Workaround due to ProviderHelper.getPGPPublicKeyByKeyId can not resolve
+                    // public key of master-key id with uri/cursor
                     /*PGPPublicKey pubkey = null;
                     for(Key key : keys) {
                         PGPPublicKey tempKey = key.getPublicKey();

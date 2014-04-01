@@ -33,9 +33,6 @@ import org.spongycastle.util.encoders.Hex;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
-import org.thialfihar.android.apg.ui.adapter.KeyValueSpinnerAdapter;
-import org.thialfihar.android.apg.util.AlgorithmNames;
 import org.thialfihar.android.apg.util.Log;
 
 import java.security.MessageDigest;

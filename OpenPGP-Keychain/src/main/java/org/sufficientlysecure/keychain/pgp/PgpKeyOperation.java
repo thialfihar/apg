@@ -52,12 +52,10 @@ import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.util.IterableIterator;
-import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.Primes;
 
 import java.io.IOException;
@@ -212,7 +210,9 @@ public class PgpKeyOperation {
 
     }
 
-    private void buildNewSecretKey(ArrayList<String> userIds, ArrayList<Key> keys, ArrayList<GregorianCalendar> keysExpiryDates, ArrayList<Integer> keysUsages, String newPassphrase, String oldPassphrase) throws PgpGeneralException,
+    private void buildNewSecretKey(ArrayList<String> userIds, ArrayList<Key> keys,
+            ArrayList<GregorianCalendar> keysExpiryDates, ArrayList<Integer> keysUsages,
+            String newPassphrase, String oldPassphrase) throws PgpGeneralException,
             PGPException, SignatureException, IOException {
 
         int usageId = keysUsages.get(0);
@@ -261,12 +261,16 @@ public class PgpKeyOperation {
             GregorianCalendar expiryDate = keysExpiryDates.get(0);
             //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
             //here we purposefully ignore partial days in each date - long type has no fractional part!
-            long numDays = (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
-            if (numDays <= 0)
-                throw new PgpGeneralException(mContext.getString(R.string.error_expiry_must_come_after_creation));
+            long numDays = (expiryDate.getTimeInMillis() / 86400000) -
+                (creationDate.getTimeInMillis() / 86400000);
+            if (numDays <= 0) {
+                throw new PgpGeneralException(
+                        mContext.getString(R.string.error_expiry_must_come_after_creation));
+            }
             hashedPacketsGen.setKeyExpirationTime(false, numDays * 86400);
         } else {
-            hashedPacketsGen.setKeyExpirationTime(false, 0); //do this explicitly, although since we're rebuilding,
+            hashedPacketsGen.setKeyExpirationTime(false, 0);
+            //do this explicitly, although since we're rebuilding,
             //this happens anyway
         }
 
@@ -330,12 +334,16 @@ public class PgpKeyOperation {
                 GregorianCalendar expiryDate = keysExpiryDates.get(i);
                 //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
                 //here we purposefully ignore partial days in each date - long type has no fractional part!
-                long numDays = (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
-                if (numDays <= 0)
-                    throw new PgpGeneralException(mContext.getString(R.string.error_expiry_must_come_after_creation));
+                long numDays = (expiryDate.getTimeInMillis() / 86400000) -
+                    (creationDate.getTimeInMillis() / 86400000);
+                if (numDays <= 0) {
+                    throw new PgpGeneralException(
+                        mContext.getString(R.string.error_expiry_must_come_after_creation));
+                }
                 hashedPacketsGen.setKeyExpirationTime(false, numDays * 86400);
             } else {
-                hashedPacketsGen.setKeyExpirationTime(false, 0); //do this explicitly, although since we're rebuilding,
+                hashedPacketsGen.setKeyExpirationTime(false, 0);
+                //do this explicitly, although since we're rebuilding,
                 //this happens anyway
             }
 
@@ -439,12 +447,16 @@ public class PgpKeyOperation {
             GregorianCalendar expiryDate = saveParcel.keysExpiryDates.get(0);
             //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
             //here we purposefully ignore partial days in each date - long type has no fractional part!
-            long numDays = (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
-            if (numDays <= 0)
-                throw new PgpGeneralException(mContext.getString(R.string.error_expiry_must_come_after_creation));
+            long numDays = (expiryDate.getTimeInMillis() / 86400000) -
+                (creationDate.getTimeInMillis() / 86400000);
+            if (numDays <= 0) {
+                throw new PgpGeneralException(
+                    mContext.getString(R.string.error_expiry_must_come_after_creation));
+            }
             hashedPacketsGen.setKeyExpirationTime(false, numDays * 86400);
         } else {
-            hashedPacketsGen.setKeyExpirationTime(false, 0); //do this explicitly, although since we're rebuilding,
+            hashedPacketsGen.setKeyExpirationTime(false, 0);
+            //do this explicitly, although since we're rebuilding,
             //this happens anyway
         }
 
@@ -453,8 +465,10 @@ public class PgpKeyOperation {
             ArrayList<Pair<String, PGPSignature>> sigList = new ArrayList<Pair<String, PGPSignature>>();
             for (String userId : saveParcel.userIDs) {
                 String origID = saveParcel.originalIDs.get(userIDIndex);
-                if (origID.equals(userId) && !userId.equals(saveParcel.originalPrimaryID) && userIDIndex != 0) {
-                    Iterator<PGPSignature> origSigs = masterPublicKey.getSignaturesForID(origID); //TODO: make sure this iterator only has signatures we are interested in
+                if (origID.equals(userId) && !userId.equals(saveParcel.originalPrimaryID) &&
+                    userIDIndex != 0) {
+                    Iterator<PGPSignature> origSigs = masterPublicKey.getSignaturesForID(origID);
+                    //TODO: make sure this iterator only has signatures we are interested in
                     while (origSigs.hasNext()) {
                         PGPSignature origSig = origSigs.next();
                         sigList.add(new Pair<String, PGPSignature>(origID, origSig));
@@ -512,7 +526,8 @@ public class PgpKeyOperation {
             for (String userId : saveParcel.userIDs) {
                 String origID = saveParcel.originalIDs.get(userIDIndex);
                 if (!(origID.equals(saveParcel.originalPrimaryID) && !saveParcel.primaryIDChanged)) {
-                    Iterator<PGPSignature> sigs = masterPublicKey.getSignaturesForID(userId); //TODO: make sure this iterator only has signatures we are interested in
+                    Iterator<PGPSignature> sigs = masterPublicKey.getSignaturesForID(userId);
+                    //TODO: make sure this iterator only has signatures we are interested in
                     while (sigs.hasNext()) {
                         PGPSignature sig = sigs.next();
                         sigList.add(new Pair<String, PGPSignature>(userId, sig));
@@ -554,7 +569,7 @@ public class PgpKeyOperation {
                 unhashedPacketsGen.generate(), certificationSignerBuilder, keyEncryptor);
 
         for (int i = 1; i < saveParcel.keys.size(); ++i) {
-            updateProgress(40 + 50 * i/ saveParcel.keys.size(), 100);
+            updateProgress(40 + 50 * i / saveParcel.keys.size(), 100);
             if (saveParcel.moddedKeys[i]) {
                 Key subKey = saveParcel.keys.get(i);
                 PGPPublicKey subPublicKey = subKey.getPublicKey();
@@ -593,14 +608,19 @@ public class PgpKeyOperation {
                     GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
                     creationDate.setTime(subPublicKey.getCreationTime());
                     GregorianCalendar expiryDate = saveParcel.keysExpiryDates.get(i);
-                    //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
-                    //here we purposefully ignore partial days in each date - long type has no fractional part!
-                    long numDays = (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
-                    if (numDays <= 0)
-                        throw new PgpGeneralException(mContext.getString(R.string.error_expiry_must_come_after_creation));
+                    // note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
+                    // here we purposefully ignore partial days in each date - long type has no
+                    // fractional part!
+                    long numDays = (expiryDate.getTimeInMillis() / 86400000) -
+                        (creationDate.getTimeInMillis() / 86400000);
+                    if (numDays <= 0) {
+                        throw new PgpGeneralException(
+                            mContext.getString(R.string.error_expiry_must_come_after_creation));
+                    }
                     hashedPacketsGen.setKeyExpirationTime(false, numDays * 86400);
                 } else {
-                    hashedPacketsGen.setKeyExpirationTime(false, 0); //do this explicitly, although since we're rebuilding,
+                    hashedPacketsGen.setKeyExpirationTime(false, 0);
+                    //do this explicitly, although since we're rebuilding,
                     //this happens anyway
                 }
 
@@ -608,8 +628,8 @@ public class PgpKeyOperation {
                 //certifications will be discarded if the key is changed, because I think, for a start,
                 //they will be invalid. Binding certs are regenerated anyway, and other certs which
                 //need to be kept are on IDs and attributes
-                //TODO: don't let revoked keys be edited, other than removed - changing one would result in the
-                //revocation being wrong?
+                //TODO: don't let revoked keys be edited, other than removed - changing one would
+                //result in the revocation being wrong?
             }
         }
 

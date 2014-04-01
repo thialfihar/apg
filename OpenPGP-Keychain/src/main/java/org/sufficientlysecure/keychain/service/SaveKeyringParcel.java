@@ -22,7 +22,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.thialfihar.android.apg.pgp.Key;
-import org.thialfihar.android.apg.remote.ui.AccountsListFragment;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -52,7 +51,7 @@ public class SaveKeyringParcel implements Parcelable {
         primaryIDChanged = source.readByte() != 0;
         moddedKeys = source.createBooleanArray();
         deletedKeys = (ArrayList<Key>) source.readSerializable();
-        keysExpiryDates = (ArrayList<GregorianCalendar>)source.readSerializable();
+        keysExpiryDates = (ArrayList<GregorianCalendar>) source.readSerializable();
         keysUsages = source.readArrayList(Integer.class.getClassLoader());
         newPassphrase = source.readString();
         oldPassphrase = source.readString();

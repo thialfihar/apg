@@ -20,49 +20,16 @@ package org.thialfihar.android.apg.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
-
-import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.devspark.appmsg.AppMsg;
-
-import org.spongycastle.openpgp.PGPPublicKey;
-import org.spongycastle.openpgp.PGPPublicKeyRing;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.PGPSecretKeyRing;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.FileHelper;
-import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.adapter.PagerTabStripAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
-import org.thialfihar.android.apg.util.Choice;
 import org.thialfihar.android.apg.util.Log;
 
 public class EncryptActivity extends DrawerActivity implements
@@ -190,12 +157,16 @@ public class EncryptActivity extends DrawerActivity implements
         // Handle intent actions
         handleActions(getIntent());
 
-        mTabsAdapterMode.addTab(EncryptAsymmetricFragment.class, mAsymmetricFragmentBundle, getString(R.string.label_asymmetric));
-        mTabsAdapterMode.addTab(EncryptSymmetricFragment.class, mSymmetricFragmentBundle, getString(R.string.label_symmetric));
+        mTabsAdapterMode.addTab(EncryptAsymmetricFragment.class, mAsymmetricFragmentBundle,
+                getString(R.string.label_asymmetric));
+        mTabsAdapterMode.addTab(EncryptSymmetricFragment.class, mSymmetricFragmentBundle,
+                getString(R.string.label_symmetric));
         mViewPagerMode.setCurrentItem(mSwitchToMode);
 
-        mTabsAdapterContent.addTab(EncryptMessageFragment.class, mMessageFragmentBundle, getString(R.string.label_message));
-        mTabsAdapterContent.addTab(EncryptFileFragment.class, mFileFragmentBundle, getString(R.string.label_file));
+        mTabsAdapterContent.addTab(EncryptMessageFragment.class, mMessageFragmentBundle,
+                getString(R.string.label_message));
+        mTabsAdapterContent.addTab(EncryptFileFragment.class, mFileFragmentBundle,
+                getString(R.string.label_file));
         mViewPagerContent.setCurrentItem(mSwitchToContent);
     }
 
@@ -258,8 +229,10 @@ public class EncryptActivity extends DrawerActivity implements
         }
 
         // preselect keys given by intent
-        mAsymmetricFragmentBundle.putLongArray(EncryptAsymmetricFragment.ARG_ENCRYPTION_KEY_IDS, encryptionKeyIds);
-        mAsymmetricFragmentBundle.putLong(EncryptAsymmetricFragment.ARG_SIGNATURE_KEY_ID, signatureKeyId);
+        mAsymmetricFragmentBundle.putLongArray(EncryptAsymmetricFragment.ARG_ENCRYPTION_KEY_IDS,
+                encryptionKeyIds);
+        mAsymmetricFragmentBundle.putLong(EncryptAsymmetricFragment.ARG_SIGNATURE_KEY_ID,
+                signatureKeyId);
         mSwitchToMode = PAGER_MODE_ASYMMETRIC;
 
         /**

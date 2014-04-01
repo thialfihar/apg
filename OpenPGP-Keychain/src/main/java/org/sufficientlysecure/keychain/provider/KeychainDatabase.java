@@ -20,7 +20,6 @@ package org.thialfihar.android.apg.provider;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.util.Log;
@@ -215,7 +214,8 @@ public class KeychainDatabase extends SQLiteOpenHelper {
                                 "compression INTEGER, " +
                                 "package_name TEXT NOT NULL, " +
                                 "UNIQUE(account_name, package_name), " +
-                                "FOREIGN KEY(package_name) REFERENCES api_apps(package_name) ON DELETE CASCADE)");
+                                "FOREIGN KEY(package_name) REFERENCES " +
+                                    "api_apps(package_name) ON DELETE CASCADE)");
                     break;
                 default:
                     break;

@@ -150,8 +150,9 @@ public class EncryptMessageFragment extends Fragment {
                 return;
             }
 
-            if (mEncryptInterface.getSignatureKey() != 0
-                    && PassphraseCacheService.getCachedPassphrase(getActivity(), mEncryptInterface.getSignatureKey()) == null) {
+            if (mEncryptInterface.getSignatureKey() != 0 &&
+                    PassphraseCacheService.getCachedPassphrase(getActivity(),
+                            mEncryptInterface.getSignatureKey()) == null) {
                 showPassphraseDialog(toClipboard);
 
                 return;
@@ -182,11 +183,13 @@ public class EncryptMessageFragment extends Fragment {
             }
             data.putString(ApgIntentService.ENCRYPT_SYMMETRIC_PASSPHRASE, passphrase);
         } else {
-            data.putLong(ApgIntentService.ENCRYPT_SIGNATURE_KEY_ID, mEncryptInterface.getSignatureKey());
-            data.putLongArray(ApgIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS, mEncryptInterface.getEncryptionKeys());
+            data.putLong(ApgIntentService.ENCRYPT_SIGNATURE_KEY_ID,
+                    mEncryptInterface.getSignatureKey());
+            data.putLongArray(ApgIntentService.ENCRYPT_ENCRYPTION_KEYS_IDS,
+                    mEncryptInterface.getEncryptionKeys());
 
-            boolean signOnly = (mEncryptInterface.getEncryptionKeys() == null
-                    || mEncryptInterface.getEncryptionKeys().length == 0);
+            boolean signOnly = (mEncryptInterface.getEncryptionKeys() == null ||
+                        mEncryptInterface.getEncryptionKeys().length == 0);
             if (signOnly) {
                 message = fixBadCharactersForGmail(message);
             }

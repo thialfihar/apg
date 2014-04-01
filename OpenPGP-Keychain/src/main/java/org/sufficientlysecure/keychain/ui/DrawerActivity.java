@@ -39,7 +39,6 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 
-import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.remote.AppsListActivity;
 
@@ -225,7 +224,7 @@ public class DrawerActivity extends ActionBarActivity {
         mDrawerList.setItemChecked(position, true);
         // set selected class
         NavItem item = (NavItem) mDrawerList.getAdapter().getItem(position);
-        mSelectedItem = item.class_;
+        mSelectedItem = item.clss;
 
         // setTitle(mDrawerTitles[position]);
         // If drawer isn't locked just close the drawer and
@@ -259,13 +258,13 @@ public class DrawerActivity extends ActionBarActivity {
     public static class NavItem {
         public String icon;
         public String title;
-        public Class class_;
+        public Class clss;
 
-        public NavItem(String icon, String title, Class class_) {
+        public NavItem(String icon, String title, Class clss) {
             super();
             this.icon = icon;
             this.title = title;
-            this.class_ = class_;
+            this.clss = clss;
         }
     }
 

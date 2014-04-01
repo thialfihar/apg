@@ -22,52 +22,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.animation.AnimationUtils;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
-
-import com.beardedhen.androidbootstrap.BootstrapButton;
-import com.devspark.appmsg.AppMsg;
-
-import org.openintents.openpgp.OpenPgpSignatureResult;
-
-import org.spongycastle.openpgp.PGPPublicKeyRing;
 
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.FileHelper;
-import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
-import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.exception.NoAsymmetricEncryptionException;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.adapter.PagerTabStripAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.regex.Matcher;
 
 public class DecryptActivity extends DrawerActivity {
@@ -117,8 +81,10 @@ public class DecryptActivity extends DrawerActivity {
         // Handle intent actions, maybe changes the bundles
         handleActions(getIntent());
 
-        mTabsAdapter.addTab(DecryptMessageFragment.class, mMessageFragmentBundle, getString(R.string.label_message));
-        mTabsAdapter.addTab(DecryptFileFragment.class, mFileFragmentBundle, getString(R.string.label_file));
+        mTabsAdapter.addTab(DecryptMessageFragment.class, mMessageFragmentBundle,
+                getString(R.string.label_message));
+        mTabsAdapter.addTab(DecryptFileFragment.class, mFileFragmentBundle,
+                getString(R.string.label_file));
         mViewPager.setCurrentItem(mSwitchToTab);
     }
 

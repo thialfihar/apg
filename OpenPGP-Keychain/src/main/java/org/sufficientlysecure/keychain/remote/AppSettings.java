@@ -17,10 +17,6 @@
 
 package org.thialfihar.android.apg.remote;
 
-import org.spongycastle.bcpg.HashAlgorithmTags;
-import org.spongycastle.openpgp.PGPEncryptedData;
-import org.thialfihar.android.apg.Id;
-
 public class AppSettings {
     private String mPackageName;
     private byte[] mPackageSignature;

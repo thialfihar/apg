@@ -28,8 +28,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,11 +48,10 @@ import com.devspark.appmsg.AppMsg;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.Key;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.KeyRing;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
@@ -118,8 +117,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
     private ExportHelper mExportHelper;
 
-    public boolean needsSaving()
-    {
+    public boolean needsSaving() {
         mNeedsSaving = (mUserIdsView == null) ? false : mUserIdsView.needsSaving();
         mNeedsSaving |= (mKeysView == null) ? false : mKeysView.needsSaving();
         mNeedsSaving |= hasPassphraseChanged();
@@ -128,19 +126,15 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     }
 
 
-    public void somethingChanged()
-    {
+    public void somethingChanged() {
         ActivityCompat.invalidateOptionsMenu(this);
-        //Toast.makeText(this, "Needs saving: " + Boolean.toString(mNeedsSaving) + "(" + Boolean.toString(mUserIdsView.needsSaving()) + ", " + Boolean.toString(mKeysView.needsSaving()) + ")", Toast.LENGTH_LONG).show();
     }
 
-    public void onDeleted(Editor e, boolean wasNewItem)
-    {
+    public void onDeleted(Editor e, boolean wasNewItem) {
         somethingChanged();
     }
 
-    public void onEdited()
-    {
+    public void onEdited() {
         somethingChanged();
     }
 
@@ -341,7 +335,9 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-            cancelClicked(); //TODO: why isn't this triggered on my tablet - one of many ui problems I've had with this device. A code compatibility issue or a Samsung fail?
+            cancelClicked();
+            // TODO: why isn't this triggered on my tablet - one of many ui problems I've had with
+            // this device. A code compatibility issue or a Samsung fail?
             return true;
         case R.id.menu_key_edit_cancel:
             cancelClicked();
@@ -359,7 +355,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             return true;
 
         case R.id.menu_key_edit_delete:
-            long rowId= ProviderHelper.getRowId(this,mDataUri);
+            long rowId = ProviderHelper.getRowId(this, mDataUri);
             Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
 
             // Message is received after key is deleted
@@ -404,8 +400,9 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                     if (!isSet) {
                         isSet = true;
                         String[] parts = PgpKeyHelper.splitUserId(userId);
-                        if (parts[0] != null)
+                        if (parts[0] != null) {
                             setTitle(parts[0]);
+                        }
                     }
                     mUserIds.add(userId);
                 }
@@ -530,23 +527,21 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public boolean isPassphraseSet() {
         if (mNoPassphrase.isChecked()) {
             return true;
-        } else if ((mIsPassphraseSet)
-                || (mNewPassphrase != null && !mNewPassphrase.equals(""))) {
+        } else if (mIsPassphraseSet || (mNewPassphrase != null && !mNewPassphrase.equals(""))) {
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean hasPassphraseChanged()
-    {
+    public boolean hasPassphraseChanged() {
         if (mNoPassphrase != null) {
             if (mNoPassphrase.isChecked()) {
                 return mIsPassphraseSet;
             } else {
-                return (mNewPassphrase != null && !mNewPassphrase.equals(""));
+                return mNewPassphrase != null && !mNewPassphrase.equals("");
             }
-        }else {
+        } else {
             return false;
         }
     }
@@ -560,10 +555,11 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 }
 
                 String passphrase;
-                if (mIsPassphraseSet)
+                if (mIsPassphraseSet) {
                     passphrase = PassphraseCacheService.getCachedPassphrase(this, masterKeyId);
-                else
+                } else {
                     passphrase = "";
+                }
                 if (passphrase == null) {
                     showPassphraseDialog(masterKeyId);
                 } else {

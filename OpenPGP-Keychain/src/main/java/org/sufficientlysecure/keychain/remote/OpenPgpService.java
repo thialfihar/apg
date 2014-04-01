@@ -187,7 +187,8 @@ public class OpenPgpService extends RemoteService {
     }
 
     private Intent encryptAndSignImpl(Intent data, ParcelFileDescriptor input,
-                                      ParcelFileDescriptor output, AccountSettings accSettings, boolean sign) {
+                                      ParcelFileDescriptor output, AccountSettings accSettings,
+                                      boolean sign) {
         try {
             boolean asciiArmor = data.getBooleanExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
@@ -304,7 +305,8 @@ public class OpenPgpService extends RemoteService {
                     // get PendingIntent for passphrase input, add it to given params and return to client
                     Intent passphraseBundle = getPassphraseBundleIntent(data, accSettings.getKeyId());
                     return passphraseBundle;
-                } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
+                } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
+                                decryptVerifyResult.getStatus()) {
                     throw new PgpGeneralException("Decryption of symmetric content not supported by API!");
                 }
 
