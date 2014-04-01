@@ -233,21 +233,20 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         return mList;
     }
 
-    public List<Boolean> getNewIDFlags()
-    {
+    public List<Boolean> getNewIDFlags() {
         ArrayList<Boolean> mList = new ArrayList<Boolean>();
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             UserIdEditor editor = (UserIdEditor) mEditors.getChildAt(i);
-            if (editor.isMainUserId())
+            if (editor.isMainUserId()) {
                 mList.add(0, editor.getIsNewID());
-            else
+            } else {
                 mList.add(editor.getIsNewID());
+            }
         }
         return mList;
     }
 
-    public List<Boolean> getNewKeysArray()
-    {
+    public List<Boolean> getNewKeysArray() {
         ArrayList<Boolean> mList = new ArrayList<Boolean>();
         if (mType == Id.type.key) {
             for (int i = 0; i < mEditors.getChildCount(); ++i) {
@@ -415,7 +414,6 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             usage = PGPKeyFlags.CAN_CERTIFY;
         }
         view.setValue(newKey, isMasterKey, usage, true);
-        view.setValue(newKey, newKey.isMasterKey(), usage, true);
         mEditors.addView(view);
         SectionView.this.updateEditorsVisible();
         if (mEditorListener != null) {
