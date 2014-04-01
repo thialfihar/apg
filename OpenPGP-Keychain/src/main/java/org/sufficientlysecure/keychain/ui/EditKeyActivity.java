@@ -85,10 +85,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public static final String EXTRA_NO_PASSPHRASE = "no_passphrase";
     public static final String EXTRA_GENERATE_DEFAULT_KEYS = "generate_default_keys";
 
-    // results when saving key
-    public static final String RESULT_EXTRA_MASTER_KEY_ID = "master_key_id";
-    public static final String RESULT_EXTRA_USER_ID = "user_id";
-
     // EDIT
     private Uri mDataUri;
 
@@ -334,46 +330,42 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            cancelClicked();
-            // TODO: why isn't this triggered on my tablet - one of many ui problems I've had with
-            // this device. A code compatibility issue or a Samsung fail?
-            return true;
-        case R.id.menu_key_edit_cancel:
-            cancelClicked();
-            return true;
-        case R.id.menu_key_edit_export_file:
-            if (needsSaving()) {
-                Toast.makeText(this, R.string.error_save_first, Toast.LENGTH_LONG).show();
-            } else {
-                long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
-                long[] ids = new long[]{masterKeyId};
-                mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC,
-                        null);
+            case android.R.id.home:
+                cancelClicked(); //TODO: why isn't this triggered on my tablet - one of many ui problems I've had with this device. A code compatibility issue or a Samsung fail?
                 return true;
-            }
-            return true;
-
-        case R.id.menu_key_edit_delete:
-            long rowId = ProviderHelper.getRowId(this, mDataUri);
-            Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
-
-            // Message is received after key is deleted
-            Handler returnHandler = new Handler() {
-                @Override
-                public void handleMessage(Message message) {
-                    if (message.what == DeleteKeyDialogFragment.MESSAGE_OKAY) {
-                        setResult(RESULT_CANCELED);
-                        finish();
-                    }
+            case R.id.menu_key_edit_cancel:
+                cancelClicked();
+                return true;
+            case R.id.menu_key_edit_export_file:
+                if (needsSaving()) {
+                    Toast.makeText(this, R.string.error_save_first, Toast.LENGTH_LONG).show();
+                } else {
+                    long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
+                    long[] ids = new long[]{masterKeyId};
+                    mExportHelper.showExportKeysDialog(ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC,
+                            null);
+                    return true;
                 }
-            };
-            mExportHelper.deleteKey(convertUri, returnHandler);
-            return true;
+                return true;
+            case R.id.menu_key_edit_delete:
+                long rowId = ProviderHelper.getRowId(this, mDataUri);
+                Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
+                // Message is received after key is deleted
+                Handler returnHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message message) {
+                        if (message.what == DeleteKeyDialogFragment.MESSAGE_OKAY) {
+                            setResult(RESULT_CANCELED);
+                            finish();
+                        }
+                    }
+                };
+                mExportHelper.deleteKey(convertUri, returnHandler);
+                return true;
 
-        case R.id.menu_key_edit_save:
-            saveClicked();
-            return true;
+            case R.id.menu_key_edit_save:
+                saveClicked();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -461,6 +453,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     /**
      * Build layout based on mUserId, mKeys and mKeysUsages Vectors. It creates Views for every user
      * id and key.
+     *
      * @param newKeys
      */
     private void buildLayout(boolean newKeys) {
@@ -624,21 +617,11 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                     if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                         Intent data = new Intent();
 
-                        // TODO: remove, now using uri!
-                        data.putExtra(RESULT_EXTRA_MASTER_KEY_ID, getMasterKeyId());
-
                         // return uri pointing to new created key
                         Uri uri = KeychainContract.KeyRings.buildPublicKeyRingsByKeyIdUri(
                                 String.valueOf(getMasterKeyId()));
                         data.setData(uri);
 
-                        ArrayList<String> userIds = null;
-                        try {
-                            userIds = getUserIds(mUserIdsView);
-                        } catch (PgpGeneralException e) {
-                            Log.e(Constants.TAG, "exception while getting user ids", e);
-                        }
-                        data.putExtra(RESULT_EXTRA_USER_ID, userIds.get(0));
                         setResult(RESULT_OK, data);
                         finish();
                     }
