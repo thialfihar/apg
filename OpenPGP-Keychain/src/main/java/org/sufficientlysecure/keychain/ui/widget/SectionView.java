@@ -32,7 +32,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.Id;
@@ -131,7 +130,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         super.onFinishInflate();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void onDeleted(Editor editor, boolean wasNewItem) {
         oldItemDeleted |= !wasNewItem;
         if (oldItemDeleted) {
@@ -159,9 +160,6 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         mEditors.setVisibility(hasChildren ? View.VISIBLE : View.GONE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public boolean needsSaving()
     {
         //check each view for needs saving, take account of deleted items
@@ -250,37 +248,37 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         return mList;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void onClick(View v) {
         if (mCanBeEdited) {
             switch (mType) {
-            case Id.type.user_id: {
-                UserIdEditor view = (UserIdEditor) mInflater.inflate(
-                        R.layout.edit_key_user_id_item, mEditors, false);
-                view.setEditorListener(this);
-                view.setValue("", mEditors.getChildCount() == 0, true);
-                mEditors.addView(view);
-                if (mEditorListener != null) {
-                    mEditorListener.onEdited();
+                case Id.type.user_id: {
+                    UserIdEditor view = (UserIdEditor) mInflater.inflate(
+                            R.layout.edit_key_user_id_item, mEditors, false);
+                    view.setEditorListener(this);
+                    view.setValue("", mEditors.getChildCount() == 0, true);
+                    mEditors.addView(view);
+                    if (mEditorListener != null) {
+                        mEditorListener.onEdited();
+                    }
+                    break;
                 }
-                break;
-            }
-
-            case Id.type.key: {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
 
                 case Id.type.key: {
                     CreateKeyDialogFragment mCreateKeyDialogFragment =
-                        CreateKeyDialogFragment.newInstance(mEditors.getChildCount());
-                    mCreateKeyDialogFragment.setOnAlgorithmSelectedListener(
-                            new CreateKeyDialogFragment.OnAlgorithmSelectedListener() {
-                        @Override
-                        public void onAlgorithmSelected(Choice algorithmChoice, int keySize) {
-                            mNewKeyAlgorithmChoice = algorithmChoice;
-                            mNewKeySize = keySize;
-                            createKey();
-                        }
-                    });
+                            CreateKeyDialogFragment.newInstance(mEditors.getChildCount());
+                    mCreateKeyDialogFragment
+                            .setOnAlgorithmSelectedListener(
+                                    new CreateKeyDialogFragment.OnAlgorithmSelectedListener() {
+                                        @Override
+                                        public void onAlgorithmSelected(Choice algorithmChoice, int keySize) {
+                                            mNewKeyAlgorithmChoice = algorithmChoice;
+                                            mNewKeySize = keySize;
+                                            createKey();
+                                        }
+                                    });
                     mCreateKeyDialogFragment.show(mActivity.getSupportFragmentManager(), "createKeyDialog");
                     break;
                 }
@@ -370,11 +368,11 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                     }
                 });
 
-        // Message is received after generating is done in ApgService
+        // Message is received after generating is done in ApgIntentService
         ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(mActivity,
                 mGeneratingDialog) {
             public void handleMessage(Message message) {
-                // handle messages by standard ApgHandler first
+                // handle messages by standard ApgIntentServiceHandler first
                 super.handleMessage(message);
 
                 if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
