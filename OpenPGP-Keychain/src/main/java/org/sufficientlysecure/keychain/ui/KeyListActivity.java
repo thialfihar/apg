@@ -56,15 +56,7 @@ public class KeyListActivity extends DrawerActivity {
                 callIntentForDrawerItem(ImportKeysActivity.class);
 
                 return true;
-            }
-            case R.id.menu_key_list_export: {
-                // TODO fix this for unified keylist
-                mExportHelper.showExportKeysDialog(null, Id.type.public_key,
-                        Constants.Path.APP_DIR_FILE_PUB, null);
-
-                return true;
-            }
-            case R.id.menu_key_list_create: {
+            case R.id.menu_key_list_create:
                 createKey();
 
                 return true;
@@ -73,10 +65,12 @@ public class KeyListActivity extends DrawerActivity {
                 createKeyExpert();
 
                 return true;
-            }
-            case R.id.menu_key_list_secret_export: {
-                mExportHelper.showExportKeysDialog(null, Id.type.secret_key,
-                        Constants.Path.APP_DIR_FILE_SEC, null);
+            case R.id.menu_key_list_export_public:
+                mExportHelper.showExportKeysDialog(null, Id.type.public_key, Constants.Path.APP_DIR_FILE_PUB, null);
+
+                return true;
+            case R.id.menu_key_list_secret_export:
+                mExportHelper.showExportKeysDialog(null, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC, null);
 
                 return true;
             }
