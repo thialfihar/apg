@@ -36,3 +36,8 @@ pom.xml.*
 #Lint output
 OpenPGP-Keychain/lint-report.html
 OpenPGP-Keychain/lint-report_files/*
+
+Makefile
+todo.txt
+*sublime*
+patches
