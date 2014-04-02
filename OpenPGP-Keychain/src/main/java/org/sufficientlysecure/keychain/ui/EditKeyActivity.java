@@ -307,31 +307,18 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 // TODO: why isn't this triggered on my tablet - one of many ui problems
                 // I've had with this device. A code compatibility issue or a Samsung fail?
                 return true;
-            case R.id.menu_key_edit_cancel:
-                cancelClicked();
-                return true;
-            case R.id.menu_key_edit_export_file:
-                if (needsSaving()) {
-                    Toast.makeText(this, R.string.error_save_first, Toast.LENGTH_LONG).show();
-                } else {
-                    long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
-                    long[] ids = new long[] {masterKeyId};
-                    mExportHelper.showExportKeysDialog(
-                        ids, Id.type.secret_key, Constants.Path.APP_DIR_FILE_SEC, null);
-                    return true;
-                }
-                return true;
-            case R.id.menu_key_edit_delete:
-                long rowId = ProviderHelper.getRowId(this, mDataUri);
-                Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingsUri(Long.toString(rowId));
-                // Message is received after key is deleted
-                Handler returnHandler = new Handler() {
-                    @Override
-                    public void handleMessage(Message message) {
-                        if (message.what == DeleteKeyDialogFragment.MESSAGE_OKAY) {
-                            setResult(RESULT_CANCELED);
-                            finish();
-                        }
+            }
+            return true;
+        case R.id.menu_key_edit_delete:
+            long rowId= ProviderHelper.getRowId(this,mDataUri);
+            Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingUri(Long.toString(rowId));
+            // Message is received after key is deleted
+            Handler returnHandler = new Handler() {
+                @Override
+                public void handleMessage(Message message) {
+                    if (message.what == DeleteKeyDialogFragment.MESSAGE_OKAY) {
+                        setResult(RESULT_CANCELED);
+                        finish();
                     }
                 };
                 mExportHelper.deleteKey(convertUri, returnHandler);

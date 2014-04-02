@@ -524,17 +524,22 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 /* Operation */
                 if (!canSign) {
                     PgpKeyOperation keyOperations = new PgpKeyOperation(new ProgressScaler(this, 0, 50, 100));
-                    PGPSecretKeyRing keyRing = ProviderHelper
-                            .getPGPSecretKeyRingByKeyId(this, masterKeyId);
+                    PGPSecretKeyRing keyRing = ProviderHelper.getPGPSecretKeyRing(this, masterKeyId);
                     keyRing = keyOperations.changeSecretKeyPassphrase(keyRing,
                             oldPassphrase, newPassphrase);
                     setProgress(R.string.progress_saving_key_ring, 50, 100);
                     ProviderHelper.saveKeyRing(this, keyRing);
                     setProgress(R.string.progress_done, 100, 100);
                 } else {
-                    PGPPublicKey pubkey = ProviderHelper.getPGPPublicKeyByKeyId(this, masterKeyId);
-                    keyOperations.buildSecretKey(userIds, keys, keysUsages, keysExpiryDates,
-                            pubkey, oldPassPhrase, newPassPhrase);
+                    PgpKeyOperation keyOperations = new PgpKeyOperation(new ProgressScaler(this, 0, 90, 100));
+                    PGPSecretKeyRing privkey = ProviderHelper.getPGPSecretKeyRing(this, masterKeyId);
+                    PGPPublicKeyRing pubkey = ProviderHelper.getPGPPublicKeyRing(this, masterKeyId);
+                    PgpKeyOperation.Pair<PGPSecretKeyRing,PGPPublicKeyRing> pair =
+                        keyOperations.buildSecretKey(privkey, pubkey, saveParams);
+                    setProgress(R.string.progress_saving_key_ring, 90, 100);
+                    ProviderHelper.saveKeyRing(this, pair.first);
+                    ProviderHelper.saveKeyRing(this, pair.second);
+                    setProgress(R.string.progress_done, 100, 100);
                 }
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);
 
@@ -676,8 +681,9 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 ArrayList<Long> publicMasterKeyIds = new ArrayList<Long>();
                 ArrayList<Long> secretMasterKeyIds = new ArrayList<Long>();
-                ArrayList<Long> allPublicMasterKeyIds = ProviderHelper.getPublicKeyRingsMasterKeyIds(this);
-                ArrayList<Long> allSecretMasterKeyIds = ProviderHelper.getSecretKeyRingsMasterKeyIds(this);
+                // TODO redo
+                ArrayList<Long> allPublicMasterKeyIds = null; // ProviderHelper.getPublicKeyRingsMasterKeyIds(this);
+                ArrayList<Long> allSecretMasterKeyIds = null; // ProviderHelper.getSecretKeyRingsMasterKeyIds(this);
 
                 if (exportAll) {
                     // get all public key ring MasterKey ids
@@ -831,8 +837,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 }
 
                 PgpKeyOperation keyOperation = new PgpKeyOperation(new ProgressScaler(this, 0, 100, 100));
-                PGPPublicKeyRing publicRing = ProviderHelper
-                        .getPGPPublicKeyRingByKeyId(this, pubKeyId);
+                PGPPublicKeyRing publicRing = ProviderHelper.getPGPPublicKeyRing(this, pubKeyId);
                 PGPPublicKey publicKey = publicRing.getPublicKey(pubKeyId);
                 PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(this,
                         masterKeyId);

@@ -170,7 +170,7 @@ public class PassphraseCacheService extends Service {
         // try to get master key id which is used as an identifier for cached passphrases
         long masterKeyId = keyId;
         if (masterKeyId != Id.key.symmetric) {
-            PGPSecretKeyRing keyRing = ProviderHelper.getPGPSecretKeyRingByKeyId(this, keyId);
+            PGPSecretKeyRing keyRing = ProviderHelper.getPGPSecretKeyRingWithKeyId(this, keyId);
             if (keyRing == null) {
                 return null;
             }
@@ -214,9 +214,8 @@ public class PassphraseCacheService extends Service {
         }
         // check if the key has no passphrase
         try {
-            PGPSecretKeyRing secRing = ProviderHelper
-                    .getPGPSecretKeyRingByKeyId(context, secretKeyId);
-            Key secretKey = null;
+            PGPSecretKeyRing secRing = ProviderHelper.getPGPSecretKeyRing(context, secretKeyId);
+            PGPSecretKey secretKey = null;
             boolean foundValidKey = false;
             for (Iterator keys = secRing.getSecretKeys(); keys.hasNext();) {
                 secretKey = new Key((PGPSecretKey) keys.next());

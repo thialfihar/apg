@@ -53,12 +53,18 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
 
     private SelectSecretKeyCallback mCallback;
 
-    private static final String[] PROJECTION = new String[] {
-        KeychainContract.UserIds.USER_ID,
-        KeychainContract.KeyRings.MASTER_KEY_ID,
+    private static final int REQUEST_CODE_SELECT_KEY = 8882;
+
+    private static final int LOADER_ID = 0;
+
+    //The Projection we will retrieve, Master Key ID is for convenience sake,
+    //to avoid having to pass the Key Around
+    final String[] PROJECTION = new String[] {
+            KeychainContract.Keys.MASTER_KEY_ID,
+            KeychainContract.UserIds.USER_ID
     };
-    private static final int INDEX_USER_ID = 0;
-    private static final int INDEX_MASTER_KEY_ID = 1;
+    final int INDEX_MASTER_KEY_ID = 0;
+    final int INDEX_USER_ID = 1;
 
     public interface SelectSecretKeyCallback {
         void onKeySelected(long secretKeyId);
@@ -120,9 +126,11 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
         return view;
     }
 
-    public void selectKey(Uri keyUri) {
-        mReceivedUri = keyUri;
-        getActivity().getSupportLoaderManager().restartLoader(0, null, this);
+    //For AppSettingsFragment
+    public void selectKey(long masterKeyId) {
+        Uri buildUri = KeychainContract.KeyRings.buildGenericKeyRingUri(String.valueOf(masterKeyId));
+        mReceivedUri = buildUri;
+        getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     private void startSelectKeyActivity() {
@@ -133,7 +141,9 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), mReceivedUri, PROJECTION, null, null, null);
+        Uri uri = KeychainContract.KeyRings.buildUnifiedKeyRingUri(mReceivedUri);
+        //We don't care about the Loader id
+        return new CursorLoader(getActivity(), uri, PROJECTION, null, null, null);
     }
 
     @Override
