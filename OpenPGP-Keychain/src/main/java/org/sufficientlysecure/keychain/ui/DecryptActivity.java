@@ -51,8 +51,6 @@ public class DecryptActivity extends DrawerActivity {
     int mSwitchToTab = PAGER_TAB_MESSAGE;
 
     private boolean mLegacyMode = false;
-    private boolean mReturnResult = false;
-    private boolean mDecryptImmediately = false;
 
     private static final int PAGER_TAB_MESSAGE = 0;
     private static final int PAGER_TAB_FILE = 1;
@@ -88,6 +86,9 @@ public class DecryptActivity extends DrawerActivity {
         mViewPager.setCurrentItem(mSwitchToTab);
     }
 
+    public boolean getLegacyMode() {
+        return mLegacyMode;
+    }
 
     /**
      * Handles all actions with this intent
@@ -157,8 +158,7 @@ public class DecryptActivity extends DrawerActivity {
                     Log.d(Constants.TAG, "Nothing matched!");
                 }
             }
-            mReturnResult = true;
-            mDecryptImmediately = true;
+            return;
         }
 
         /**

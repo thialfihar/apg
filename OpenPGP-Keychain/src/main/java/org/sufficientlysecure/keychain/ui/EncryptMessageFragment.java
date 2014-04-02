@@ -47,6 +47,7 @@ import org.thialfihar.android.apg.util.Log;
 public class EncryptMessageFragment extends Fragment {
     public static final String ARG_TEXT = "text";
 
+    private boolean mLegacyMode = false;
     private EditText mMessage = null;
     private BootstrapButton mEncryptShare;
     private BootstrapButton mEncryptClipboard;
@@ -90,7 +91,6 @@ public class EncryptMessageFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -98,6 +98,15 @@ public class EncryptMessageFragment extends Fragment {
         String text = getArguments().getString(ARG_TEXT);
         if (text != null) {
             mMessage.setText(text);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mLegacyMode = mEncryptInterface.getLegacyMode();
+        if (mLegacyMode) {
+            encryptClicked(true);
         }
     }
 
@@ -205,6 +214,7 @@ public class EncryptMessageFragment extends Fragment {
 
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
+        final Activity activity = getActivity();
         // Message is received after encrypting is done in ApgIntentService
         ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(getActivity(),
                 getString(R.string.progress_encrypting), ProgressDialog.STYLE_HORIZONTAL) {
@@ -219,7 +229,13 @@ public class EncryptMessageFragment extends Fragment {
                     String output = new String(data.getByteArray(ApgIntentService.RESULT_BYTES));
                     Log.d(Constants.TAG, "output: " + output);
 
-                    if (toClipboard) {
+                    if (mLegacyMode) {
+                        Intent result = new Intent();
+                        result.putExtra("encryptedMessage", output);
+                        activity.setResult(activity.RESULT_OK, result);
+                        activity.finish();
+                        return;
+                    } else if (toClipboard) {
                         ClipboardReflection.copyToClipboard(getActivity(), output);
                         AppMsg.makeText(getActivity(),
                                 R.string.encryption_to_clipboard_successful, AppMsg.STYLE_INFO)

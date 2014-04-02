@@ -17,6 +17,7 @@
 
 package org.thialfihar.android.apg.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,13 +48,25 @@ import java.util.regex.Matcher;
 public class DecryptMessageFragment extends DecryptFragment {
     public static final String ARG_CIPHERTEXT = "ciphertext";
 
+    private boolean mLegacyMode = false;
     // view
     private EditText mMessage;
     private BootstrapButton mDecryptButton;
     private BootstrapButton mDecryptFromCLipboardButton;
+    private DecryptActivity mDecryptActivity;
 
     // model
     private String mCiphertext;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mDecryptActivity = (DecryptActivity) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("parent activity must be DecryptActivity");
+        }
+    }
 
     /**
      * Inflate the layout for this fragment
@@ -82,12 +95,12 @@ public class DecryptMessageFragment extends DecryptFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        String ciphertext = getArguments().getString(ARG_CIPHERTEXT);
-        if (ciphertext != null) {
-            mMessage.setText(ciphertext);
+    public void onStart() {
+        super.onStart();
+        mLegacyMode = mDecryptActivity.getLegacyMode();
+        mCiphertext = getArguments().getString(ARG_CIPHERTEXT);
+        if (mCiphertext != null) {
+            mMessage.setText(mCiphertext);
             decryptStart(null);
         }
     }
@@ -138,6 +151,7 @@ public class DecryptMessageFragment extends DecryptFragment {
 
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
+        final Activity activity = getActivity();
         // Message is received after encrypting is done in ApgIntentService
         ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(getActivity(),
                 getString(R.string.progress_decrypting), ProgressDialog.STYLE_HORIZONTAL) {
@@ -157,6 +171,28 @@ public class DecryptMessageFragment extends DecryptFragment {
                     } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
                                     decryptVerifyResult.getStatus()) {
                         showPassphraseDialog(Id.key.symmetric);
+                    } else if (mLegacyMode) {
+                        Intent intent = new Intent();
+
+                        OpenPgpSignatureResult signatureResult =
+                            decryptVerifyResult.getSignatureResult();
+                        if (signatureResult != null) {
+                            intent.putExtra("signatureUserId", signatureResult.getUserId());
+                            intent.putExtra("signatureKeyId", signatureResult.getKeyId());
+                            intent.putExtra("signatureSuccess",
+                                signatureResult.getStatus() ==
+                                    OpenPgpSignatureResult.SIGNATURE_SUCCESS_UNCERTIFIED);
+                            intent.putExtra("signatureUnknown",
+                                signatureResult.getStatus() ==
+                                    OpenPgpSignatureResult.SIGNATURE_UNKNOWN_PUB_KEY);
+                        }
+
+                        byte[] decryptedMessage = returnData
+                                .getByteArray(ApgIntentService.RESULT_DECRYPTED_BYTES);
+                        intent.putExtra("decryptedMessage", new String(decryptedMessage));
+                        activity.setResult(Activity.RESULT_OK, intent);
+                        activity.finish();
+                        return;
                     } else {
                         AppMsg.makeText(getActivity(), R.string.decryption_successful,
                                 AppMsg.STYLE_INFO).show();

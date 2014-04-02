@@ -106,6 +106,10 @@ public class EncryptActivity extends DrawerActivity implements
         }
     }
 
+    public boolean getLegacyMode() {
+        return mLegacyMode;
+    }
+
     @Override
     public long getSignatureKey() {
         return mSigningKeyId;

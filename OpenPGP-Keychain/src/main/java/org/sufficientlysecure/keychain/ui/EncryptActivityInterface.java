@@ -27,4 +27,5 @@ public interface EncryptActivityInterface {
     public String getPassphrase();
     public String getPassphraseAgain();
 
+    public boolean getLegacyMode();
 }
