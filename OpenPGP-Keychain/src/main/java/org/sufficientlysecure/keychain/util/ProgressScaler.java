@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.util;
+package org.thialfihar.android.apg.util;
 
 import org.thialfihar.android.apg.pgp.Progressable;
 

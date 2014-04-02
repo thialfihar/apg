@@ -28,7 +28,10 @@ import android.os.RemoteException;
 import org.spongycastle.bcpg.sig.KeyFlags;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
+import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
 
 import org.thialfihar.android.apg.Constants;
@@ -50,11 +53,13 @@ import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.PublicKeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.KeychainServiceListener;
 import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressScaler;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -522,7 +527,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     PGPSecretKeyRing keyRing = ProviderHelper
                             .getPGPSecretKeyRingByKeyId(this, masterKeyId);
                     keyRing = keyOperations.changeSecretKeyPassphrase(keyRing,
-                            oldPassPhrase, newPassPhrase);
+                            oldPassphrase, newPassphrase);
                     setProgress(R.string.progress_saving_key_ring, 50, 100);
                     ProviderHelper.saveKeyRing(this, keyRing);
                     setProgress(R.string.progress_done, 100, 100);
@@ -557,8 +562,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 /* Operation */
                 PgpKeyOperation keyOperations = new PgpKeyOperation(new ProgressScaler(this, 0, 100, 100));
-                PGPSecretKey newKey = keyOperations.createKey(algorithm, keysize,
-                        passphrase, masterKey);
+                Key newKey = keyOperations.createKey(algorithm, keysize, passphrase, masterKey);
 
                 /* Output */
                 Bundle resultData = new Bundle();
@@ -831,7 +835,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 /* Operation */
                 String signaturePassphrase = PassphraseCacheService.getCachedPassphrase(this,
                         masterKeyId);
-                if (signaturePassPhrase == null) {
+                if (signaturePassphrase == null) {
                     throw new PgpGeneralException("Unable to obtain passphrase");
                 }
 
@@ -842,7 +846,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(this,
                         masterKeyId);
                 publicKey = keyOperation.certifyKey(certificationKey, publicKey,
-                        userIds, signaturePassPhrase);
+                        userIds, signaturePassphrase);
                 publicRing = PGPPublicKeyRing.insertPublicKey(publicRing, publicKey);
 
                 // store the signed key in our local cache

@@ -17,7 +17,6 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import android.content.Context;
 import android.util.Pair;
 
 import org.spongycastle.bcpg.CompressionAlgorithmTags;
@@ -52,9 +51,7 @@ import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
-import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Primes;
@@ -129,8 +126,8 @@ public class PgpKeyOperation {
      */
 
     // TODO: key flags?
-    public PGPSecretKey createKey(int algorithmChoice, int keySize, String passphrase,
-                                  boolean isMasterKey)
+    public Key createKey(int algorithmChoice, int keySize, String passphrase,
+                         boolean isMasterKey)
             throws NoSuchAlgorithmException, PGPException, NoSuchProviderException,
                    PgpGeneralMsgIdException, InvalidAlgorithmParameterException {
 
@@ -391,7 +388,7 @@ public class PgpKeyOperation {
 
         if (mKR == null) {
             return buildNewSecretKey(saveParcel.userIDs, saveParcel.keys, saveParcel.keysExpiryDates,
-                    saveParcel.keysUsages, saveParcel.newPassPhrase, saveParcel.oldPassPhrase); //new Keyring
+                    saveParcel.keysUsages, saveParcel.newPassphrase, saveParcel.oldPassphrase); //new Keyring
         }
 
         /*

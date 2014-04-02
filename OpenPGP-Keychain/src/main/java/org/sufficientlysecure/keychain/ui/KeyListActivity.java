@@ -52,7 +52,7 @@ public class KeyListActivity extends DrawerActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_key_list_import: {
+            case R.id.menu_key_list_import:
                 callIntentForDrawerItem(ImportKeysActivity.class);
 
                 return true;
@@ -60,8 +60,7 @@ public class KeyListActivity extends DrawerActivity {
                 createKey();
 
                 return true;
-            }
-            case R.id.menu_key_list_create_expert: {
+            case R.id.menu_key_list_create_expert:
                 createKeyExpert();
 
                 return true;
@@ -75,7 +74,6 @@ public class KeyListActivity extends DrawerActivity {
                     Constants.Path.APP_DIR_FILE_SEC, null);
 
                 return true;
-            }
             default: {
                 return super.onOptionsItemSelected(item);
             }

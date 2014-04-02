@@ -34,6 +34,8 @@ import org.spongycastle.openpgp.PGPPBEEncryptedData;
 import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPPublicKeyEncryptedData;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.PGPSecretKeyRing;
 
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureList;
@@ -51,8 +53,8 @@ import org.spongycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactory
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
