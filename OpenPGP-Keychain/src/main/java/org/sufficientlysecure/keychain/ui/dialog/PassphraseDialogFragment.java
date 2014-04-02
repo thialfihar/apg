@@ -91,6 +91,27 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
     }
 
     /**
+     * Shows passphrase dialog to cache a new passphrase the user enters for using it later for
+     * encryption. Based on mSecretKeyId it asks for a passphrase to open a private key or it asks
+     * for a symmetric passphrase
+     */
+    public static void show(FragmentActivity context, long keyId, Handler returnHandler) {
+        // Create a new Messenger for the communication back
+        Messenger messenger = new Messenger(returnHandler);
+
+        try {
+            PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(context,
+                    messenger, keyId);
+
+            passphraseDialog.show(context.getSupportFragmentManager(), "passphraseDialog");
+        } catch (PgpGeneralException e) {
+            Log.d(Constants.TAG, "No passphrase for this secret key, encrypt directly!");
+            // send message to handler to start encryption directly
+            returnHandler.sendEmptyMessage(PassphraseDialogFragment.MESSAGE_OKAY);
+        }
+    }
+
+    /**
      * Creates new instance of this dialog fragment
      *
      * @param secretKeyId
