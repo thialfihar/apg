@@ -88,12 +88,9 @@ public class KeychainContract {
     public static final String PATH_PUBLIC = "public";
     public static final String PATH_SECRET = "secret";
 
-    public static final String PATH_BY_MASTER_KEY_ID = "master_key_id";
-    public static final String PATH_BY_KEY_ID = "key_id";
-    public static final String PATH_BY_KEY_ROW_ID = "key_row_id";
-    public static final String PATH_BY_CERTIFIER_ID = "certifier_id";
-    public static final String PATH_BY_EMAILS = "emails";
-    public static final String PATH_BY_LIKE_EMAIL = "like_email";
+    public static final String PATH_FIND = "find";
+    public static final String PATH_BY_EMAIL = "email";
+    public static final String PATH_BY_SUBKEY = "subkey";
 
     public static final String PATH_USER_IDS = "user_ids";
     public static final String PATH_KEYS = "keys";
@@ -130,22 +127,24 @@ public class KeychainContract {
                     .appendPath(PATH_BY_MASTER_KEY_ID).appendPath(masterKeyId).build();
         }
 
-        public static Uri buildPublicKeyRingsByKeyIdUri(String keyId) {
-            return CONTENT_URI.buildUpon().appendPath(PATH_PUBLIC).appendPath(PATH_BY_KEY_ID)
-                    .appendPath(keyId).build();
-        }
-
         public static Uri buildPublicKeyRingsByEmailsUri(String emails) {
             return CONTENT_URI.buildUpon().appendPath(PATH_PUBLIC).appendPath(PATH_BY_EMAILS)
                     .appendPath(emails).build();
         }
-
         public static Uri buildUnifiedKeyRingUri(String masterKeyId) {
             return CONTENT_URI.buildUpon().appendPath(masterKeyId).appendPath(PATH_UNIFIED).build();
         }
         public static Uri buildUnifiedKeyRingUri(Uri uri) {
             return CONTENT_URI.buildUpon().appendPath(uri.getPathSegments().get(1)).appendPath(PATH_UNIFIED).build();
         }
+
+        public static Uri buildUnifiedKeyRingsFindByEmailUri(String email) {
+            return CONTENT_URI.buildUpon().appendPath(PATH_FIND).appendPath(PATH_BY_EMAIL).appendPath(email).build();
+        }
+        public static Uri buildUnifiedKeyRingsFindBySubkeyUri(String subkey) {
+            return CONTENT_URI.buildUpon().appendPath(PATH_FIND).appendPath(PATH_BY_SUBKEY).appendPath(subkey).build();
+        }
+
     }
 
     public static class KeyRingData implements KeyRingsColumns, BaseColumns {

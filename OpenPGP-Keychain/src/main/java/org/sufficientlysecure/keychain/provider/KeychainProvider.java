@@ -65,7 +65,10 @@ public class KeychainProvider extends ContentProvider {
     private static final int CERTS_BY_CERTIFIER_ID = 406;
     private static final int CERTS_BY_KEY_ROW_ID_HAS_SECRET = 407;
 
-    // private static final int DATA_STREAM = 401;
+    private static final int KEY_RINGS_FIND_BY_EMAIL = 400;
+    private static final int KEY_RINGS_FIND_BY_SUBKEY = 401;
+
+    // private static final int DATA_STREAM = 501;
 
     protected UriMatcher mUriMatcher;
 
@@ -92,6 +95,20 @@ public class KeychainProvider extends ContentProvider {
         matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS
                 + "/" + KeychainContract.PATH_PUBLIC,
                 KEY_RINGS_PUBLIC);
+
+        /**
+         * find by criteria other than master key id
+         *
+         * key_rings/find/email/_
+         * key_rings/find/subkey/_
+         *
+         */
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
+                + KeychainContract.PATH_FIND + "/" + KeychainContract.PATH_BY_EMAIL + "/*",
+                KEY_RINGS_FIND_BY_EMAIL);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
+                + KeychainContract.PATH_FIND + "/" + KeychainContract.PATH_BY_SUBKEY + "/*",
+                KEY_RINGS_FIND_BY_SUBKEY);
 
         /**
          * list key_ring specifics
@@ -522,7 +539,6 @@ public class KeychainProvider extends ContentProvider {
         Log.v(Constants.TAG, "query(uri=" + uri + ", proj=" + Arrays.toString(projection) + ")");
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        SQLiteDatabase db = mApgDatabase.getReadableDatabase();
 
         int match = mUriMatcher.match(uri);
 
@@ -531,7 +547,9 @@ public class KeychainProvider extends ContentProvider {
 
         switch (match) {
             case KEY_RING_UNIFIED:
-            case KEY_RINGS_UNIFIED: {
+            case KEY_RINGS_UNIFIED:
+            case KEY_RINGS_FIND_BY_EMAIL:
+            case KEY_RINGS_FIND_BY_SUBKEY: {
                 HashMap<String, String> projectionMap = new HashMap<String, String>();
                 projectionMap.put(KeyRings._ID, Tables.KEYS + ".oid AS _id");
                 projectionMap.put(KeyRings.MASTER_KEY_ID, Tables.KEYS + "." + Keys.MASTER_KEY_ID);
@@ -564,96 +582,71 @@ public class KeychainProvider extends ContentProvider {
                     );
                 qb.appendWhere(Tables.KEYS + "." + Keys.RANK + " = 0");
 
-                if(match == KEY_RING_UNIFIED) {
-                    qb.appendWhere(" AND " + Tables.KEYS + "." + Keys.MASTER_KEY_ID + " = ");
-                    qb.appendWhereEscapeString(uri.getPathSegments().get(1));
-                } else if (TextUtils.isEmpty(sortOrder)) {
+                switch(match) {
+                    case KEY_RING_UNIFIED: {
+                        qb.appendWhere(" AND " + Tables.KEYS + "." + Keys.MASTER_KEY_ID + " = ");
+                        qb.appendWhereEscapeString(uri.getPathSegments().get(1));
+                        break;
+                    }
+                    case KEY_RINGS_FIND_BY_SUBKEY: {
+                        try {
+                            String subkey = Long.valueOf(uri.getLastPathSegment()).toString();
+                            qb.appendWhere(" AND EXISTS ("
+                                    + " SELECT 1 FROM " + Tables.KEYS + " AS tmp"
+                                    + " WHERE tmp." + UserIds.MASTER_KEY_ID
+                                    + " = " + Tables.KEYS + "." + Keys.MASTER_KEY_ID
+                                    + " AND tmp." + Keys.KEY_ID + " = " + subkey + ""
+                                    + ")");
+                        } catch(NumberFormatException e) {
+                            Log.e(Constants.TAG, "Malformed find by subkey query!", e);
+                            qb.appendWhere(" AND 0");
+                        }
+                        break;
+                    }
+                    case KEY_RINGS_FIND_BY_EMAIL: {
+                        String chunks[] = uri.getLastPathSegment().split(" *, *");
+                        boolean gotCondition = false;
+                        String emailWhere = "";
+                        // JAVA ♥
+                        for (int i = 0; i < chunks.length; ++i) {
+                            if (chunks[i].length() == 0) {
+                                continue;
+                            }
+                            if (i != 0) {
+                                emailWhere += " OR ";
+                            }
+                            emailWhere += "tmp." + UserIds.USER_ID + " LIKE ";
+                            // match '*<email>', so it has to be at the *end* of the user id
+                            emailWhere += DatabaseUtils.sqlEscapeString("%<" + chunks[i] + ">");
+                            gotCondition = true;
+                        }
+                        if(gotCondition) {
+                            qb.appendWhere(" AND EXISTS ("
+                                + " SELECT 1 FROM " + Tables.USER_IDS + " AS tmp"
+                                    + " WHERE tmp." + UserIds.MASTER_KEY_ID
+                                            + " = " + Tables.KEYS + "." + Keys.MASTER_KEY_ID
+                                        + " AND (" + emailWhere + ")"
+                                + ")");
+                        } else {
+                            // TODO better way to do this?
+                            Log.e(Constants.TAG, "Malformed find by email query!");
+                            qb.appendWhere(" AND 0");
+                        }
+                        break;
+                    }
+                }
+
+                if (TextUtils.isEmpty(sortOrder)) {
                     sortOrder =
-                            Tables.KEY_RINGS_SECRET + "." + KeyRings.MASTER_KEY_ID + " IS NULL DESC"
-                            + Tables.USER_IDS + "." + UserIds.USER_ID + " ASC";
+                            Tables.KEY_RINGS_SECRET + "." + KeyRings.MASTER_KEY_ID + " IS NULL ASC, "
+                                    + Tables.USER_IDS + "." + UserIds.USER_ID + " ASC";
                 }
 
                 // uri to watch is all /key_rings/
                 uri = KeyRings.CONTENT_URI;
 
                 break;
-
-            case PUBLIC_KEY_RING:
-            case SECRET_KEY_RING:
-                qb = buildKeyRingQuery(qb, match);
-
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
-                }
-
-                break;
-
-            case PUBLIC_KEY_RING_BY_ROW_ID:
-            case SECRET_KEY_RING_BY_ROW_ID:
-                qb = buildKeyRingQuery(qb, match);
-
-                qb.appendWhere(" AND " + Tables.KEY_RINGS + "." + BaseColumns._ID + " = ");
-                qb.appendWhereEscapeString(uri.getLastPathSegment());
-
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
-                }
-
-                break;
-
-            case PUBLIC_KEY_RING_BY_MASTER_KEY_ID:
-            case SECRET_KEY_RING_BY_MASTER_KEY_ID:
-                qb = buildKeyRingQuery(qb, match);
-
-                qb.appendWhere(" AND " + Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID + " = ");
-                qb.appendWhereEscapeString(uri.getLastPathSegment());
-
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
-                }
-
-                break;
-
-            case SECRET_KEY_RING_BY_KEY_ID:
-            case PUBLIC_KEY_RING_BY_KEY_ID:
-                qb = buildKeyRingQueryWithSpecificKey(qb, match);
-
-                qb.appendWhere(" AND " + Tables.KEYS + "." + KeysColumns.KEY_ID + " = ");
-                qb.appendWhereEscapeString(uri.getLastPathSegment());
-
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
-                }
-
-                break;
-
-            case SECRET_KEY_RING_BY_EMAILS:
-            case PUBLIC_KEY_RING_BY_EMAILS:
-                qb = buildKeyRingQuery(qb, match);
-
-                String emails = uri.getLastPathSegment();
-                String chunks[] = emails.split(" *, *");
-                boolean gotCondition = false;
-                String emailWhere = "";
-                for (int i = 0; i < chunks.length; ++i) {
-                    if (chunks[i].length() == 0) {
-                        continue;
-                    }
-                    if (i != 0) {
-                        emailWhere += " OR ";
-                    }
-                    emailWhere += "tmp." + UserIds.USER_ID + " LIKE ";
-                    // match '*<email>', so it has to be at the *end* of the user id
-                    emailWhere += DatabaseUtils.sqlEscapeString("%<" + chunks[i] + ">");
-                    gotCondition = true;
-                }
-
-                if (gotCondition) {
-                    qb.appendWhere(" AND EXISTS (SELECT tmp." + Base._ID + " FROM "
-                            + Tables.USER_IDS + " AS tmp WHERE tmp." + UserIds.KEY_RING_ROW_ID
-                            + " = " + Tables.KEY_RINGS + "." + Base._ID + " AND (" + emailWhere
-                            + "))");
-                }*/
+            }
 
             case KEY_RING_KEYS: {
                 HashMap<String, String> projectionMap = new HashMap<String, String>();
@@ -752,7 +745,7 @@ public class KeychainProvider extends ContentProvider {
                 break;
 
             default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+                throw new IllegalArgumentException("Unknown URI " + uri + " (" + match + ")");
 
         }
 
@@ -764,6 +757,7 @@ public class KeychainProvider extends ContentProvider {
             orderBy = sortOrder;
         }
 
+        SQLiteDatabase db = mKeychainDatabase.getReadableDatabase();
         Cursor c = qb.query(db, projection, selection, selectionArgs, groupBy, having, orderBy);
 
         // Tell the cursor what uri to watch, so it knows when its source data changes

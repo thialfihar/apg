@@ -43,8 +43,8 @@ import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 
 import java.util.Date;
@@ -170,15 +170,11 @@ public class PassphraseCacheService extends Service {
         // try to get master key id which is used as an identifier for cached passphrases
         long masterKeyId = keyId;
         if (masterKeyId != Id.key.symmetric) {
-            PGPSecretKeyRing keyRing = ProviderHelper.getPGPSecretKeyRingWithKeyId(this, keyId);
-            if (keyRing == null) {
+            masterKeyId = ProviderHelper.getMasterKeyId(this,
+                    KeychainContract.KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(keyId)));
+            // Failure
+            if(masterKeyId == 0)
                 return null;
-            }
-            PGPSecretKey masterKey = keyRing.getSecretKey();
-            if (masterKey == null) {
-                return null;
-            }
-            masterKeyId = masterKey.getKeyID();
         }
         Log.d(TAG, "getCachedPassphraseImpl() for masterKeyId " + masterKeyId);
 
