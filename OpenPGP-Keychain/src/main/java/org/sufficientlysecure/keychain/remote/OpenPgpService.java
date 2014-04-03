@@ -37,7 +37,9 @@ import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.remote.ui.RemoteServiceActivity;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.ImportKeysActivity;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 
@@ -317,11 +319,10 @@ public class OpenPgpService extends RemoteService {
                     if (signatureResult.getStatus() == OpenPgpSignatureResult.SIGNATURE_UNKNOWN_PUB_KEY) {
                         // If signature is unknown we return an _additional_ PendingIntent
                         // to retrieve the missing key
-                        // TODO!!!
-                        Intent intent = new Intent(getBaseContext(), RemoteServiceActivity.class);
-                        intent.setAction(RemoteServiceActivity.ACTION_ERROR_MESSAGE);
-                        intent.putExtra(RemoteServiceActivity.EXTRA_ERROR_MESSAGE, "todo");
-                        intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
+                        Intent intent = new Intent(getBaseContext(), ImportKeysActivity.class);
+                        intent.setAction(ImportKeysActivity.ACTION_IMPORT_KEY_FROM_KEYSERVER_AND_RETURN);
+                        intent.putExtra(ImportKeysActivity.EXTRA_KEY_ID, signatureResult.getKeyId());
+                        intent.putExtra(ImportKeysActivity.EXTRA_PENDING_INTENT_DATA, data);
 
                         PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
                                 intent,
