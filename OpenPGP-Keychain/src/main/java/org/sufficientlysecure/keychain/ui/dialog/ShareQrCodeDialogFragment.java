@@ -32,8 +32,10 @@ import android.widget.Toast;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.QrCodeUtils;
 
@@ -97,26 +99,28 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
         if (mFingerprintOnly) {
             alert.setPositiveButton(R.string.btn_okay, null);
 
-            byte[] fingerprintBlob = ProviderHelper.getFingerprint(mContext, dataUri);
-            String fingerprint = PgpKeyHelper.convertFingerprintToHex(fingerprintBlob);
+            Object blob = ProviderHelper.getUnifiedData(getActivity(), dataUri, KeychainContract.Keys.FINGERPRINT);
+            if(!(blob instanceof byte[])) {
+                // TODO error handling?!
+                return null;
+            }
 
+            String fingerprint = PgpKeyHelper.convertFingerprintToHex((byte[]) blob);
             mText.setText(getString(R.string.share_qr_code_dialog_fingerprint_text) + " " + fingerprint);
-
             content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;
             setQrCode(content);
         } else {
             mText.setText(R.string.share_qr_code_dialog_start);
 
-            // TODO
-            long masterKeyId = ProviderHelper.getMasterKeyId(mContext, dataUri);
-            KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
-            try {
-                content = keyRing.getArmoredEncoded(mContext);
-            } catch (IOException e) {
-                Toast.makeText(mContext, R.string.error_could_not_encode_key_ring,
-                    Toast.LENGTH_LONG).show();
-                return null;
-            }
+            // TODO works, but
+            long masterKeyId = ProviderHelper.getMasterKeyId(getActivity(), dataUri);
+            // get public keyring as ascii armored string
+            ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(
+                    getActivity(), dataUri, new long[] { masterKeyId });
+
+            // TODO: binary?
+
+            content = keyringArmored.get(0);
 
             // OnClickListener are set in onResume to prevent automatic dismissing of Dialogs
             // http://bit.ly/O5vfaR

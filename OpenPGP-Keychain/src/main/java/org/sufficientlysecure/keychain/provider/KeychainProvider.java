@@ -554,6 +554,9 @@ public class KeychainProvider extends ContentProvider {
                             Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
                 }
 
+                // uri to watch is all /key_rings/
+                uri = KeyRings.CONTENT_URI;
+
                 break;
 
             case PUBLIC_KEY_RING:
@@ -916,19 +919,18 @@ public class KeychainProvider extends ContentProvider {
             case SECRET_KEY_RING_BY_ROW_ID:
                 defaultSelection = BaseColumns._ID + "=" + uri.getLastPathSegment();
                 // corresponding keys and userIds are deleted by ON DELETE CASCADE
-                count = db.delete(Tables.KEY_RINGS,
-                        buildDefaultKeyRingsSelection(defaultSelection, getKeyType(match), selection),
-                        selectionArgs);
-                sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
+                count = db.delete(Tables.KEY_RINGS_PUBLIC, selection, selectionArgs);
+                uri = KeyRings.buildGenericKeyRingUri(uri.getPathSegments().get(1));
                 break;
-            case PUBLIC_KEY_RING_BY_MASTER_KEY_ID:
-            case SECRET_KEY_RING_BY_MASTER_KEY_ID:
-                defaultSelection = KeyRings.MASTER_KEY_ID + "=" + uri.getLastPathSegment();
-                // corresponding keys and userIds are deleted by ON DELETE CASCADE
-                count = db.delete(Tables.KEY_RINGS,
-                        buildDefaultKeyRingsSelection(defaultSelection, getKeyType(match), selection),
-                        selectionArgs);
-                sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
+            }
+            case KEY_RING_SECRET: {
+                @SuppressWarnings("ConstantConditions") // ensured by uriMatcher above
+                String selection  = KeyRings.MASTER_KEY_ID + " = " + uri.getPathSegments().get(1);
+                if (!TextUtils.isEmpty(additionalSelection)) {
+                    selection += " AND (" + additionalSelection + ")";
+                }
+                count = db.delete(Tables.KEY_RINGS_SECRET, selection, selectionArgs);
+                uri = KeyRings.buildGenericKeyRingUri(uri.getPathSegments().get(1));
                 break;
             case PUBLIC_KEY_RING_KEY_BY_ROW_ID:
             case SECRET_KEY_RING_KEY_BY_ROW_ID:

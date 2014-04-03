@@ -35,6 +35,9 @@ import android.widget.Toast;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.util.Log;
+
+import java.io.IOException;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ViewKeyActivityJB extends ViewKeyActivity implements CreateNdefMessageCallback,
@@ -65,13 +68,17 @@ public class ViewKeyActivityJB extends ViewKeyActivity implements CreateNdefMess
 
                 // get public keyring as byte array
                 long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
-                mSharedKeyringBytes = ProviderHelper.getKeyRingsAsByteArray(this, dataUri,
-                        new long[] { masterKeyId });
+                try {
+                    mSharedKeyringBytes = ProviderHelper.getPGPPublicKeyRing(this, masterKeyId).getEncoded();
 
-                // Register callback to set NDEF message
-                mNfcAdapter.setNdefPushMessageCallback(this, this);
-                // Register callback to listen for message-sent success
-                mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+                    // Register callback to set NDEF message
+                    mNfcAdapter.setNdefPushMessageCallback(this, this);
+                    // Register callback to listen for message-sent success
+                    mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
+                } catch(IOException e) {
+                    // not much trouble, but leave a note
+                    Log.e(Constants.TAG, "Error parsing keyring: ", e);
+                }
             }
         }
     }

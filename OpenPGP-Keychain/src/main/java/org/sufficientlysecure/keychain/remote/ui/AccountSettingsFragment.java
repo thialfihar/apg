@@ -34,6 +34,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.AccountSettings;
 import org.thialfihar.android.apg.ui.EditKeyActivity;
 import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
@@ -178,8 +179,8 @@ public class AccountSettingsFragment extends Fragment implements
             case REQUEST_CODE_CREATE_KEY: {
                 if (resultCode == Activity.RESULT_OK) {
                     // select newly created key
-                    Uri newKeyUri = data.getData();
-                    mSelectKeyFragment.selectKey(newKeyUri);
+                    long masterKeyId = ProviderHelper.getMasterKeyId(getActivity(), data.getData());
+                    mSelectKeyFragment.selectKey(masterKeyId);
                 }
                 break;
             }
