@@ -266,7 +266,7 @@ public class PgpDecryptVerify {
                 updateProgress(R.string.progress_finding_key, currentProgress, 100);
 
                 PGPPublicKeyEncryptedData encData = (PGPPublicKeyEncryptedData) obj;
-                secretKey = ProviderHelper.getPGPSecretKeyByKeyId(mContext, encData.getKeyID());
+                secretKey = ProviderHelper.getPGPSecretKeyRing(mContext, encData.getKeyID()).getSecretKey();
                 if (secretKey != null) {
                     // secret key exists in database
 

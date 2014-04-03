@@ -35,11 +35,11 @@ import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiAccounts;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.ui.RemoteServiceActivity;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
-import org.thialfihar.android.apg.ui.ImportKeysActivity;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 
@@ -354,7 +354,7 @@ public class OpenPgpService extends RemoteService {
         try {
             long keyId = data.getLongExtra(OpenPgpApi.EXTRA_KEY_ID, 0);
 
-            if (ProviderHelper.getPGPPublicKeyByKeyId(this, keyId) == null) {
+            if (ProviderHelper.getPGPPublicKeyRing(this, keyId) == null) {
                 Intent result = new Intent();
 
                 // If keys are not in db we return an additional PendingIntent
@@ -465,7 +465,7 @@ public class OpenPgpService extends RemoteService {
                 String currentPkg = getCurrentCallingPackage();
                 Set<Long> allowedKeyIds =
                     ProviderHelper.getAllKeyIdsForApp(mContext,
-                        KeychainContract.ApiAccounts.buildBaseUri(currentPkg));
+                        ApiAccounts.buildBaseUri(currentPkg));
                 return decryptAndVerifyImpl(data, input, output, allowedKeyIds);
             } else if (OpenPgpApi.ACTION_GET_KEY.equals(action)) {
                 return getKeyImpl(data);
