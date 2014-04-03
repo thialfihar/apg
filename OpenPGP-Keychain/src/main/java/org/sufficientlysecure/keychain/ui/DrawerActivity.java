@@ -152,6 +152,10 @@ public class DrawerActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (mDrawerToggle == null) {
+            return super.onCreateOptionsMenu(menu);
+        }
+
         menu.add(42, MENU_ID_PREFERENCE, 100, R.string.menu_preferences);
         menu.add(42, MENU_ID_HELP, 101, R.string.menu_help);
 
@@ -160,6 +164,10 @@ public class DrawerActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle == null) {
+            return super.onOptionsItemSelected(item);
+        }
+
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -218,14 +226,18 @@ public class DrawerActivity extends ActionBarActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        if (mDrawerToggle != null) {
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     public static class NavItem {

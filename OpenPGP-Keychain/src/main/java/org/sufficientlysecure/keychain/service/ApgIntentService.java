@@ -113,7 +113,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     // possible targets:
     public static final int TARGET_BYTES = 1;
     public static final int TARGET_URI = 2;
-    public static final int TARGET_STREAM = 3;
 
     // encrypt
     public static final String ENCRYPT_SIGNATURE_KEY_ID = "secret_key_id";
@@ -124,7 +123,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String ENCRYPT_MESSAGE_BYTES = "message_bytes";
     public static final String ENCRYPT_INPUT_FILE = "input_file";
     public static final String ENCRYPT_OUTPUT_FILE = "output_file";
-    public static final String ENCRYPT_PROVIDER_URI = "provider_uri";
     public static final String ENCRYPT_SYMMETRIC_PASSPHRASE = "passphrase";
 
     // decrypt/verify
@@ -175,11 +173,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
     public static final String RESULT_KEY_USAGES = "new_key_usages";
 
     // encrypt
-    public static final String RESULT_SIGNATURE_BYTES = "signature_data";
-    public static final String RESULT_SIGNATURE_STRING = "signature_text";
-    public static final String RESULT_ENCRYPTED_STRING = "encrypted_message";
     public static final String RESULT_BYTES = "encrypted_data";
-    public static final String RESULT_URI = "result_uri";
 
     // decrypt/verify
     public static final String RESULT_DECRYPTED_BYTES = "decrypted_data";
@@ -192,10 +186,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
     // export
     public static final String RESULT_EXPORT = "exported";
-
-    // query
-    public static final String RESULT_QUERY_KEY_DATA = "query_key_data";
-    public static final String RESULT_QUERY_KEY_SEARCH_RESULT = "query_key_search_result";
 
     private Messenger mMessenger;
 
@@ -751,9 +741,6 @@ public class ApgIntentService extends IntentService implements Progressable, Key
             try {
                 ArrayList<ImportKeysListEntry> entries = data.getParcelableArrayList(DOWNLOAD_KEY_LIST);
                 String keyServer = data.getString(DOWNLOAD_KEY_SERVER);
-
-                // TODO: add extra which requires fingerprint suport and force verification!
-                // only supported by newer sks keyserver versions
 
                 // this downloads the keys and places them into the ImportKeysListEntry entries
                 HkpKeyServer server = new HkpKeyServer(keyServer);

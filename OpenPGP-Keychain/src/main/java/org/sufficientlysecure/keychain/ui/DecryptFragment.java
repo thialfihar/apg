@@ -36,6 +36,9 @@ import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
@@ -86,13 +89,9 @@ public class DecryptFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
 
-            // this request is returned after LookupUnknownKeyDialogFragment started
-            // ImportKeysActivity and user looked uo key
             case RESULT_CODE_LOOKUP_KEY: {
-                Log.d(Constants.TAG, "Returning from Lookup Key...");
                 if (resultCode == Activity.RESULT_OK) {
-                    // decrypt again
-//                    decryptStart();
+                    // TODO: generate new OpenPgpSignatureResult and display it
                 }
                 return;
             }
@@ -173,6 +172,7 @@ public class DecryptFragment extends Fragment {
 
     /**
      * Should be overridden by MessageFragment and FileFragment to start actual decryption
+     *
      * @param passphrase
      */
     protected void decryptStart(String passphrase) {
