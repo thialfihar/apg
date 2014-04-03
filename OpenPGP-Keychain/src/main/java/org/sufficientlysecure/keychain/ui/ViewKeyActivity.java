@@ -183,16 +183,12 @@ public class ViewKeyActivity extends ActionBarActivity {
                 return;
             }
         } else {
-            // get public key ring as ascii armored string
-            long masterKeyId = mProvider.getMasterKeyId(dataUri);
-            KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
-            try {
-                content = keyRing.getArmoredEncoded(this);
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), R.string.error_could_not_encode_key_ring,
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
+            // get public keyring as ascii armored string
+            long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
+            ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(
+                    this, new long[]{ masterKeyId });
+
+            content = keyringArmored.get(0);
 
             // Android will fail with android.os.TransactionTooLargeException if key is too big
             // see http://www.lonestarprod.com/?p=34

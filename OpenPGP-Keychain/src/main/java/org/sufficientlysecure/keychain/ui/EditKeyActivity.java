@@ -45,18 +45,21 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.PGPSecretKeyRing;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.Key;
-import org.thialfihar.android.apg.pgp.KeyRing;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
@@ -67,6 +70,7 @@ import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
 import org.thialfihar.android.apg.ui.widget.KeyEditor;
 import org.thialfihar.android.apg.ui.widget.SectionView;
 import org.thialfihar.android.apg.ui.widget.UserIdEditor;
+import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
@@ -321,7 +325,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 }
                 return true;
             case R.id.menu_key_edit_delete:
-                Uri convertUri = KeychainContract.KeyRings.buildSecretKeyRingUri(mDataUri);
+                Uri convertUri = KeyRingData.buildSecretKeyRingUri(mDataUri);
                     // Message is received after key is deleted
                     Handler returnHandler = new Handler() {
                         @Override

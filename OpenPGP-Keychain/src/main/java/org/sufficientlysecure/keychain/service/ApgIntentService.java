@@ -527,8 +527,8 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     PgpKeyOperation.Pair<PGPSecretKeyRing,PGPPublicKeyRing> pair =
                         keyOperations.buildSecretKey(privkey, pubkey, saveParams);
                     setProgress(R.string.progress_saving_key_ring, 90, 100);
-                    ProviderHelper.saveKeyRing(this, pair.first);
-                    ProviderHelper.saveKeyRing(this, pair.second);
+                    // save the pair
+                    ProviderHelper.saveKeyRing(this, pair.second, pair.first);
                     setProgress(R.string.progress_done, 100, 100);
                 }
                 PassphraseCacheService.addCachedPassphrase(this, masterKeyId, newPassphrase);

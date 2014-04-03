@@ -44,6 +44,7 @@ import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
 import org.thialfihar.android.apg.provider.KeychainContract.Keys;
 import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 import org.thialfihar.android.apg.remote.AccountSettings;
@@ -71,13 +72,13 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Private helper method to get KeyRing from database
      */
-    public KeyRing getKeyRing(Uri queryUri) {
-        Cursor cursor = mContext.getContentResolver().query(queryUri,
-                new String[] {KeyRings._ID, KeyRings.KEY_RING_DATA}, null, null, null);
+    public static PGPKeyRing getPGPKeyRing(Context context, Uri queryUri) {
+        Cursor cursor = context.getContentResolver().query(queryUri,
+                new String[]{KeyRings._ID, KeyRingData.KEY_RING_DATA}, null, null, null);
 
         KeyRing keyRing = null;
         if (cursor != null && cursor.moveToFirst()) {
-            int keyRingDataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
+            int keyRingDataCol = cursor.getColumnIndex(KeyRingData.KEY_RING_DATA);
 
             byte[] data = cursor.getBlob(keyRingDataCol);
             if (data != null) {
@@ -164,7 +165,7 @@ public class ProviderHelper implements PgpKeyProvider {
      */
     public static PGPPublicKeyRing getPGPPublicKeyRing(Context context,
                                                                     long masterKeyId) {
-        Uri queryUri = KeyRings.buildPublicKeyRingUri(Long.toString(masterKeyId));
+        Uri queryUri = KeyRingData.buildPublicKeyRingUri(Long.toString(masterKeyId));
         return (PGPPublicKeyRing) getPGPKeyRing(context, queryUri);
     }
 
@@ -173,7 +174,7 @@ public class ProviderHelper implements PgpKeyProvider {
      */
     public static PGPSecretKeyRing getPGPSecretKeyRing(Context context,
                                                                     long masterKeyId) {
-        Uri queryUri = KeyRings.buildSecretKeyRingUri(Long.toString(masterKeyId));
+        Uri queryUri = KeyRingData.buildSecretKeyRingUri(Long.toString(masterKeyId));
         return (PGPSecretKeyRing) getPGPKeyRing(context, queryUri);
     }
 
@@ -186,12 +187,11 @@ public class ProviderHelper implements PgpKeyProvider {
         long masterKeyId = masterKey.getKeyID();
 
         // IF there is a secret key, preserve it!
-        // TODO This even necessary?
-        // PGPSecretKeyRing secretRing = ProviderHelper.getPGPSecretKeyRing(context, masterKeyId);
+        PGPSecretKeyRing secretRing = ProviderHelper.getPGPSecretKeyRing(context, masterKeyId);
 
         // delete old version of this keyRing, which also deletes all keys and userIds on cascade
         try {
-            context.getContentResolver().delete(KeyRings.buildPublicKeyRingUri(Long.toString(masterKeyId)), null, null);
+            context.getContentResolver().delete(KeyRingData.buildPublicKeyRingUri(Long.toString(masterKeyId)), null, null);
         } catch (UnsupportedOperationException e) {
             Log.e(Constants.TAG, "Key could not be deleted! Maybe we are creating a new one!", e);
         }
@@ -201,11 +201,11 @@ public class ProviderHelper implements PgpKeyProvider {
         // NOTE: If we would not use the same _ID again,
         // getting back to the ViewKeyActivity would result in Nullpointer,
         // because the currently loaded key would be gone from the database
-        values.put(KeyRings.MASTER_KEY_ID, masterKeyId);
-        values.put(KeyRings.KEY_RING_DATA, keyRing.getEncoded());
+        values.put(KeyRingData.MASTER_KEY_ID, masterKeyId);
+        values.put(KeyRingData.KEY_RING_DATA, keyRing.getEncoded());
 
         // insert new version of this keyRing
-        Uri uri = KeyRings.buildPublicKeyRingUri(Long.toString(masterKeyId));
+        Uri uri = KeyRingData.buildPublicKeyRingUri(Long.toString(masterKeyId));
         Uri insertedUri = context.getContentResolver().insert(uri, values);
 
         // save all keys and userIds included in keyRing object in database
@@ -270,31 +270,43 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         // Save the saved keyring (if any)
-        // TODO this even necessary? see above...
-        // if(secretRing != null)
-            // saveKeyRing(context, secretRing);
+        if(secretRing != null) {
+            saveKeyRing(context, secretRing);
+        }
 
     }
 
     /**
-     * Saves PGPSecretKeyRing with its keys and userIds in DB
+     * Saves a PGPSecretKeyRing in the DB. This will only work if a corresponding public keyring
+     * is already in the database!
      */
     @SuppressWarnings("unchecked")
     public static void saveKeyRing(Context context, PGPSecretKeyRing keyRing) throws IOException {
-        PGPSecretKey masterKey = keyRing.getSecretKey();
-        long masterKeyId = masterKey.getKeyID();
+        long masterKeyId = keyRing.getPublicKey().getKeyID();
 
-        // TODO Make sure there is a public key for this secret key in the db (create one maybe)
+        // save secret keyring
+        ContentValues values = new ContentValues();
+        values.put(KeyRingData.MASTER_KEY_ID, masterKeyId);
+        values.put(KeyRingData.KEY_RING_DATA, keyRing.getEncoded());
+        // insert new version of this keyRing
+        Uri uri = KeyRingData.buildSecretKeyRingUri(Long.toString(masterKeyId));
+        context.getContentResolver().insert(uri, values);
 
-        {
-            ContentValues values = new ContentValues();
-            values.put(KeyRings.MASTER_KEY_ID, masterKeyId);
-            values.put(KeyRings.KEY_RING_DATA, keyRing.getEncoded());
-            // insert new version of this keyRing
-            Uri uri = KeyRings.buildSecretKeyRingUri(Long.toString(masterKeyId));
-            context.getContentResolver().insert(uri, values);
-        }
+    }
 
+    /**
+     * Saves (or updates) a pair of public and secret KeyRings in the database
+     */
+    @SuppressWarnings("unchecked")
+    public static void saveKeyRing(Context context, PGPPublicKeyRing pubRing, PGPSecretKeyRing privRing) throws IOException {
+        long masterKeyId = pubRing.getPublicKey().getKeyID();
+
+        // delete secret keyring (so it isn't unnecessarily saved by public-saveKeyRing below)
+        context.getContentResolver().delete(KeyRingData.buildSecretKeyRingUri(Long.toString(masterKeyId)), null, null);
+
+        // save public keyring
+        saveKeyRing(context, pubRing);
+        saveKeyRing(context, privRing);
     }
 
     /**
@@ -351,24 +363,14 @@ public class ProviderHelper implements PgpKeyProvider {
         return ContentProviderOperation.newInsert(uri).withValues(values).build();
     }
 
-    public static void deletePublicKeyRing(Context context, long masterKeyId) {
-        ContentResolver cr = context.getContentResolver();
-        cr.delete(KeyRings.buildPublicKeyRingUri(Long.toString(masterKeyId)), null, null);
-    }
-
-    public static void deleteSecretKeyRing(Context context, long masterKeyId) {
-        ContentResolver cr = context.getContentResolver();
-        cr.delete(KeyRings.buildSecretKeyRingUri(Long.toString(masterKeyId)), null, null);
-    }
-
     public static boolean hasSecretKeyByMasterKeyId(Context context, long masterKeyId) {
-        Uri queryUri = KeyRings.buildSecretKeyRingUri(Long.toString(masterKeyId));
+        Uri queryUri = KeyRingData.buildSecretKeyRingUri(Long.toString(masterKeyId));
         // see if we can get our master key id back from the uri
         return getMasterKeyId(context, queryUri) == masterKeyId;
     }
 
-    /**
-     * Get master key id of key
+    /** Find the master key id related to a given query. The id will either be extracted from the
+     * query, which should work for all specific /key_rings/ queries, or will be queried if it can't.
      */
     public static long getMasterKeyId(Context context, Uri queryUri) {
         // try extracting from the uri first
@@ -376,39 +378,25 @@ public class ProviderHelper implements PgpKeyProvider {
             return Long.parseLong(queryUri.getPathSegments().get(1));
         } catch(NumberFormatException e) {
             // didn't work? oh well.
+            Log.d(Constants.TAG, "Couldn't get masterKeyId from URI, querying...");
         }
-
-        Cursor cursor = context.getContentResolver().query(queryUri, new String[] {
-                KeyRings.MASTER_KEY_ID
-        }, null, null, null);
-
-        long masterKeyId = 0;
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                int masterKeyIdCol = cursor.getColumnIndexOrThrow(KeyRings.MASTER_KEY_ID);
-
-                masterKeyId = cursor.getLong(masterKeyIdCol);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return masterKeyId;
+        Object data = getUnifiedData(context, queryUri, KeyRings.MASTER_KEY_ID);
+        if(data instanceof Long)
+            return (Long) data;
+        // TODO better error handling?
+        return 0L;
     }
 
-    public static ArrayList<String> getKeyRingsAsArmoredString(Context context, Uri uri,
-                                                               long[] masterKeyIds) {
+    public static ArrayList<String> getKeyRingsAsArmoredString(Context context, long[] masterKeyIds) {
         ArrayList<String> output = new ArrayList<String>();
 
         if (masterKeyIds != null && masterKeyIds.length > 0) {
 
-            Cursor cursor = getCursorWithSelectedKeyringMasterKeyIds(context, uri, masterKeyIds);
+            Cursor cursor = getCursorWithSelectedKeyringMasterKeyIds(context, masterKeyIds);
 
             if (cursor != null) {
-                int masterIdCol = cursor.getColumnIndex(KeyRings.MASTER_KEY_ID);
-                int dataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
+                int masterIdCol = cursor.getColumnIndex(KeyRingData.MASTER_KEY_ID);
+                int dataCol = cursor.getColumnIndex(KeyRingData.KEY_RING_DATA);
                 if (cursor.moveToFirst()) {
                     do {
                         Log.d(Constants.TAG, "masterKeyId: " + cursor.getLong(masterIdCol));
@@ -458,48 +446,11 @@ public class ProviderHelper implements PgpKeyProvider {
             return null;
         }
     }
-
-    public static byte[] getKeyRingsAsByteArray(Context context, Uri uri, long[] masterKeyIds) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-        if (masterKeyIds != null && masterKeyIds.length > 0) {
-
-            Cursor cursor = getCursorWithSelectedKeyringMasterKeyIds(context, uri, masterKeyIds);
-
-            if (cursor != null) {
-                int masterIdCol = cursor.getColumnIndex(KeyRings.MASTER_KEY_ID);
-                int dataCol = cursor.getColumnIndex(KeyRings.KEY_RING_DATA);
-                if (cursor.moveToFirst()) {
-                    do {
-                        Log.d(Constants.TAG, "masterKeyId: " + cursor.getLong(masterIdCol));
-
-                        // get actual keyring data blob and write it to ByteArrayOutputStream
-                        try {
-                            bos.write(cursor.getBlob(dataCol));
-                        } catch (IOException e) {
-                            Log.e(Constants.TAG, "IOException", e);
-                        }
-                    } while (cursor.moveToNext());
-                }
-            }
-
-            if (cursor != null) {
-                cursor.close();
-            }
-
-        } else {
-            Log.e(Constants.TAG, "No master keys given!");
-        }
-
-        return bos.toByteArray();
-    }
-
-    private static Cursor getCursorWithSelectedKeyringMasterKeyIds(Context context, Uri baseUri,
-                                                                   long[] masterKeyIds) {
+    private static Cursor getCursorWithSelectedKeyringMasterKeyIds(Context context, long[] masterKeyIds) {
         Cursor cursor = null;
         if (masterKeyIds != null && masterKeyIds.length > 0) {
 
-            String inMasterKeyList = KeyRings.MASTER_KEY_ID + " IN (";
+            String inMasterKeyList = KeyRingData.MASTER_KEY_ID + " IN (";
             for (int i = 0; i < masterKeyIds.length; ++i) {
                 if (i != 0) {
                     inMasterKeyList += ", ";
@@ -508,9 +459,9 @@ public class ProviderHelper implements PgpKeyProvider {
             }
             inMasterKeyList += ")";
 
-            cursor = context.getContentResolver().query(baseUri,
-                    new String[] {KeyRings._ID, KeyRings.MASTER_KEY_ID, KeyRings.KEY_RING_DATA},
-                    inMasterKeyList, null, null);
+            cursor = context.getContentResolver().query(KeyRingData.buildPublicKeyRingUri(), new String[] {
+                    KeyRingData._ID, KeyRingData.MASTER_KEY_ID, KeyRingData.KEY_RING_DATA
+                }, inMasterKeyList, null, null);
         }
 
         return cursor;

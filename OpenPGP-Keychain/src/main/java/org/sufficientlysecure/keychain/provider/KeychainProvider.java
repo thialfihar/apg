@@ -26,10 +26,14 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.text.TextUtils;
 import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.provider.KeychainContract.*;
+import org.sufficientlysecure.keychain.provider.KeychainContract.ApiAccounts;
+import org.sufficientlysecure.keychain.provider.KeychainContract.ApiApps;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingData;
+import org.sufficientlysecure.keychain.provider.KeychainContract.Keys;
+import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
 import org.sufficientlysecure.keychain.provider.KeychainDatabase.Tables;
 import org.sufficientlysecure.keychain.util.Log;
 
@@ -37,32 +41,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class KeychainProvider extends ContentProvider {
-    // public static final String ACTION_BROADCAST_DATABASE_CHANGE = Constants.PACKAGE_NAME
-    // + ".action.DATABASE_CHANGE";
-    //
-    // public static final String EXTRA_BROADCAST_KEY_TYPE = "key_type";
-    // public static final String EXTRA_BROADCAST_CONTENT_ITEM_TYPE = "contentItemType";
 
-    private static final int PUBLIC_KEY_RING = 101;
-    private static final int PUBLIC_KEY_RING_BY_ROW_ID = 102;
-    private static final int PUBLIC_KEY_RING_BY_MASTER_KEY_ID = 103;
-    private static final int PUBLIC_KEY_RING_BY_KEY_ID = 104;
-    private static final int PUBLIC_KEY_RING_BY_EMAILS = 105;
-    private static final int PUBLIC_KEY_RING_BY_LIKE_EMAIL = 106;
-
-    private static final int PUBLIC_KEY_RING_KEY = 111;
-    private static final int PUBLIC_KEY_RING_KEY_BY_ROW_ID = 112;
-
-    private static final int PUBLIC_KEY_RING_USER_ID = 121;
-    private static final int PUBLIC_KEY_RING_USER_ID_BY_ROW_ID = 122;
-    private static final int PUBLIC_KEY_RING_BY_MASTER_KEY_ID_USER_ID = 123;
-
-    private static final int SECRET_KEY_RING = 201;
-    private static final int SECRET_KEY_RING_BY_ROW_ID = 202;
-    private static final int SECRET_KEY_RING_BY_MASTER_KEY_ID = 203;
-    private static final int SECRET_KEY_RING_BY_KEY_ID = 204;
-    private static final int SECRET_KEY_RING_BY_EMAILS = 205;
-    private static final int SECRET_KEY_RING_BY_LIKE_EMAIL = 206;
+    private static final int KEY_RINGS_UNIFIED = 101;
+    private static final int KEY_RINGS_PUBLIC = 102;
 
     private static final int SECRET_KEY_RING_KEY = 211;
     private static final int SECRET_KEY_RING_KEY_BY_ROW_ID = 212;
@@ -98,16 +79,22 @@ public class KeychainProvider extends ContentProvider {
         String authority = KeychainContract.CONTENT_AUTHORITY;
 
         /**
-         * unified key rings
+         * list key_rings
          *
          * <pre>
-         * key_rings
+         * key_rings/unified
+         * key_rings/public
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS, UNIFIED_KEY_RING);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS
+                + "/" + KeychainContract.PATH_UNIFIED,
+                KEY_RINGS_UNIFIED);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS
+                + "/" + KeychainContract.PATH_PUBLIC,
+                KEY_RINGS_PUBLIC);
 
         /**
-         * public key rings
+         * list key_ring specifics
          *
          * <pre>
          * key_rings/public
@@ -543,15 +530,47 @@ public class KeychainProvider extends ContentProvider {
         String groupBy = null, having = null;
 
         switch (match) {
-            case UNIFIED_KEY_RING:
-                qb = buildKeyRingQuery(qb, match);
+            case KEY_RING_UNIFIED:
+            case KEY_RINGS_UNIFIED: {
+                HashMap<String, String> projectionMap = new HashMap<String, String>();
+                projectionMap.put(KeyRings._ID, Tables.KEYS + ".oid AS _id");
+                projectionMap.put(KeyRings.MASTER_KEY_ID, Tables.KEYS + "." + Keys.MASTER_KEY_ID);
+                projectionMap.put(KeyRings.KEY_ID, Keys.KEY_ID);
+                projectionMap.put(KeyRings.KEY_SIZE, Keys.KEY_SIZE);
+                projectionMap.put(KeyRings.IS_REVOKED, Keys.IS_REVOKED);
+                projectionMap.put(KeyRings.CAN_CERTIFY, Keys.CAN_CERTIFY);
+                projectionMap.put(KeyRings.CAN_ENCRYPT, Keys.CAN_ENCRYPT);
+                projectionMap.put(KeyRings.CAN_SIGN, Keys.CAN_SIGN);
+                projectionMap.put(KeyRings.CREATION, Keys.CREATION);
+                projectionMap.put(KeyRings.EXPIRY, Keys.EXPIRY);
+                projectionMap.put(KeyRings.ALGORITHM, Keys.ALGORITHM);
+                projectionMap.put(KeyRings.FINGERPRINT, Keys.FINGERPRINT);
+                projectionMap.put(KeyRings.USER_ID, UserIds.USER_ID);
+                projectionMap.put(KeyRings.HAS_SECRET, "(" + Tables.KEY_RINGS_SECRET + "." + KeyRings.MASTER_KEY_ID + " IS NOT NULL) AS " + KeyRings.HAS_SECRET);
+                qb.setProjectionMap(projectionMap);
 
-                // GROUP BY so we don't get duplicates
-                groupBy = Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID;
+                qb.setTables(
+                    Tables.KEYS
+                        + " INNER JOIN " + Tables.USER_IDS + " ON ("
+                                    + Tables.KEYS + "." + Keys.MASTER_KEY_ID
+                                + " = "
+                                    + Tables.USER_IDS + "." + UserIds.MASTER_KEY_ID
+                            + " AND " + Tables.USER_IDS + "." + UserIds.RANK + " = 0"
+                        + ") LEFT JOIN " + Tables.KEY_RINGS_SECRET + " ON ("
+                            + Tables.KEYS + "." + Keys.MASTER_KEY_ID
+                                + " = "
+                            + Tables.KEY_RINGS_SECRET + "." + KeyRings.MASTER_KEY_ID
+                        + ")"
+                    );
+                qb.appendWhere(Tables.KEYS + "." + Keys.RANK + " = 0");
 
-                if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = KeyRings.TYPE + " DESC, " +
-                            Tables.USER_IDS + "." + UserIdsColumns.USER_ID + " ASC";
+                if(match == KEY_RING_UNIFIED) {
+                    qb.appendWhere(" AND " + Tables.KEYS + "." + Keys.MASTER_KEY_ID + " = ");
+                    qb.appendWhereEscapeString(uri.getPathSegments().get(1));
+                } else if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder =
+                            Tables.KEY_RINGS_SECRET + "." + KeyRings.MASTER_KEY_ID + " IS NULL DESC"
+                            + Tables.USER_IDS + "." + UserIds.USER_ID + " ASC";
                 }
 
                 // uri to watch is all /key_rings/
@@ -623,47 +642,58 @@ public class KeychainProvider extends ContentProvider {
                     if (i != 0) {
                         emailWhere += " OR ";
                     }
-                    emailWhere += "tmp." + UserIdsColumns.USER_ID + " LIKE ";
+                    emailWhere += "tmp." + UserIds.USER_ID + " LIKE ";
                     // match '*<email>', so it has to be at the *end* of the user id
                     emailWhere += DatabaseUtils.sqlEscapeString("%<" + chunks[i] + ">");
                     gotCondition = true;
                 }
 
                 if (gotCondition) {
-                    qb.appendWhere(" AND EXISTS (SELECT tmp." + BaseColumns._ID + " FROM "
-                            + Tables.USER_IDS + " AS tmp WHERE tmp." + UserIdsColumns.KEY_RING_ROW_ID
-                            + " = " + Tables.KEY_RINGS + "." + BaseColumns._ID + " AND (" + emailWhere
+                    qb.appendWhere(" AND EXISTS (SELECT tmp." + Base._ID + " FROM "
+                            + Tables.USER_IDS + " AS tmp WHERE tmp." + UserIds.KEY_RING_ROW_ID
+                            + " = " + Tables.KEY_RINGS + "." + Base._ID + " AND (" + emailWhere
                             + "))");
-                }
+                }*/
 
-                break;
+            case KEY_RING_KEYS: {
+                HashMap<String, String> projectionMap = new HashMap<String, String>();
+                projectionMap.put(Keys._ID, Tables.KEYS + ".oid AS _id");
+                projectionMap.put(Keys.MASTER_KEY_ID, Tables.KEYS + "." + Keys.MASTER_KEY_ID);
+                projectionMap.put(Keys.RANK, Tables.KEYS + "." + Keys.RANK);
+                projectionMap.put(Keys.KEY_ID, Keys.KEY_ID);
+                projectionMap.put(Keys.KEY_SIZE, Keys.KEY_SIZE);
+                projectionMap.put(Keys.IS_REVOKED, Keys.IS_REVOKED);
+                projectionMap.put(Keys.CAN_CERTIFY, Keys.CAN_CERTIFY);
+                projectionMap.put(Keys.CAN_ENCRYPT, Keys.CAN_ENCRYPT);
+                projectionMap.put(Keys.CAN_SIGN, Keys.CAN_SIGN);
+                projectionMap.put(Keys.CREATION, Keys.CREATION);
+                projectionMap.put(Keys.EXPIRY, Keys.EXPIRY);
+                projectionMap.put(Keys.ALGORITHM, Keys.ALGORITHM);
+                projectionMap.put(Keys.FINGERPRINT, Keys.FINGERPRINT);
+                qb.setProjectionMap(projectionMap);
 
-            case SECRET_KEY_RING_BY_LIKE_EMAIL:
-            case PUBLIC_KEY_RING_BY_LIKE_EMAIL:
-                qb = buildKeyRingQuery(qb, match);
-
-                String likeEmail = uri.getLastPathSegment();
-
-                String likeEmailWhere = "tmp." + UserIdsColumns.USER_ID + " LIKE "
-                        + DatabaseUtils.sqlEscapeString("%<%" + likeEmail + "%>");
-
-                qb.appendWhere(" AND EXISTS (SELECT tmp." + BaseColumns._ID + " FROM "
-                        + Tables.USER_IDS + " AS tmp WHERE tmp." + UserIdsColumns.KEY_RING_ROW_ID
-                        + " = " + Tables.KEY_RINGS + "." + BaseColumns._ID + " AND (" + likeEmailWhere
-                        + "))");
-
-                break;
-
-            case PUBLIC_KEY_RING_KEY:
-            case SECRET_KEY_RING_KEY:
                 qb.setTables(Tables.KEYS);
-                qb.appendWhere(KeysColumns.TYPE + " = ");
-                qb.appendWhereEscapeString(Integer.toString(getKeyType(match)));
+                qb.appendWhere(Keys.MASTER_KEY_ID + " = ");
+                qb.appendWhereEscapeString(uri.getPathSegments().get(1));
 
-                qb.appendWhere(" AND " + KeysColumns.KEY_RING_ROW_ID + " = ");
-                qb.appendWhereEscapeString(uri.getPathSegments().get(2));
+                break;
 
-                qb.setProjectionMap(getProjectionMapForKeys());
+            case KEY_RING_USER_IDS: {
+                HashMap<String, String> projectionMap = new HashMap<String, String>();
+                projectionMap.put(UserIds._ID, Tables.USER_IDS + ".oid AS _id");
+                projectionMap.put(UserIds.MASTER_KEY_ID, UserIds.MASTER_KEY_ID);
+                projectionMap.put(UserIds.USER_ID, UserIds.USER_ID);
+                projectionMap.put(UserIds.RANK, UserIds.RANK);
+                projectionMap.put(UserIds.IS_PRIMARY, UserIds.IS_PRIMARY);
+                qb.setProjectionMap(projectionMap);
+
+                qb.setTables(Tables.USER_IDS);
+                qb.appendWhere(UserIds.MASTER_KEY_ID + " = ");
+                qb.appendWhereEscapeString(uri.getPathSegments().get(1));
+
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = UserIds.RANK + " ASC";
+                }
 
                 break;
 
@@ -673,100 +703,33 @@ public class KeychainProvider extends ContentProvider {
                 qb.appendWhere(KeysColumns.TYPE + " = ");
                 qb.appendWhereEscapeString(Integer.toString(getKeyType(match)));
 
-                qb.appendWhere(" AND " + KeysColumns.KEY_RING_ROW_ID + " = ");
-                qb.appendWhereEscapeString(uri.getPathSegments().get(2));
+            case KEY_RINGS_PUBLIC:
+            case KEY_RING_PUBLIC: {
+                HashMap<String, String> projectionMap = new HashMap<String, String>();
+                projectionMap.put(KeyRingData._ID, Tables.KEY_RINGS_PUBLIC + ".oid AS _id");
+                projectionMap.put(KeyRingData.MASTER_KEY_ID, KeyRingData.MASTER_KEY_ID);
+                projectionMap.put(KeyRingData.KEY_RING_DATA, KeyRingData.KEY_RING_DATA);
+                qb.setProjectionMap(projectionMap);
 
-                qb.appendWhere(" AND " + BaseColumns._ID + " = ");
-                qb.appendWhereEscapeString(uri.getLastPathSegment());
+                qb.setTables(Tables.KEY_RINGS_PUBLIC);
 
-                qb.setProjectionMap(getProjectionMapForKeys());
-
-                break;
-
-            case PUBLIC_KEY_RING_BY_MASTER_KEY_ID_USER_ID:
-            case PUBLIC_KEY_RING_USER_ID:
-            case SECRET_KEY_RING_USER_ID:
-                qb.setTables(Tables.USER_IDS
-                        + " INNER JOIN " + Tables.KEY_RINGS + " ON ("
-                            + Tables.KEY_RINGS + "." + BaseColumns._ID + " = "
-                                + Tables.USER_IDS + "." + KeysColumns.KEY_RING_ROW_ID
-                        + ") LEFT JOIN " + Tables.CERTS + " ON ("
-                            + Tables.USER_IDS + "." + UserIds.KEY_RING_ROW_ID + " = "
-                                + Tables.CERTS + "." + Certs.KEY_RING_ROW_ID
-                            + " AND " + Tables.USER_IDS + "." + UserIds.RANK + " = "
-                                + Tables.CERTS + "." + Certs.RANK
-                        + ") LEFT JOIN " + Tables.KEYS + " ON ("
-                            + Tables.KEYS + "." + Keys.KEY_ID + " = "
-                                + Tables.CERTS + "." + Certs.KEY_ID_CERTIFIER
-                            // might introduce a "trusted" flag later? for now, we simply assume
-                            // every private key's signature is good.
-                            + " AND " + Tables.KEYS + "." + Keys.TYPE
-                                + " == " + KeyTypes.SECRET
-                        + ")");
-
-                groupBy = Tables.USER_IDS + "." + UserIds.RANK;
-
-                qb.setProjectionMap(getProjectionMapForUserIds());
-
-                if(match == PUBLIC_KEY_RING_BY_MASTER_KEY_ID_USER_ID) {
-                    qb.appendWhere(Tables.KEY_RINGS + "." + KeyRingsColumns.MASTER_KEY_ID + " = ");
-                    qb.appendWhereEscapeString(uri.getPathSegments().get(3));
-                } else {
-                    qb.appendWhere(Tables.USER_IDS + "." + UserIdsColumns.KEY_RING_ROW_ID + " = ");
-                    qb.appendWhereEscapeString(uri.getPathSegments().get(2));
-                }
-
-                break;
-
-            case PUBLIC_KEY_RING_USER_ID_BY_ROW_ID:
-            case SECRET_KEY_RING_USER_ID_BY_ROW_ID:
-                qb.setTables(Tables.USER_IDS);
-                qb.appendWhere(UserIdsColumns.KEY_RING_ROW_ID + " = ");
-                qb.appendWhereEscapeString(uri.getPathSegments().get(2));
-
-                qb.appendWhere(" AND " + BaseColumns._ID + " = ");
-                qb.appendWhereEscapeString(uri.getLastPathSegment());
-
-                break;
-
-            case CERTS_BY_ROW_ID:
-            case CERTS_BY_KEY_ROW_ID_ALL:
-            case CERTS_BY_KEY_ROW_ID_HAS_SECRET:
-            case CERTS_BY_KEY_ROW_ID:
-                qb.setTables(Tables.CERTS
-                    + " JOIN " + Tables.USER_IDS + " ON ("
-                            + Tables.CERTS + "." + Certs.KEY_RING_ROW_ID + " = "
-                            + Tables.USER_IDS + "." + UserIds.KEY_RING_ROW_ID
-                        + " AND "
-                            + Tables.CERTS + "." + Certs.RANK + " = "
-                            + Tables.USER_IDS + "." + UserIds.RANK
-                    // noooooooot sure about this~ database design
-                    + ")" + (match == CERTS_BY_KEY_ROW_ID_ALL ? " LEFT" : "")
-                        + " JOIN " + Tables.KEYS + " ON ("
-                            + Tables.CERTS + "." + Certs.KEY_ID_CERTIFIER + " = "
-                            + Tables.KEYS + "." + Keys.KEY_ID
-                        + (match == CERTS_BY_KEY_ROW_ID_HAS_SECRET ?
-                            " AND " + Tables.KEYS + "." + Keys.TYPE + " = " + KeyTypes.SECRET : ""
-                        )
-                    + ") LEFT JOIN " + Tables.USER_IDS + " AS signer ON ("
-                            + Tables.KEYS + "." + Keys.KEY_RING_ROW_ID + " = "
-                            + "signer." + UserIds.KEY_RING_ROW_ID
-                        + " AND "
-                            + "signer." + Keys.RANK + " = 0"
-                    + ")");
-
-                qb.setProjectionMap(getProjectionMapForCerts());
-
-                groupBy = Tables.CERTS + "." + Certs.RANK + ", "
-                        + Tables.CERTS + "." + Certs.KEY_ID_CERTIFIER;
-
-                if(match == CERTS_BY_ROW_ID) {
-                    qb.appendWhere(Tables.CERTS + "." + Certs._ID + " = ");
+                if(match == KEY_RING_PUBLIC) {
+                    qb.appendWhere(KeyRings.MASTER_KEY_ID + " = ");
                     qb.appendWhereEscapeString(uri.getPathSegments().get(1));
-                } else {
-                    qb.appendWhere(Tables.CERTS + "." + Certs.KEY_RING_ROW_ID + " = ");
-                    qb.appendWhereEscapeString(uri.getPathSegments().get(2));
                 }
+
+                break;
+
+            case KEY_RING_SECRET: {
+                HashMap<String, String> projectionMap = new HashMap<String, String>();
+                projectionMap.put(KeyRingData._ID, Tables.KEY_RINGS_SECRET + ".oid AS _id");
+                projectionMap.put(KeyRingData.MASTER_KEY_ID, KeyRingData.MASTER_KEY_ID);
+                projectionMap.put(KeyRingData.KEY_RING_DATA, KeyRingData.KEY_RING_DATA);
+                qb.setProjectionMap(projectionMap);
+
+                qb.setTables(Tables.KEY_RINGS_SECRET);
+                qb.appendWhere(KeyRings.MASTER_KEY_ID + " = ");
+                qb.appendWhereEscapeString(uri.getPathSegments().get(1));
 
                 break;
 
@@ -832,13 +795,14 @@ public class KeychainProvider extends ContentProvider {
             final int match = mUriMatcher.match(uri);
 
             switch (match) {
-                case PUBLIC_KEY_RING:
-                    values.put(KeyRings.TYPE, KeyTypes.PUBLIC);
+                case KEY_RING_PUBLIC:
+                    db.insertOrThrow(Tables.KEY_RINGS_PUBLIC, null, values);
+                    keyId = values.getAsLong(KeyRings.MASTER_KEY_ID);
+                    break;
 
-                    rowId = db.insertOrThrow(Tables.KEY_RINGS, null, values);
-                    rowUri = KeyRings.buildPublicKeyRingsUri(Long.toString(rowId));
-                    sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
-
+                case KEY_RING_SECRET:
+                    db.insertOrThrow(Tables.KEY_RINGS_SECRET, null, values);
+                    keyId = values.getAsLong(KeyRings.MASTER_KEY_ID);
                     break;
                 case PUBLIC_KEY_RING_KEY:
                     values.put(Keys.TYPE, KeyTypes.PUBLIC);
@@ -847,12 +811,19 @@ public class KeychainProvider extends ContentProvider {
                     rowUri = Keys.buildPublicKeysUri(Long.toString(rowId));
                     sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
 
+                case KEY_RING_KEYS:
+                    Log.d(Constants.TAG, "keys");
+                    db.insertOrThrow(Tables.KEYS, null, values);
+                    keyId = values.getAsLong(Keys.MASTER_KEY_ID);
                     break;
                 case PUBLIC_KEY_RING_USER_ID:
                     rowId = db.insertOrThrow(Tables.USER_IDS, null, values);
                     rowUri = UserIds.buildPublicUserIdsUri(Long.toString(rowId));
                     sendBroadcastDatabaseChange(getKeyType(match), getType(uri));
 
+                case KEY_RING_USER_IDS:
+                    db.insertOrThrow(Tables.USER_IDS, null, values);
+                    keyId = values.getAsLong(UserIds.MASTER_KEY_ID);
                     break;
                 case SECRET_KEY_RING:
                     values.put(KeyRings.TYPE, KeyTypes.SECRET);
