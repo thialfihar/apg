@@ -396,6 +396,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
+                Log.e(Constants.TAG, "error during encryption/signing", e);
                 sendErrorToHandler(e);
             }
         } else if (ACTION_DECRYPT_VERIFY.equals(action)) {
@@ -515,6 +516,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
             } catch (Exception e) {
+                Log.e(Constants.TAG, "error during decryption/verification", e);
                 sendErrorToHandler(e);
             }
         } else if (ACTION_SAVE_KEYRING.equals(action)) {
