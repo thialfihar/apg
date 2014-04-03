@@ -275,7 +275,7 @@ public class PgpDecryptVerify {
                         // TODO: improve this code! get master key directly!
                         PGPSecretKeyRing secretKeyRing =
                                 ProviderHelper.getPGPSecretKeyRingWithKeyId(mContext, encData.getKeyID());
-                        long masterKeyId = PgpKeyHelper.getMasterKey(secretKeyRing).getKeyID();
+                        long masterKeyId = secretKeyRing.getSecretKey().getKeyID();
                         Log.d(Constants.TAG, "encData.getKeyID():" + encData.getKeyID());
                         Log.d(Constants.TAG, "allowedKeyIds: " + mAllowedKeyIds);
                         Log.d(Constants.TAG, "masterKeyId: " + masterKeyId);
