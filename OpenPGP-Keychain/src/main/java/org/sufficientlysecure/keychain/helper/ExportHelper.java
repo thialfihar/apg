@@ -62,8 +62,8 @@ public class ExportHelper {
     /**
      * Show dialog where to export keys
      */
-    public void showExportKeysDialog(final long[] masterKeyIds, final int keyType,
-                                     final String exportFilename, final String checkboxString) {
+    public void showExportKeysDialog(final long[] masterKeyIds, final String exportFilename,
+                                     final boolean showSecretCheckbox) {
         mExportFilename = exportFilename;
 
         // Message is received after file is selected
@@ -72,14 +72,9 @@ public class ExportHelper {
             public void handleMessage(Message message) {
                 if (message.what == FileDialogFragment.MESSAGE_OKAY) {
                     Bundle data = message.getData();
-                    int type = keyType;
                     mExportFilename = data.getString(FileDialogFragment.MESSAGE_DATA_FILENAME);
 
-                    if (data.getBoolean(FileDialogFragment.MESSAGE_DATA_CHECKED)) {
-                        type = Id.type.public_secret_key;
-                    }
-
-                    exportKeys(masterKeyIds, type);
+                    exportKeys(masterKeyIds, data.getBoolean(FileDialogFragment.MESSAGE_DATA_CHECKED));
                 }
             }
         };
@@ -99,9 +94,11 @@ public class ExportHelper {
                 }
 
                 String message = mActivity.getString(R.string.specify_file_to_export_to);
+                String checkMsg = showSecretCheckbox ?
+                        mActivity.getString(R.string.also_export_secret_keys) : null;
 
                 mFileDialog = FileDialogFragment.newInstance(messenger, title, message,
-                        exportFilename, checkboxString);
+                        exportFilename, checkMsg);
 
                 mFileDialog.show(mActivity.getSupportFragmentManager(), "fileDialog");
             }
@@ -111,7 +108,7 @@ public class ExportHelper {
     /**
      * Export keys
      */
-    public void exportKeys(long[] masterKeyIds, int keyType) {
+    public void exportKeys(long[] masterKeyIds, boolean exportSecret) {
         Log.d(Constants.TAG, "exportKeys started");
 
         // Send all information needed to service to export key in other thread
@@ -123,7 +120,7 @@ public class ExportHelper {
         Bundle data = new Bundle();
 
         data.putString(ApgIntentService.EXPORT_FILENAME, mExportFilename);
-        data.putInt(ApgIntentService.EXPORT_KEY_TYPE, keyType);
+        data.putBoolean(ApgIntentService.EXPORT_SECRET, exportSecret);
 
         if (masterKeyIds == null) {
             data.putBoolean(ApgIntentService.EXPORT_ALL, true);
