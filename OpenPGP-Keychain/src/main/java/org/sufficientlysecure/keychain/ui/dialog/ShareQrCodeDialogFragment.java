@@ -28,18 +28,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.KeyRing;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.QrCodeUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ShareQrCodeDialogFragment extends DialogFragment {
@@ -99,15 +94,15 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
         if (mFingerprintOnly) {
             alert.setPositiveButton(R.string.btn_okay, null);
 
-            Object blob = ProviderHelper.getGenericData(
-                    getActivity(), KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                    KeychainContract.Keys.FINGERPRINT);
-            if(!(blob instanceof byte[])) {
+            byte[] blob = (byte[]) ProviderHelper.getGenericData(
+                    getActivity(), KeyRings.buildUnifiedKeyRingUri(dataUri),
+                    KeyRings.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+            if(blob == null) {
                 // TODO error handling?!
                 return null;
             }
 
-            String fingerprint = PgpKeyHelper.convertFingerprintToHex((byte[]) blob);
+            String fingerprint = PgpKeyHelper.convertFingerprintToHex(blob);
             mText.setText(getString(R.string.share_qr_code_dialog_fingerprint_text) + " " + fingerprint);
             content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;
             setQrCode(content);
