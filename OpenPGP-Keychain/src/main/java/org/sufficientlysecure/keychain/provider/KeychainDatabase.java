@@ -98,6 +98,18 @@ public class KeychainDatabase extends SQLiteOpenHelper {
 
     KeychainDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        // make sure this is only done once, on the first instance!
+        boolean iAmIt = false;
+        synchronized(apg_hack) {
+            if(!apg_hack) {
+                iAmIt = true;
+                apg_hack = true;
+            }
+        }
+        // if it's us, do the import
+        if(iAmIt)
+            checkAndImportApg(context);
     }
 
     @Override
