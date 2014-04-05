@@ -50,7 +50,9 @@ public class KeychainContract {
     interface UserIdsColumns {
         String KEY_RING_ROW_ID = "key_ring_row_id"; // foreign key to key_rings._ID
         String USER_ID = "user_id"; // not a database id
-        String RANK = "rank";
+        String RANK = "rank"; // ONLY used for sorting! no key, no nothing!
+        String IS_PRIMARY = "is_primary";
+        String IS_REVOKED = "is_revoked";
     }
 
     interface CertsColumns {
@@ -101,7 +103,8 @@ public class KeychainContract {
     public static final String BASE_CERTS = "certs";
 
     public static class KeyRings implements BaseColumns, KeysColumns, UserIdsColumns {
-        public static final String MASTER_KEY_ID = "master_key_id";
+        public static final String MASTER_KEY_ID = KeysColumns.MASTER_KEY_ID;
+        public static final String IS_REVOKED = KeysColumns.IS_REVOKED;
         public static final String HAS_SECRET = "has_secret";
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URI_INTERNAL.buildUpon()
