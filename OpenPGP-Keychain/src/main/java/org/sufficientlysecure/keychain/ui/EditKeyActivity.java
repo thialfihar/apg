@@ -38,7 +38,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
@@ -312,7 +311,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 }
             } else {
                 Log.e(Constants.TAG, "Keyring not found with masterKeyId: " + masterKeyId);
-                Toast.makeText(this, R.string.error_no_secret_key_found, Toast.LENGTH_LONG).show();
+                AppMsg.makeText(this, R.string.error_no_secret_key_found, AppMsg.STYLE_ALERT).show();
                 // TODO
             }
             if (masterKey != null) {
@@ -500,8 +499,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                     checkEmptyIDsWanted();
                 }
             } catch (PgpGeneralException e) {
-                Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
-                        Toast.LENGTH_SHORT).show();
+                AppMsg.makeText(this, getString(R.string.error_message, e.getMessage()),
+                        AppMsg.STYLE_ALERT).show();
             }
         } else {
             AppMsg.makeText(this, R.string.error_change_something_first, AppMsg.STYLE_ALERT).show();
@@ -546,8 +545,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             }
         } catch (PgpGeneralException e) {
             Log.e(Constants.TAG, getString(R.string.error_message, e.getMessage()));
-            Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
-                    Toast.LENGTH_SHORT).show();
+            AppMsg.makeText(this, getString(R.string.error_message, e.getMessage()), AppMsg.STYLE_ALERT).show();
         }
         finallySaveClicked();
     }
@@ -623,8 +621,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             startService(intent);
         } catch (PgpGeneralException e) {
             Log.e(Constants.TAG, getString(R.string.error_message, e.getMessage()));
-            Toast.makeText(this, getString(R.string.error_message, e.getMessage()),
-                    Toast.LENGTH_SHORT).show();
+            AppMsg.makeText(this, getString(R.string.error_message, e.getMessage()),
+                    AppMsg.STYLE_ALERT).show();
         }
     }
 
