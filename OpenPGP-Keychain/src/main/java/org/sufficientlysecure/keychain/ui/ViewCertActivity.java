@@ -50,13 +50,12 @@ public class ViewCertActivity extends ActionBarActivity
 
     // These are the rows that we will retrieve.
     static final String[] PROJECTION = new String[] {
-            KeychainContract.Certs._ID,
-            KeychainContract.Certs.KEY_ID,
-            KeychainContract.UserIds.USER_ID,
-            KeychainContract.Certs.CREATION,
-            KeychainContract.Certs.KEY_ID_CERTIFIER,
-            "signer_uid",
-            KeychainContract.Certs.KEY_DATA
+            Certs.MASTER_KEY_ID,
+            Certs.USER_ID,
+            Certs.CREATION,
+            Certs.KEY_ID_CERTIFIER,
+            Certs.SIGNER_UID,
+            Certs.TYPE
     };
     private static final int INDEX_KEY_ID = 1;
     private static final int INDEX_USER_ID = 2;
@@ -64,6 +63,7 @@ public class ViewCertActivity extends ActionBarActivity
     private static final int INDEX_KEY_ID_CERTIFIER = 4;
     private static final int INDEX_UID_CERTIFIER = 5;
     private static final int INDEX_KEY_DATA = 6;
+    private static final int INDEX_KEY_TYPE = 6;
 
     private Uri mDataUri;
 

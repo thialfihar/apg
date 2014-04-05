@@ -41,39 +41,75 @@ public class KeychainDatabase extends SQLiteOpenHelper {
         String CERTS = "certs";
     }
 
-    private static final String CREATE_KEY_RINGS = "CREATE TABLE IF NOT EXISTS " + Tables.KEY_RINGS
-            + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + KeyRingsColumns.MASTER_KEY_ID + " INT64, "
-            + KeyRingsColumns.TYPE + " INTEGER, "
-            + KeyRingsColumns.KEY_RING_DATA + " BLOB)";
+    private static final String CREATE_KEYRINGS_PUBLIC =
+            "CREATE TABLE IF NOT EXISTS keyrings_public ("
+                + KeyRingsColumns.MASTER_KEY_ID + " INTEGER PRIMARY KEY,"
+                + KeyRingsColumns.KEY_RING_DATA + " BLOB"
+            + ")";
 
-    private static final String CREATE_KEYS = "CREATE TABLE IF NOT EXISTS " + Tables.KEYS + " ("
-            + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + KeysColumns.KEY_ID + " INT64, "
-            + KeysColumns.TYPE + " INTEGER, "
-            + KeysColumns.IS_MASTER_KEY + " INTEGER, "
-            + KeysColumns.ALGORITHM + " INTEGER, "
-            + KeysColumns.KEY_SIZE + " INTEGER, "
-            + KeysColumns.CAN_CERTIFY + " INTEGER, "
-            + KeysColumns.CAN_SIGN + " INTEGER, "
-            + KeysColumns.CAN_ENCRYPT + " INTEGER, "
-            + KeysColumns.IS_REVOKED + " INTEGER, "
-            + KeysColumns.CREATION + " INTEGER, "
-            + KeysColumns.EXPIRY + " INTEGER, "
-            + KeysColumns.KEY_DATA + " BLOB,"
-            + KeysColumns.RANK + " INTEGER, "
-            + KeysColumns.FINGERPRINT + " BLOB, "
-            + KeysColumns.KEY_RING_ROW_ID + " INTEGER NOT NULL, FOREIGN KEY("
-            + KeysColumns.KEY_RING_ROW_ID + ") REFERENCES " + Tables.KEY_RINGS + "("
-            + BaseColumns._ID + ") ON DELETE CASCADE)";
+    private static final String CREATE_KEYRINGS_SECRET =
+            "CREATE TABLE IF NOT EXISTS keyrings_secret ("
+                    + KeyRingsColumns.MASTER_KEY_ID + " INTEGER PRIMARY KEY,"
+                    + KeyRingsColumns.KEY_RING_DATA + " BLOB,"
+                    + "FOREIGN KEY(" + KeyRingsColumns.MASTER_KEY_ID + ") "
+                        + "REFERENCES keyrings_public(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE"
+            + ")";
 
-    private static final String CREATE_USER_IDS = "CREATE TABLE IF NOT EXISTS " + Tables.USER_IDS
-            + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + UserIdsColumns.USER_ID + " TEXT, "
-            + UserIdsColumns.RANK + " INTEGER, "
-            + UserIdsColumns.KEY_RING_ROW_ID + " INTEGER NOT NULL, FOREIGN KEY("
-            + UserIdsColumns.KEY_RING_ROW_ID + ") REFERENCES " + Tables.KEY_RINGS + "("
-            + BaseColumns._ID + ") ON DELETE CASCADE)";
+    private static final String CREATE_KEYS =
+            "CREATE TABLE IF NOT EXISTS " + Tables.KEYS + " ("
+                + KeysColumns.MASTER_KEY_ID + " INTEGER, "
+                + KeysColumns.RANK + " INTEGER, "
+
+                + KeysColumns.KEY_ID + " INTEGER, "
+                + KeysColumns.KEY_SIZE + " INTEGER, "
+                + KeysColumns.ALGORITHM + " INTEGER, "
+                + KeysColumns.FINGERPRINT + " BLOB, "
+
+                + KeysColumns.CAN_CERTIFY + " BOOLEAN, "
+                + KeysColumns.CAN_SIGN + " BOOLEAN, "
+                + KeysColumns.CAN_ENCRYPT + " BOOLEAN, "
+                + KeysColumns.IS_REVOKED + " BOOLEAN, "
+
+                + KeysColumns.CREATION + " INTEGER, "
+                + KeysColumns.EXPIRY + " INTEGER, "
+
+                + "PRIMARY KEY(" + KeysColumns.MASTER_KEY_ID + ", " + KeysColumns.RANK + "),"
+                + "FOREIGN KEY(" + KeysColumns.MASTER_KEY_ID + ") REFERENCES "
+                    + Tables.KEY_RINGS_PUBLIC + "(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE"
+            + ")";
+
+    private static final String CREATE_USER_IDS =
+            "CREATE TABLE IF NOT EXISTS " + Tables.USER_IDS + "("
+                + UserIdsColumns.MASTER_KEY_ID + " INTEGER, "
+                + UserIdsColumns.USER_ID + " CHARMANDER, "
+
+                + UserIdsColumns.IS_PRIMARY + " BOOLEAN, "
+                + UserIdsColumns.RANK+ " INTEGER, "
+
+                + "PRIMARY KEY(" + UserIdsColumns.MASTER_KEY_ID + ", " + UserIdsColumns.USER_ID + "), "
+                + "UNIQUE (" + UserIdsColumns.MASTER_KEY_ID + ", " + UserIdsColumns.RANK + "), "
+                + "FOREIGN KEY(" + UserIdsColumns.MASTER_KEY_ID + ") REFERENCES "
+                    + Tables.KEY_RINGS_PUBLIC + "(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE"
+            + ")";
+
+    private static final String CREATE_CERTS =
+            "CREATE TABLE IF NOT EXISTS " + Tables.CERTS + "("
+                + CertsColumns.MASTER_KEY_ID + " INTEGER,"
+                + CertsColumns.RANK + " INTEGER, " // rank of certified uid
+
+                + CertsColumns.KEY_ID_CERTIFIER + " INTEGER, " // certifying key
+                + CertsColumns.TYPE + " INTEGER, "
+                + CertsColumns.VERIFIED + " INTEGER, "
+                + CertsColumns.CREATION + " INTEGER, "
+                + CertsColumns.EXPIRY + " INTEGER, "
+
+                + "PRIMARY KEY(" + CertsColumns.MASTER_KEY_ID + ", " + CertsColumns.RANK + ", "
+                    + CertsColumns.KEY_ID_CERTIFIER + "), "
+                + "FOREIGN KEY(" + CertsColumns.MASTER_KEY_ID + ") REFERENCES "
+                    + Tables.KEY_RINGS_PUBLIC + "(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE,"
+                + "FOREIGN KEY(" + CertsColumns.MASTER_KEY_ID + ", " + CertsColumns.RANK + ") REFERENCES "
+                    + Tables.USER_IDS + "(" + UserIdsColumns.MASTER_KEY_ID + ", " + UserIdsColumns.RANK + ") ON DELETE CASCADE"
+            + ")";
 
     private static final String CREATE_API_APPS = "CREATE TABLE IF NOT EXISTS " + Tables.API_APPS
             + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
