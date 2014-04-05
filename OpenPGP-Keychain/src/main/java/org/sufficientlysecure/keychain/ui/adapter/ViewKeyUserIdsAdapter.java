@@ -84,6 +84,8 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter {
     private void initIndex(Cursor cursor) {
         if (cursor != null) {
             mIndexUserId = cursor.getColumnIndexOrThrow(UserIds.USER_ID);
+            mIndexRank = cursor.getColumnIndexOrThrow(UserIds.RANK);
+            mVerifiedId = cursor.getColumnIndexOrThrow(UserIds.VERIFIED);
         }
     }
 
@@ -105,9 +107,11 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter {
         vAddress.setText(userId[1]);
 
         int verified = cursor.getInt(mVerifiedId);
-        // TODO introduce own resource for this :)
-        if(verified > 0)
+        // TODO introduce own resources for this :)
+        if(verified == 1)
             vVerified.setImageResource(android.R.drawable.presence_online);
+        else if(verified > 1)
+            vVerified.setImageResource(android.R.drawable.presence_away);
         else
             vVerified.setImageResource(android.R.drawable.presence_invisible);
 
