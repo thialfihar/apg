@@ -35,8 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
-
+import org.spongycastle.openpgp.PGPSignature;
 import org.sufficientlysecure.keychain.Constants;
 import org.sufficientlysecure.keychain.R;
 import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
@@ -57,6 +56,7 @@ public class ViewKeyCertsFragment extends Fragment
         Certs._ID,
         Certs.MASTER_KEY_ID,
         Certs.VERIFIED,
+        Certs.TYPE,
         Certs.RANK,
         Certs.KEY_ID_CERTIFIER,
         Certs.USER_ID,
@@ -66,8 +66,7 @@ public class ViewKeyCertsFragment extends Fragment
     // sort by our user id,
     static final String SORT_ORDER =
               Tables.CERTS + "." + Certs.RANK + " ASC, "
-            + Certs.VERIFIED + " DESC, "
-            + Certs.SIGNER_UID + " ASC";
+            + Certs.VERIFIED + " DESC, " + Certs.TYPE + " DESC, " + Certs.SIGNER_UID + " ASC";
 
     public static final String ARG_KEYRING_ROW_ID = "row_id";
 
@@ -75,9 +74,8 @@ public class ViewKeyCertsFragment extends Fragment
     private Spinner mSpinner;
 
     private CertListAdapter mAdapter;
-    private boolean mUnknownShown = false;
 
-    private Uri mBaseUri, mDataUri;
+    private Uri mDataUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -135,7 +133,7 @@ public class ViewKeyCertsFragment extends Fragment
         }
 
         Uri uri = getArguments().getParcelable(ARG_DATA_URI);
-        mBaseUri = Certs.buildCertsUri(uri);
+        mDataUri = Certs.buildCertsUri(uri);
 
         mStickyList.setAreHeadersSticky(true);
         mStickyList.setDrawingListUnderStickyHeader(false);
@@ -157,9 +155,6 @@ public class ViewKeyCertsFragment extends Fragment
         mAdapter = new CertListAdapter(getActivity(), null);
         mStickyList.setAdapter(mAdapter);
 
-        // Prepare the loader. Either re-connect with an existing one,
-        // or start a new one.
-        mDataUri = mBaseUri;
         getLoaderManager().initLoader(0, null, this);
 
     }
@@ -207,7 +202,7 @@ public class ViewKeyCertsFragment extends Fragment
         private int mIndexCertId;
         private int mIndexUserId, mIndexRank;
         private int mIndexSignerKeyId, mIndexSignerUserId;
-        private int mIndexVerified;
+        private int mIndexVerified, mIndexType;
 
         public CertListAdapter(Context context, Cursor c) {
             super(context, c, 0);
@@ -235,6 +230,7 @@ public class ViewKeyCertsFragment extends Fragment
                 mIndexCertId = cursor.getColumnIndexOrThrow(Certs.MASTER_KEY_ID);
                 mIndexUserId = cursor.getColumnIndexOrThrow(Certs.USER_ID);
                 mIndexRank = cursor.getColumnIndexOrThrow(Certs.RANK);
+                mIndexType = cursor.getColumnIndexOrThrow(Certs.TYPE);
                 mIndexVerified = cursor.getColumnIndexOrThrow(Certs.VERIFIED);
                 mIndexSignerKeyId = cursor.getColumnIndexOrThrow(Certs.KEY_ID_CERTIFIER);
                 mIndexSignerUserId = cursor.getColumnIndexOrThrow(Certs.SIGNER_UID);
@@ -257,11 +253,21 @@ public class ViewKeyCertsFragment extends Fragment
 
             String signerKeyId = PgpKeyHelper.convertKeyIdToHex(cursor.getLong(mIndexSignerKeyId));
             String signerUserId = cursor.getString(mIndexSignerUserId);
-            String signStatus = cursor.getInt(mIndexVerified) > 0 ? "ok" : "unknown";
+            switch(cursor.getInt(mIndexType)) {
+                case PGPSignature.DEFAULT_CERTIFICATION: // 0x10
+                    wSignStatus.setText(R.string.cert_default); break;
+                case PGPSignature.NO_CERTIFICATION: // 0x11
+                    wSignStatus.setText(R.string.cert_none); break;
+                case PGPSignature.CASUAL_CERTIFICATION: // 0x12
+                    wSignStatus.setText(R.string.cert_casual); break;
+                case PGPSignature.POSITIVE_CERTIFICATION: // 0x13
+                    wSignStatus.setText(R.string.cert_positive); break;
+                case PGPSignature.CERTIFICATION_REVOCATION: // 0x30
+                    wSignStatus.setText(R.string.cert_revoke); break;
+            }
 
             wSignerUserId.setText(signerUserId);
             wSignerKeyId.setText(signerKeyId);
-            wSignStatus.setText(signStatus);
 
         }
 
