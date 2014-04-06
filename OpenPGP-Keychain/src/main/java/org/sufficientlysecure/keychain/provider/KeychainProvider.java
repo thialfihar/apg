@@ -45,11 +45,13 @@ public class KeychainProvider extends ContentProvider {
     private static final int KEY_RINGS_UNIFIED = 101;
     private static final int KEY_RINGS_PUBLIC = 102;
 
-    private static final int SECRET_KEY_RING_KEY = 211;
-    private static final int SECRET_KEY_RING_KEY_BY_ROW_ID = 212;
-
-    private static final int SECRET_KEY_RING_USER_ID = 221;
-    private static final int SECRET_KEY_RING_USER_ID_BY_ROW_ID = 222;
+    private static final int KEY_RING_UNIFIED = 200;
+    private static final int KEY_RING_KEYS = 201;
+    private static final int KEY_RING_USER_IDS = 202;
+    private static final int KEY_RING_PUBLIC = 203;
+    private static final int KEY_RING_SECRET = 204;
+    private static final int KEY_RING_CERTS = 205;
+    private static final int KEY_RING_CERTS_SPECIFIC = 206;
 
     private static final int API_APPS = 301;
     private static final int API_APPS_BY_ROW_ID = 302;
@@ -114,33 +116,36 @@ public class KeychainProvider extends ContentProvider {
          * list key_ring specifics
          *
          * <pre>
-         * key_rings/public
-         * key_rings/public/#
-         * key_rings/public/master_key_id/_
-         * key_rings/public/key_id/_
-         * key_rings/public/emails/_
-         * key_rings/public/like_email/_
+         * key_rings/_/unified
+         * key_rings/_/keys
+         * key_rings/_/user_ids
+         * key_rings/_/public
+         * key_rings/_/secret
+         * key_rings/_/certs
+         * key_rings/_/certs/_/_
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC, PUBLIC_KEY_RING);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/#", PUBLIC_KEY_RING_BY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_MASTER_KEY_ID
-                + "/*", PUBLIC_KEY_RING_BY_MASTER_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_KEY_ID + "/*",
-                PUBLIC_KEY_RING_BY_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_EMAILS + "/*",
-                PUBLIC_KEY_RING_BY_EMAILS);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_EMAILS,
-                PUBLIC_KEY_RING_BY_EMAILS); // without emails specified
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_LIKE_EMAIL + "/*",
-                PUBLIC_KEY_RING_BY_LIKE_EMAIL);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                + KeychainContract.PATH_UNIFIED,
+                KEY_RING_UNIFIED);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                + KeychainContract.PATH_KEYS,
+                KEY_RING_KEYS);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                + KeychainContract.PATH_USER_IDS,
+                KEY_RING_USER_IDS);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                + KeychainContract.PATH_PUBLIC,
+                KEY_RING_PUBLIC);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                + KeychainContract.PATH_SECRET,
+                KEY_RING_SECRET);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                + KeychainContract.PATH_CERTS,
+                KEY_RING_CERTS);
+        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/*/"
+                        + KeychainContract.PATH_CERTS + "/*/*",
+                KEY_RING_CERTS_SPECIFIC);
 
         /**
          * public keys
@@ -748,6 +753,7 @@ public class KeychainProvider extends ContentProvider {
             }
 
             case KEY_RING_CERTS:
+            case KEY_RING_CERTS_SPECIFIC: {
                 HashMap<String, String> projectionMap = new HashMap<String, String>();
                 projectionMap.put(Certs._ID, Tables.CERTS + ".oid AS " + Certs._ID);
                 projectionMap.put(Certs.MASTER_KEY_ID, Tables.CERTS + "." + Certs.MASTER_KEY_ID);
@@ -755,6 +761,7 @@ public class KeychainProvider extends ContentProvider {
                 projectionMap.put(Certs.VERIFIED, Tables.CERTS + "." + Certs.VERIFIED);
                 projectionMap.put(Certs.TYPE, Tables.CERTS + "." + Certs.TYPE);
                 projectionMap.put(Certs.CREATION, Tables.CERTS + "." + Certs.CREATION);
+                projectionMap.put(Certs.EXPIRY, Tables.CERTS + "." + Certs.EXPIRY);
                 projectionMap.put(Certs.KEY_ID_CERTIFIER, Tables.CERTS + "." + Certs.KEY_ID_CERTIFIER);
                 projectionMap.put(Certs.USER_ID, Tables.USER_IDS + "." + UserIds.USER_ID);
                 projectionMap.put(Certs.SIGNER_UID, "signer." + UserIds.USER_ID + " AS " + Certs.SIGNER_UID);
@@ -762,7 +769,7 @@ public class KeychainProvider extends ContentProvider {
 
                 qb.setTables(Tables.CERTS
                     + " JOIN " + Tables.USER_IDS + " ON ("
-                            + Tables.CERTS + "." + Certs.MASTER_KEY_ID  + " = "
+                            + Tables.CERTS + "." + Certs.MASTER_KEY_ID + " = "
                             + Tables.USER_IDS + "." + UserIds.MASTER_KEY_ID
                         + " AND "
                             + Tables.CERTS + "." + Certs.RANK + " = "
@@ -777,10 +784,17 @@ public class KeychainProvider extends ContentProvider {
                 groupBy = Tables.CERTS + "." + Certs.RANK + ", "
                         + Tables.CERTS + "." + Certs.KEY_ID_CERTIFIER;
 
-                qb.appendWhere(Tables.CERTS + "." + KeyRings.MASTER_KEY_ID + " = ");
+                qb.appendWhere(Tables.CERTS + "." + Certs.MASTER_KEY_ID + " = ");
                 qb.appendWhereEscapeString(uri.getPathSegments().get(1));
+                if(match == KEY_RING_CERTS_SPECIFIC) {
+                    qb.appendWhere(" AND " + Tables.CERTS + "." + Certs.RANK + " = ");
+                    qb.appendWhereEscapeString(uri.getPathSegments().get(3));
+                    qb.appendWhere(" AND " + Tables.CERTS + "." + Certs.KEY_ID_CERTIFIER+ " = ");
+                    qb.appendWhereEscapeString(uri.getPathSegments().get(4));
+                }
 
                 break;
+            }
 
             case API_APPS:
                 qb.setTables(Tables.API_APPS);

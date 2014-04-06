@@ -303,20 +303,11 @@ public class KeychainContract {
         public static Uri buildCertsUri(String rowId) {
             return CONTENT_URI.buildUpon().appendPath(rowId).build();
         }
-
-        public static Uri buildCertsByKeyRowIdUri(String keyRingRowId) {
-            return CONTENT_URI.buildUpon().appendPath(PATH_BY_KEY_ROW_ID)
-                    .appendPath(keyRingRowId).build();
+        public static Uri buildCertsSpecificUri(String masterKeyId, String rank, String certifier) {
+            return CONTENT_URI.buildUpon().appendPath(masterKeyId).appendPath(PATH_CERTS).appendPath(rank).appendPath(certifier).build();
         }
-
-        public static Uri buildCertsByKeyIdUri(String keyId) {
-            return CONTENT_URI.buildUpon().appendPath(PATH_BY_KEY_ID).appendPath(keyId)
-                    .build();
-        }
-
-        public static Uri buildCertsByCertifierKeyIdUri(String keyId) {
-            return CONTENT_URI.buildUpon().appendPath(PATH_BY_CERTIFIER_ID).appendPath(keyId)
-                    .build();
+        public static Uri buildCertsUri(Uri uri) {
+            return CONTENT_URI.buildUpon().appendPath(uri.getPathSegments().get(1)).appendPath(PATH_CERTS).build();
         }
 
     }
