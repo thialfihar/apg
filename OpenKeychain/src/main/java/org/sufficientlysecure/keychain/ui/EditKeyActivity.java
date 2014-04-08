@@ -290,12 +290,13 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         } else {
             Log.d(Constants.TAG, "uri: " + mDataUri);
 
-            // get master key id using row id
-            KeyRing keyRing = mProvider.getKeyRing(mDataUri);
-            Key masterKey = keyRing.getMasterKey();
-            long masterKeyId = masterKey.getKeyId();
-
-            finallyEdit(masterKeyId);
+            try {
+                // get master key id using row id
+                long masterKeyId = ProviderHelper.getMasterKeyId(this, mDataUri);
+                finallyEdit(masterKeyId);
+            } catch (ProviderHelper.NotFoundException e) {
+                Log.e(Constants.TAG, "key not found!", e);
+            }
         }
     }
 

@@ -44,6 +44,7 @@ import org.sufficientlysecure.keychain.provider.ProviderHelper;
 import org.sufficientlysecure.keychain.ui.adapter.TabsAdapter;
 import org.sufficientlysecure.keychain.ui.dialog.ShareNfcDialogFragment;
 import org.sufficientlysecure.keychain.ui.dialog.ShareQrCodeDialogFragment;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -188,7 +189,7 @@ public class ViewKeyActivity extends ActionBarActivity {
     }
 
     private void shareKey(Uri dataUri, boolean fingerprintOnly) {
-        String content;
+        String content = null;
         if (fingerprintOnly) {
             byte[] data = (byte[]) ProviderHelper.getGenericData(
                     this, KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
@@ -203,27 +204,36 @@ public class ViewKeyActivity extends ActionBarActivity {
             }
         } else {
             // get public keyring as ascii armored string
-            long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
-            ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(
-                    this, new long[]{masterKeyId});
+            try {
+                long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
 
-            content = keyringArmored.get(0);
+                ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(
+                        this, new long[]{masterKeyId});
 
-            // Android will fail with android.os.TransactionTooLargeException if key is too big
-            // see http://www.lonestarprod.com/?p=34
-            if (content.length() >= 86389) {
-                Toast.makeText(getApplicationContext(), R.string.key_too_big_for_sharing,
-                        Toast.LENGTH_LONG).show();
-                return;
+                content = keyringArmored.get(0);
+
+                // Android will fail with android.os.TransactionTooLargeException if key is too big
+                // see http://www.lonestarprod.com/?p=34
+                if (content.length() >= 86389) {
+                    Toast.makeText(getApplicationContext(), R.string.key_too_big_for_sharing,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } catch (ProviderHelper.NotFoundException e) {
+                Log.e(Constants.TAG, "key not found!", e);
             }
         }
 
-        // let user choose application
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, content);
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent,
-                getResources().getText(R.string.action_share_key_with)));
+        if (content != null) {
+            // let user choose application
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, content);
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent,
+                    getResources().getText(R.string.action_share_key_with)));
+        } else {
+            Log.e(Constants.TAG, "content is null!");
+        }
     }
 
     private void shareKeyQrCode(Uri dataUri, boolean fingerprintOnly) {
