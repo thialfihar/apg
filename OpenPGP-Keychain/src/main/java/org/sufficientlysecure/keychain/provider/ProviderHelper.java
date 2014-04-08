@@ -40,6 +40,7 @@ import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyProvider;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.provider.KeychainContract.Certs;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.Keys;
 import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
@@ -53,7 +54,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ProviderHelper implements PgpKeyProvider {
@@ -234,8 +237,12 @@ public class ProviderHelper implements PgpKeyProvider {
 
             byte[] data = cursor.getBlob(keyRingDataCol);
             if (data != null) {
-                keyRing = KeyRing.decode(data);
-                result.put(cursor.getLong(masterKeyIdCol), PgpConversionHelper.BytesToPGPKeyRing(data));
+                KeyRing keyRing = KeyRing.decode(data);
+                if (keyRing.isPublic()) {
+                    result.put(cursor.getLong(masterKeyIdCol), keyRing.getPublicKeyRing());
+                } else {
+                    result.put(cursor.getLong(masterKeyIdCol), keyRing.getSecretKeyRing());
+                }
             }
         } while(cursor.moveToNext());
 
@@ -243,15 +250,6 @@ public class ProviderHelper implements PgpKeyProvider {
             cursor.close();
         }
 
-        if (keyRing == null) {
-            return null;
-        }
-
-        if (keyRing.isPublic()) {
-            return keyRing.getPublicKeyRing();
-        } else {
-            return keyRing.getSecretKeyRing();
-        }
         return result;
     }
 

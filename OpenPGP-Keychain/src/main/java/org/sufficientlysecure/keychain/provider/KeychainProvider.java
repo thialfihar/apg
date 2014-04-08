@@ -32,6 +32,7 @@ import android.text.TextUtils;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiAccounts;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.provider.KeychainContract.Certs;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRingsColumns;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyTypes;
