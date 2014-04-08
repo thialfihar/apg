@@ -234,8 +234,12 @@ public class PgpSignEncrypt {
         KeyRing signingKeyRing = null;
         PGPPrivateKey signaturePrivateKey = null;
         if (enableSignature) {
-            signingKeyRing = mKeyProvider.getSecretKeyRingByKeyId(mSignatureKeyId);
-            signingKey = signingKeyRing.getSigningKey();
+            try {
+                signingKeyRing = ProviderHelper.getPGPSecretKeyRingWithKeyId(mContext, mSignatureKeyId);
+            } catch (ProviderHelper.NotFoundException e) {
+                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
+            }
+            signingKey = PgpKeyHelper.getSigningKey(mContext, mSignatureKeyId);
             if (signingKey == null) {
                 throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
             }
@@ -461,8 +465,13 @@ public class PgpSignEncrypt {
             throw new PgpGeneralException(mContext.getString(R.string.error_no_signature_key));
         }
 
-        KeyRing signingKeyRing = mKeyProvider.getSecretKeyRingByKeyId(mSignatureKeyId);
-        Key signingKey = signingKeyRing.getSigningKey();
+        PGPSecretKeyRing signingKeyRing;
+        try {
+            signingKeyRing = ProviderHelper.getPGPSecretKeyRingWithKeyId(mContext, mSignatureKeyId);
+        } catch (ProviderHelper.NotFoundException e) {
+            throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
+        }
+        PGPSecretKey signingKey = PgpKeyHelper.getSigningKey(mContext, mSignatureKeyId);
         if (signingKey == null) {
             throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
         }

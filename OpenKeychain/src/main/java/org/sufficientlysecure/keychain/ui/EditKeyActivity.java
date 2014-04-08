@@ -303,15 +303,17 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     @SuppressWarnings("unchecked")
     private void finallyEdit(final long masterKeyId) {
         if (masterKeyId != 0) {
-            Key masterKey = null;
-            mKeyRing = mProvider.getSecretKeyRingByMasterKeyId(masterKeyId);
-            if (mKeyRing != null) {
-                masterKey = mKeyRing.getMasterKey();
-                for (Key key : mKeyRing.getSecretKeys()) {
+            PGPSecretKey masterKey = null;
+            try {
+                mKeyRing = ProviderHelper.getPGPSecretKeyRing(this, masterKeyId);
+
+                masterKey = mKeyRing.getSecretKey();
+                mMasterCanSign = PgpKeyHelper.isCertificationKey(mKeyRing.getSecretKey());
+                for (PGPSecretKey key : new IterableIterator<PGPSecretKey>(mKeyRing.getSecretKeys())) {
                     mKeys.add(key);
                     mKeysUsages.add(-1); // get usage when view is created
                 }
-            } else {
+            } catch (ProviderHelper.NotFoundException e) {
                 Log.e(Constants.TAG, "Keyring not found with masterKeyId: " + masterKeyId);
                 AppMsg.makeText(this, R.string.error_no_secret_key_found, AppMsg.STYLE_ALERT).show();
                 // TODO
