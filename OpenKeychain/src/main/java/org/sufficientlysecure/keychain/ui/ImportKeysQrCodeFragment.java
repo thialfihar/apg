@@ -29,9 +29,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
@@ -95,18 +95,36 @@ public class ImportKeysQrCodeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode & 0xFFFF) {
-        case IntentIntegratorSupportV4.REQUEST_CODE: {
-            IntentResult scanResult = IntentIntegratorSupportV4.parseActivityResult(requestCode,
-                    resultCode, data);
-            if (scanResult != null && scanResult.getFormatName() != null) {
-                String scannedContent = scanResult.getContents();
+            case IntentIntegratorSupportV4.REQUEST_CODE: {
+                IntentResult scanResult = IntentIntegratorSupportV4.parseActivityResult(requestCode,
+                        resultCode, data);
+                if (scanResult != null && scanResult.getFormatName() != null) {
+                    String scannedContent = scanResult.getContents();
 
-                Log.d(Constants.TAG, "scannedContent: " + scannedContent);
+                    Log.d(Constants.TAG, "scannedContent: " + scannedContent);
 
-                // look if it's fingerprint only
-                if (scannedContent.toLowerCase(Locale.ENGLISH).startsWith(Constants.FINGERPRINT_SCHEME)) {
-                    importFingerprint(Uri.parse(scanResult.getContents()));
-                    return;
+                    // look if it's fingerprint only
+                    if (scannedContent.toLowerCase(Locale.ENGLISH).startsWith(Constants.FINGERPRINT_SCHEME)) {
+                        importFingerprint(Uri.parse(scanResult.getContents()));
+                        return;
+                    }
+
+                    // look if it is the whole key
+                    String[] parts = scannedContent.split(",");
+                    if (parts.length == 3) {
+                        importParts(parts);
+                        return;
+                    }
+
+                    // is this a full key encoded as qr code?
+                    if (scannedContent.startsWith("-----BEGIN PGP")) {
+                        mImportActivity.loadCallback(scannedContent.getBytes(), null, null, null);
+                        return;
+                    }
+
+                    // fail...
+                    AppMsg.makeText(getActivity(), R.string.import_qr_code_wrong, AppMsg.STYLE_ALERT)
+                            .show();
                 }
 
                 // look if it is the whole key
@@ -159,7 +177,7 @@ public class ImportKeysQrCodeFragment extends Fragment {
         }
 
         if (mScannedContent == null || counter > mScannedContent.length) {
-            Toast.makeText(getActivity(), R.string.import_qr_code_start_with_one, Toast.LENGTH_LONG)
+            AppMsg.makeText(getActivity(), R.string.import_qr_code_start_with_one, AppMsg.STYLE_ALERT)
                     .show();
             return;
         }
