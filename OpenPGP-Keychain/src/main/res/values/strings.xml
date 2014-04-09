@@ -78,8 +78,6 @@
     <string name="menu_import_from_qr_code">Import from QR Code</string>
     <string name="menu_import">Import</string>
     <string name="menu_import_from_nfc">Import from NFC</string>
-    <string name="menu_export_public_keys">Export all public keys</string>
-    <string name="menu_export_secret_keys">Export all secret keys</string>
     <string name="menu_export_key">Export to file</string>
     <string name="menu_delete_key">Delete key</string>
     <string name="menu_create_key">Create key</string>
@@ -104,7 +102,9 @@
     <string name="menu_encrypt_to">Encrypt to…</string>
     <string name="menu_select_all">Select all</string>
     <string name="menu_add_keys">Add keys</string>
+    <string name="menu_export_all_keys">Export all keys</string>
     <string name="menu_export_keys">Export keys</string>
+    <string name="menu_export_public_keys">Export public keys</string>
 
     <!-- label -->
     <string name="label_sign">Sign</string>
@@ -121,8 +121,8 @@
     <string name="label_share_after_encryption">Share After Encryption</string>
     <string name="label_encryption_algorithm">Encryption Algorithm</string>
     <string name="label_hash_algorithm">Hash Algorithm</string>
-    <string name="label_asymmetric">Public Key</string>
-    <string name="label_symmetric">Passphrase</string>
+    <string name="label_asymmetric">with Public Key</string>
+    <string name="label_symmetric">with Passphrase</string>
     <string name="label_passphrase_cache_ttl">Passphrase Cache</string>
     <string name="label_message_compression">Message Compression</string>
     <string name="label_file_compression">File Compression</string>
@@ -305,7 +305,6 @@
     <string name="error_no_symmetric_encryption_packet">couldn\'t find a packet with symmetric encryption</string>
     <string name="error_wrong_passphrase">wrong passphrase</string>
     <string name="error_saving_keys">error saving some keys</string>
-    <string name="error_could_not_encode_key_ring">Couldn\'t encode key ring</string>
     <string name="error_could_not_extract_private_key">could not extract private key</string>
     <string name="error_only_files_are_supported">Direct binary data without actual file in filesystem is not supported. This is only supported by ACTION_ENCRYPT_STREAM_AND_RETURN.</string>
     <string name="error_jelly_bean_needed">You need Android 4.1 alias Jelly Bean to use Androids NFC Beam feature!</string>
@@ -406,7 +405,7 @@
     <string name="import_qr_code_start_with_one">Please start with QR Code with ID 1</string>
     <string name="import_qr_code_wrong">QR Code malformed! Please try again!</string>
     <string name="import_qr_code_finished">QR Code scanning finished!</string>
-    <string name="import_qr_code_too_short_fingerprint">Fingerprint contained in this QR Code is too short (&lt; 16 characters)</string>
+    <string name="import_qr_code_too_short_fingerprint">Fingerprint is too short (&lt; 16 characters)</string>
     <string name="import_qr_scan_button">Scan QR Code with \'Barcode Scanner\'</string>
     <string name="import_nfc_text">To receive keys via NFC, the device needs to be unlocked.</string>
     <string name="import_nfc_help_button">Help</string>
@@ -485,10 +484,31 @@
     <string name="label_secret_key">Secret Key</string>
     <string name="secret_key_yes">available</string>
     <string name="secret_key_no">unavailable</string>
+
+    <!-- hints -->
+    <string name="encrypt_content_edit_text_hint">Write message here to encrypt and/or sign…</string>
+    <string name="decrypt_content_edit_text_hint">Enter ciphertext here to decrypt and/or verify…</string>
+
+    <!-- unsorted -->
+    <string name="permission_read_key_details_label">Read key details from APG.</string>
+    <string name="permission_read_key_details_description">Read key details of public and secret keys stored in APG, such as key ID and user IDs. The keys themselves can NOT be read.</string>
+    <string name="show_unknown_signatures">Show unknown signatures</string>
+    <string name="section_signer_id">Signer</string>
+    <string name="section_cert">Certificate Details</string>
+    <string name="label_user_id">User ID</string>
+    <string name="label_subkey_rank">Subkey Rank</string>
+    <string name="unknown_uid"><![CDATA[<unknown>]]></string>
+    <string name="empty_certs">No certificates for this key</string>
     <string name="section_uids_to_sign">User IDs to sign</string>
     <string name="progress_re_adding_certs">Reapplying certificates</string>
     <string name="certs_list_known_secret">Show by known secret keys</string>
     <string name="certs_list_known">Show by known public keys</string>
     <string name="certs_list_all">Show all certificates</string>
+    <string name="cert_default">default</string>
+    <string name="cert_none">none</string>
+    <string name="cert_casual">casual</string>
+    <string name="cert_positive">positive</string>
+    <string name="cert_revoke">revoke</string>
+    <string name="never">never</string>
 
 </resources>
