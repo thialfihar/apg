@@ -38,6 +38,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.Keys;
 import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
@@ -202,8 +203,9 @@ public class ViewKeyMainFragment extends Fragment implements
          * because the notification triggers faster than the activity closes.
          */
         // Avoid NullPointerExceptions...
-        if(data.getCount() == 0)
+        if(data.getCount() == 0) {
             return;
+        }
         // Swap the new cursor in. (The framework will take care of closing the
         // old cursor once we return.)
         switch (loader.getId()) {
@@ -230,7 +232,8 @@ public class ViewKeyMainFragment extends Fragment implements
                         mActionEdit.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View view) {
                                 Intent editIntent = new Intent(getActivity(), EditKeyActivity.class);
-                                editIntent.setData(mDataUri);
+                                editIntent.setData(
+                                        KeyRingData.buildSecretKeyRingUri(mDataUri));
                                 editIntent.setAction(EditKeyActivity.ACTION_EDIT_KEY);
                                 startActivityForResult(editIntent, 0);
                             }
@@ -328,7 +331,8 @@ public class ViewKeyMainFragment extends Fragment implements
     private void encryptToContact(Uri dataUri) {
         // TODO preselect from uri? should be feasible without trivial query
         try {
-            long keyId = ProviderHelper.getMasterKeyId(getActivity(), dataUri);
+            long keyId = ProviderHelper.getMasterKeyId(getActivity(),
+                    KeyRingData.buildPublicKeyRingUri(dataUri));
 
             long[] encryptionKeyIds = new long[]{ keyId };
             Intent intent = new Intent(getActivity(), EncryptActivity.class);

@@ -30,9 +30,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 import org.thialfihar.android.apg.provider.KeychainContract.Certs;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,7 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
 
     private final ArrayList<Boolean> mCheckStates;
 
-    public static final String[] USER_IDS_PROJECTION = new String[] {
+    public static final String[] USER_IDS_PROJECTION = new String[]{
             UserIds._ID, UserIds.USER_ID, UserIds.RANK,
             UserIds.VERIFIED, UserIds.IS_PRIMARY, UserIds.IS_REVOKED
     };
@@ -58,6 +59,7 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
 
         initIndex(c);
     }
+
     public ViewKeyUserIdsAdapter(Context context, Cursor c, int flags) {
         this(context, c, flags, false);
     }
@@ -71,7 +73,7 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
                 int count = newCursor.getCount();
                 mCheckStates.ensureCapacity(count);
                 // initialize to true (use case knowledge: we usually want to sign all uids)
-                for(int i = 0; i < count; i++) {
+                for (int i = 0; i < count; i++) {
                     newCursor.moveToPosition(i);
                     int verified = newCursor.getInt(mVerifiedId);
                     mCheckStates.add(verified != Certs.VERIFIED_SECRET);
@@ -105,7 +107,7 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
         TextView vAddress = (TextView) view.findViewById(R.id.address);
         ImageView vVerified = (ImageView) view.findViewById(R.id.certified);
 
-        if(cursor.getInt(mIsPrimary) > 0) {
+        if (cursor.getInt(mIsPrimary) > 0) {
             vRank.setText("+");
         } else {
             vRank.setText(Integer.toString(cursor.getInt(mIndexRank)));
@@ -119,18 +121,28 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
         }
         vAddress.setText(userId[1]);
 
-        if(cursor.getInt(mIsRevoked) > 0) {
+        if (cursor.getInt(mIsRevoked) > 0) {
             vRank.setText(" ");
             vVerified.setImageResource(android.R.drawable.presence_away);
+
+            // disable and strike through text for revoked user ids
+            vUserId.setEnabled(false);
+            vAddress.setEnabled(false);
+            vUserId.setText(OtherHelper.strikeOutText(vUserId.getText()));
+            vAddress.setText(OtherHelper.strikeOutText(vAddress.getText()));
         } else {
+            vUserId.setEnabled(true);
+            vAddress.setEnabled(true);
+
             int verified = cursor.getInt(mVerifiedId);
             // TODO introduce own resources for this :)
-            if(verified == Certs.VERIFIED_SECRET)
+            if (verified == Certs.VERIFIED_SECRET) {
                 vVerified.setImageResource(android.R.drawable.presence_online);
-            else if(verified == Certs.VERIFIED_SELF)
+            } else if (verified == Certs.VERIFIED_SELF) {
                 vVerified.setImageResource(android.R.drawable.presence_invisible);
-            else
+            } else {
                 vVerified.setImageResource(android.R.drawable.presence_busy);
+            }
         }
 
         // don't care further if checkboxes aren't shown
@@ -153,7 +165,7 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
 
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         CheckBox box = ((CheckBox) view.findViewById(R.id.checkBox));
-        if(box != null) {
+        if (box != null) {
             box.toggle();
         }
     }
