@@ -33,8 +33,8 @@ import org.spongycastle.x509.X509V3CertificateGenerator;
 import org.spongycastle.x509.extension.AuthorityKeyIdentifierStructure;
 import org.spongycastle.x509.extension.SubjectKeyIdentifierStructure;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.io.IOException;
 import java.math.BigInteger;

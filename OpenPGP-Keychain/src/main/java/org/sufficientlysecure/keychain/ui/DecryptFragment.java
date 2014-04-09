@@ -33,14 +33,14 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
 import org.openintents.openpgp.OpenPgpSignatureResult;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.pgp.exception.PgpGeneralException;
+import org.sufficientlysecure.keychain.provider.KeychainContract;
+import org.sufficientlysecure.keychain.provider.ProviderHelper;
+import org.sufficientlysecure.keychain.ui.dialog.PassphraseDialogFragment;
+import org.sufficientlysecure.keychain.util.Log;
 
 public class DecryptFragment extends Fragment {
     private static final int RESULT_CODE_LOOKUP_KEY = 0x00007006;

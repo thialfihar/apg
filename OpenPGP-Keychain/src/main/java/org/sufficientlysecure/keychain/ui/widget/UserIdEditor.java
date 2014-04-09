@@ -31,9 +31,9 @@ import android.widget.LinearLayout;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ContactHelper;
-import org.thialfihar.android.apg.pgp.Utils;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.helper.ContactHelper;
+import org.sufficientlysecure.keychain.pgp.Utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

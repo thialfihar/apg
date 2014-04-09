@@ -20,7 +20,7 @@ package org.thialfihar.android.apg.provider;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import org.thialfihar.android.apg.Constants;
+import org.sufficientlysecure.keychain.Constants;
 
 public class ApgContract {
 

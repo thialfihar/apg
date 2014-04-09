@@ -34,9 +34,9 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.provider.KeychainContract;
 
 public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 

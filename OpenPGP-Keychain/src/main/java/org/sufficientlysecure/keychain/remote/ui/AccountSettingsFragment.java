@@ -32,14 +32,14 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.remote.AccountSettings;
-import org.thialfihar.android.apg.ui.EditKeyActivity;
-import org.thialfihar.android.apg.ui.SelectSecretKeyLayoutFragment;
-import org.thialfihar.android.apg.ui.adapter.KeyValueSpinnerAdapter;
-import org.thialfihar.android.apg.util.AlgorithmNames;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.provider.KeychainContract;
+import org.sufficientlysecure.keychain.provider.ProviderHelper;
+import org.sufficientlysecure.keychain.remote.AccountSettings;
+import org.sufficientlysecure.keychain.ui.EditKeyActivity;
+import org.sufficientlysecure.keychain.ui.SelectSecretKeyLayoutFragment;
+import org.sufficientlysecure.keychain.ui.adapter.KeyValueSpinnerAdapter;
+import org.sufficientlysecure.keychain.util.AlgorithmNames;
 
 public class AccountSettingsFragment extends Fragment implements
         SelectSecretKeyLayoutFragment.SelectSecretKeyCallback {

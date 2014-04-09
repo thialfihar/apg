@@ -35,16 +35,16 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.openpgp.PGPKeyFlags;
 
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.Key;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.service.PassphraseCacheService;
-import org.thialfihar.android.apg.ui.dialog.CreateKeyDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
-import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
-import org.thialfihar.android.apg.util.Choice;
+import org.sufficientlysecure.keychain.Id;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.pgp.Key;
+import org.sufficientlysecure.keychain.service.ApgIntentService;
+import org.sufficientlysecure.keychain.service.ApgIntentServiceHandler;
+import org.sufficientlysecure.keychain.service.PassphraseCacheService;
+import org.sufficientlysecure.keychain.ui.dialog.CreateKeyDialogFragment;
+import org.sufficientlysecure.keychain.ui.dialog.ProgressDialogFragment;
+import org.sufficientlysecure.keychain.ui.widget.Editor.EditorListener;
+import org.sufficientlysecure.keychain.util.Choice;
 
 import java.util.ArrayList;
 import java.util.List;

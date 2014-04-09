@@ -19,7 +19,7 @@ package org.thialfihar.android.apg.remote;
 
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
-import org.thialfihar.android.apg.Id;
+import org.sufficientlysecure.keychain.Id;
 
 public class AccountSettings {
     private String mAccountName;

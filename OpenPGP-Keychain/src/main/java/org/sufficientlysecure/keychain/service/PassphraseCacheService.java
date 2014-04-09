@@ -40,12 +40,12 @@ import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.Id;
+import org.sufficientlysecure.keychain.helper.Preferences;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.provider.KeychainContract;
+import org.sufficientlysecure.keychain.provider.ProviderHelper;
 
 import java.util.Date;
 import java.util.Iterator;

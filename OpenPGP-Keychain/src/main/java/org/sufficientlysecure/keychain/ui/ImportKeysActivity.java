@@ -39,14 +39,14 @@ import android.widget.ArrayAdapter;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.ui.dialog.BadImportKeyDialogFragment;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.service.KeychainIntentService;
+import org.sufficientlysecure.keychain.service.KeychainIntentServiceHandler;
+import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
+import org.sufficientlysecure.keychain.ui.dialog.BadImportKeyDialogFragment;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.util.ArrayList;
 import java.util.Locale;

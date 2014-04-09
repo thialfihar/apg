@@ -29,8 +29,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.provider.KeychainContract.ApiApps;
 
 public class RegisteredAppsAdapter extends CursorAdapter {
 

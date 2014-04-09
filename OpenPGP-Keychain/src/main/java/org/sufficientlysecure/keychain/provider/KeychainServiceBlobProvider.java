@@ -27,10 +27,10 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.BaseColumns;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.Blobs;
-import org.thialfihar.android.apg.provider.KeychainServiceBlobContract.BlobsColumns;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.provider.KeychainServiceBlobContract.Blobs;
+import org.sufficientlysecure.keychain.provider.KeychainServiceBlobContract.BlobsColumns;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;

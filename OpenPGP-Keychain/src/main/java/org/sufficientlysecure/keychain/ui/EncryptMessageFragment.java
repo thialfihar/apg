@@ -33,15 +33,15 @@ import android.widget.EditText;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.compatibility.ClipboardReflection;
-import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.service.PassphraseCacheService;
-import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.compatibility.ClipboardReflection;
+import org.sufficientlysecure.keychain.helper.Preferences;
+import org.sufficientlysecure.keychain.service.ApgIntentService;
+import org.sufficientlysecure.keychain.service.ApgIntentServiceHandler;
+import org.sufficientlysecure.keychain.service.PassphraseCacheService;
+import org.sufficientlysecure.keychain.ui.dialog.PassphraseDialogFragment;
+import org.sufficientlysecure.keychain.util.Log;
 
 public class EncryptMessageFragment extends Fragment {
     public static final String ARG_TEXT = "text";

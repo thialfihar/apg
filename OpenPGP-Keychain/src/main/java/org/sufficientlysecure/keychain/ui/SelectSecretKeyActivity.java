@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
-import org.thialfihar.android.apg.R;
+import org.sufficientlysecure.keychain.R;
 
 public class SelectSecretKeyActivity extends ActionBarActivity {
 

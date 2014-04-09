@@ -27,7 +27,7 @@ import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.beardedhen.androidbootstrap.FontAwesomeText;
-import org.thialfihar.android.apg.R;
+import org.sufficientlysecure.keychain.R;
 
 /**
  * Class representing a LinearLayout that can fold and hide it's content when pressed

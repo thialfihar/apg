@@ -19,8 +19,8 @@ package org.thialfihar.android.apg.remote;
 
 import android.os.Bundle;
 
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.ui.DrawerActivity;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.ui.DrawerActivity;
 
 public class AppsListActivity extends DrawerActivity {
 

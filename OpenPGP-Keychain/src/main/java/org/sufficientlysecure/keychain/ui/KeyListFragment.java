@@ -55,17 +55,17 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
-import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.Id;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.helper.ExportHelper;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingData;
+import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
+import org.sufficientlysecure.keychain.ui.adapter.HighlightQueryCursorAdapter;
+import org.sufficientlysecure.keychain.ui.dialog.DeleteKeyDialogFragment;
+import org.sufficientlysecure.keychain.util.Log;
 import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;

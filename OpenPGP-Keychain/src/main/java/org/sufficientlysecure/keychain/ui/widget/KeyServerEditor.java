@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.R;
+import org.sufficientlysecure.keychain.R;
 
 public class KeyServerEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;

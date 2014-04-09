@@ -36,10 +36,10 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.FileHelper;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.helper.FileHelper;
+import org.sufficientlysecure.keychain.util.Log;
 
 public class FileDialogFragment extends DialogFragment {
     private static final String ARG_MESSENGER = "messenger";

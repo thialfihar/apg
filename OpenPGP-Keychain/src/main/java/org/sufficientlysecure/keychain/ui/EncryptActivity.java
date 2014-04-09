@@ -24,13 +24,13 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.ActionBarHelper;
-import org.thialfihar.android.apg.helper.FileHelper;
-import org.thialfihar.android.apg.ui.adapter.PagerTabStripAdapter;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.Id;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.helper.ActionBarHelper;
+import org.sufficientlysecure.keychain.helper.FileHelper;
+import org.sufficientlysecure.keychain.ui.adapter.PagerTabStripAdapter;
+import org.sufficientlysecure.keychain.util.Log;
 
 public class EncryptActivity extends DrawerActivity implements
         EncryptSymmetricFragment.OnSymmetricKeySelection,

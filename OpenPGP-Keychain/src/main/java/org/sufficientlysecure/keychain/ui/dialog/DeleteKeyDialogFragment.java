@@ -32,13 +32,13 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingData;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
+import org.sufficientlysecure.keychain.provider.KeychainDatabase;
+import org.sufficientlysecure.keychain.provider.ProviderHelper;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.util.HashMap;
 

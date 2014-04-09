@@ -18,7 +18,7 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
 
 import java.util.List;
 

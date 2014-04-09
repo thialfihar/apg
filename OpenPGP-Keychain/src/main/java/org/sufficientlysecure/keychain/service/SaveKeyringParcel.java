@@ -21,7 +21,7 @@ package org.thialfihar.android.apg.service;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.thialfihar.android.apg.pgp.Key;
+import org.sufficientlysecure.keychain.pgp.Key;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;

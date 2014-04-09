@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.R;
+import org.sufficientlysecure.keychain.R;
 
 public class ImportKeysNFCFragment extends Fragment {
 

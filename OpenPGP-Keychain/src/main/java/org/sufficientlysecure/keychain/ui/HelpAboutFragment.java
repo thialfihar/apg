@@ -28,9 +28,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.util.Log;
 
 public class HelpAboutFragment extends Fragment {
 

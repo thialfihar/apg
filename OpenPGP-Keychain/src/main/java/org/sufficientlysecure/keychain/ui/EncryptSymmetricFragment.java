@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import org.thialfihar.android.apg.R;
+import org.sufficientlysecure.keychain.R;
 
 public class EncryptSymmetricFragment extends Fragment {
 

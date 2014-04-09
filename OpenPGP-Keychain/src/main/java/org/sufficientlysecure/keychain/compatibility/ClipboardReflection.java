@@ -19,8 +19,8 @@ package org.thialfihar.android.apg.compatibility;
 
 import android.content.Context;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.lang.reflect.Method;
 

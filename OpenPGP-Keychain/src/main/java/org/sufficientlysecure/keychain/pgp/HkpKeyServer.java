@@ -30,9 +30,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

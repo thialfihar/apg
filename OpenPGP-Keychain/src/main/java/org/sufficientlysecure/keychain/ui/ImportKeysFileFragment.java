@@ -27,10 +27,10 @@ import android.view.ViewGroup;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.helper.FileHelper;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.Id;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.helper.FileHelper;
 
 public class ImportKeysFileFragment extends Fragment {
     private ImportKeysActivity mImportActivity;

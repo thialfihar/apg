@@ -28,7 +28,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-import org.thialfihar.android.apg.Constants;
+import org.sufficientlysecure.keychain.Constants;
 
 import java.util.Hashtable;
 

@@ -32,19 +32,19 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.compatibility.ClipboardReflection;
-import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.KeyRing;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
-import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
-import org.thialfihar.android.apg.util.Log;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.Id;
+import org.sufficientlysecure.keychain.R;
+import org.sufficientlysecure.keychain.compatibility.ClipboardReflection;
+import org.sufficientlysecure.keychain.helper.ExportHelper;
+import org.sufficientlysecure.keychain.pgp.KeyRing;
+import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
+import org.sufficientlysecure.keychain.provider.KeychainContract;
+import org.sufficientlysecure.keychain.provider.ProviderHelper;
+import org.sufficientlysecure.keychain.ui.adapter.TabsAdapter;
+import org.sufficientlysecure.keychain.ui.dialog.ShareNfcDialogFragment;
+import org.sufficientlysecure.keychain.ui.dialog.ShareQrCodeDialogFragment;
+import org.sufficientlysecure.keychain.util.Log;
 
 import java.io.IOException;
 
