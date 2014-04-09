@@ -24,8 +24,8 @@ import android.content.SharedPreferences;
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.Id;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.Id;
 
 import java.util.Vector;
 

@@ -39,10 +39,10 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.bcpg.sig.KeyFlags;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.pgp.Key;
-import org.sufficientlysecure.keychain.pgp.Utils;
-import org.sufficientlysecure.keychain.util.Choice;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.Utils;
+import org.thialfihar.android.apg.util.Choice;
 
 import java.text.DateFormat;
 import java.util.Calendar;

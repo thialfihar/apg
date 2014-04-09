@@ -17,7 +17,7 @@
 
 package org.thialfihar.android.apg.util;
 
-import org.sufficientlysecure.keychain.Constants;
+import org.thialfihar.android.apg.Constants;
 
 /**
  * Wraps Android Logging to enable or disable debug output using Constants

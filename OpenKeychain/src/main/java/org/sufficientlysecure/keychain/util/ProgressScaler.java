@@ -17,7 +17,7 @@
 
 package org.thialfihar.android.apg.util;
 
-import org.sufficientlysecure.keychain.pgp.Progressable;
+import org.thialfihar.android.apg.pgp.Progressable;
 
 /** This is a simple class that wraps a ProgressDialogUpdater, scaling the progress
  * values into a specified range.

@@ -31,9 +31,9 @@ import android.widget.TextView;
 
 import org.spongycastle.util.encoders.Hex;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.util.Log;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

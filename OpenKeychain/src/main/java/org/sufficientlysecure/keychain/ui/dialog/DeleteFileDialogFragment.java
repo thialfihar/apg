@@ -29,9 +29,9 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.service.ApgIntentService;
-import org.sufficientlysecure.keychain.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 
 public class DeleteFileDialogFragment extends DialogFragment {
     private static final String ARG_DELETE_FILE = "delete_file";

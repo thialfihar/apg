@@ -21,8 +21,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
 
 public class ApgDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "apg";

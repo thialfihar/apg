@@ -23,7 +23,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.text.Spannable;
 import android.text.style.ForegroundColorSpan;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

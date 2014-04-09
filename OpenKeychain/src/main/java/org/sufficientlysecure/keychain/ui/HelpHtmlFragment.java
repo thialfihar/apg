@@ -28,7 +28,7 @@ import android.widget.ScrollView;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 public class HelpHtmlFragment extends Fragment {
     private Activity mActivity;

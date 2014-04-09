@@ -21,13 +21,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.provider.KeychainContract.ApiAppsColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingsColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeysColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIdsColumns;
-import org.sufficientlysecure.keychain.provider.KeychainContract.CertsColumns;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiAppsColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRingsColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.KeysColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIdsColumns;
+import org.thialfihar.android.apg.provider.KeychainContract.CertsColumns;
+import org.thialfihar.android.apg.util.Log;
 
 public class KeychainDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "openkeychain.db";

@@ -27,7 +27,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 public class ProgressDialogFragment extends DialogFragment {
     private static final String ARG_MESSAGE = "message";

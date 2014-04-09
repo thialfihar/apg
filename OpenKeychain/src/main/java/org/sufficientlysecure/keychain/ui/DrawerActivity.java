@@ -39,8 +39,8 @@ import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.FontAwesomeText;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.remote.AppsListActivity;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.remote.AppsListActivity;
 
 public class DrawerActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;

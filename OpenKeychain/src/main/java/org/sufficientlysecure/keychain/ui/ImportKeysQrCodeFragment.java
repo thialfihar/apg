@@ -33,10 +33,10 @@ import android.widget.Toast;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.util.IntentIntegratorSupportV4;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.util.IntentIntegratorSupportV4;
+import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
 import java.util.Locale;

@@ -28,17 +28,17 @@ import android.widget.ListView;
 
 import com.devspark.appmsg.AppMsg;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.helper.Preferences;
-import org.sufficientlysecure.keychain.pgp.KeyServer;
-import org.sufficientlysecure.keychain.ui.adapter.AsyncTaskResultWrapper;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysAdapter;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListEntry;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListLoader;
-import org.sufficientlysecure.keychain.ui.adapter.ImportKeysListServerLoader;
-import org.sufficientlysecure.keychain.util.InputData;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.pgp.KeyServer;
+import org.thialfihar.android.apg.ui.adapter.AsyncTaskResultWrapper;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysAdapter;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListLoader;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListServerLoader;
+import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;

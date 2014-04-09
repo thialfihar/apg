@@ -30,7 +30,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class ShareNfcDialogFragment extends DialogFragment {

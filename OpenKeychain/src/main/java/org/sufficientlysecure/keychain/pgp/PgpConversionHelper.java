@@ -28,15 +28,15 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureList;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
 
 
 public class PgpConversionHelper {
 
     /**
      * Convert from byte[] to PGPKeyRing
-     * 
+     *
      * @param keysBytes
      * @return
      */
@@ -56,7 +56,7 @@ public class PgpConversionHelper {
 
     /**
      * Convert from byte[] to ArrayList<PGPSecretKey>
-     * 
+     *
      * @param keysBytes
      * @return
      */
@@ -75,9 +75,9 @@ public class PgpConversionHelper {
 
     /**
      * Convert from byte[] to PGPSecretKey
-     * 
+     *
      * Singles keys are encoded as keyRings with one single key in it by Bouncy Castle
-     * 
+     *
      * @param keysBytes
      * @return
      */
@@ -129,7 +129,7 @@ public class PgpConversionHelper {
 
     /**
      * Convert from ArrayList<PGPSecretKey> to byte[]
-     * 
+     *
      * @param keys
      * @return
      */
@@ -148,7 +148,7 @@ public class PgpConversionHelper {
 
     /**
      * Convert from PGPSecretKey to byte[]
-     * 
+     *
      * @param keysBytes
      * @return
      */
@@ -164,7 +164,7 @@ public class PgpConversionHelper {
 
     /**
      * Convert from PGPSecretKeyRing to byte[]
-     * 
+     *
      * @param keysBytes
      * @return
      */

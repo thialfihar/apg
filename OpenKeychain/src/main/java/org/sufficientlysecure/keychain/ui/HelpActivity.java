@@ -23,8 +23,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.ui.adapter.TabsAdapter;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 
 public class HelpActivity extends ActionBarActivity {
     public static final String EXTRA_SELECTED_TAB = "selected_tab";

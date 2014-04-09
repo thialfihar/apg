@@ -23,8 +23,8 @@ import android.app.Activity;
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
 
-import org.sufficientlysecure.keychain.Id;
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.Id;
+import org.thialfihar.android.apg.R;
 
 import java.util.HashMap;
 

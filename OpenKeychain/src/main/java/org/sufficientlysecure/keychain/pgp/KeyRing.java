@@ -26,7 +26,7 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 
-import org.sufficientlysecure.keychain.util.IterableIterator;
+import org.thialfihar.android.apg.util.IterableIterator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
