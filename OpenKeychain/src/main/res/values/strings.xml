@@ -105,6 +105,7 @@
     <string name="menu_export_all_keys">Export all keys</string>
     <string name="menu_export_keys">Export keys</string>
     <string name="menu_export_public_keys">Export public keys</string>
+    <string name="menu_export_secret_keys">Export secret keys</string>
 
     <!-- label -->
     <string name="label_sign">Sign</string>

@@ -39,16 +39,16 @@ import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IOException;
 
 public class ViewKeyActivity extends ActionBarActivity {
 
@@ -155,17 +155,17 @@ public class ViewKeyActivity extends ActionBarActivity {
     }
 
     private void exportToFile(Uri dataUri) {
-        Uri baseUri = KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri);
+        Uri baseUri = ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri);
 
         HashMap<String, Object> data = ProviderHelper.getGenericData(this,
                 baseUri,
-                new String[]{KeychainContract.Keys.MASTER_KEY_ID, KeychainContract.KeyRings.HAS_SECRET},
+                new String[]{ApgContract.Keys.MASTER_KEY_ID, ApgContract.KeyRings.HAS_SECRET},
                 new int[]{ProviderHelper.FIELD_TYPE_INTEGER, ProviderHelper.FIELD_TYPE_INTEGER});
 
         mExportHelper.showExportKeysDialog(
-                new long[]{(Long) data.get(KeychainContract.KeyRings.MASTER_KEY_ID)},
+                new long[]{(Long) data.get(ApgContract.KeyRings.MASTER_KEY_ID)},
                 Constants.Path.APP_DIR_FILE,
-                ((Long) data.get(KeychainContract.KeyRings.HAS_SECRET) == 1)
+                ((Long) data.get(ApgContract.KeyRings.HAS_SECRET) == 1)
         );
     }
 
@@ -177,8 +177,8 @@ public class ViewKeyActivity extends ActionBarActivity {
 
     private void updateFromKeyserver(Uri dataUri) {
         byte[] blob = (byte[]) ProviderHelper.getGenericData(
-                this, KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                KeychainContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+                this, ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
+                ApgContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
         String fingerprint = PgpKeyHelper.convertFingerprintToHex(blob);
 
         Intent queryIntent = new Intent(this, ImportKeysActivity.class);
@@ -192,8 +192,8 @@ public class ViewKeyActivity extends ActionBarActivity {
         String content = null;
         if (fingerprintOnly) {
             byte[] data = (byte[]) ProviderHelper.getGenericData(
-                    this, KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                    KeychainContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+                    this, ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
+                    ApgContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
             if (data != null) {
                 String fingerprint = PgpKeyHelper.convertFingerprintToHex(data);
                 content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;

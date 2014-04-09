@@ -12,8 +12,8 @@ dependencies {
     compile project(':libs:bc:pg')
     compile project(':libs:bc:prov')
     compile project(':libs:HtmlTextView')
-    compile project(':OpenPGP-Keychain-API:libraries:openpgp-api-library')
-    compile project(':OpenPGP-Keychain-API:libraries:openkeychain-api-library')
+    compile project(':OpenKeychain-API:libraries:openpgp-api-library')
+    compile project(':OpenKeychain-API:libraries:openkeychain-api-library')
 }
 
 android {
@@ -31,6 +31,14 @@ android {
             runProguard true
             proguardFile file('../proguard.cfg')
             proguardFile getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                exclude '**/Keychain*'
+            }
         }
     }
 

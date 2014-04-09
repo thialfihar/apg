@@ -40,6 +40,7 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.PgpKeyProvider;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
 import org.thialfihar.android.apg.provider.KeychainContract.Certs;
 import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
@@ -143,27 +144,6 @@ public class ProviderHelper implements PgpKeyProvider {
         } else {
             throw new NotFoundException();
         }
-    }
-
-    public static PGPKeyRing getPGPKeyRing(Context context, Uri queryUri) {
-        Cursor cursor = context.getContentResolver().query(queryUri,
-                new String[]{KeyRings._ID, KeyRingData.KEY_RING_DATA}, null, null, null);
-
-        PGPKeyRing keyRing = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            int keyRingDataCol = cursor.getColumnIndex(KeyRingData.KEY_RING_DATA);
-
-            byte[] data = cursor.getBlob(keyRingDataCol);
-            if (data != null) {
-                keyRing = PgpConversionHelper.BytesToPGPKeyRing(data);
-            }
-        }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-
-        return result;
     }
 
     public static PGPKeyRing getPGPKeyRing(Context context, Uri queryUri) throws NotFoundException {

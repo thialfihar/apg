@@ -18,16 +18,25 @@
 package org.sufficientlysecure.keychain.provider;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiAppsColumns;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRingsColumns;
-import org.thialfihar.android.apg.provider.KeychainContract.KeysColumns;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIdsColumns;
-import org.thialfihar.android.apg.provider.KeychainContract.CertsColumns;
-import org.thialfihar.android.apg.util.Log;
+
+import org.spongycastle.openpgp.PGPKeyRing;
+import org.spongycastle.openpgp.PGPPublicKeyRing;
+import org.spongycastle.openpgp.PGPSecretKeyRing;
+import org.sufficientlysecure.keychain.Constants;
+import org.sufficientlysecure.keychain.pgp.PgpConversionHelper;
+import org.sufficientlysecure.keychain.provider.KeychainContract.ApiAppsColumns;
+import org.sufficientlysecure.keychain.provider.KeychainContract.ApiAppsAccountsColumns;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingsColumns;
+import org.sufficientlysecure.keychain.provider.KeychainContract.KeysColumns;
+import org.sufficientlysecure.keychain.provider.KeychainContract.UserIdsColumns;
+import org.sufficientlysecure.keychain.provider.KeychainContract.CertsColumns;
+import org.sufficientlysecure.keychain.util.Log;
+
+import java.io.IOException;
 
 public class KeychainDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "openkeychain.db";
@@ -35,11 +44,13 @@ public class KeychainDatabase extends SQLiteOpenHelper {
     static Boolean apgHack = false;
 
     public interface Tables {
-        String KEY_RINGS = "key_rings";
+        String KEY_RINGS_PUBLIC = "keyrings_public";
+        String KEY_RINGS_SECRET = "keyrings_secret";
         String KEYS = "keys";
         String USER_IDS = "user_ids";
-        String API_APPS = "api_apps";
         String CERTS = "certs";
+        String API_APPS = "api_apps";
+        String API_ACCOUNTS = "api_accounts";
     }
 
     private static final String CREATE_KEYRINGS_PUBLIC =
@@ -116,24 +127,21 @@ public class KeychainDatabase extends SQLiteOpenHelper {
 
     private static final String CREATE_API_APPS = "CREATE TABLE IF NOT EXISTS " + Tables.API_APPS
             + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + ApiAppsColumns.PACKAGE_NAME + " TEXT UNIQUE, "
-            + ApiAppsColumns.PACKAGE_SIGNATURE + " BLOB, "
-            + ApiAppsColumns.KEY_ID + " INT64, "
-            + ApiAppsColumns.ENCRYPTION_ALGORITHM + " INTEGER, "
-            + ApiAppsColumns.HASH_ALORITHM + " INTEGER, "
-            + ApiAppsColumns.COMPRESSION + " INTEGER)";
+            + ApiAppsColumns.PACKAGE_NAME + " TEXT NOT NULL UNIQUE, "
+            + ApiAppsColumns.PACKAGE_SIGNATURE + " BLOB)";
 
-    private static final String CREATE_CERTS = "CREATE TABLE IF NOT EXISTS " + Tables.CERTS
+    private static final String CREATE_API_APPS_ACCOUNTS = "CREATE TABLE IF NOT EXISTS " + Tables.API_ACCOUNTS
             + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + CertsColumns.KEY_RING_ROW_ID + " INTEGER NOT NULL "
-                + " REFERENCES " + Tables.KEY_RINGS + "(" + BaseColumns._ID + ") ON DELETE CASCADE, "
-            + CertsColumns.KEY_ID + " INTEGER, " // certified key
-            + CertsColumns.RANK + " INTEGER, " // key rank of certified uid
-            + CertsColumns.KEY_ID_CERTIFIER + " INTEGER, " // certifying key
-            + CertsColumns.CREATION + " INTEGER, "
-            + CertsColumns.VERIFIED + " INTEGER, "
-            + CertsColumns.KEY_DATA + " BLOB)";
-
+            + ApiAppsAccountsColumns.ACCOUNT_NAME + " TEXT NOT NULL, "
+            + ApiAppsAccountsColumns.KEY_ID + " INT64, "
+            + ApiAppsAccountsColumns.ENCRYPTION_ALGORITHM + " INTEGER, "
+            + ApiAppsAccountsColumns.HASH_ALORITHM + " INTEGER, "
+            + ApiAppsAccountsColumns.COMPRESSION + " INTEGER, "
+            + ApiAppsAccountsColumns.PACKAGE_NAME + " TEXT NOT NULL, "
+            + "UNIQUE(" + ApiAppsAccountsColumns.ACCOUNT_NAME + ", "
+            + ApiAppsAccountsColumns.PACKAGE_NAME + "), "
+            + "FOREIGN KEY(" + ApiAppsAccountsColumns.PACKAGE_NAME + ") REFERENCES "
+            + Tables.API_APPS + "(" + ApiAppsColumns.PACKAGE_NAME + ") ON DELETE CASCADE)";
 
     KeychainDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -155,11 +163,13 @@ public class KeychainDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.w(Constants.TAG, "Creating database...");
 
-        db.execSQL(CREATE_KEY_RINGS);
+        db.execSQL(CREATE_KEYRINGS_PUBLIC);
+        db.execSQL(CREATE_KEYRINGS_SECRET);
         db.execSQL(CREATE_KEYS);
         db.execSQL(CREATE_USER_IDS);
-        db.execSQL(CREATE_API_APPS);
         db.execSQL(CREATE_CERTS);
+        db.execSQL(CREATE_API_APPS);
+        db.execSQL(CREATE_API_APPS_ACCOUNTS);
     }
 
     @Override
@@ -195,26 +205,39 @@ public class KeychainDatabase extends SQLiteOpenHelper {
                 if(db.equals("apg.db")) {
                     hasApgDb = true;
                     break;
-                case 4:
-                    db.execSQL(CREATE_API_APPS);
-                    break;
-                case 5:
-                    // new column: package_signature
-                    db.execSQL("DROP TABLE IF EXISTS " + Tables.API_APPS);
-                    db.execSQL(CREATE_API_APPS);
-                    break;
-                case 6:
-                    // new column: fingerprint
-                    db.execSQL("ALTER TABLE " + Tables.KEYS + " ADD COLUMN " + KeysColumns.FINGERPRINT
-                            + " BLOB;");
-                    break;
-                case 7:
-                    // new table: certs
-                    db.execSQL(CREATE_CERTS);
+                }
+            }
+        }
 
-                    break;
-                default:
-                    break;
+        if(!hasApgDb)
+            return;
+
+        Log.d(Constants.TAG, "apg.db exists! Importing...");
+
+        SQLiteDatabase db = new SQLiteOpenHelper(context, "apg.db", null, 1) {
+            @Override
+            public void onCreate(SQLiteDatabase db) {
+                // should never happen
+                assert false;
+            }
+            @Override
+            public void onDowngrade(SQLiteDatabase db, int old, int nu) {
+                // don't care
+            }
+            @Override
+            public void onUpgrade(SQLiteDatabase db, int old, int nu) {
+                // don't care either
+            }
+        }.getReadableDatabase();
+
+        // kill current!
+        { // TODO don't kill current.
+            Log.d(Constants.TAG, "Truncating db...");
+            SQLiteDatabase d = getWritableDatabase();
+            d.execSQL("DELETE FROM keyrings_public");
+            d.close();
+            Log.d(Constants.TAG, "Ok.");
+        }
 
         Cursor c = null;
         try {
@@ -256,7 +279,22 @@ public class KeychainDatabase extends SQLiteOpenHelper {
                     Log.e(Constants.TAG, "Unknown blob data type!");
                 }
             }
+
+        } catch(IOException e) {
+            Log.e(Constants.TAG, "Error importing apg db!", e);
+            return;
+        } finally {
+            if(c != null)
+                c.close();
+            if(db != null)
+                db.close();
         }
+
+        // TODO delete old db, if we are sure this works
+        // context.deleteDatabase("apg.db");
+        Log.d(Constants.TAG, "All done, (not) deleting apg.db");
+
+
     }
 
 }

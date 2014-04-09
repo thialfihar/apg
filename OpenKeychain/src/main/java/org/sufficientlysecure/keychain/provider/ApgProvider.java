@@ -30,17 +30,17 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiAccounts;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
-import org.thialfihar.android.apg.provider.KeychainContract.Certs;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRingsColumns;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyTypes;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
-import org.thialfihar.android.apg.provider.KeychainContract.KeysColumns;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIdsColumns;
-import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
+import org.thialfihar.android.apg.provider.ApgContract.ApiAccounts;
+import org.thialfihar.android.apg.provider.ApgContract.ApiApps;
+import org.thialfihar.android.apg.provider.ApgContract.Certs;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRingsColumns;
+import org.thialfihar.android.apg.provider.ApgContract.KeyTypes;
+import org.thialfihar.android.apg.provider.ApgContract.Keys;
+import org.thialfihar.android.apg.provider.ApgContract.KeysColumns;
+import org.thialfihar.android.apg.provider.ApgContract.UserIds;
+import org.thialfihar.android.apg.provider.ApgContract.UserIdsColumns;
+import org.thialfihar.android.apg.provider.ApgDatabase.Tables;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.Arrays;
@@ -111,7 +111,7 @@ public class ApgProvider extends ContentProvider {
     protected UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        String authority = KeychainContract.CONTENT_AUTHORITY;
+        String authority = ApgContract.CONTENT_AUTHORITY;
 
         /**
          * unified key rings
@@ -120,7 +120,7 @@ public class ApgProvider extends ContentProvider {
          * key_rings
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS, UNIFIED_KEY_RING);
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS, UNIFIED_KEY_RING);
 
         /**
          * public key rings
@@ -134,24 +134,24 @@ public class ApgProvider extends ContentProvider {
          * key_rings/public/like_email/_
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC, PUBLIC_KEY_RING);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/#", PUBLIC_KEY_RING_BY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_MASTER_KEY_ID
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC, PUBLIC_KEY_RING);
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/#", PUBLIC_KEY_RING_BY_ROW_ID);
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/" + ApgContract.PATH_BY_MASTER_KEY_ID
                 + "/*", PUBLIC_KEY_RING_BY_MASTER_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_KEY_ID + "/*",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/" + ApgContract.PATH_BY_KEY_ID + "/*",
                 PUBLIC_KEY_RING_BY_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_EMAILS + "/*",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/" + ApgContract.PATH_BY_EMAILS + "/*",
                 PUBLIC_KEY_RING_BY_EMAILS);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_EMAILS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/" + ApgContract.PATH_BY_EMAILS,
                 PUBLIC_KEY_RING_BY_EMAILS); // without emails specified
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/" + KeychainContract.PATH_BY_LIKE_EMAIL + "/*",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/" + ApgContract.PATH_BY_LIKE_EMAIL + "/*",
                 PUBLIC_KEY_RING_BY_LIKE_EMAIL);
 
         /**
@@ -162,11 +162,11 @@ public class ApgProvider extends ContentProvider {
          * key_rings/public/#/keys/#
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/#/" + KeychainContract.PATH_KEYS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/#/" + ApgContract.PATH_KEYS,
                 PUBLIC_KEY_RING_KEY);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/#/" + KeychainContract.PATH_KEYS + "/#",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/#/" + ApgContract.PATH_KEYS + "/#",
                 PUBLIC_KEY_RING_KEY_BY_ROW_ID);
 
         /**
@@ -178,15 +178,15 @@ public class ApgProvider extends ContentProvider {
          * key_rings/public/master_key_id/#/user_ids
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/#/" + KeychainContract.PATH_USER_IDS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/#/" + ApgContract.PATH_USER_IDS,
                 PUBLIC_KEY_RING_USER_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/#/" + KeychainContract.PATH_USER_IDS + "/#",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/#/" + ApgContract.PATH_USER_IDS + "/#",
                 PUBLIC_KEY_RING_USER_ID_BY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_PUBLIC + "/"
-                + KeychainContract.PATH_BY_MASTER_KEY_ID + "/*/" + KeychainContract.PATH_USER_IDS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_PUBLIC + "/"
+                + ApgContract.PATH_BY_MASTER_KEY_ID + "/*/" + ApgContract.PATH_USER_IDS,
                 PUBLIC_KEY_RING_BY_MASTER_KEY_ID_USER_ID);
 
         /**
@@ -201,24 +201,24 @@ public class ApgProvider extends ContentProvider {
          * key_rings/secret/like_email/_
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET, SECRET_KEY_RING);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/#", SECRET_KEY_RING_BY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/" + KeychainContract.PATH_BY_MASTER_KEY_ID
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET, SECRET_KEY_RING);
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/#", SECRET_KEY_RING_BY_ROW_ID);
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/" + ApgContract.PATH_BY_MASTER_KEY_ID
                 + "/*", SECRET_KEY_RING_BY_MASTER_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/" + KeychainContract.PATH_BY_KEY_ID + "/*",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/" + ApgContract.PATH_BY_KEY_ID + "/*",
                 SECRET_KEY_RING_BY_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/" + KeychainContract.PATH_BY_EMAILS + "/*",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/" + ApgContract.PATH_BY_EMAILS + "/*",
                 SECRET_KEY_RING_BY_EMAILS);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/" + KeychainContract.PATH_BY_EMAILS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/" + ApgContract.PATH_BY_EMAILS,
                 SECRET_KEY_RING_BY_EMAILS); // without emails specified
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/" + KeychainContract.PATH_BY_LIKE_EMAIL + "/*",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/" + ApgContract.PATH_BY_LIKE_EMAIL + "/*",
                 SECRET_KEY_RING_BY_LIKE_EMAIL);
 
         /**
@@ -229,11 +229,11 @@ public class ApgProvider extends ContentProvider {
          * key_rings/secret/#/keys/#
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/#/" + KeychainContract.PATH_KEYS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/#/" + ApgContract.PATH_KEYS,
                 SECRET_KEY_RING_KEY);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/#/" + KeychainContract.PATH_KEYS + "/#",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/#/" + ApgContract.PATH_KEYS + "/#",
                 SECRET_KEY_RING_KEY_BY_ROW_ID);
 
         /**
@@ -244,11 +244,11 @@ public class ApgProvider extends ContentProvider {
          * key_rings/secret/#/user_ids/#
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/#/" + KeychainContract.PATH_USER_IDS,
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/#/" + ApgContract.PATH_USER_IDS,
                 SECRET_KEY_RING_USER_ID);
-        matcher.addURI(authority, KeychainContract.BASE_KEY_RINGS + "/"
-                + KeychainContract.PATH_SECRET + "/#/" + KeychainContract.PATH_USER_IDS + "/#",
+        matcher.addURI(authority, ApgContract.BASE_KEY_RINGS + "/"
+                + ApgContract.PATH_SECRET + "/#/" + ApgContract.PATH_USER_IDS + "/#",
                 SECRET_KEY_RING_USER_ID_BY_ROW_ID);
 
         /**
@@ -262,13 +262,13 @@ public class ApgProvider extends ContentProvider {
          * api_apps/_/accounts/_ (account name)
          * </pre>
          */
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS, API_APPS);
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS + "/*", API_APPS_BY_PACKAGE_NAME);
+        matcher.addURI(authority, ApgContract.BASE_API_APPS, API_APPS);
+        matcher.addURI(authority, ApgContract.BASE_API_APPS + "/*", API_APPS_BY_PACKAGE_NAME);
 
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS + "/*/"
-                + KeychainContract.PATH_ACCOUNTS, API_ACCOUNTS);
-        matcher.addURI(authority, KeychainContract.BASE_API_APPS + "/*/"
-                + KeychainContract.PATH_ACCOUNTS + "/*", API_ACCOUNTS_BY_ACCOUNT_NAME);
+        matcher.addURI(authority, ApgContract.BASE_API_APPS + "/*/"
+                + ApgContract.PATH_ACCOUNTS, API_ACCOUNTS);
+        matcher.addURI(authority, ApgContract.BASE_API_APPS + "/*/"
+                + ApgContract.PATH_ACCOUNTS + "/*", API_ACCOUNTS_BY_ACCOUNT_NAME);
 
         /**
          * certifications
@@ -277,18 +277,18 @@ public class ApgProvider extends ContentProvider {
          * key_rings/unified
          *
          */
-        matcher.addURI(authority, KeychainContract.BASE_CERTS, CERTS);
-        matcher.addURI(authority, KeychainContract.BASE_CERTS + "/#", CERTS_BY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_CERTS + "/"
-                + KeychainContract.PATH_BY_KEY_ROW_ID + "/#", CERTS_BY_KEY_ROW_ID);
-        matcher.addURI(authority, KeychainContract.BASE_CERTS + "/"
-                + KeychainContract.PATH_BY_KEY_ROW_ID + "/#/all", CERTS_BY_KEY_ROW_ID_ALL);
-        matcher.addURI(authority, KeychainContract.BASE_CERTS + "/"
-                + KeychainContract.PATH_BY_KEY_ROW_ID + "/#/has_secret", CERTS_BY_KEY_ROW_ID_HAS_SECRET);
-        matcher.addURI(authority, KeychainContract.BASE_CERTS + "/"
-                + KeychainContract.PATH_BY_KEY_ID + "/#", CERTS_BY_KEY_ID);
-        matcher.addURI(authority, KeychainContract.BASE_CERTS + "/"
-                + KeychainContract.PATH_BY_CERTIFIER_ID + "/#", CERTS_BY_CERTIFIER_ID);
+        matcher.addURI(authority, ApgContract.BASE_CERTS, CERTS);
+        matcher.addURI(authority, ApgContract.BASE_CERTS + "/#", CERTS_BY_ROW_ID);
+        matcher.addURI(authority, ApgContract.BASE_CERTS + "/"
+                + ApgContract.PATH_BY_KEY_ROW_ID + "/#", CERTS_BY_KEY_ROW_ID);
+        matcher.addURI(authority, ApgContract.BASE_CERTS + "/"
+                + ApgContract.PATH_BY_KEY_ROW_ID + "/#/all", CERTS_BY_KEY_ROW_ID_ALL);
+        matcher.addURI(authority, ApgContract.BASE_CERTS + "/"
+                + ApgContract.PATH_BY_KEY_ROW_ID + "/#/has_secret", CERTS_BY_KEY_ROW_ID_HAS_SECRET);
+        matcher.addURI(authority, ApgContract.BASE_CERTS + "/"
+                + ApgContract.PATH_BY_KEY_ID + "/#", CERTS_BY_KEY_ID);
+        matcher.addURI(authority, ApgContract.BASE_CERTS + "/"
+                + ApgContract.PATH_BY_CERTIFIER_ID + "/#", CERTS_BY_CERTIFIER_ID);
 
         /**
          * data stream
@@ -297,7 +297,7 @@ public class ApgProvider extends ContentProvider {
          * data / _
          * </pre>
          */
-        // matcher.addURI(authority, KeychainContract.BASE_DATA + "/*", DATA_STREAM);
+        // matcher.addURI(authority, ApgContract.BASE_DATA + "/*", DATA_STREAM);
 
         // legacy uris
         matcher.addURI(authority, "key_rings/public/key_id/*", LEGACY_PUBLIC_KEY_RING_BY_KEY_ID);
@@ -308,7 +308,7 @@ public class ApgProvider extends ContentProvider {
         return matcher;
     }
 
-    private KeychainDatabase mKeychainDatabase;
+    private ApgDatabase mApgDatabase;
 
     /**
      * {@inheritDoc}
@@ -316,7 +316,7 @@ public class ApgProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mUriMatcher = buildUriMatcher();
-        mKeychainDatabase = new KeychainDatabase(getContext());
+        mApgDatabase = new ApgDatabase(getContext());
         return true;
     }
 
@@ -591,7 +591,7 @@ public class ApgProvider extends ContentProvider {
         Log.v(Constants.TAG, "query(uri=" + uri + ", proj=" + Arrays.toString(projection) + ")");
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        SQLiteDatabase db = mKeychainDatabase.getReadableDatabase();
+        SQLiteDatabase db = mApgDatabase.getReadableDatabase();
 
         int match = mUriMatcher.match(uri);
 
@@ -877,7 +877,7 @@ public class ApgProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         Log.d(Constants.TAG, "insert(uri=" + uri + ", values=" + values.toString() + ")");
 
-        final SQLiteDatabase db = mKeychainDatabase.getWritableDatabase();
+        final SQLiteDatabase db = mApgDatabase.getWritableDatabase();
 
         Uri rowUri = null;
         long rowId = -1;
@@ -978,7 +978,7 @@ public class ApgProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.v(Constants.TAG, "delete(uri=" + uri + ")");
 
-        final SQLiteDatabase db = mKeychainDatabase.getWritableDatabase();
+        final SQLiteDatabase db = mApgDatabase.getWritableDatabase();
 
         int count;
         final int match = mUriMatcher.match(uri);
@@ -1039,7 +1039,7 @@ public class ApgProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         Log.v(Constants.TAG, "update(uri=" + uri + ", values=" + values.toString() + ")");
 
-        final SQLiteDatabase db = mKeychainDatabase.getWritableDatabase();
+        final SQLiteDatabase db = mApgDatabase.getWritableDatabase();
 
         String defaultSelection = null;
         int count = 0;

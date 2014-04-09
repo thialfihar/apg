@@ -69,7 +69,6 @@ public class KeyListActivity extends DrawerActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
-            }
         }
     }
 
