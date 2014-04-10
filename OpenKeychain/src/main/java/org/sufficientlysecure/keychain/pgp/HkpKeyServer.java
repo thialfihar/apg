@@ -296,6 +296,7 @@ public class HkpKeyServer extends KeyServer {
                 userIds.add(tmp);
             }
             entry.setUserIds(userIds);
+            entry.setPrimaryUserId(userIds.get(0));
 
             results.add(entry);
         }
