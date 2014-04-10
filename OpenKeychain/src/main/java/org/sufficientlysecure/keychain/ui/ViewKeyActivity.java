@@ -145,7 +145,7 @@ public class ViewKeyActivity extends ActionBarActivity {
                 uploadToKeyserver(mDataUri);
                 return true;
             case R.id.menu_key_view_export_file:
-                exportToFile(mDataUri);
+                exportToFile(mDataUri, mExportHelper);
                 return true;
             case R.id.menu_key_view_share_default_fingerprint:
                 shareKey(mDataUri, true);
@@ -166,14 +166,14 @@ public class ViewKeyActivity extends ActionBarActivity {
                 copyToClipboard(mDataUri);
                 return true;
             case R.id.menu_key_view_delete: {
-                deleteKey(mDataUri);
+                deleteKey(mDataUri, mExportHelper);
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void exportToFile(Uri dataUri) {
+    private void exportToFile(Uri dataUri, ExportHelper exportHelper) {
         Uri baseUri = ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri);
 
         HashMap<String, Object> data = ProviderHelper.getGenericData(this,
@@ -283,7 +283,7 @@ public class ViewKeyActivity extends ActionBarActivity {
         dialog.show(getSupportFragmentManager(), "shareNfcDialog");
     }
 
-    private void deleteKey(Uri dataUri) {
+    private void deleteKey(Uri dataUri, ExportHelper exportHelper) {
         // Message is received after key is deleted
         Handler returnHandler = new Handler() {
             @Override
@@ -293,7 +293,7 @@ public class ViewKeyActivity extends ActionBarActivity {
             }
         };
 
-        mExportHelper.deleteKey(dataUri, returnHandler);
+        exportHelper.deleteKey(dataUri, returnHandler);
     }
 
     @Override
