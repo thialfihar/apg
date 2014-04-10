@@ -173,4 +173,16 @@ public class ViewKeyKeysAdapter extends CursorAdapter {
         return view;
     }
 
+    // Disable selection of items, http://stackoverflow.com/a/4075045
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    // Disable selection of items, http://stackoverflow.com/a/4075045
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
+
 }
