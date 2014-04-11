@@ -33,13 +33,15 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
+import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainContract.ApiAccounts;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.ui.RemoteServiceActivity;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
+import org.thialfihar.android.apg.ui.ImportKeysActivity;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 
@@ -165,7 +167,8 @@ public class OpenPgpService extends RemoteService {
 
                 // sign-only
                 PgpSignEncrypt.Builder builder =
-                    new PgpSignEncrypt.Builder(getContext(), inputData, os, new ProviderHelper(this));
+                    new PgpSignEncrypt.Builder(new ProviderHelper(getContext()), inputData, os,
+                        new ProviderHelper(this));
                 builder.setEnableAsciiArmorOutput(asciiArmor)
                         .setSignatureHashAlgorithm(accSettings.getHashAlgorithm())
                         .setSignatureForceV3(false)
@@ -231,8 +234,10 @@ public class OpenPgpService extends RemoteService {
                 long inputLength = is.available();
                 InputData inputData = new InputData(is, inputLength);
 
-                PgpSignEncrypt.Builder builder =
-                    new PgpSignEncrypt.Builder(getContext(), inputData, os, new ProviderHelper(this));
+                PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(
+                        new ProviderHelper(getContext()),
+                        PgpHelper.getFullVersion(getContext()),
+                        inputData, os, new ProviderHelper(this);
                 builder.setEnableAsciiArmorOutput(asciiArmor)
                         .setCompressionId(accSettings.getCompression())
                         .setSymmetricEncryptionAlgorithm(accSettings.getEncryptionAlgorithm())

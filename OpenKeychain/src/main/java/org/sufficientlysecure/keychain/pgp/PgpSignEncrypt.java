@@ -18,8 +18,6 @@
 
 package org.thialfihar.android.apg.pgp;
 
-import android.content.Context;
-
 import org.spongycastle.bcpg.ArmoredOutputStream;
 import org.spongycastle.bcpg.BCPGOutputStream;
 import org.spongycastle.openpgp.PGPCompressedDataGenerator;
@@ -64,8 +62,8 @@ import java.util.Date;
  * This class uses a Builder pattern!
  */
 public class PgpSignEncrypt {
-    private Context mContext;
     private ProviderHelper mProviderHelper;
+    private String mVersionHeader;
     private InputData mData;
     private OutputStream mOutputStream;
     private PgpKeyProvider mKeyProvider;
@@ -93,11 +91,10 @@ public class PgpSignEncrypt {
         }
     }
 
-
     private PgpSignEncrypt(Builder builder) {
         // private Constructor can only be called from Builder
-        this.mContext = builder.mContext;
-        this.mProviderHelper = new ProviderHelper(mContext);
+        this.mProviderHelper = builder.mProviderHelper;
+        this.mVersionHeader = builder.mVersionHeader;
         this.mData = builder.mData;
         this.mOutputStream = builder.mOutputStream;
         this.mKeyProvider = builder.mKeyProvider;
@@ -118,7 +115,8 @@ public class PgpSignEncrypt {
 
     public static class Builder {
         // mandatory parameter
-        private Context mContext;
+        private ProviderHelper mProviderHelper;
+        private String mVersionHeader;
         private InputData mData;
         private OutputStream mOutputStream;
         private PgpKeyProvider mKeyProvider;
@@ -137,12 +135,13 @@ public class PgpSignEncrypt {
         private boolean mEncryptToSigner = false;
         private boolean mBinaryInput = false;
 
-        public Builder(Context context, InputData data, OutputStream outputStream,
-                        PgpKeyProvider keyProvider) {
-            mContext = context;
-            mData = data;
-            mOutputStream = outputStream;
-            mKeyProvider = keyProvider;
+        public Builder(ProviderHelper providerHelper, String versionHeader, InputData data,
+                       OutputStream outputStream, PgpKeyProvider keyProvider) {
+            this.mProviderHelper = providerHelper;
+            this.mVersionHeader = versionHeader;
+            this.mData = data;
+            this.mOutStream = outStream;
+            this.mKeyProvider = keyProvider;
         }
 
         public Builder setProgressable(Progressable progressable) {
@@ -234,6 +233,21 @@ public class PgpSignEncrypt {
         }
     }
 
+    public static class KeyExtractionException extends Exception {
+        public KeyExtractionException() {
+        }
+    }
+
+    public static class NoPassphraseException extends Exception {
+        public NoPassphraseException() {
+        }
+    }
+
+    public static class NoSigningKeyException extends Exception {
+        public NoSigningKeyException() {
+        }
+    }
+
     /**
      * Signs and/or encrypts mData based on parameters of class
      *
@@ -246,7 +260,7 @@ public class PgpSignEncrypt {
      */
     public void execute()
             throws IOException, PgpGeneralException, PGPException, NoSuchProviderException,
-            NoSuchAlgorithmException, SignatureException {
+            NoSuchAlgorithmException, SignatureException, KeyExtractionException, NoSigningKeyException, NoPassphraseException {
 
         boolean enableSignature = mSignatureMasterKeyId != Id.key.none;
         boolean enableEncryption = ((mEncryptionMasterKeyIds != null && mEncryptionMasterKeyIds.length > 0)
@@ -275,8 +289,8 @@ public class PgpSignEncrypt {
         ArmoredOutputStream armorOut = null;
         OutputStream out;
         if (mEnableAsciiArmorOutput) {
-            armorOut = new ArmoredOutputStream(mOutputStream);
-            armorOut.setHeader("Version", PgpHelper.getFullVersion(mContext));
+            armorOut = new ArmoredOutputStream(mOutStream);
+            armorOut.setHeader("Version", mVersionHeader);
             out = armorOut;
         } else {
             out = mOutputStream;
@@ -290,24 +304,28 @@ public class PgpSignEncrypt {
             try {
                 signingKeyRing = mProviderHelper.getPGPSecretKeyRing(mSignatureMasterKeyId);
             } catch (ProviderHelper.NotFoundException e) {
-                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
+                throw new NoSigningKeyException();
+//                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
             }
             signingKey = PgpKeyHelper.getSigningKey(signingKeyRing);
             if (signingKey == null) {
-                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
+                throw new NoSigningKeyException();
+//                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
             }
 
             if (mSignaturePassphrase == null) {
-                throw new PgpGeneralException(
-                        mContext.getString(R.string.error_no_signature_passphrase));
+//                throw new PgpGeneralException(
+//                        mContext.getString(R.string.error_no_signature_passphrase));
+                throw new NoPassphraseException();
             }
 
             updateProgress(R.string.progress_extracting_signature_key, 0, 100);
 
             signaturePrivateKey = signingKey.extractPrivateKey(mSignaturePassphrase);
             if (signaturePrivateKey == null) {
-                throw new PgpGeneralException(
-                        mContext.getString(R.string.error_could_not_extract_private_key));
+//                throw new PgpGeneralException(
+//                        mContext.getString(R.string.error_could_not_extract_private_key));
+                throw new KeyExtractionException();
             }
         }
         updateProgress(R.string.progress_preparing_streams, 5, 100);

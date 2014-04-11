@@ -27,10 +27,12 @@ import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
+import org.thialfihar.android.apg.BuildConfig;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,14 +57,14 @@ public class PgpHelper {
             Pattern.DOTALL);
 
     public static String getVersion(Context context) {
-        String version = null;
+        String version;
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo(Constants.PACKAGE_NAME, 0);
             version = pi.versionName;
             return version;
         } catch (NameNotFoundException e) {
             Log.e(Constants.TAG, "Version could not be retrieved!", e);
-            return "0.0.0";
+            return "0.0";
         }
     }
 

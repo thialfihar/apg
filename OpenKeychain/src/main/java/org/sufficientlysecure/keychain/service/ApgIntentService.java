@@ -315,7 +315,10 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 /* Operation */
                 PgpSignEncrypt.Builder builder =
-                    new PgpSignEncrypt.Builder(this, inputData, outStream, new ProviderHelper(this));
+                        new PgpSignEncrypt.Builder(
+                                new ProviderHelper(this),
+                                PgpHelper.getFullVersion(this),
+                                inputData, outStream, new ProviderHelper(this));
                 builder.setProgressable(this);
 
                 if (generateSignature) {
