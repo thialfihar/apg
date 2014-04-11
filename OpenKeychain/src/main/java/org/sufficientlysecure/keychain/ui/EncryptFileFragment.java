@@ -106,12 +106,12 @@ public class EncryptFileFragment extends Fragment {
         mBrowse.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FileHelper.openFile(EncryptFileFragment.this, mFilename.getText().toString(), "*/*",
-                        Id.request.filename);
+                        RESULT_CODE_FILE);
             }
         });
 
         mFileCompression = (Spinner) view.findViewById(R.id.fileCompression);
-        Choice[] choices = new Choice[] {
+        Choice[] choices = new Choice[]{
                 new Choice(Id.choice.compression.none, getString(R.string.choice_none) + " ("
                         + getString(R.string.compression_fast) + ")"),
                 new Choice(Id.choice.compression.zip, "ZIP ("
@@ -253,17 +253,17 @@ public class EncryptFileFragment extends Fragment {
             }
 
             if (mEncryptInterface.getSignatureKey() != 0 &&
-                PassphraseCacheService.getCachedPassphrase(getActivity(),
-                    mEncryptInterface.getSignatureKey()) == null) {
+                    PassphraseCacheService.getCachedPassphrase(getActivity(),
+                            mEncryptInterface.getSignatureKey()) == null) {
                 PassphraseDialogFragment.show(getActivity(), mEncryptInterface.getSignatureKey(),
-                    new Handler() {
-                        @Override
-                        public void handleMessage(Message message) {
-                            if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
-                                showOutputFileDialog();
+                        new Handler() {
+                            @Override
+                            public void handleMessage(Message message) {
+                                if (message.what == PassphraseDialogFragment.MESSAGE_OKAY) {
+                                    showOutputFileDialog();
+                                }
                             }
-                        }
-                    });
+                        });
 
                 return;
             }

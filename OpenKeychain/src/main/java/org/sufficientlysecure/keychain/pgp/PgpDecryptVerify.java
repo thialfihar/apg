@@ -51,7 +51,6 @@ import org.spongycastle.openpgp.operator.jcajce.JcaPGPDigestCalculatorProviderBu
 import org.spongycastle.openpgp.operator.jcajce.JcePBEDataDecryptorFactoryBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactoryBuilder;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
@@ -228,16 +227,10 @@ public class PgpDecryptVerify {
     }
 
     /**
-     * Decrypts and/or verifies mData based on parameters of class
-     *
-     * @return
-     * @throws IOException
-     * @throws PgpGeneralException
-     * @throws PGPException
-     * @throws SignatureException
+     * Decrypts and/or verifies data based on parameters of class
      */
     public PgpDecryptVerifyResult execute()
-            throws IOException, PgpGeneralException, PGPException, SignatureException,
+            throws IOException, PGPException, SignatureException,
             WrongPassphraseException, NoSecretKeyException, KeyExtractionException,
             InvalidDataException, IntegrityCheckFailedException {
         // automatically works with ascii armor input and binary
@@ -259,16 +252,9 @@ public class PgpDecryptVerify {
 
     /**
      * Decrypt and/or verifies binary or ascii armored pgp
-     *
-     * @param in
-     * @return
-     * @throws IOException
-     * @throws PgpGeneralException
-     * @throws PGPException
-     * @throws SignatureException
      */
     private PgpDecryptVerifyResult decryptVerify(InputStream in)
-            throws IOException, PgpGeneralException, PGPException, SignatureException,
+            throws IOException, PGPException, SignatureException,
             WrongPassphraseException, KeyExtractionException, NoSecretKeyException,
             InvalidDataException, IntegrityCheckFailedException {
         PgpDecryptVerifyResult result = new PgpDecryptVerifyResult();
@@ -610,15 +596,9 @@ public class PgpDecryptVerify {
      * <p/>
      * The method is heavily based on
      * pg/src/main/java/org/spongycastle/openpgp/examples/ClearSignedFileProcessor.java
-     *
-     * @return
-     * @throws IOException
-     * @throws PgpGeneralException
-     * @throws PGPException
-     * @throws SignatureException
      */
     private PgpDecryptVerifyResult verifyCleartextSignature(ArmoredInputStream aIn)
-            throws IOException, PgpGeneralException, PGPException, SignatureException, InvalidDataException {
+            throws IOException, PGPException, SignatureException, InvalidDataException {
         PgpDecryptVerifyResult result = new PgpDecryptVerifyResult();
         OpenPgpSignatureResult signatureResult = new OpenPgpSignatureResult();
         // cleartext signatures are never encrypted ;)

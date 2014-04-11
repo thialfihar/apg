@@ -38,13 +38,14 @@ import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePBEKeyEncryptionMethodGenerator;
 import org.spongycastle.openpgp.operator.jcajce.JcePGPDataEncryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodGenerator;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -249,17 +250,10 @@ public class PgpSignEncrypt {
     }
 
     /**
-     * Signs and/or encrypts mData based on parameters of class
-     *
-     * @throws IOException
-     * @throws PgpGeneralException
-     * @throws PGPException
-     * @throws NoSuchProviderException
-     * @throws NoSuchAlgorithmException
-     * @throws SignatureException
+     * Signs and/or encrypts data based on parameters of class
      */
     public void execute()
-            throws IOException, PgpGeneralException, PGPException, NoSuchProviderException,
+            throws IOException, PGPException, NoSuchProviderException,
             NoSuchAlgorithmException, SignatureException, KeyExtractionException, NoSigningKeyException, NoPassphraseException {
 
         boolean enableSignature = mSignatureMasterKeyId != Id.key.none;

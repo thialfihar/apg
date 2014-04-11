@@ -44,6 +44,8 @@ public class PreferencesActivity extends PreferenceActivity {
     public static final String ACTION_PREFS_GEN = "org.thialfihar.android.apg.ui.PREFS_GEN";
     public static final String ACTION_PREFS_ADV = "org.thialfihar.android.apg.ui.PREFS_ADV";
 
+    public static final int REQUEST_CODE_KEYSERVER_PREF = 0x00007005;
+
     private PreferenceScreen mKeyServerPreference = null;
     private static Preferences sPreferences;
 
@@ -76,7 +78,7 @@ public class PreferencesActivity extends PreferenceActivity {
                                     PreferencesKeyServerActivity.class);
                             intent.putExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS,
                                     sPreferences.getKeyServers());
-                            startActivityForResult(intent, Id.request.key_server_preference);
+                            startActivityForResult(intent, REQUEST_CODE_KEYSERVER_PREF);
                             return false;
                         }
                     });
@@ -93,7 +95,7 @@ public class PreferencesActivity extends PreferenceActivity {
                     getString(R.string.choice_none) + " (" + getString(R.string.compression_fast) + ")",
                     "ZIP (" + getString(R.string.compression_fast) + ")",
                     "ZLIB (" + getString(R.string.compression_fast) + ")",
-                    "BZIP2 (" + getString(R.string.compression_very_slow) + ")", };
+                    "BZIP2 (" + getString(R.string.compression_very_slow) + ")",};
             String[] values = new String[valueIds.length];
             for (int i = 0; i < values.length; ++i) {
                 values[i] = "" + valueIds[i];
@@ -126,7 +128,7 @@ public class PreferencesActivity extends PreferenceActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case Id.request.key_server_preference: {
+            case REQUEST_CODE_KEYSERVER_PREF: {
                 if (resultCode == RESULT_CANCELED || data == null) {
                     return;
                 }
@@ -178,7 +180,7 @@ public class PreferencesActivity extends PreferenceActivity {
                                     PreferencesKeyServerActivity.class);
                             intent.putExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS,
                                     sPreferences.getKeyServers());
-                            startActivityForResult(intent, Id.request.key_server_preference);
+                            startActivityForResult(intent, REQUEST_CODE_KEYSERVER_PREF);
                             return false;
                         }
                     });
@@ -187,7 +189,7 @@ public class PreferencesActivity extends PreferenceActivity {
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             switch (requestCode) {
-                case Id.request.key_server_preference: {
+                case REQUEST_CODE_KEYSERVER_PREF: {
                     if (resultCode == RESULT_CANCELED || data == null) {
                         return;
                     }
@@ -220,13 +222,13 @@ public class PreferencesActivity extends PreferenceActivity {
             initializeEncryptionAlgorithm(
                     (IntegerListPreference) findPreference(Constants.Pref.DEFAULT_ENCRYPTION_ALGORITHM));
 
-            int[] valueIds = new int[] { Id.choice.compression.none, Id.choice.compression.zip,
-                    Id.choice.compression.zlib, Id.choice.compression.bzip2, };
-            String[] entries = new String[] {
+            int[] valueIds = new int[]{Id.choice.compression.none, Id.choice.compression.zip,
+                    Id.choice.compression.zlib, Id.choice.compression.bzip2,};
+            String[] entries = new String[]{
                     getString(R.string.choice_none) + " (" + getString(R.string.compression_fast) + ")",
                     "ZIP (" + getString(R.string.compression_fast) + ")",
                     "ZLIB (" + getString(R.string.compression_fast) + ")",
-                    "BZIP2 (" + getString(R.string.compression_very_slow) + ")", };
+                    "BZIP2 (" + getString(R.string.compression_very_slow) + ")",};
             String[] values = new String[valueIds.length];
             for (int i = 0; i < values.length; ++i) {
                 values[i] = "" + valueIds[i];
