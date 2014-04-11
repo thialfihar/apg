@@ -462,8 +462,16 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 // verifyText and decrypt returning additional resultData values for the
                 // verification of signatures
-                PgpDecryptVerify.Builder builder =
-                    new PgpDecryptVerify.Builder(this, inputData, outStream, new ProviderHelper(this));
+                PgpDecryptVerify.Builder builder = new PgpDecryptVerify.Builder(
+                        new ProviderHelper(this),
+                        new PgpDecryptVerify.PassphraseCache() {
+                            @Override
+                            public String getCachedPassphrase(long masterKeyId) {
+                                return PassphraseCacheService.getCachedPassphrase(
+                                        KeychainIntentService.this, masterKeyId);
+                            }
+                        },
+                        inputData, outStream, new ProviderHelper(this));
                 builder.setProgressable(this);
 
                 builder.setAllowSymmetricDecryption(true)
