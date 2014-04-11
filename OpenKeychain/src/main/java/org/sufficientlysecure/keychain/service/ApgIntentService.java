@@ -322,7 +322,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     Log.d(Constants.TAG, "generating signature...");
                     builder.setEnableAsciiArmorOutput(useAsciiArmor)
                         .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                        .setSignatureKeyId(signatureKeyId)
+                        .setSignatureMasterKeyId(signatureKeyId)
                         .setSignatureHashAlgorithm(
                             Preferences.getPreferences(this).getDefaultHashAlgorithm())
                         .setSignaturePassphrase(
@@ -336,9 +336,9 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                         .setSymmetricEncryptionAlgorithm(
                             Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
                         .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                        .setEncryptionKeyIds(encryptionKeyIds)
+                        .setEncryptionMasterKeyIds(encryptionKeyIds)
                         .setSymmetricPassphrase(symmetricPassphrase)
-                        .setSignatureKeyId(signatureKeyId)
+                        .setSignatureMasterKeyId(signatureKeyId)
                         .setSignatureHashAlgorithm(
                             Preferences.getPreferences(this).getDefaultHashAlgorithm())
                         .setSignaturePassphrase(
@@ -828,8 +828,14 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 PgpKeyOperation keyOperation = new PgpKeyOperation(new ProgressScaler(this, 0, 100, 100));
                 PGPPublicKeyRing publicRing = ProviderHelper.getPGPPublicKeyRing(this, pubKeyId);
                 PGPPublicKey publicKey = publicRing.getPublicKey(pubKeyId);
-                PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(this,
-                        masterKeyId);
+                PGPSecretKeyRing secretKeyRing = null;
+                try {
+                    secretKeyRing = ProviderHelper.getPGPSecretKeyRing(this, masterKeyId);
+                } catch (ProviderHelper.NotFoundException e) {
+                    Log.e(Constants.TAG, "key not found!", e);
+                    // TODO: throw exception here!
+                }
+                PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(secretKeyRing);
                 publicKey = keyOperation.certifyKey(certificationKey, publicKey,
                         userIds, signaturePassphrase);
                 publicRing = PGPPublicKeyRing.insertPublicKey(publicRing, publicKey);
