@@ -53,11 +53,13 @@ public class PgpImportExport {
     private Context mContext;
     private Progressable mProgress;
     private KeychainServiceListener mKeychainServiceListener;
+    private ProviderHelper mProviderHelper;
 
     public PgpImportExport(Context context, Progressable progress) {
         super();
         this.mContext = context;
         this.mProgress = progress;
+        this.mProviderHelper = new ProviderHelper(context);
     }
 
     public PgpImportExport(Context context, Progressable progress,
@@ -65,6 +67,7 @@ public class PgpImportExport {
         super();
         this.mContext = context;
         this.mProgress = progress;
+        this.mProviderHelper = new ProviderHelper(context);
         this.mKeychainServiceListener = keychainListener;
     }
 
@@ -182,7 +185,7 @@ public class PgpImportExport {
             updateProgress(progress * 100 / masterKeyIdsSize, 100);
 
             try {
-                PGPPublicKeyRing publicKeyRing = ProviderHelper.getPGPPublicKeyRing(mContext, pubKeyMasterId);
+                PGPPublicKeyRing publicKeyRing = mProviderHelper.getPGPPublicKeyRing(pubKeyMasterId);
 
                 publicKeyRing.encode(arOutStream);
             } catch (ProviderHelper.NotFoundException e) {
@@ -208,7 +211,7 @@ public class PgpImportExport {
             updateProgress(progress * 100 / masterKeyIdsSize, 100);
 
             try {
-                PGPSecretKeyRing secretKeyRing = ProviderHelper.getPGPSecretKeyRing(mContext, secretKeyMasterId);
+                PGPSecretKeyRing secretKeyRing = mProviderHelper.getPGPSecretKeyRing(secretKeyMasterId);
                 secretKeyRing.encode(arOutStream);
             } catch (ProviderHelper.NotFoundException e) {
                 Log.e(Constants.TAG, "key not found!", e);
@@ -265,15 +268,15 @@ public class PgpImportExport {
                         newPubRing = PGPPublicKeyRing.insertPublicKey(newPubRing, key);
                     }
                     if (newPubRing != null) {
-                        ProviderHelper.saveKeyRing(mContext, newPubRing);
+                        mProviderHelper.saveKeyRing(newPubRing);
                     }
-                    ProviderHelper.saveKeyRing(mContext, secretKeyRing);
+                    mProviderHelper.saveKeyRing(secretKeyRing);
                     // TODO: remove status returns, use exceptions!
                     status = Id.return_value.ok;
                 }
             } else if (keyRing instanceof PGPPublicKeyRing) {
                 PGPPublicKeyRing publicKeyRing = (PGPPublicKeyRing) keyRing;
-                ProviderHelper.saveKeyRing(mContext, publicKeyRing);
+                mProviderHelper.saveKeyRing(publicKeyRing);
                 // TODO: remove status returns, use exceptions!
                 status = Id.return_value.ok;
             }

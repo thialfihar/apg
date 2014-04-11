@@ -57,13 +57,14 @@ import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.IOException;
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ViewKeyActivity extends ActionBarActivity {
 
     ExportHelper mExportHelper;
-    ProviderHelper mProvider;
+    ProviderHelper mProviderHelper;
 
     protected Uri mDataUri;
 
@@ -87,7 +88,7 @@ public class ViewKeyActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         mExportHelper = new ExportHelper(this);
-        mProvider = new ProviderHelper(this);
+        mProviderHelper = new ProviderHelper(this);
 
         // let the actionbar look like Android's contact app
         ActionBar actionBar = getSupportActionBar();
@@ -139,19 +140,19 @@ public class ViewKeyActivity extends ActionBarActivity {
                 startActivity(homeIntent);
                 return true;
             case R.id.menu_key_view_update:
-                updateFromKeyserver(mDataUri);
+                updateFromKeyserver(mDataUri, mProviderHelper);
                 return true;
             case R.id.menu_key_view_export_keyserver:
                 uploadToKeyserver(mDataUri);
                 return true;
             case R.id.menu_key_view_export_file:
-                exportToFile(mDataUri, mExportHelper);
+                exportToFile(mDataUri, mExportHelper, mProviderHelper);
                 return true;
             case R.id.menu_key_view_share_default_fingerprint:
-                shareKey(mDataUri, true);
+                shareKey(mDataUri, true, mProviderHelper);
                 return true;
             case R.id.menu_key_view_share_default:
-                shareKey(mDataUri, false);
+                shareKey(mDataUri, false, mProviderHelper);
                 return true;
             case R.id.menu_key_view_share_qr_code_fingerprint:
                 shareKeyQrCode(mDataUri, true);
@@ -163,7 +164,7 @@ public class ViewKeyActivity extends ActionBarActivity {
                 shareNfc();
                 return true;
             case R.id.menu_key_view_share_clipboard:
-                copyToClipboard(mDataUri);
+                copyToClipboard(mDataUri, mProviderHelper);
                 return true;
             case R.id.menu_key_view_delete: {
                 deleteKey(mDataUri, mExportHelper);
@@ -173,10 +174,10 @@ public class ViewKeyActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void exportToFile(Uri dataUri, ExportHelper exportHelper) {
+    private void exportToFile(Uri dataUri, ExportHelper exportHelper, ProviderHelper providerHelper) {
         Uri baseUri = ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri);
 
-        HashMap<String, Object> data = ProviderHelper.getGenericData(this,
+        HashMap<String, Object> data = providerHelper.getGenericData(
                 baseUri,
                 new String[]{ApgContract.Keys.MASTER_KEY_ID, ApgContract.KeyRings.HAS_SECRET},
                 new int[]{ProviderHelper.FIELD_TYPE_INTEGER, ProviderHelper.FIELD_TYPE_INTEGER});
@@ -194,10 +195,10 @@ public class ViewKeyActivity extends ActionBarActivity {
         startActivityForResult(uploadIntent, Id.request.export_to_server);
     }
 
-    private void updateFromKeyserver(Uri dataUri) {
-        byte[] blob = (byte[]) ProviderHelper.getGenericData(
-                this, ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                ApgContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+    private void updateFromKeyserver(Uri dataUri, ProviderHelper providerHelper) {
+        byte[] blob = (byte[]) providerHelper.getGenericData(
+                KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
+                KeychainContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
         String fingerprint = PgpKeyHelper.convertFingerprintToHex(blob);
 
         Intent queryIntent = new Intent(this, ImportKeysActivity.class);
@@ -207,12 +208,12 @@ public class ViewKeyActivity extends ActionBarActivity {
         startActivityForResult(queryIntent, RESULT_CODE_LOOKUP_KEY);
     }
 
-    private void shareKey(Uri dataUri, boolean fingerprintOnly) {
+    private void shareKey(Uri dataUri, boolean fingerprintOnly, ProviderHelper providerHelper) {
         String content = null;
         if (fingerprintOnly) {
-            byte[] data = (byte[]) ProviderHelper.getGenericData(
-                    this, ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                    ApgContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+            byte[] data = (byte[]) providerHelper.getGenericData(
+                    KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
+                    KeychainContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
             if (data != null) {
                 String fingerprint = PgpKeyHelper.convertFingerprintToHex(data);
                 content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;
@@ -225,7 +226,7 @@ public class ViewKeyActivity extends ActionBarActivity {
             // get public keyring as ascii armored string
             try {
                 Uri uri = KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
-                content = ProviderHelper.getKeyRingAsArmoredString(this, uri);
+                content = providerHelper.getKeyRingAsArmoredString(uri);
 
                 // Android will fail with android.os.TransactionTooLargeException if key is too big
                 // see http://www.lonestarprod.com/?p=34
@@ -261,7 +262,7 @@ public class ViewKeyActivity extends ActionBarActivity {
         dialog.show(getSupportFragmentManager(), "shareQrCodeDialog");
     }
 
-    private void copyToClipboard(Uri dataUri) {
+    private void copyToClipboard(Uri dataUri, ProviderHelper providerHelper) {
         // get public keyring as ascii armored string
         long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
         KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
@@ -367,8 +368,8 @@ public class ViewKeyActivity extends ActionBarActivity {
                                 try {
                                     Uri blobUri =
                                             KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
-                                    mNfcKeyringBytes = ProviderHelper.getPGPKeyRing(
-                                            ViewKeyActivity.this, blobUri).getEncoded();
+                                    mNfcKeyringBytes = mProviderHelper.getPGPKeyRing(
+                                            blobUri).getEncoded();
                                 } catch (IOException e) {
                                     Log.e(Constants.TAG, "Error parsing keyring", e);
                                 } catch (ProviderHelper.NotFoundException e) {

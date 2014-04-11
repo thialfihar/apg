@@ -171,7 +171,7 @@ public class PassphraseCacheService extends Service {
         long masterKeyId = keyId;
         if (masterKeyId != Id.key.symmetric) {
             try {
-                masterKeyId = ProviderHelper.getMasterKeyId(this,
+                masterKeyId = new ProviderHelper(this).getMasterKeyId(
                         KeychainContract.KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(keyId)));
             } catch (ProviderHelper.NotFoundException e) {
                 return null;
@@ -236,7 +236,7 @@ public class PassphraseCacheService extends Service {
         }
         // check if the key has no passphrase
         try {
-            PGPSecretKeyRing secRing = ProviderHelper.getPGPSecretKeyRing(context, secretKeyId);
+            PGPSecretKeyRing secRing = new ProviderHelper(context).getPGPSecretKeyRing(secretKeyId);
             return hasPassphrase(secRing);
         } catch (ProviderHelper.NotFoundException e) {
             Log.e(Constants.TAG, "key not found!", e);

@@ -79,6 +79,7 @@ import java.util.Set;
  */
 public class PgpDecryptVerify {
     private Context mContext;
+    private ProviderHelper mProviderHelper;
     private InputData mData;
     private OutputStream mOutputStream;
     private PgpKeyProvider mKeyProvider;
@@ -90,15 +91,16 @@ public class PgpDecryptVerify {
 
     private PgpDecryptVerify(Builder builder) {
         // private Constructor can only be called from Builder
-        mContext = builder.mContext;
-        mData = builder.mData;
-        mOutputStream = builder.mOutputStream;
-        mKeyProvider = builder.mKeyProvider;
+        this.mContext = builder.mContext;
+        this.mProviderHelper = new ProviderHelper(mContext);
+        this.mData = builder.mData;
+        this.mOutpuStream = builder.mOutpuStream;
+        this.mKeyProvider = builder.mKeyProvider;
 
-        mProgressable = builder.mProgressable;
-        mAllowSymmetricDecryption = builder.mAllowSymmetricDecryption;
-        mPassphrase = builder.mPassphrase;
-        mAllowedKeyIds = builder.mAllowedKeyIds;
+        this.mProgressable = builder.mProgressable;
+        this.mAllowSymmetricDecryption = builder.mAllowSymmetricDecryption;
+        this.mPassphrase = builder.mPassphrase;
+        this.mAllowedKeyIds = builder.mAllowedKeyIds;
     }
 
     public static class Builder {
@@ -277,11 +279,11 @@ public class PgpDecryptVerify {
                 PGPSecretKeyRing secretKeyRing = null;
                 try {
                     // get master key id for this encryption key id
-                    masterKeyId = ProviderHelper.getMasterKeyId(mContext,
+                    masterKeyId = mProviderHelper.getMasterKeyId(
                             KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(encData.getKeyID()))
                     );
                     // get actual keyring object based on master key id
-                    secretKeyRing = ProviderHelper.getPGPSecretKeyRing(mContext, masterKeyId);
+                    secretKeyRing = mProviderHelper.getPGPSecretKeyRing(masterKeyId);
                 } catch (ProviderHelper.NotFoundException e) {
                     // continue with the next packet in the while loop
                     continue;
@@ -427,17 +429,17 @@ public class PgpDecryptVerify {
                 try {
                     Uri uri = KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(
                             Long.toString(sigList.get(i).getKeyID()));
-                    masterKeyId = ProviderHelper.getMasterKeyId(mContext, uri);
+                    masterKeyId = mProviderHelper.getMasterKeyId(uri);
                     signatureIndex = i;
                 } catch (ProviderHelper.NotFoundException e) {
                     Log.d(Constants.TAG, "key not found!");
                 }
             }
 
-            if(masterKeyId == null) {
+            if (masterKeyId == null) {
                 try {
-                    signatureKey = ProviderHelper
-                            .getPGPPublicKeyRing(mContext, masterKeyId).getPublicKey();
+                    signatureKey = mProviderHelper
+                            .getPGPPublicKeyRing(masterKeyId).getPublicKey();
                 } catch (ProviderHelper.NotFoundException e) {
                     // can't happen
                 }
@@ -451,7 +453,7 @@ public class PgpDecryptVerify {
 
                 signature.init(contentVerifierBuilderProvider, signatureKey.getPublicKey());
             } else {
-                if(!sigList.isEmpty()) {
+                if (!sigList.isEmpty()) {
                     signatureResult.setKeyId(sigList.get(0).getKeyID());
                 }
 
@@ -622,7 +624,7 @@ public class PgpDecryptVerify {
             signatureKeyId = signature.getKeyID();
 
             // find data about this subkey
-            HashMap<String, Object> data = ProviderHelper.getGenericData(mContext,
+            HashMap<String, Object> data = mProviderHelper.getGenericData(
                     KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(signature.getKeyID())),
                     new String[]{KeyRings.MASTER_KEY_ID, KeyRings.USER_ID},
                     new int[]{ProviderHelper.FIELD_TYPE_INTEGER, ProviderHelper.FIELD_TYPE_STRING});
@@ -635,7 +637,7 @@ public class PgpDecryptVerify {
 
             // this one can't fail now (yay database constraints)
             try {
-                signatureKey = ProviderHelper.getPGPPublicKeyRing(mContext, (Long) data.get(KeyRings.MASTER_KEY_ID)).getPublicKey();
+                signatureKey = mProviderHelper.getPGPPublicKeyRing((Long) data.get(KeyRings.MASTER_KEY_ID)).getPublicKey();
             } catch (ProviderHelper.NotFoundException e) {
                 Log.e(Constants.TAG, "key not found!", e);
             }
@@ -705,7 +707,7 @@ public class PgpDecryptVerify {
 
         PGPPublicKey mKey = null;
         try {
-            PGPPublicKeyRing signKeyRing = ProviderHelper.getPGPPublicKeyRingWithKeyId(context,
+            PGPPublicKeyRing signKeyRing = mProviderHelper.getPGPPublicKeyRingWithKeyId(
                     signatureKeyId);
             mKey = signKeyRing.getPublicKey();
         } catch (ProviderHelper.NotFoundException e) {

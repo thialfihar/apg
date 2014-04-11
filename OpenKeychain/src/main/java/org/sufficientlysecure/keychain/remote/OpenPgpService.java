@@ -307,10 +307,10 @@ public class OpenPgpService extends RemoteService {
                 if (PgpDecryptVerifyResult.KEY_PASSHRASE_NEEDED == decryptVerifyResult.getStatus()) {
                     // get PendingIntent for passphrase input, add it to given params and return to client
                     Intent passphraseBundle =
-                        getPassphraseBundleIntent(data, decryptVerifyResult.getKeyIdPassphraseNeeded());
+                            getPassphraseBundleIntent(data, decryptVerifyResult.getKeyIdPassphraseNeeded());
                     return passphraseBundle;
                 } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
-                                decryptVerifyResult.getStatus()) {
+                        decryptVerifyResult.getStatus()) {
                     throw new PgpGeneralException("Decryption of symmetric content not supported by API!");
                 }
 
@@ -354,7 +354,7 @@ public class OpenPgpService extends RemoteService {
         try {
             long keyId = data.getLongExtra(OpenPgpApi.EXTRA_KEY_ID, 0);
 
-            if (ProviderHelper.getPGPPublicKeyRing(this, keyId) == null) {
+            if (mProviderHelper.getPGPPublicKeyRing(keyId) == null) {
                 Intent result = new Intent();
 
                 // If keys are not in db we return an additional PendingIntent
@@ -464,8 +464,8 @@ public class OpenPgpService extends RemoteService {
             } else if (OpenPgpApi.ACTION_DECRYPT_VERIFY.equals(action)) {
                 String currentPkg = getCurrentCallingPackage();
                 Set<Long> allowedKeyIds =
-                    ProviderHelper.getAllKeyIdsForApp(mContext,
-                        ApiAccounts.buildBaseUri(currentPkg));
+                        mProviderHelper.getAllKeyIdsForApp(
+                                ApiAccounts.buildBaseUri(currentPkg));
                 return decryptAndVerifyImpl(data, input, output, allowedKeyIds);
             } else if (OpenPgpApi.ACTION_GET_KEY.equals(action)) {
                 return getKeyImpl(data);
