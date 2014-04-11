@@ -224,12 +224,8 @@ public class ViewKeyActivity extends ActionBarActivity {
         } else {
             // get public keyring as ascii armored string
             try {
-                long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
-
-                ArrayList<String> keyringArmored = ProviderHelper.getKeyRingsAsArmoredString(
-                        this, new long[]{masterKeyId});
-
-                content = keyringArmored.get(0);
+                Uri uri = KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
+                content = ProviderHelper.getKeyRingAsArmoredString(this, uri);
 
                 // Android will fail with android.os.TransactionTooLargeException if key is too big
                 // see http://www.lonestarprod.com/?p=34
@@ -238,8 +234,12 @@ public class ViewKeyActivity extends ActionBarActivity {
                             AppMsg.STYLE_ALERT).show();
                     return;
                 }
+            } catch (IOException e) {
+                Log.e(Constants.TAG, "error processing key!", e);
+                AppMsg.makeText(this, R.string.error_invalid_data, AppMsg.STYLE_ALERT).show();
             } catch (ProviderHelper.NotFoundException e) {
                 Log.e(Constants.TAG, "key not found!", e);
+                AppMsg.makeText(this, R.string.error_key_not_found, AppMsg.STYLE_ALERT).show();
             }
         }
 
@@ -269,8 +269,12 @@ public class ViewKeyActivity extends ActionBarActivity {
         try {
             armoredKeyRing = keyRing.getArmoredEncoded(this);
         } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), R.string.error_could_not_encode_key_ring,
-                    Toast.LENGTH_LONG).show();
+            Log.e(Constants.TAG, "error processing key!", e);
+            AppMsg.makeText(this, R.string.error_key_processing, AppMsg.STYLE_ALERT).show();
+            return;
+        } catch (ProviderHelper.NotFoundException e) {
+            Log.e(Constants.TAG, "key not found!", e);
+            AppMsg.makeText(this, R.string.error_key_not_found, AppMsg.STYLE_ALERT).show();
             return;
         }
 
