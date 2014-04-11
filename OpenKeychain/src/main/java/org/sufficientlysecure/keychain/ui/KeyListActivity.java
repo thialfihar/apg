@@ -22,9 +22,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.devspark.appmsg.AppMsg;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ExportHelper;
+import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.util.Log;
+
+import java.io.IOException;
 
 public class KeyListActivity extends DrawerActivity {
     ExportHelper mExportHelper;
@@ -45,6 +52,12 @@ public class KeyListActivity extends DrawerActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.key_list, menu);
+
+        if(Constants.DEBUG) {
+            menu.findItem(R.id.menu_key_list_debug_read).setVisible(true);
+            menu.findItem(R.id.menu_key_list_debug_write).setVisible(true);
+        }
+
         return true;
     }
 
@@ -65,6 +78,27 @@ public class KeyListActivity extends DrawerActivity {
 
             case R.id.menu_key_list_export:
                 mExportHelper.showExportKeysDialog(null, Constants.Path.APP_DIR_FILE, true);
+                return true;
+
+            case R.id.menu_key_list_debug_read:
+                try {
+                    KeychainDatabase.debugRead(this);
+                    AppMsg.makeText(this, "Restored from backup", AppMsg.STYLE_CONFIRM).show();
+                    getContentResolver().notifyChange(KeychainContract.KeyRings.CONTENT_URI, null);
+                } catch(IOException e) {
+                    Log.e(Constants.TAG, "IO Error", e);
+                    AppMsg.makeText(this, "IO Error: " + e.getMessage(), AppMsg.STYLE_ALERT).show();
+                }
+                return true;
+
+            case R.id.menu_key_list_debug_write:
+                try {
+                    KeychainDatabase.debugWrite(this);
+                    AppMsg.makeText(this, "Backup successful", AppMsg.STYLE_CONFIRM).show();
+                } catch(IOException e) {
+                    Log.e(Constants.TAG, "IO Error", e);
+                    AppMsg.makeText(this, "IO Error: " + e.getMessage(), AppMsg.STYLE_ALERT).show();
+                }
                 return true;
 
             default:
