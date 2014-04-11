@@ -81,7 +81,7 @@ public class ImportKeysFileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode & 0xFFFF) {
+        switch (requestCode) {
             case REQUEST_CODE_FILE: {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
