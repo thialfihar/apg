@@ -848,7 +848,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     Log.e(Constants.TAG, "key not found!", e);
                     // TODO: throw exception here!
                 }
-                PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(secretKeyRing);
+                PGPSecretKey certificationKey = PgpKeyHelper.getFirstCertificationSubkey(secretKeyRing);
                 publicKey = keyOperation.certifyKey(certificationKey, publicKey,
                         userIds, signaturePassphrase);
                 publicRing = PGPPublicKeyRing.insertPublicKey(publicRing, publicKey);
