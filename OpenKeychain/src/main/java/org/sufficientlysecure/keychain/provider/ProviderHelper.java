@@ -386,7 +386,6 @@ public class ProviderHelper implements PgpKeyProvider {
      * Saves a PGPSecretKeyRing in the DB. This will only work if a corresponding public keyring
      * is already in the database!
      */
-    @SuppressWarnings("unchecked")
     public void saveKeyRing(PGPSecretKeyRing keyRing) throws IOException {
         long masterKeyId = keyRing.getPublicKey().getKeyID();
 
@@ -402,7 +401,6 @@ public class ProviderHelper implements PgpKeyProvider {
     /**
      * Saves (or updates) a pair of public and secret KeyRings in the database
      */
-    @SuppressWarnings("unchecked")
     public void saveKeyRing(PGPPublicKeyRing pubRing, PGPSecretKeyRing privRing) throws IOException {
         long masterKeyId = pubRing.getPublicKey().getKeyID();
 
@@ -512,8 +510,14 @@ public class ProviderHelper implements PgpKeyProvider {
         return getKeyRingAsArmoredString(data);
     }
 
-    // TODO This method is NOT ACTUALLY USED. Is this preparation for something, or just dead code?
-    public ArrayList<String> getKeyRingsAsArmoredString(Context context, long[] masterKeyIds)
+    /**
+     * TODO: currently not used, but will be needed to upload many keys at once!
+     *
+     * @param masterKeyIds
+     * @return
+     * @throws IOException
+     */
+    public ArrayList<String> getKeyRingsAsArmoredString(long[] masterKeyIds)
             throws IOException {
         ArrayList<String> output = new ArrayList<String>();
 
@@ -523,7 +527,7 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         // Build a cursor for the selected masterKeyIds
-        Cursor cursor = null;
+        Cursor cursor;
         {
             String inMasterKeyList = KeyRingData.MASTER_KEY_ID + " IN (";
             for (int i = 0; i < masterKeyIds.length; ++i) {
@@ -534,7 +538,7 @@ public class ProviderHelper implements PgpKeyProvider {
             }
             inMasterKeyList += ")";
 
-            cursor = context.getContentResolver().query(KeyRingData.buildPublicKeyRingUri(), new String[]{
+            cursor = mContentResolver.query(KeyRingData.buildPublicKeyRingUri(), new String[]{
                     KeyRingData._ID, KeyRingData.MASTER_KEY_ID, KeyRingData.KEY_RING_DATA
             }, inMasterKeyList, null, null);
         }
@@ -613,13 +617,6 @@ public class ProviderHelper implements PgpKeyProvider {
 
     public void insertApiAccount(Uri uri, AccountSettings accSettings) {
         mContentResolver.insert(uri, contentValueForApiAccounts(accSettings));
-    }
-
-    public void updateApiApp(AppSettings appSettings, Uri uri) {
-        if (mContentResolver.update(uri, contentValueForApiApps(appSettings), null,
-                null) <= 0) {
-            throw new RuntimeException();
-        }
     }
 
     public void updateApiAccount(AccountSettings accSettings, Uri uri) {
