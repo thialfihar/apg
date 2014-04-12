@@ -350,6 +350,13 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                     builder.build().execute();
                 }
 
+                // this assumes that the bytes are cleartext (valid for current implementation!)
+                if (target == TARGET_BYTES) {
+                    builder.cleartextInput(true);
+                }
+
+                builder.build().execute();
+
                 outStream.close();
 
                 /* Output */

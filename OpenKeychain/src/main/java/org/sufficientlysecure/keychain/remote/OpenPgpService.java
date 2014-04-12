@@ -166,14 +166,20 @@ public class OpenPgpService extends RemoteService {
                 InputData inputData = new InputData(is, inputLength);
 
                 // sign-only
-                PgpSignEncrypt.Builder builder =
                     new PgpSignEncrypt.Builder(new ProviderHelper(getContext()), inputData, os,
-                        new ProviderHelper(this));
-                builder.setEnableAsciiArmorOutput(asciiArmor)
-                        .setSignatureHashAlgorithm(accSettings.getHashAlgorithm())
-                        .setSignatureForceV3(false)
-                        .setSignatureMasterKeyId(accSettings.getKeyId())
-                        .setSignaturePassphrase(passphrase);
+                PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(
+                        new ProviderHelper(getContext()),
+                        PgpHelper.getFullVersion(getContext()),
+                        inputData, os, new ProviderHelper(this));
+                builder.enableAsciiArmorOutput(asciiArmor)
+                        .signatureHashAlgorithm(accSettings.getHashAlgorithm())
+                        .signatureForceV3(false)
+                        .signatureMasterKeyId(accSettings.getKeyId())
+                        .signaturePassphrase(passphrase);
+
+                // TODO: currently always assume cleartext input, no sign-only of binary currently!
+                builder.cleartextInput(true);
+
                 builder.build().execute();
             } finally {
                 is.close();
