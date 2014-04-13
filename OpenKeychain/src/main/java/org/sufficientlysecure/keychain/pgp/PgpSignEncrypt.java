@@ -291,17 +291,13 @@ public class PgpSignEncrypt {
                 signingKeyRing = mProviderHelper.getPGPSecretKeyRing(mSignatureMasterKeyId);
             } catch (ProviderHelper.NotFoundException e) {
                 throw new NoSigningKeyException();
-//                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
             }
             signingKey = PgpKeyHelper.getFirstSigningSubkey(signingKeyRing);
             if (signingKey == null) {
                 throw new NoSigningKeyException();
-//                throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
             }
 
             if (mSignaturePassphrase == null) {
-//                throw new PgpGeneralException(
-//                        mContext.getString(R.string.error_no_signature_passphrase));
                 throw new NoPassphraseException();
             }
 
@@ -309,8 +305,6 @@ public class PgpSignEncrypt {
 
             signaturePrivateKey = signingKey.extractPrivateKey(mSignaturePassphrase);
             if (signaturePrivateKey == null) {
-//                throw new PgpGeneralException(
-//                        mContext.getString(R.string.error_could_not_extract_private_key));
                 throw new KeyExtractionException();
             }
         }

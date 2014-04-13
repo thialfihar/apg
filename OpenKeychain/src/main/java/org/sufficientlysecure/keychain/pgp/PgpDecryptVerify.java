@@ -273,7 +273,6 @@ public class PgpDecryptVerify {
         }
 
         if (enc == null) {
-//            throw new PgpGeneralException(mContext.getString(R.string.error_invalid_data));
             throw new InvalidDataException();
         }
 
@@ -343,8 +342,6 @@ public class PgpDecryptVerify {
                 if (mPassphrase == null) {
                     // returns "" if key has no passphrase
                     mPassphrase = mPassphraseCache.getCachedPassphrase(masterKeyId);
-//                    mPassphrase =
-//                            PassphraseCacheService.getCachedPassphrase(mContext, masterKeyId);
 
                     // if passphrase was not cached, return here
                     // indicating that a passphrase is missing!
@@ -403,12 +400,9 @@ public class PgpDecryptVerify {
                                 mPassphrase.toCharArray());
                 privateKey = secretKey.extractPrivateKey(keyDecryptor);
             } catch (PGPException e) {
-//                throw new PGPException(mContext.getString(R.string.error_wrong_passphrase));
                 throw new WrongPassphraseException();
             }
             if (privateKey == null) {
-//                throw new PgpGeneralException(
-//                        mContext.getString(R.string.error_could_not_extract_private_key));
                 throw new KeyExtractionException();
             }
             currentProgress += 5;
@@ -423,7 +417,6 @@ public class PgpDecryptVerify {
             currentProgress += 5;
         } else {
             // no packet has been found where we have the corresponding secret key in our db
-//            throw new PgpGeneralException(mContext.getString(R.string.error_no_secret_key_found));
             throw new NoSecretKeyException();
         }
 
@@ -575,7 +568,6 @@ public class PgpDecryptVerify {
             } else {
                 // failed
                 Log.d(Constants.TAG, "Integrity verification: failed!");
-//                throw new PgpGeneralException(mContext.getString(R.string.error_integrity_check_failed));
                 throw new IntegrityCheckFailedException();
             }
         } else {
@@ -633,7 +625,6 @@ public class PgpDecryptVerify {
 
         PGPSignatureList sigList = (PGPSignatureList) pgpFact.nextObject();
         if (sigList == null) {
-//            throw new PgpGeneralException(mContext.getString(R.string.error_corrupt_data));
             throw new InvalidDataException();
         }
         PGPSignature signature = null;
