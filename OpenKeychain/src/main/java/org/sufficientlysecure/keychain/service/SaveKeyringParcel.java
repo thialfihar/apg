@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.thialfihar.android.apg.service;
 
 import android.os.Parcel;
