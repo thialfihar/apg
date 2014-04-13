@@ -47,12 +47,22 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * This class is the single place where ALL operations that actually modify a PGP public or secret
+ * key take place.
+ * <p/>
+ * Note that no android specific stuff should be done here, ie no imports from com.android.
+ * <p/>
+ * All operations support progress reporting to a ProgressDialogUpdater passed on initialization.
+ * This indicator may be null.
+ */
 public class PgpKeyOperation {
     private Context mContext;
     private ProgressDialogUpdater mProgress;
@@ -104,7 +114,7 @@ public class PgpKeyOperation {
     public PGPSecretKey createKey(int algorithmChoice, int keySize, String passphrase,
                                   boolean isMasterKey)
             throws NoSuchAlgorithmException, PGPException, NoSuchProviderException,
-                   PgpGeneralException, InvalidAlgorithmParameterException {
+            PgpGeneralMsgIdException, InvalidAlgorithmParameterException {
 
         if (keySize < 512) {
             throw new PgpGeneralException(mContext.getString(R.string.error_key_size_minimum512bit));
@@ -167,15 +177,16 @@ public class PgpKeyOperation {
                 PGPEncryptedData.CAST5, sha1Calc)
                 .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(passphrase.toCharArray());
 
-        PGPSecretKey secKey = new PGPSecretKey(keyPair.getPrivateKey(), keyPair.getPublicKey(),
+        return new PGPSecretKey(keyPair.getPrivateKey(), keyPair.getPublicKey(),
                 sha1Calc, isMasterKey, keyEncryptor);
 
         return secKey;
     }
 
-    public void changeSecretKeyPassphrase(PGPSecretKeyRing keyRing, String oldPassPhrase,
-                                          String newPassPhrase) throws IOException, PGPException,
-            NoSuchProviderException {
+
+    public PGPSecretKeyRing changeSecretKeyPassphrase(PGPSecretKeyRing keyRing, String oldPassphrase,
+                                                      String newPassphrase)
+            throws IOException, PGPException, NoSuchProviderException {
 
         updateProgress(R.string.progress_building_key, 0, 100);
         if (oldPassPhrase == null) {
@@ -251,13 +262,13 @@ public class PgpKeyOperation {
             PGPSignatureSubpacketGenerator unhashedPacketsGen; {
 
         if (saveParcel.keysExpiryDates.get(0) != null) {
-            GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+            Calendar creationDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             creationDate.setTime(masterPublicKey.getCreationTime());
-            GregorianCalendar expiryDate = saveParcel.keysExpiryDates.get(0);
+            Calendar expiryDate = saveParcel.keysExpiryDates.get(0);
             //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
             //here we purposefully ignore partial days in each date - long type has no fractional part!
             long numDays = (expiryDate.getTimeInMillis() / 86400000) -
-                (creationDate.getTimeInMillis() / 86400000);
+                    (creationDate.getTimeInMillis() / 86400000);
             if (numDays <= 0) {
                 throw new PgpGeneralMsgIdException(R.string.error_expiry_must_come_after_creation);
             }
@@ -328,13 +339,13 @@ public class PgpKeyOperation {
             hashedPacketsGen.setKeyFlags(false, keyFlags);
 
             if (saveParcel.keysExpiryDates.get(i) != null) {
-                GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+                Calendar creationDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 creationDate.setTime(subPublicKey.getCreationTime());
-                GregorianCalendar expiryDate = saveParcel.keysExpiryDates.get(i);
+                Calendar expiryDate = saveParcel.keysExpiryDates.get(i);
                 //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
                 //here we purposefully ignore partial days in each date - long type has no fractional part!
-                long numDays =
-                        (expiryDate.getTimeInMillis() / 86400000) - (creationDate.getTimeInMillis() / 86400000);
+                long numDays = (expiryDate.getTimeInMillis() / 86400000) -
+                        (creationDate.getTimeInMillis() / 86400000);
                 if (numDays <= 0) {
                     throw new PgpGeneralException
                             (mContext.getString(R.string.error_expiry_must_come_after_creation));
@@ -431,13 +442,13 @@ public class PgpKeyOperation {
         hashedPacketsGen.setPreferredCompressionAlgorithms(true, PREFERRED_COMPRESSION_ALGORITHMS);
 
         if (saveParcel.keysExpiryDates.get(0) != null) {
-            GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+            Calendar creationDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             creationDate.setTime(masterPublicKey.getCreationTime());
-            GregorianCalendar expiryDate = saveParcel.keysExpiryDates.get(0);
+            Calendar expiryDate = saveParcel.keysExpiryDates.get(0);
             //note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
             //here we purposefully ignore partial days in each date - long type has no fractional part!
             long numDays = (expiryDate.getTimeInMillis() / 86400000) -
-                (creationDate.getTimeInMillis() / 86400000);
+                    (creationDate.getTimeInMillis() / 86400000);
             if (numDays <= 0) {
                 throw new PgpGeneralMsgIdException(R.string.error_expiry_must_come_after_creation);
             }
@@ -449,13 +460,13 @@ public class PgpKeyOperation {
         }
 
         if (saveParcel.primaryIDChanged ||
-            !saveParcel.originalIDs.get(0).equals(saveParcel.userIds.get(0))) {
+                !saveParcel.originalIDs.get(0).equals(saveParcel.userIds.get(0))) {
             anyIDChanged = true;
             ArrayList<Pair<String, PGPSignature>> sigList = new ArrayList<Pair<String, PGPSignature>>();
             for (String userId : saveParcel.userIds) {
                 String origID = saveParcel.originalIDs.get(userIDIndex);
                 if (origID.equals(userId) && !saveParcel.newIDs[userIDIndex] &&
-                    !userId.equals(saveParcel.originalPrimaryID) && userIDIndex != 0) {
+                        !userId.equals(saveParcel.originalPrimaryID) && userIDIndex != 0) {
                     Iterator<PGPSignature> origSigs = masterPublicKey.getSignaturesForID(origID);
                     // TODO: make sure this iterator only has signatures we are interested in
                     while (origSigs.hasNext()) {
@@ -483,7 +494,7 @@ public class PgpKeyOperation {
             }
             for (Pair<String, PGPSignature> toAdd : sigList) {
                 masterPublicKey =
-                    PGPPublicKey.addCertification(masterPublicKey, toAdd.first, toAdd.second);
+                        PGPPublicKey.addCertification(masterPublicKey, toAdd.first, toAdd.second);
             }
         } else {
             for (String userId : saveParcel.userIds) {
@@ -505,7 +516,7 @@ public class PgpKeyOperation {
                         masterPublicKey = PGPPublicKey.removeCertification(masterPublicKey, origID);
                     }
                     masterPublicKey =
-                        PGPPublicKey.addCertification(masterPublicKey, userId, certification);
+                            PGPPublicKey.addCertification(masterPublicKey, userId, certification);
                 }
                 userIDIndex++;
             }
@@ -600,14 +611,14 @@ public class PgpKeyOperation {
                 hashedPacketsGen.setKeyFlags(false, usageId);
 
                 if (saveParcel.keysExpiryDates.get(i) != null) {
-                    GregorianCalendar creationDate = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+                    Calendar creationDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                     creationDate.setTime(subPublicKey.getCreationTime());
-                    GregorianCalendar expiryDate = saveParcel.keysExpiryDates.get(i);
+                    Calendar expiryDate = saveParcel.keysExpiryDates.get(i);
                     // note that the below, (a/c) - (b/c) is *not* the same as (a - b) /c
                     // here we purposefully ignore partial days in each date - long type has
                     // no fractional part!
                     long numDays = (expiryDate.getTimeInMillis() / 86400000) -
-                        (creationDate.getTimeInMillis() / 86400000);
+                            (creationDate.getTimeInMillis() / 86400000);
                     if (numDays <= 0) {
                         throw new PgpGeneralMsgIdException(R.string.error_expiry_must_come_after_creation);
                     }
@@ -681,21 +692,20 @@ public class PgpKeyOperation {
     /**
      * Certify the given pubkeyid with the given masterkeyid.
      *
-     * @param masterKeyId Certifying key, must be available as secret key
-     * @param pubKeyId ID of public key to certify
-     * @param userIds User IDs to certify, must not be null or empty
-     * @param passphrase Passphrase of the secret key
+     * @param certificationKey Certifying key
+     * @param publicKey        public key to certify
+     * @param userIds          User IDs to certify, must not be null or empty
+     * @param passphrase       Passphrase of the secret key
      * @return A keyring with added certifications
      */
-    public PGPPublicKeyRing certifyKey(long masterKeyId, long pubKeyId, List<String> userIds, String passphrase)
-            throws PgpGeneralException, NoSuchAlgorithmException, NoSuchProviderException,
+    public PGPPublicKey certifyKey(PGPSecretKey certificationKey, PGPPublicKey publicKey,
+                                   List<String> userIds, String passphrase)
+            throws PgpGeneralMsgIdException, NoSuchAlgorithmException, NoSuchProviderException,
             PGPException, SignatureException {
-        if (passphrase == null) {
-            throw new PgpGeneralException("Unable to obtain passphrase");
-        } else {
 
-            // create a signatureGenerator from the supplied masterKeyId and passphrase
-            PGPSignatureGenerator signatureGenerator; {
+        // create a signatureGenerator from the supplied masterKeyId and passphrase
+        PGPSignatureGenerator signatureGenerator;
+        {
 
                 PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(mContext, masterKeyId);
                 if (certificationKey == null) {
@@ -736,6 +746,21 @@ public class PgpKeyOperation {
             pubring = PGPPublicKeyRing.insertPublicKey(pubring, signedKey);
 
             return pubring;
+        }
+
+    /**
+     * Simple static subclass that stores two values.
+     * <p/>
+     * This is only used to return a pair of values in one function above. We specifically don't use
+     * com.android.Pair to keep this class free from android dependencies.
+     */
+    public static class Pair<K, V> {
+        public final K first;
+        public final V second;
+
+        public Pair(K first, V second) {
+            this.first = first;
+            this.second = second;
         }
     }
 }

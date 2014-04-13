@@ -72,6 +72,7 @@ import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
@@ -723,8 +724,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         return keysUsages;
     }
 
-    private ArrayList<GregorianCalendar> getKeysExpiryDates(SectionView keysView) throws PgpGeneralException {
-        ArrayList<GregorianCalendar> keysExpiryDates = new ArrayList<GregorianCalendar>();
+    private ArrayList<Calendar> getKeysExpiryDates(SectionView keysView) throws PgpGeneralException {
+        ArrayList<Calendar> keysExpiryDates = new ArrayList<Calendar>();
 
         ViewGroup keyEditors = keysView.getEditors();
 
