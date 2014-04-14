@@ -22,7 +22,7 @@ import android.app.Activity;
 
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
-
+import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 
@@ -58,13 +58,13 @@ public class AlgorithmNames {
         mHashNames.put(HashAlgorithmTags.SHA384, "SHA-384");
         mHashNames.put(HashAlgorithmTags.SHA512, "SHA-512");
 
-        mCompressionNames.put(Id.choice.compression.none, mActivity.getString(R.string.choice_none)
+        mCompressionNames.put(Constants.choice.compression.none, mActivity.getString(R.string.choice_none)
                 + " (" + mActivity.getString(R.string.compression_fast) + ")");
-        mCompressionNames.put(Id.choice.compression.zip,
+        mCompressionNames.put(Constants.choice.compression.zip,
                 "ZIP (" + mActivity.getString(R.string.compression_fast) + ")");
-        mCompressionNames.put(Id.choice.compression.zlib,
+        mCompressionNames.put(Constants.choice.compression.zlib,
                 "ZLIB (" + mActivity.getString(R.string.compression_fast) + ")");
-        mCompressionNames.put(Id.choice.compression.bzip2,
+        mCompressionNames.put(Constants.choice.compression.bzip2,
                 "BZIP2 (" + mActivity.getString(R.string.compression_very_slow) + ")");
     }
 

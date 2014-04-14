@@ -38,11 +38,16 @@ import org.thialfihar.android.apg.pgp.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.util.KeychainServiceListener;
 import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -54,6 +59,11 @@ public class PgpImportExport {
     private Progressable mProgress;
     private KeychainServiceListener mKeychainServiceListener;
     private ProviderHelper mProviderHelper;
+
+    public static final int RETURN_OK = 0;
+    public static final int RETURN_ERROR = -1;
+    public static final int RETURN_BAD = -2;
+    public static final int RETURN_UPDATED = 1;
 
     public PgpImportExport(Context context, Progressable progress) {
         super();
@@ -98,6 +108,16 @@ public class PgpImportExport {
         } catch (AddKeyException e) {
             // TODO: tell the user?
             return false;
+        } finally {
+            try {
+                if (aos != null) {
+                    aos.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
+            } catch (IOException e) {
+            }
         }
     }
 
@@ -127,17 +147,17 @@ public class PgpImportExport {
                         status = storeKeyRingInCache(keyRing.getSecretKeyRing());
                     }
 
-                    if (status == Id.return_value.error) {
+                    if (status == RETURN_ERROR) {
                         throw new PgpGeneralException(
                                 mContext.getString(R.string.error_saving_keys));
                     }
 
                     // update the counts to display to the user at the end
-                    if (status == Id.return_value.updated) {
+                    if (status == RETURN_UPDATED) {
                         ++oldKeys;
-                    } else if (status == Id.return_value.ok) {
+                    } else if (status == RETURN_OK) {
                         ++newKeys;
-                    } else if (status == Id.return_value.bad) {
+                    } else if (status == RETURN_BAD) {
                         ++badKeys;
                     }
                 } else {
@@ -233,12 +253,9 @@ public class PgpImportExport {
         return returnData;
     }
 
-    /**
-     * TODO: implement Id.return_value.updated as status when key already existed
-     */
     @SuppressWarnings("unchecked")
-    public int storeKeyRingInCache(PGPKeyRing keyRing) {
-        int status = Integer.MIN_VALUE; // out of bounds value (Id.return_value.*)
+    public int storeKeyRingInCache(PGPKeyRing keyring) {
+        int status = RETURN_ERROR;
         try {
             if (keyRing instanceof PGPSecretKeyRing) {
                 PGPSecretKeyRing secretKeyRing = (PGPSecretKeyRing) keyRing;
@@ -250,7 +267,7 @@ public class PgpImportExport {
                         if (testSecretKey.isPrivateKeyEmpty()) {
                             // this is bad, something is very wrong...
                             save = false;
-                            status = Id.return_value.bad;
+                            status = RETURN_BAD;
                         }
                     }
                 }
@@ -271,17 +288,15 @@ public class PgpImportExport {
                         mProviderHelper.saveKeyRing(newPubRing);
                     }
                     mProviderHelper.saveKeyRing(secretKeyRing);
-                    // TODO: remove status returns, use exceptions!
-                    status = Id.return_value.ok;
+                    status = RETURN_OK;
                 }
             } else if (keyRing instanceof PGPPublicKeyRing) {
                 PGPPublicKeyRing publicKeyRing = (PGPPublicKeyRing) keyRing;
                 mProviderHelper.saveKeyRing(publicKeyRing);
-                // TODO: remove status returns, use exceptions!
-                status = Id.return_value.ok;
+                status = RETURN_OK;
             }
         } catch (IOException e) {
-            status = Id.return_value.error;
+            status = RETURN_ERROR;
         }
 
         return status;

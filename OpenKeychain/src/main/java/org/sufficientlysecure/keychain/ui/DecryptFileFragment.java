@@ -34,6 +34,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
 import org.openintents.openpgp.OpenPgpSignatureResult;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -41,6 +42,8 @@ import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -202,7 +205,7 @@ public class DecryptFileFragment extends DecryptFragment {
                         showPassphraseDialog(decryptVerifyResult.getKeyIdPassphraseNeeded());
                     } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
                                     decryptVerifyResult.getStatus()) {
-                        showPassphraseDialog(Id.key.symmetric);
+                        showPassphraseDialog(Constants.key.symmetric);
                     } else {
                         // display signature result in activity
                         onResult(decryptVerifyResult);

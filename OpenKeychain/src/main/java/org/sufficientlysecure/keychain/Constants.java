@@ -19,6 +19,7 @@ package org.thialfihar.android.apg;
 
 import android.os.Environment;
 
+import org.spongycastle.bcpg.CompressionAlgorithmTags;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 public final class Constants {
@@ -73,5 +74,25 @@ public final class Constants {
                 DECRYPT,
                 REGISTERED_APPS_LIST
         };
+    }
+
+    public static final class choice {
+        public static final class algorithm {
+            public static final int dsa = 0x21070001;
+            public static final int elgamal = 0x21070002;
+            public static final int rsa = 0x21070003;
+        }
+
+        public static final class compression {
+            public static final int none = 0x21070001;
+            public static final int zlib = CompressionAlgorithmTags.ZLIB;
+            public static final int bzip2 = CompressionAlgorithmTags.BZIP2;
+            public static final int zip = CompressionAlgorithmTags.ZIP;
+        }
+    }
+
+    public static final class key {
+        public static final int none = 0;
+        public static final int symmetric = -1;
     }
 }

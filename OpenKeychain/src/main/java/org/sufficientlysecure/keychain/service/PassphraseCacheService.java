@@ -169,7 +169,7 @@ public class PassphraseCacheService extends Service {
 
         // try to get master key id which is used as an identifier for cached passphrases
         long masterKeyId = keyId;
-        if (masterKeyId != Id.key.symmetric) {
+        if (masterKeyId != Constants.key.symmetric) {
             try {
                 masterKeyId = new ProviderHelper(this).getMasterKeyId(
                         KeychainContract.KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(keyId)));

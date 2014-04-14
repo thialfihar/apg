@@ -44,6 +44,8 @@ import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
@@ -112,13 +114,13 @@ public class EncryptFileFragment extends Fragment {
 
         mFileCompression = (Spinner) view.findViewById(R.id.fileCompression);
         Choice[] choices = new Choice[]{
-                new Choice(Id.choice.compression.none, getString(R.string.choice_none) + " ("
+                new Choice(Constants.choice.compression.none, getString(R.string.choice_none) + " ("
                         + getString(R.string.compression_fast) + ")"),
-                new Choice(Id.choice.compression.zip, "ZIP ("
+                new Choice(Constants.choice.compression.zip, "ZIP ("
                         + getString(R.string.compression_fast) + ")"),
-                new Choice(Id.choice.compression.zlib, "ZLIB ("
+                new Choice(Constants.choice.compression.zlib, "ZLIB ("
                         + getString(R.string.compression_fast) + ")"),
-                new Choice(Id.choice.compression.bzip2, "BZIP2 ("
+                new Choice(Constants.choice.compression.bzip2, "BZIP2 ("
                         + getString(R.string.compression_very_slow) + ")"),
         };
         ArrayAdapter<Choice> adapter = new ArrayAdapter<Choice>(getActivity(),

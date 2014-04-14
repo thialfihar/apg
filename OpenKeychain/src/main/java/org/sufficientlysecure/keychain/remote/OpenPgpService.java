@@ -270,7 +270,7 @@ public class OpenPgpService extends RemoteService {
                             .setSignaturePassphrase(passphrase);
                 } else {
                     // encrypt only
-                    builder.setSignatureMasterKeyId(Id.key.none);
+                    builder.setSignatureMasterKeyId(Constants.key.none);
                 }
                 // execute PGP operation!
                 builder.build().execute();

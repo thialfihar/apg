@@ -32,12 +32,19 @@ import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.spongycastle.openpgp.operator.PBESecretKeyEncryptor;
 import org.spongycastle.openpgp.operator.PGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.PGPDigestCalculator;
-import org.spongycastle.openpgp.operator.jcajce.*;
+import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
+import org.spongycastle.openpgp.operator.jcajce.JcaPGPDigestCalculatorProviderBuilder;
+import org.spongycastle.openpgp.operator.jcajce.JcaPGPKeyPair;
+import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
+import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.Primes;
@@ -128,14 +135,14 @@ public class PgpKeyOperation {
         KeyPairGenerator keyGen = null;
 
         switch (algorithmChoice) {
-            case Id.choice.algorithm.dsa: {
+            case Constants.choice.algorithm.dsa: {
                 keyGen = KeyPairGenerator.getInstance("DSA", Constants.BOUNCY_CASTLE_PROVIDER_NAME);
                 keyGen.initialize(keySize, new SecureRandom());
                 algorithm = PGPPublicKey.DSA;
                 break;
             }
 
-            case Id.choice.algorithm.elgamal: {
+            case Constants.choice.algorithm.elgamal: {
                 if (isMasterKey) {
                     throw new PgpGeneralException(
                             mContext.getString(R.string.error_master_key_must_not_be_el_gamal));
@@ -151,7 +158,7 @@ public class PgpKeyOperation {
                 break;
             }
 
-            case Id.choice.algorithm.rsa: {
+            case Constants.choice.algorithm.rsa: {
                 keyGen = KeyPairGenerator.getInstance("RSA", Constants.BOUNCY_CASTLE_PROVIDER_NAME);
                 keyGen.initialize(keySize, new SecureRandom());
 

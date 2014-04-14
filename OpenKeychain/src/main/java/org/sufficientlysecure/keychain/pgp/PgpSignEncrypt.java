@@ -125,11 +125,11 @@ public class PgpSignEncrypt {
         // optional
         private Progressable mProgressable = null;
         private boolean mEnableAsciiArmorOutput = false;
-        private int mCompressionId = Id.choice.compression.none;
+        private int mCompressionId = Constants.choice.compression.none;
         private long[] mEncryptionMasterKeyIds = null;
         private String mSymmetricPassphrase = null;
         private int mSymmetricEncryptionAlgorithm = 0;
-        private long mSignatureMasterKeyId = Id.key.none;
+        private long mSignatureMasterKeyId = Constants.key.none;
         private int mSignatureHashAlgorithm = 0;
         private boolean mSignatureForceV3 = false;
         private String mSignaturePassphrase = null;
@@ -256,10 +256,10 @@ public class PgpSignEncrypt {
             throws IOException, PGPException, NoSuchProviderException,
             NoSuchAlgorithmException, SignatureException, KeyExtractionException, NoSigningKeyException, NoPassphraseException {
 
-        boolean enableSignature = mSignatureMasterKeyId != Id.key.none;
+        boolean enableSignature = mSignatureMasterKeyId != Constants.key.none;
         boolean enableEncryption = ((mEncryptionMasterKeyIds != null && mEncryptionMasterKeyIds.length > 0)
                 || mSymmetricPassphrase != null);
-        boolean enableCompression = (mCompressionId != Id.choice.compression.none);
+        boolean enableCompression = (mCompressionId != Constants.choice.compression.none);
 
         Log.d(Constants.TAG, "enableSignature:" + enableSignature
                 + "\nenableEncryption:" + enableEncryption

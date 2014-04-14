@@ -27,6 +27,7 @@ import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
+
 import org.thialfihar.android.apg.BuildConfig;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;

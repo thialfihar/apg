@@ -74,7 +74,7 @@ public class EncryptActivity extends DrawerActivity implements
 
     // model useb by message and file fragment
     private long mEncryptionKeyIds[] = null;
-    private long mSigningKeyId = Id.key.none;
+    private long mSigningKeyId = Constants.key.none;
     private String mPassphrase;
     private String mPassphraseAgain;
 

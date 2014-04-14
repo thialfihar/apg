@@ -33,6 +33,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
 import org.openintents.openpgp.OpenPgpSignatureResult;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -41,6 +42,8 @@ import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.regex.Matcher;
@@ -170,7 +173,7 @@ public class DecryptMessageFragment extends DecryptFragment {
                         showPassphraseDialog(decryptVerifyResult.getKeyIdPassphraseNeeded());
                     } else if (PgpDecryptVerifyResult.SYMMETRIC_PASSHRASE_NEEDED ==
                                     decryptVerifyResult.getStatus()) {
-                        showPassphraseDialog(Id.key.symmetric);
+                        showPassphraseDialog(Constants.key.symmetric);
                     } else if (mLegacyMode) {
                         Intent intent = new Intent();
 

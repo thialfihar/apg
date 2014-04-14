@@ -44,6 +44,7 @@ import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.HkpKeyServer;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
@@ -59,9 +60,11 @@ import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.provider.KeychainDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.KeychainServiceListener;
 import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
 import java.io.BufferedInputStream;
@@ -606,21 +609,21 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                         keysTotal);
                 PgpKeyOperation keyOperations = new PgpKeyOperation(new ProgressScaler(this, 0, 100, 100));
 
-                Key masterKey = keyOperations.createKey(Id.choice.algorithm.rsa,
+                Key masterKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
                         4096, passphrase, true);
                 newKeys.add(masterKey);
                 keyUsageList.add(KeyFlags.CERTIFY_OTHER);
                 keysCreated++;
                 setProgress(keysCreated, keysTotal);
 
-                Key subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
+                Key subKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
                         4096, passphrase, false);
                 newKeys.add(subKey);
                 keyUsageList.add(KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE);
                 keysCreated++;
                 setProgress(keysCreated, keysTotal);
 
-                subKey = keyOperations.createKey(Id.choice.algorithm.rsa,
+                subKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
                         4096, passphrase, false);
                 newKeys.add(subKey);
                 keyUsageList.add(KeyFlags.SIGN_DATA);
@@ -863,7 +866,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
                 // store the signed key in our local cache
                 PgpImportExport pgpImportExport = new PgpImportExport(this, null);
                 int retval = pgpImportExport.storeKeyRingInCache(publicRing);
-                if (retval != Id.return_value.ok && retval != Id.return_value.updated) {
+                if (retval != PgpImportExport.RETURN_OK && retval != PgpImportExport.RETURN_UPDATED) {
                     throw new PgpGeneralException("Failed to store signed key in local cache");
                 }
 

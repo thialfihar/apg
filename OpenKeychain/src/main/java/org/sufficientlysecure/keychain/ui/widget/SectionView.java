@@ -36,12 +36,16 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.openpgp.PGPKeyFlags;
+import org.spongycastle.openpgp.PGPSecretKey;
 
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.dialog.CreateKeyDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
@@ -71,6 +75,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     private ProgressDialogFragment mGeneratingDialog;
 
+    public static final int TYPE_USER_ID = 1;
+    public static final int TYPE_KEY = 2;
+
     public void setEditorListener(EditorListener listener) {
         mEditorListener = listener;
     }
@@ -92,12 +99,12 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     public void setType(int type) {
         mType = type;
         switch (type) {
-            case Id.type.user_id: {
+            case TYPE_USER_ID: {
                 mTitle.setText(R.string.section_user_ids);
                 break;
             }
 
-            case Id.type.key: {
+            case TYPE_KEY: {
                 mTitle.setText(R.string.section_keys);
                 break;
             }
@@ -141,9 +148,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     public void onDeleted(Editor editor, boolean wasNewItem) {
         mOldItemDeleted |= !wasNewItem;
         if (mOldItemDeleted) {
-            if (mType == Id.type.user_id) {
-                mDeletedIDs.add(((UserIdEditor) editor).getOriginalId());
-            } else if (mType == Id.type.key) {
+            if (mType == TYPE_USER_ID) {
+                mDeletedIDs.add(((UserIdEditor) editor).getOriginalID());
+            } else if (mType == TYPE_KEY) {
                 mDeletedKeys.add(((KeyEditor) editor).getValue());
             }
         }
@@ -171,7 +178,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             Editor editor = (Editor) mEditors.getChildAt(i);
             ret |= editor.needsSaving();
-            if (mType == Id.type.user_id) {
+            if (mType == TYPE_USER_ID) {
                 ret |= true; // todo: be smarter about this... for now always true
             }
         }
@@ -195,7 +202,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         //    revoked ones make this harder than the simple case we are continuing to assume here
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             Editor editor = (Editor) mEditors.getChildAt(i);
-            if (mType == Id.type.user_id) {
+            if (mType == TYPE_USER_ID) {
                 /*if(((UserIdEditor)editor).getIsOriginallyMainUserID()) {
                     return ((UserIdEditor)editor).getOriginalID();
                 }*/
@@ -207,7 +214,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     public ArrayList<String> getOriginalIDs() {
         ArrayList<String> orig = new ArrayList<String>();
-        if (mType == Id.type.user_id) {
+        if (mType == TYPE_USER_ID) {
             for (int i = 0; i < mEditors.getChildCount(); ++i) {
                 UserIdEditor editor = (UserIdEditor) mEditors.getChildAt(i);
                 orig.add(editor.getOriginalId());
@@ -246,7 +253,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     public List<Boolean> getNewKeysArray() {
         ArrayList<Boolean> mList = new ArrayList<Boolean>();
-        if (mType == Id.type.key) {
+        if (mType == TYPE_KEY) {
             for (int i = 0; i < mEditors.getChildCount(); ++i) {
                 KeyEditor editor = (KeyEditor) mEditors.getChildAt(i);
                 mList.add(editor.getIsNewKey());
@@ -261,7 +268,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     public void onClick(View v) {
         if (mCanBeEdited) {
             switch (mType) {
-                case Id.type.user_id: {
+                case TYPE_USER_ID: {
                     UserIdEditor view = (UserIdEditor) mInflater.inflate(
                             R.layout.edit_key_user_id_item, mEditors, false);
                     view.setEditorListener(this);
@@ -273,7 +280,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
                     break;
                 }
 
-                case Id.type.key: {
+                case TYPE_KEY: {
                     CreateKeyDialogFragment mCreateKeyDialogFragment =
                             CreateKeyDialogFragment.newInstance(mEditors.getChildCount());
                     mCreateKeyDialogFragment
@@ -299,7 +306,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     }
 
     public void setUserIds(Vector<String> list) {
-        if (mType != Id.type.user_id) {
+        if (mType != TYPE_USER_ID) {
             return;
         }
 
@@ -317,7 +324,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
     }
 
     public void setKeys(Vector<Key> list, Vector<Integer> usages, boolean newKeys) {
-        if (mType != Id.type.key) {
+        if (mType != TYPE_KEY) {
             return;
         }
 

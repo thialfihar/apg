@@ -61,7 +61,7 @@ public class EncryptAsymmetricFragment extends Fragment {
     private TextView mMainUserIdRest;
 
     // model
-    private long mSecretKeyId = Id.key.none;
+    private long mSecretKeyId = Constants.key.none;
     private long mEncryptionKeyIds[] = null;
 
     // Container Activity must implement this interface
@@ -117,7 +117,7 @@ public class EncryptAsymmetricFragment extends Fragment {
                 if (checkBox.isChecked()) {
                     selectSecretKey();
                 } else {
-                    setSignatureKeyId(Id.key.none);
+                    setSignatureKeyId(Constants.key.none);
                 }
             }
         });
@@ -197,7 +197,7 @@ public class EncryptAsymmetricFragment extends Fragment {
                     mEncryptionKeyIds.length));
         }
 
-        if (mSecretKeyId == Id.key.none) {
+        if (mSecretKeyId == Constants.key.none) {
             mSign.setChecked(false);
             mMainUserId.setText("");
             mMainUserIdRest.setText("");
@@ -264,7 +264,7 @@ public class EncryptAsymmetricFragment extends Fragment {
                     Uri uriMasterKey = data.getData();
                     setSignatureKeyId(Long.valueOf(uriMasterKey.getLastPathSegment()));
                 } else {
-                    setSignatureKeyId(Id.key.none);
+                    setSignatureKeyId(Constants.key.none);
                 }
                 break;
             }

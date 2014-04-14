@@ -32,6 +32,8 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.remote.AccountSettings;
+import org.thialfihar.android.apg.remote.AppSettings;
 import org.thialfihar.android.apg.remote.ui.AccountSettingsFragment;
 import org.thialfihar.android.apg.ui.SelectPublicKeyFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -141,7 +143,7 @@ public class RemoteServiceActivity extends ActionBarActivity {
                             // Save
 
                             // user needs to select a key!
-                            if (mAccSettingsFragment.getAccSettings().getKeyId() == Id.key.none) {
+                            if (mAccSettingsFragment.getAccSettings().getKeyId() == Constants.key.none) {
                                 mAccSettingsFragment.setErrorOnSelectKeyFragment(
                                         getString(R.string.api_register_error_select_key));
                             } else {

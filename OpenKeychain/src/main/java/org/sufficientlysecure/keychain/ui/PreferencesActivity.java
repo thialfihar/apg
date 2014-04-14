@@ -89,9 +89,13 @@ public class PreferencesActivity extends PreferenceActivity {
             initializeEncryptionAlgorithm(
                     (IntegerListPreference) findPreference(Constants.Pref.DEFAULT_ENCRYPTION_ALGORITHM));
 
-            int[] valueIds = new int[] { Id.choice.compression.none, Id.choice.compression.zip,
-                    Id.choice.compression.zlib, Id.choice.compression.bzip2, };
-            String[] entries = new String[] {
+            int[] valueIds = new int[]{
+                    Constants.choice.compression.none,
+                    Constants.choice.compression.zip,
+                    Constants.choice.compression.zlib,
+                    Constants.choice.compression.bzip2,
+            };
+            String[] entries = new String[]{
                     getString(R.string.choice_none) + " (" + getString(R.string.compression_fast) + ")",
                     "ZIP (" + getString(R.string.compression_fast) + ")",
                     "ZLIB (" + getString(R.string.compression_fast) + ")",
@@ -222,13 +226,20 @@ public class PreferencesActivity extends PreferenceActivity {
             initializeEncryptionAlgorithm(
                     (IntegerListPreference) findPreference(Constants.Pref.DEFAULT_ENCRYPTION_ALGORITHM));
 
-            int[] valueIds = new int[]{Id.choice.compression.none, Id.choice.compression.zip,
-                    Id.choice.compression.zlib, Id.choice.compression.bzip2,};
+            int[] valueIds = new int[]{
+                    Constants.choice.compression.none,
+                    Constants.choice.compression.zip,
+                    Constants.choice.compression.zlib,
+                    Constants.choice.compression.bzip2,
+            };
+
             String[] entries = new String[]{
                     getString(R.string.choice_none) + " (" + getString(R.string.compression_fast) + ")",
                     "ZIP (" + getString(R.string.compression_fast) + ")",
                     "ZLIB (" + getString(R.string.compression_fast) + ")",
-                    "BZIP2 (" + getString(R.string.compression_very_slow) + ")",};
+                    "BZIP2 (" + getString(R.string.compression_very_slow) + ")",
+            };
+
             String[] values = new String[valueIds.length];
             for (int i = 0; i < values.length; ++i) {
                 values[i] = "" + valueIds[i];
