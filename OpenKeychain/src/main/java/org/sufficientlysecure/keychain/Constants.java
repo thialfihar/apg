@@ -22,6 +22,11 @@ import android.os.Environment;
 import org.spongycastle.bcpg.CompressionAlgorithmTags;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
+import org.thialfihar.android.apg.remote.ui.AppsListActivity;
+import org.thialfihar.android.apg.ui.DecryptActivity;
+import org.thialfihar.android.apg.ui.EncryptActivity;
+import org.thialfihar.android.apg.ui.KeyListActivity;
+
 public final class Constants {
 
     public static final boolean DEBUG = BuildConfig.DEBUG;
@@ -78,12 +83,14 @@ public final class Constants {
 
     public static final class choice {
         public static final class algorithm {
+            // TODO: legacy reasons :/ better: PublicKeyAlgorithmTags
             public static final int dsa = 0x21070001;
             public static final int elgamal = 0x21070002;
             public static final int rsa = 0x21070003;
         }
 
         public static final class compression {
+            // TODO: legacy reasons :/ better: CompressionAlgorithmTags.UNCOMPRESSED
             public static final int none = 0x21070001;
             public static final int zlib = CompressionAlgorithmTags.ZLIB;
             public static final int bzip2 = CompressionAlgorithmTags.BZIP2;
