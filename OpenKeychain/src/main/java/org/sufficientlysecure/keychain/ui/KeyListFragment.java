@@ -55,6 +55,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -65,6 +66,7 @@ import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
 import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.util.Log;
+
 import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;

@@ -38,6 +38,8 @@ import org.spongycastle.openpgp.PGPException;
 import org.spongycastle.openpgp.PGPPrivateKey;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
+import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
+import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;

@@ -29,7 +29,6 @@ import android.preference.PreferenceScreen;
 
 import org.spongycastle.bcpg.HashAlgorithmTags;
 import org.spongycastle.openpgp.PGPEncryptedData;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;

@@ -37,7 +37,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.openpgp.PGPKeyFlags;
 import org.spongycastle.openpgp.PGPSecretKey;
-
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Key;

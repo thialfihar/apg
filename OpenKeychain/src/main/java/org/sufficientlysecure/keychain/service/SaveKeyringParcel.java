@@ -24,7 +24,6 @@ import org.thialfihar.android.apg.pgp.Key;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class SaveKeyringParcel implements Parcelable {
 

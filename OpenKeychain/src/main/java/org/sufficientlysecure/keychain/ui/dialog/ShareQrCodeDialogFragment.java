@@ -41,7 +41,6 @@ import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.QrCodeUtils;
 
 import java.io.IOException;
-import java.security.Provider;
 import java.util.ArrayList;
 
 public class ShareQrCodeDialogFragment extends DialogFragment {

@@ -29,8 +29,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.Log;
 

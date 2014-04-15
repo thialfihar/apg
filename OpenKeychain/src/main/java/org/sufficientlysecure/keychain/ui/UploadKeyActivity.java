@@ -37,6 +37,8 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.util.Log;
 
 /**

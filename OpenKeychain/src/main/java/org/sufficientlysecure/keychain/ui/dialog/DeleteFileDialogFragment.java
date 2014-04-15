@@ -32,6 +32,8 @@ import android.widget.Toast;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
+import org.thialfihar.android.apg.service.KeychainIntentService;
+import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 
 public class DeleteFileDialogFragment extends DialogFragment {
     private static final String ARG_DELETE_FILE = "delete_file";
