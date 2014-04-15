@@ -62,6 +62,34 @@ public class PgpKeyHelper {
         return key.getPublicKey().getCreationTime();
     }
 
+    public static Date getExpiryDate(PGPPublicKey key) {
+        Date creationDate = getCreationDate(key);
+        if (key.getValidDays() == 0) {
+            // no expiry
+            return null;
+        }
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(creationDate);
+        calendar.add(Calendar.DATE, key.getValidDays());
+
+        return calendar.getTime();
+    }
+
+    public static Date getExpiryDate(PGPSecretKey key) {
+        return getExpiryDate(key.getPublicKey());
+    }
+
+    public static boolean isExpired(PGPPublicKey key) {
+        Date creationDate = getCreationDate(key);
+        Date expiryDate = getExpiryDate(key);
+        Date now = new Date();
+        if (now.compareTo(creationDate) >= 0
+                && (expiryDate == null || now.compareTo(expiryDate) <= 0)) {
+            return false;
+        }
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     public static PGPSecretKey getKeyNum(PGPSecretKeyRing keyRing, long num) {
         long cnt = 0;
@@ -79,7 +107,7 @@ public class PgpKeyHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static Vector<PGPPublicKey> getEncryptKeys(PGPPublicKeyRing keyRing) {
+    private static Vector<PGPPublicKey> getEncryptKeys(PGPPublicKeyRing keyRing) {
         Vector<PGPPublicKey> encryptKeys = new Vector<PGPPublicKey>();
 
         for (PGPPublicKey key : new IterableIterator<PGPPublicKey>(keyRing.getPublicKeys())) {
@@ -92,7 +120,7 @@ public class PgpKeyHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static Vector<PGPSecretKey> getSigningKeys(PGPSecretKeyRing keyRing) {
+    private static Vector<PGPSecretKey> getSigningKeys(PGPSecretKeyRing keyRing) {
         Vector<PGPSecretKey> signingKeys = new Vector<PGPSecretKey>();
 
         for (PGPSecretKey key : new IterableIterator<PGPSecretKey>(keyRing.getSecretKeys())) {
@@ -105,7 +133,7 @@ public class PgpKeyHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static Vector<PGPSecretKey> getCertificationKeys(PGPSecretKeyRing keyRing) {
+    private static Vector<PGPSecretKey> getCertificationKeys(PGPSecretKeyRing keyRing) {
         Vector<PGPSecretKey> signingKeys = new Vector<PGPSecretKey>();
 
         for (PGPSecretKey key : new IterableIterator<PGPSecretKey>(keyRing.getSecretKeys())) {
@@ -117,7 +145,7 @@ public class PgpKeyHelper {
         return signingKeys;
     }
 
-    public static Vector<PGPPublicKey> getUsableEncryptKeys(PGPPublicKeyRing keyRing) {
+    private static Vector<PGPPublicKey> getUsableEncryptKeys(PGPPublicKeyRing keyRing) {
         Vector<PGPPublicKey> usableKeys = new Vector<PGPPublicKey>();
         Vector<PGPPublicKey> encryptKeys = getEncryptKeys(keyRing);
         PGPPublicKey masterKey = null;
@@ -137,18 +165,7 @@ public class PgpKeyHelper {
         return usableKeys;
     }
 
-    public static boolean isExpired(PGPPublicKey key) {
-        Date creationDate = getCreationDate(key);
-        Date expiryDate = getExpiryDate(key);
-        Date now = new Date();
-        if (now.compareTo(creationDate) >= 0
-                && (expiryDate == null || now.compareTo(expiryDate) <= 0)) {
-            return false;
-        }
-        return true;
-    }
-
-    public static Vector<PGPSecretKey> getUsableCertificationKeys(PGPSecretKeyRing keyRing) {
+    private static Vector<PGPSecretKey> getUsableCertificationKeys(PGPSecretKeyRing keyRing) {
         Vector<PGPSecretKey> usableKeys = new Vector<PGPSecretKey>();
         Vector<PGPSecretKey> signingKeys = getCertificationKeys(keyRing);
         PGPSecretKey masterKey = null;
@@ -166,7 +183,7 @@ public class PgpKeyHelper {
         return usableKeys;
     }
 
-    public static Vector<PGPSecretKey> getUsableSigningKeys(PGPSecretKeyRing keyRing) {
+    private static Vector<PGPSecretKey> getUsableSigningKeys(PGPSecretKeyRing keyRing) {
         Vector<PGPSecretKey> usableKeys = new Vector<PGPSecretKey>();
         Vector<PGPSecretKey> signingKeys = getSigningKeys(keyRing);
         PGPSecretKey masterKey = null;
@@ -184,22 +201,6 @@ public class PgpKeyHelper {
         return usableKeys;
     }
 
-    public static Date getExpiryDate(PGPPublicKey key) {
-        Date creationDate = getCreationDate(key);
-        if (key.getValidDays() == 0) {
-            // no expiry
-            return null;
-        }
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTime(creationDate);
-        calendar.add(Calendar.DATE, key.getValidDays());
-
-        return calendar.getTime();
-    }
-
-    public static Date getExpiryDate(PGPSecretKey key) {
-        return getExpiryDate(key.getPublicKey());
-    }
 
     public static PGPPublicKey getFirstEncryptSubkey(PGPPublicKeyRing keyRing) {
         Vector<PGPPublicKey> encryptKeys = getUsableEncryptKeys(keyRing);
