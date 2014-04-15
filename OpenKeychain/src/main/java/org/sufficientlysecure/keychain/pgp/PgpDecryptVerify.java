@@ -439,8 +439,6 @@ public class PgpDecryptVerify {
         if (dataChunk instanceof PGPOnePassSignatureList) {
             updateProgress(R.string.progress_processing_signature, currentProgress, 100);
 
-            signatureResultBuilder.signatureAvailable(true);
-
             PGPOnePassSignatureList sigList = (PGPOnePassSignatureList) dataChunk;
 
             // go through all signatures
@@ -473,6 +471,7 @@ public class PgpDecryptVerify {
                 // get the subkey which has been used to generate this signature
                 signatureKey = publicKeyRing.getPublicKey(signature.getKeyID());
 
+                signatureResultBuilder.signatureAvailable(true);
                 signatureResultBuilder.knownKey(true);
                 // TODO: uses the first pubkey for information
                 signatureResultBuilder.userId(PgpKeyHelper.getMainUserId(publicKeyRing.getPublicKey()));
@@ -491,9 +490,9 @@ public class PgpDecryptVerify {
                 signatureResultBuilder.signatureKeyCertified(isSignatureKeyCertified);
             } else {
                 // no key in our database -> return "unknown pub key" status including the first key id
-                signatureResultBuilder.knownKey(false);
-
                 if (!sigList.isEmpty()) {
+                    signatureResultBuilder.signatureAvailable(true);
+                    signatureResultBuilder.knownKey(false);
                     signatureResultBuilder.keyId(sigList.get(0).getKeyID());
                 }
             }
@@ -639,8 +638,6 @@ public class PgpDecryptVerify {
             throw new InvalidDataException();
         }
 
-        signatureResultBuilder.signatureAvailable(true);
-
         // go through all signatures
         // and find out for which signature we have a key in our database
         Long masterKeyId = null;
@@ -674,6 +671,7 @@ public class PgpDecryptVerify {
             // get the subkey which has been used to generate this signature
             signatureKey = publicKeyRing.getPublicKey(signature.getKeyID());
 
+            signatureResultBuilder.signatureAvailable(true);
             signatureResultBuilder.knownKey(true);
             // TODO: uses the first pubkey for information
             signatureResultBuilder.userId(PgpKeyHelper.getMainUserId(publicKeyRing.getPublicKey()));
@@ -693,9 +691,9 @@ public class PgpDecryptVerify {
             signatureResultBuilder.signatureKeyCertified(isSignatureKeyCertified);
         } else {
             // no key in our database -> return "unknown pub key" status including the first key id
-            signatureResultBuilder.knownKey(false);
-
             if (!sigList.isEmpty()) {
+                signatureResultBuilder.signatureAvailable(true);
+                signatureResultBuilder.knownKey(false);
                 signatureResultBuilder.keyId(sigList.get(0).getKeyID());
             }
         }
