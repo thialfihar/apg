@@ -6,8 +6,8 @@
     <color name="html_text_color">#ddd</color>
     <color name="transparent">#00000000</color>
 
-    <color name="result_red">#CC0000</color>
-    <color name="result_orange">#FF8800</color>
-    <color name="result_green">#669900</color>
-    <color name="result_blue">#336699</color>
+    <color name="result_red">#FF4444</color>
+    <color name="result_orange">#FFBB33</color>
+    <color name="result_green">#99CC00</color>
+    <color name="result_blue">#33B5E5</color>
 </resources>
