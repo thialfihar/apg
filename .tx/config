@@ -17,6 +17,11 @@ file_filter = apg/src/main/res/raw-<lang>/help_changelog.html
 source_file = apg/src/main/res/raw/help_changelog.html
 source_lang = en
 
+[apg.help-wot]
+file_filter = apg/src/main/res/raw-<lang>/help_wot.html
+source_file = apg/src/main/res/raw/help_wot.html
+source_lang = en
+
 [apg.help-nfc-beam]
 file_filter = apg/src/main/res/raw-<lang>/help_nfc_beam.html
 source_file = apg/src/main/res/raw/help_nfc_beam.html
