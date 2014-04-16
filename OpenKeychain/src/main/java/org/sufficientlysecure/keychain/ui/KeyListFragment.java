@@ -257,7 +257,7 @@ public class KeyListFragment extends Fragment
             KeyRings.IS_REVOKED,
             KeyRings.EXPIRY,
             KeyRings.VERIFIED,
-            KeyRings.HAS_SECRET
+            KeyRings.HAS_ANY_SECRET
     };
 
     static final int INDEX_MASTER_KEY_ID = 1;
@@ -265,10 +265,10 @@ public class KeyListFragment extends Fragment
     static final int INDEX_IS_REVOKED = 3;
     static final int INDEX_EXPIRY = 4;
     static final int INDEX_VERIFIED = 5;
-    static final int INDEX_HAS_SECRET = 6;
+    static final int INDEX_HAS_ANY_SECRET = 6;
 
     static final String ORDER = // IN THE COURT
-            KeyRings.HAS_SECRET + " DESC, " + KeyRings.USER_ID + " ASC";
+            KeyRings.HAS_ANY_SECRET + " DESC, " + KeyRings.USER_ID + " ASC";
 
 
     @Override
@@ -519,7 +519,7 @@ public class KeyListFragment extends Fragment
 
             { // set edit button and revoked info, specific by key type
 
-                if (cursor.getInt(KeyListFragment.INDEX_HAS_SECRET) != 0) {
+                if (cursor.getInt(KeyListFragment.INDEX_HAS_ANY_SECRET) != 0) {
                     // this is a secret key - show the edit mButton
                     h.mStatusDivider.setVisibility(View.VISIBLE);
                     h.mStatusLayout.setVisibility(View.VISIBLE);
@@ -565,7 +565,7 @@ public class KeyListFragment extends Fragment
                 throw new IllegalStateException("couldn't move cursor to position " + id);
             }
 
-            return mCursor.getInt(INDEX_HAS_SECRET) != 0;
+            return mCursor.getInt(INDEX_HAS_ANY_SECRET) != 0;
         }
         public long getMasterKeyId(int id) {
             if (!mCursor.moveToPosition(id)) {
@@ -605,7 +605,7 @@ public class KeyListFragment extends Fragment
                 throw new IllegalStateException("couldn't move cursor to position " + position);
             }
 
-            if (mCursor.getInt(KeyListFragment.INDEX_HAS_SECRET) != 0) {
+            if (mCursor.getInt(KeyListFragment.INDEX_HAS_ANY_SECRET) != 0) {
                 { // set contact count
                     int num = mCursor.getCount();
                     String contactsTotal = getResources().getQuantityString(R.plurals.n_contacts, num, num);
@@ -644,7 +644,7 @@ public class KeyListFragment extends Fragment
             }
 
             // early breakout: all secret keys are assigned id 0
-            if (mCursor.getInt(KeyListFragment.INDEX_HAS_SECRET) != 0) {
+            if (mCursor.getInt(KeyListFragment.INDEX_HAS_ANY_SECRET) != 0) {
                 return 1L;
             }
             // otherwise, return the first character of the name as ID
