@@ -712,10 +712,9 @@ public class PgpKeyOperation {
         PGPSignatureGenerator signatureGenerator;
         {
 
-                PGPSecretKey certificationKey = PgpKeyHelper.getCertificationKey(mContext, masterKeyId);
-                if (certificationKey == null) {
-                    throw new PgpGeneralException(mContext.getString(R.string.error_signature_failed));
-                }
+            if (certificationKey == null) {
+                throw new PgpGeneralMsgIdException(R.string.error_no_signature_key);
+            }
 
                 PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
                         Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(passphrase.toCharArray());
