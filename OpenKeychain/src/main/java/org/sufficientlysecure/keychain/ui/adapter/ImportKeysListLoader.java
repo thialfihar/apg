@@ -51,8 +51,8 @@ public class ImportKeysListLoader
         }
     }
 
-    private Context mContext;
-    private InputData mInputData;
+    private final Context mContext;
+    private final InputData mInputData;
 
     private ArrayList<ImportKeysListEntry> mData = new ArrayList<ImportKeysListEntry>();
     private AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> mEntryListWrapper;
@@ -65,6 +65,12 @@ public class ImportKeysListLoader
 
     @Override
     public AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> loadInBackground() {
+
+        // This has already been loaded! nvm any further, just return
+        if (mEntryListWrapper != null) {
+            return mEntryListWrapper;
+        }
+
         mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mData, null);
 
         if (mInputData == null) {
