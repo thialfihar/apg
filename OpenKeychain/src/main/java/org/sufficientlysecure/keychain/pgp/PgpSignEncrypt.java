@@ -42,6 +42,7 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
@@ -286,9 +287,12 @@ public class PgpSignEncrypt {
         Key signingKey = null;
         KeyRing signingKeyRing = null;
         PGPPrivateKey signaturePrivateKey = null;
+        String signingUserId = null;
         if (enableSignature) {
             try {
                 signingKeyRing = mProviderHelper.getPGPSecretKeyRing(mSignatureMasterKeyId);
+                signingUserId = (String) mProviderHelper.getUnifiedData(mSignatureMasterKeyId,
+                        KeychainContract.KeyRings.USER_ID, ProviderHelper.FIELD_TYPE_STRING);
             } catch (ProviderHelper.NotFoundException e) {
                 throw new NoSigningKeyException();
             }
@@ -372,9 +376,8 @@ public class PgpSignEncrypt {
                 signatureGenerator = new PGPSignatureGenerator(contentSignerBuilder);
                 signatureGenerator.init(signatureType, signaturePrivateKey);
 
-                String userId = signingKeyRing.getMasterKey().getMainUserId();
                 PGPSignatureSubpacketGenerator spGen = new PGPSignatureSubpacketGenerator();
-                spGen.setSignerUserID(false, userId);
+                spGen.setSignerUserID(false, signingUserId);
                 signatureGenerator.setHashedSubpackets(spGen.generate());
             }
         }

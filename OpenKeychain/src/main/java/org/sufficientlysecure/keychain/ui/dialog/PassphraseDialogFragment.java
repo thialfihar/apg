@@ -51,6 +51,7 @@ import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.util.Log;
@@ -158,13 +159,17 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
         alert.setTitle(R.string.title_authentication);
 
         final PGPSecretKey secretKey;
+        final String userId;
 
         if (secretKeyId == Constants.key.symmetric || secretKeyId == Constants.key.none) {
             secretKey = null;
             alert.setMessage(R.string.passphrase_for_symmetric_encryption);
         } else {
             try {
-                secretKey = new ProviderHelper(activity).getPGPSecretKeyRing(secretKeyId).getSecretKey();
+                ProviderHelper helper = new ProviderHelper(activity);
+                secretKey = helper.getPGPSecretKeyRing(secretKeyId).getSecretKey();
+                userId = (String) helper.getUnifiedData(secretKeyId,
+                        KeychainContract.KeyRings.USER_ID, ProviderHelper.FIELD_TYPE_STRING);
             } catch (ProviderHelper.NotFoundException e) {
                 alert.setTitle(R.string.title_key_not_found);
                 alert.setMessage(getString(R.string.key_not_found, secretKeyId));
@@ -177,8 +182,6 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
                 mCanRequestFocus = false;
                 return alert.create();
             }
-
-            String userId = PgpKeyHelper.getMainUserIdSafe(activity, secretKey);
 
             Log.d(Constants.TAG, "User id: '" + userId + "'");
             alert.setMessage(getString(R.string.passphrase_for, userId));
