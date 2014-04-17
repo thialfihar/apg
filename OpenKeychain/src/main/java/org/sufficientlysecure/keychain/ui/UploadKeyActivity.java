@@ -35,6 +35,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.Preferences;
+import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.KeychainIntentService;
@@ -61,7 +62,8 @@ public class UploadKeyActivity extends ActionBarActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, Preferences.getPreferences(this)
-                        .getKeyServers());
+                .getKeyServers()
+        );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mKeyServerSpinner.setAdapter(adapter);
         if (adapter.getCount() > 0) {
@@ -92,7 +94,8 @@ public class UploadKeyActivity extends ActionBarActivity {
         intent.setAction(ApgIntentService.ACTION_UPLOAD_KEYRING);
 
         // set data uri as path to keyring
-        intent.setData(mDataUri);
+        Uri blobUri = KeychainContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
+        intent.setData(blobUri);
 
         // fill values for this action
         Bundle data = new Bundle();
