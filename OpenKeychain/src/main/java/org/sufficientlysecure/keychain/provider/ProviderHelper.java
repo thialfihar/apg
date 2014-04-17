@@ -92,11 +92,12 @@ public class ProviderHelper implements PgpKeyProvider {
     public static final int FIELD_TYPE_STRING = 4;
     public static final int FIELD_TYPE_BLOB = 5;
 
-    public Object getGenericData(Uri uri, String column, int type) {
+    public Object getGenericData(Uri uri, String column, int type) throws NotFoundException {
         return getGenericData(uri, new String[]{column}, new int[]{type}).get(column);
     }
 
-    public HashMap<String, Object> getGenericData(Uri uri, String[] proj, int[] types) {
+    public HashMap<String, Object> getGenericData(Uri uri, String[] proj, int[] types)
+            throws NotFoundException {
         Cursor cursor = mContentResolver.query(uri, proj, null, null, null);
 
         HashMap<String, Object> result = new HashMap<String, Object>(proj.length);
@@ -131,11 +132,13 @@ public class ProviderHelper implements PgpKeyProvider {
         return result;
     }
 
-    public Object getUnifiedData(long masterKeyId, String column, int type) {
+    public Object getUnifiedData(long masterKeyId, String column, int type)
+            throws NotFoundException {
         return getUnifiedData(masterKeyId, new String[]{column}, new int[]{type}).get(column);
     }
 
-    public HashMap<String, Object> getUnifiedData(long masterKeyId, String[] proj, int[] types) {
+    public HashMap<String, Object> getUnifiedData(long masterKeyId, String[] proj, int[] types)
+            throws NotFoundException {
         return getGenericData(KeyRings.buildUnifiedKeyRingUri(Long.toString(masterKeyId)), proj, types);
     }
 
