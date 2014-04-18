@@ -8,39 +8,39 @@ sourceSets {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.0.1'
-    compile 'com.android.support:appcompat-v7:19.0.1'
-    compile project(':OpenPGP-Keychain-API:libraries:openpgp-api-library')
-    compile project(':OpenPGP-Keychain-API:libraries:openkeychain-api-library')
-    compile project(':libraries:HtmlTextView')
-    compile project(':libraries:StickyListHeaders:library')
-    compile project(':libraries:AndroidBootstrap')
-    compile project(':libraries:zxing')
-    compile project(':libraries:zxing-android-integration')
-    compile project(':libraries:spongycastle:core')
-    compile project(':libraries:spongycastle:pg')
-    compile project(':libraries:spongycastle:pkix')
-    compile project(':libraries:spongycastle:prov')
-    compile project(':libraries:Android-AppMsg:library')
+    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:appcompat-v7:19.1.0'
+    compile project(':OpenKeychain-API:libraries:openpgp-api-library')
+    compile project(':OpenKeychain-API:libraries:openkeychain-api-library')
+    compile project(':extern:html-textview')
+    compile project(':extern:StickyListHeaders:library')
+    compile project(':extern:AndroidBootstrap:AndroidBootstrap')
+    compile project(':extern:zxing-qr-code')
+    compile project(':extern:zxing-android-integration')
+    compile project(':extern:spongycastle:core')
+    compile project(':extern:spongycastle:pg')
+    compile project(':extern:spongycastle:pkix')
+    compile project(':extern:spongycastle:prov')
+    compile project(':extern:AppMsg:library')
 
     // Dependencies for the `testLocal` task, make sure to list all your global dependencies here as well
     testLocalCompile 'junit:junit:4.11'
-    testLocalCompile 'org.robolectric:robolectric:2.1.+'
+    testLocalCompile 'org.robolectric:robolectric:2.2'
     testLocalCompile 'com.google.android:android:4.1.1.4'
-    testLocalCompile 'com.android.support:support-v4:19.0.1'
-    testLocalCompile 'com.android.support:appcompat-v7:19.0.1'
-    testLocalCompile project(':OpenPGP-Keychain-API:libraries:openpgp-api-library')
-    testLocalCompile project(':OpenPGP-Keychain-API:libraries:openkeychain-api-library')
-    testLocalCompile project(':libraries:HtmlTextView')
-    testLocalCompile project(':libraries:StickyListHeaders:library')
-    testLocalCompile project(':libraries:AndroidBootstrap')
-    testLocalCompile project(':libraries:zxing')
-    testLocalCompile project(':libraries:zxing-android-integration')
-    testLocalCompile project(':libraries:spongycastle:core')
-    testLocalCompile project(':libraries:spongycastle:pg')
-    testLocalCompile project(':libraries:spongycastle:pkix')
-    testLocalCompile project(':libraries:spongycastle:prov')
-    testLocalCompile project(':libraries:Android-AppMsg:library')
+    testLocalCompile 'com.android.support:support-v4:19.1.0'
+    testLocalCompile 'com.android.support:appcompat-v7:19.1.0'
+    testLocalCompile project(':OpenKeychain-API:libraries:openpgp-api-library')
+    testLocalCompile project(':OpenKeychain-API:libraries:openkeychain-api-library')
+    testLocalCompile project(':extern:html-textview')
+    testLocalCompile project(':extern:StickyListHeaders:library')
+    testLocalCompile project(':extern:AndroidBootstrap:AndroidBootstrap')
+    testLocalCompile project(':extern:zxing-qr-code')
+    testLocalCompile project(':extern:zxing-android-integration')
+    testLocalCompile project(':extern:spongycastle:core')
+    testLocalCompile project(':extern:spongycastle:pg')
+    testLocalCompile project(':extern:spongycastle:pkix')
+    testLocalCompile project(':extern:spongycastle:prov')
+    testLocalCompile project(':extern:AppMsg:library')
 }
 
 android {
@@ -65,7 +65,7 @@ android {
             project.hasProperty('signingKeyAlias') &&
             project.hasProperty('signingKeyPassword')) {
         println "Found sign properties in gradle.properties! Signing build…"
-        
+
         signingConfigs {
             release {
                 storeFile file(signingStoreLocation)
@@ -79,7 +79,7 @@ android {
     } else {
         buildTypes.release.signingConfig = null
     }
-    
+
     // Do not abort build if lint finds errors
     lintOptions {
         abortOnError false
