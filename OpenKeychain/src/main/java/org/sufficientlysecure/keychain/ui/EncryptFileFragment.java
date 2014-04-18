@@ -338,7 +338,7 @@ public class EncryptFileFragment extends Fragment {
                         sendFileIntent.setType("*/*");
                         sendFileIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(mOutputFilename));
                         startActivity(Intent.createChooser(sendFileIntent,
-                                getString(R.string.title_send_file)));
+                                getString(R.string.title_share_file)));
                     }
                 }
             }

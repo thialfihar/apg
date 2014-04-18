@@ -68,7 +68,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
             mKeyServerPreference = (PreferenceScreen) findPreference(Constants.Pref.KEY_SERVERS);
             String servers[] = sPreferences.getKeyServers();
-            mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_key_servers,
+            mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_keyservers,
                     servers.length, servers.length));
             mKeyServerPreference
                     .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -139,7 +139,7 @@ public class PreferencesActivity extends PreferenceActivity {
                         .getStringArrayExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS);
                 sPreferences.setKeyServers(servers);
                 mKeyServerPreference.setSummary(getResources().getQuantityString(
-                        R.plurals.n_key_servers, servers.length, servers.length));
+                        R.plurals.n_keyservers, servers.length, servers.length));
                 break;
             }
 
@@ -174,7 +174,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
             mKeyServerPreference = (PreferenceScreen) findPreference(Constants.Pref.KEY_SERVERS);
             String servers[] = sPreferences.getKeyServers();
-            mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_key_servers,
+            mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_keyservers,
                     servers.length, servers.length));
             mKeyServerPreference
                     .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -200,7 +200,7 @@ public class PreferencesActivity extends PreferenceActivity {
                             .getStringArrayExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS);
                     sPreferences.setKeyServers(servers);
                     mKeyServerPreference.setSummary(getResources().getQuantityString(
-                            R.plurals.n_key_servers, servers.length, servers.length));
+                            R.plurals.n_keyservers, servers.length, servers.length));
                     break;
                 }
 

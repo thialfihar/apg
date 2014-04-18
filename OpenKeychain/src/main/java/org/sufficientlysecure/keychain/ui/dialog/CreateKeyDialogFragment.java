@@ -17,6 +17,7 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -309,6 +310,7 @@ public class CreateKeyDialogFragment extends DialogFragment {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void replaceArrayAdapterContent(ArrayAdapter<CharSequence> arrayAdapter, int stringArrayResourceId) {
         final String[] spinnerValuesStringArray = getResources().getStringArray(stringArrayResourceId);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
