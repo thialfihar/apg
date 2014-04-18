@@ -192,8 +192,9 @@ public class DecryptFragment extends Fragment {
             }
         } else {
             mSignatureLayout.setVisibility(View.GONE);
+            mLookupKey.setVisibility(View.GONE);
 
-            // only successful decryption
+            // successful decryption-only
             mResultLayout.setBackgroundColor(getResources().getColor(R.color.result_blue));
             mResultText.setText(R.string.decrypt_result_decrypted);
         }
@@ -210,7 +211,8 @@ public class DecryptFragment extends Fragment {
                             decryptStart(passphrase);
                         }
                     }
-                });
+                }
+        );
     }
 
     /**
