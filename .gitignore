@@ -32,12 +32,8 @@ pom.xml.*
 #OS Specific
 [Tt]humbs.db
 
-
-#Lint output
-OpenPGP-Keychain/lint-report.html
-OpenPGP-Keychain/lint-report_files/*
-
 Makefile
 todo.txt
 *sublime*
 patches
+.DS_Store

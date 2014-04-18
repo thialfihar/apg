@@ -62,6 +62,8 @@ import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.ApgServiceListener;
 import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.KeyServer;
+import org.thialfihar.android.apg.util.KeybaseKeyServer;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
@@ -107,6 +109,7 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
 
     public static final String ACTION_UPLOAD_KEYRING = Constants.INTENT_PREFIX + "UPLOAD_KEYRING";
     public static final String ACTION_DOWNLOAD_AND_IMPORT_KEYS = Constants.INTENT_PREFIX + "QUERY_KEYRING";
+    public static final String ACTION_IMPORT_KEYBASE_KEYS = Constants.INTENT_PREFIX + "DOWNLOAD_KEYBASE";
 
     public static final String ACTION_CERTIFY_KEYRING = Constants.INTENT_PREFIX + "SIGN_KEYRING";
 
@@ -756,6 +759,56 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
                 }
 
                 sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY);
+            } catch (Exception e) {
+                sendErrorToHandler(e);
+            }
+        } else if (ACTION_IMPORT_KEYBASE_KEYS.equals(action)) {
+            ArrayList<ImportKeysListEntry> entries = data.getParcelableArrayList(DOWNLOAD_KEY_LIST);
+
+            try {
+                KeybaseKeyServer server = new KeybaseKeyServer();
+                for (ImportKeysListEntry entry : entries) {
+                    // the keybase handle is in userId(1)
+                    String username = entry.getUserIds().get(1);
+                    byte[] downloadedKeyBytes = server.get(username).getBytes();
+
+                    // create PGPKeyRing object based on downloaded armored key
+                    PGPKeyRing downloadedKey = null;
+                    BufferedInputStream bufferedInput =
+                            new BufferedInputStream(new ByteArrayInputStream(downloadedKeyBytes));
+                    if (bufferedInput.available() > 0) {
+                        InputStream in = PGPUtil.getDecoderStream(bufferedInput);
+                        PGPObjectFactory objectFactory = new PGPObjectFactory(in);
+
+                        // get first object in block
+                        Object obj;
+                        if ((obj = objectFactory.nextObject()) != null) {
+                            Log.d(Constants.TAG, "Found class: " + obj.getClass());
+
+                            if (obj instanceof PGPKeyRing) {
+                                downloadedKey = (PGPKeyRing) obj;
+                            } else {
+                                throw new PgpGeneralException("Object not recognized as PGPKeyRing!");
+                            }
+                        }
+                    }
+
+                    // save key bytes in entry object for doing the
+                    // actual import afterwards
+                    entry.setBytes(downloadedKey.getEncoded());
+                }
+
+                Intent importIntent = new Intent(this, KeychainIntentService.class);
+                importIntent.setAction(ACTION_IMPORT_KEYRING);
+                Bundle importData = new Bundle();
+                importData.putParcelableArrayList(IMPORT_KEY_LIST, entries);
+                importIntent.putExtra(EXTRA_DATA, importData);
+                importIntent.putExtra(EXTRA_MESSENGER, mMessenger);
+
+                // now import it with this service
+                onHandleIntent(importIntent);
+
+                // result is handled in ACTION_IMPORT_KEYRING
             } catch (Exception e) {
                 sendErrorToHandler(e);
             }

@@ -35,9 +35,11 @@ import org.thialfihar.android.apg.pgp.KeyServer;
 import org.thialfihar.android.apg.ui.adapter.AsyncTaskResultWrapper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysAdapter;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+import org.thialfihar.android.apg.ui.adapter.ImportKeysListKeybaseLoader;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListLoader;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListServerLoader;
 import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayInputStream;
@@ -60,9 +62,11 @@ public class ImportKeysListFragment extends ListFragment implements
     private Uri mDataUri;
     private String mServerQuery;
     private String mKeyServer;
+    private String mKeybaseQuery;
 
     private static final int LOADER_ID_BYTES = 0;
     private static final int LOADER_ID_SERVER_QUERY = 1;
+    private static final int LOADER_ID_KEYBASE = 2;
 
     public byte[] getKeyBytes() {
         return mKeyBytes;
@@ -74,6 +78,10 @@ public class ImportKeysListFragment extends ListFragment implements
 
     public String getServerQuery() {
         return mServerQuery;
+    }
+
+    public String getKeybaseQuery() {
+        return mKeybaseQuery;
     }
 
     public String getKeyServer() {
@@ -148,6 +156,16 @@ public class ImportKeysListFragment extends ListFragment implements
             // give arguments to onCreateLoader()
             getLoaderManager().initLoader(LOADER_ID_SERVER_QUERY, null, this);
         }
+
+        if (mKeybaseQuery != null) {
+            // Start out with a progress indicator.
+            setListShown(false);
+
+            // Prepare the loader. Either re-connect with an existing one,
+            // or start a new one.
+            // give arguments to onCreateLoader()
+            getLoaderManager().initLoader(LOADER_ID_KEYBASE, null, this);
+        }
     }
 
     @Override
@@ -157,16 +175,18 @@ public class ImportKeysListFragment extends ListFragment implements
         // Select checkbox!
         // Update underlying data and notify adapter of change. The adapter will
         // update the view automatically.
+
         ImportKeysListEntry entry = mAdapter.getItem(position);
         entry.setSelected(!entry.isSelected());
         mAdapter.notifyDataSetChanged();
     }
 
-    public void loadNew(byte[] keyBytes, Uri dataUri, String serverQuery, String keyServer) {
+    public void loadNew(byte[] keyBytes, Uri dataUri, String serverQuery, String keyServer, String keybaseQuery) {
         mKeyBytes = keyBytes;
         mDataUri = dataUri;
         mServerQuery = serverQuery;
         mKeyServer = keyServer;
+        mKeybaseQuery = keybaseQuery;
 
         if (mKeyBytes != null || mDataUri != null) {
             // Start out with a progress indicator.
@@ -181,11 +201,18 @@ public class ImportKeysListFragment extends ListFragment implements
 
             getLoaderManager().restartLoader(LOADER_ID_SERVER_QUERY, null, this);
         }
+
+        if (mKeybaseQuery != null) {
+            // Start out with a progress indicator.
+            setListShown(false);
+
+            getLoaderManager().restartLoader(LOADER_ID_KEYBASE, null, this);
+        }
     }
 
     @Override
     public Loader<AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>>
-                onCreateLoader(int id, Bundle args) {
+    onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_BYTES: {
                 InputData inputData = getInputData(mKeyBytes, mDataUri);
@@ -193,6 +220,9 @@ public class ImportKeysListFragment extends ListFragment implements
             }
             case LOADER_ID_SERVER_QUERY: {
                 return new ImportKeysListServerLoader(getActivity(), mServerQuery, mKeyServer);
+            }
+            case LOADER_ID_KEYBASE: {
+                return new ImportKeysListKeybaseLoader(getActivity(), mKeybaseQuery);
             }
 
             default:
@@ -248,7 +278,7 @@ public class ImportKeysListFragment extends ListFragment implements
                 if (error == null) {
                     AppMsg.makeText(
                             getActivity(), getResources().getQuantityString(R.plurals.keys_found,
-                            mAdapter.getCount(), mAdapter.getCount()),
+                                    mAdapter.getCount(), mAdapter.getCount()),
                             AppMsg.STYLE_INFO
                     ).show();
                 } else if (error instanceof KeyServer.InsufficientQuery) {
@@ -263,6 +293,19 @@ public class ImportKeysListFragment extends ListFragment implements
                 }
                 break;
 
+            case LOADER_ID_KEYBASE:
+
+                if (error == null) {
+                    AppMsg.makeText(
+                            getActivity(), getResources().getQuantityString(R.plurals.keys_found,
+                                    mAdapter.getCount(), mAdapter.getCount()),
+                            AppMsg.STYLE_INFO
+                    ).show();
+                }  else if (error instanceof KeyServer.QueryException) {
+                    AppMsg.makeText(getActivity(), R.string.error_keyserver_query,
+                            AppMsg.STYLE_ALERT).show();
+                }
+
             default:
                 break;
         }
@@ -276,6 +319,10 @@ public class ImportKeysListFragment extends ListFragment implements
                 mAdapter.clear();
                 break;
             case LOADER_ID_SERVER_QUERY:
+                // Clear the data in the adapter.
+                mAdapter.clear();
+                break;
+            case LOADER_ID_KEYBASE:
                 // Clear the data in the adapter.
                 mAdapter.clear();
                 break;
