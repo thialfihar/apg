@@ -217,7 +217,6 @@ public class EncryptMessageFragment extends Fragment {
 
         int compressionId = Preferences.getPreferences(getActivity()).getDefaultMessageCompression();
         data.putInt(ApgIntentService.ENCRYPT_COMPRESSION_ID, compressionId);
-//        data.putBoolean(ApgIntentService.ENCRYPT_GENERATE_SIGNATURE, mGenerateSignature);
 
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 

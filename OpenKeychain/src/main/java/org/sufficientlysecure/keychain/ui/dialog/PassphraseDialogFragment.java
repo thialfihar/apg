@@ -49,6 +49,7 @@ import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.compatibility.DialogFragmentWorkaround;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.KeychainContract;
@@ -95,20 +96,24 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
      * encryption. Based on mSecretKeyId it asks for a passphrase to open a private key or it asks
      * for a symmetric passphrase
      */
-    public static void show(FragmentActivity context, long keyId, Handler returnHandler) {
+    public static void show(final FragmentActivity context, final long keyId, final Handler returnHandler) {
         // Create a new Messenger for the communication back
-        Messenger messenger = new Messenger(returnHandler);
+        final Messenger messenger = new Messenger(returnHandler);
 
-        try {
-            PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(context,
-                    messenger, keyId);
+        DialogFragmentWorkaround.INTERFACE.runnableRunDelayed(new Runnable() {
+            public void run() {
+                try {
+                    PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(context,
+                            messenger, keyId);
 
-            passphraseDialog.show(context.getSupportFragmentManager(), "passphraseDialog");
-        } catch (PgpGeneralException e) {
-            Log.d(Constants.TAG, "No passphrase for this secret key, encrypt directly!");
-            // send message to handler to start encryption directly
-            returnHandler.sendEmptyMessage(PassphraseDialogFragment.MESSAGE_OKAY);
-        }
+                    passphraseDialog.show(context.getSupportFragmentManager(), "passphraseDialog");
+                } catch (PgpGeneralException e) {
+                    Log.d(Constants.TAG, "No passphrase for this secret key!");
+                    // send message to handler to start encryption directly
+                    returnHandler.sendEmptyMessage(PassphraseDialogFragment.MESSAGE_OKAY);
+                }
+            }
+        });
     }
 
     /**
@@ -224,8 +229,9 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
                                     } else {
                                         try {
                                             clickSecretKey = PgpKeyHelper.getKeyNum(new ProviderHelper(activity)
-                                                    .getPGPSecretKeyRingWithKeyId(secretKeyId),
-                                                    curKeyIndex);
+                                                            .getPGPSecretKeyRingWithKeyId(secretKeyId),
+                                                    curKeyIndex
+                                            );
                                         } catch (ProviderHelper.NotFoundException e) {
                                             Log.e(Constants.TAG, "key not found!", e);
                                         }
