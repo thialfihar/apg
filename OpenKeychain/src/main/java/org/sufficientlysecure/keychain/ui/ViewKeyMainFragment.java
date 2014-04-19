@@ -276,7 +276,10 @@ public class ViewKeyMainFragment extends Fragment implements
                     }
 
                     String algorithmStr = PgpKeyHelper.getAlgorithmInfo(
-                            data.getInt(INDEX_UNIFIED_ALGORITHM), data.getInt(INDEX_UNIFIED_KEY_SIZE));
+                            getActivity(),
+                            data.getInt(INDEX_UNIFIED_ALGORITHM),
+                            data.getInt(INDEX_UNIFIED_KEY_SIZE)
+                    );
                     mAlgorithm.setText(algorithmStr);
 
                     byte[] fingerprintBlob = data.getBlob(INDEX_UNIFIED_FINGERPRINT);

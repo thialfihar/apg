@@ -46,8 +46,12 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
     private final ArrayList<Boolean> mCheckStates;
 
     public static final String[] USER_IDS_PROJECTION = new String[]{
-            UserIds._ID, UserIds.USER_ID, UserIds.RANK,
-            UserIds.VERIFIED, UserIds.IS_PRIMARY, UserIds.IS_REVOKED
+            UserIds._ID,
+            UserIds.USER_ID,
+            UserIds.RANK,
+            UserIds.VERIFIED,
+            UserIds.IS_PRIMARY,
+            UserIds.IS_REVOKED
     };
 
     public ViewKeyUserIdsAdapter(Context context, Cursor c, int flags, boolean showCheckBoxes) {
@@ -136,12 +140,16 @@ public class ViewKeyUserIdsAdapter extends CursorAdapter implements AdapterView.
 
             int verified = cursor.getInt(mVerifiedId);
             // TODO introduce own resources for this :)
-            if (verified == Certs.VERIFIED_SECRET) {
-                vVerified.setImageResource(R.drawable.key_certify_ok_depth0);
-            } else if (verified == Certs.VERIFIED_SELF) {
-                vVerified.setImageResource(R.drawable.key_certify_ok_self);
-            } else {
-                vVerified.setImageResource(R.drawable.key_certify_error);
+            switch (verified) {
+                case Certs.VERIFIED_SECRET:
+                    vVerified.setImageResource(R.drawable.key_certify_ok_depth0);
+                    break;
+                case Certs.VERIFIED_SELF:
+                    vVerified.setImageResource(R.drawable.key_certify_ok_self);
+                    break;
+                default:
+                    vVerified.setImageResource(R.drawable.key_certify_error);
+                    break;
             }
         }
 

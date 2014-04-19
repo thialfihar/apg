@@ -66,8 +66,8 @@ abstract public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter
         if (cursor != null) {
             mIndexUserId = cursor.getColumnIndexOrThrow(KeyRings.USER_ID);
             mIndexMasterKeyId = cursor.getColumnIndexOrThrow(KeyRings.MASTER_KEY_ID);
-            mIndexExpiry= cursor.getColumnIndexOrThrow(KeyRings.EXPIRY);
-            mIndexRevoked= cursor.getColumnIndexOrThrow(KeyRings.IS_REVOKED);
+            mIndexExpiry = cursor.getColumnIndexOrThrow(KeyRings.EXPIRY);
+            mIndexRevoked = cursor.getColumnIndexOrThrow(KeyRings.IS_REVOKED);
         }
     }
 
@@ -123,7 +123,7 @@ abstract public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter
         h.keyId.setText(PgpKeyHelper.convertKeyIdToHex(masterKeyId));
 
         boolean enabled = true;
-        if(cursor.getInt(mIndexRevoked) != 0) {
+        if (cursor.getInt(mIndexRevoked) != 0) {
             h.status.setText(R.string.revoked);
             enabled = false;
         } else if (!cursor.isNull(mIndexExpiry)
@@ -135,7 +135,6 @@ abstract public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter
         }
 
         h.status.setTag(enabled);
-
     }
 
     @Override
