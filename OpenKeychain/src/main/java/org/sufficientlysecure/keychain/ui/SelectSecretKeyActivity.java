@@ -29,10 +29,10 @@ import org.thialfihar.android.apg.R;
 public class SelectSecretKeyActivity extends ActionBarActivity {
 
     public static final String EXTRA_FILTER_CERTIFY = "filter_certify";
+    public static final String EXTRA_FILTER_SIGN = "filter_sign";
 
     public static final String RESULT_EXTRA_MASTER_KEY_ID = "master_key_id";
 
-    private boolean mFilterCertify;
     private SelectSecretKeyFragment mSelectFragment;
 
     @Override
@@ -46,7 +46,8 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setHomeButtonEnabled(false);
 
-        mFilterCertify = getIntent().getBooleanExtra(EXTRA_FILTER_CERTIFY, false);
+        boolean filterCertify = getIntent().getBooleanExtra(EXTRA_FILTER_CERTIFY, false);
+        boolean filterSign = getIntent().getBooleanExtra(EXTRA_FILTER_SIGN, false);
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -60,7 +61,7 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
             }
 
             // Create an instance of the fragment
-            mSelectFragment = SelectSecretKeyFragment.newInstance(mFilterCertify);
+            mSelectFragment = SelectSecretKeyFragment.newInstance(filterCertify, filterSign);
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction()
