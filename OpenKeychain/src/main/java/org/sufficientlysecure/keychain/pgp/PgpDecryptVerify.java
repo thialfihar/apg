@@ -726,12 +726,6 @@ public class PgpDecryptVerify {
         if (signature != null) {
             updateProgress(R.string.progress_verifying_signature, 90, 100);
 
-            JcaPGPContentVerifierBuilderProvider contentVerifierBuilderProvider =
-                    new JcaPGPContentVerifierBuilderProvider()
-                            .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
-
-            signature.init(contentVerifierBuilderProvider, signatureKey);
-
             InputStream sigIn = new BufferedInputStream(new ByteArrayInputStream(clearText));
 
             lookAhead = readInputLine(lineOut, sigIn);
