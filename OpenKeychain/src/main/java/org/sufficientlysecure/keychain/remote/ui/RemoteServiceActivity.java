@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.thialfihar.android.apg.remote;
+package org.thialfihar.android.apg.remote.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +30,7 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.AccountSettings;
 import org.thialfihar.android.apg.remote.AppSettings;
@@ -148,7 +148,7 @@ public class RemoteServiceActivity extends ActionBarActivity {
                                         getString(R.string.api_register_error_select_key));
                             } else {
                                 new ProviderHelper(RemoteServiceActivity.this).insertApiAccount(
-                                        KeychainContract.ApiAccounts.buildBaseUri(packageName),
+                                        ApgContract.ApiAccounts.buildBaseUri(packageName),
                                         mAccSettingsFragment.getAccSettings());
 
                                 // give data through for new service call

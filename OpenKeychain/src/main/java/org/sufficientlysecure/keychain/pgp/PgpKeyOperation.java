@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import android.content.Context;
 
@@ -40,6 +40,7 @@ import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
@@ -47,7 +48,6 @@ import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.Primes;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -70,7 +70,7 @@ import java.util.TimeZone;
  */
 public class PgpKeyOperation {
     private Context mContext;
-    private ProgressDialogUpdater mProgress;
+    private Progressable mProgress;
 
     private static final int[] PREFERRED_SYMMETRIC_ALGORITHMS = new int[]{
             SymmetricKeyAlgorithmTags.AES_256, SymmetricKeyAlgorithmTags.AES_192,
@@ -82,7 +82,7 @@ public class PgpKeyOperation {
             CompressionAlgorithmTags.ZLIB, CompressionAlgorithmTags.BZIP2,
             CompressionAlgorithmTags.ZIP};
 
-    public PgpKeyOperation(Context context, ProgressDialogUpdater progress) {
+    public PgpKeyOperation(Context context, Progressable progress) {
         super();
         this.mContext = context;
         this.mProgress = progress;

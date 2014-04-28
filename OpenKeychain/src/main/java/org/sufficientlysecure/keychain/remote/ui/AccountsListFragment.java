@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.ui.widget.FixedListView;
 import org.thialfihar.android.apg.util.Log;
 
@@ -126,8 +126,8 @@ public class AccountsListFragment extends ListFragment implements
 
     // These are the Contacts rows that we will retrieve.
     static final String[] PROJECTION = new String[]{
-            KeychainContract.ApiAccounts._ID, // 0
-            KeychainContract.ApiAccounts.ACCOUNT_NAME // 1
+            ApgContract.ApiAccounts._ID, // 0
+            ApgContract.ApiAccounts.ACCOUNT_NAME // 1
     };
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -137,7 +137,7 @@ public class AccountsListFragment extends ListFragment implements
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
         return new CursorLoader(getActivity(), mDataUri, PROJECTION, null, null,
-                KeychainContract.ApiAccounts.ACCOUNT_NAME + " COLLATE LOCALIZED ASC");
+                ApgContract.ApiAccounts.ACCOUNT_NAME + " COLLATE LOCALIZED ASC");
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

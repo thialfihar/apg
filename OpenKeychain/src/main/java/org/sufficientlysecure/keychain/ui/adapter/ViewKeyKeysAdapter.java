@@ -31,7 +31,7 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
+import org.thialfihar.android.apg.provider.ApgContract.Keys;
 
 import java.util.Date;
 

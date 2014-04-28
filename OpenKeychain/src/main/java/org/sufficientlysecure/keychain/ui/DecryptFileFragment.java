@@ -42,8 +42,6 @@ import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.ui.dialog.DeleteFileDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.FileDialogFragment;
 import org.thialfihar.android.apg.util.Log;

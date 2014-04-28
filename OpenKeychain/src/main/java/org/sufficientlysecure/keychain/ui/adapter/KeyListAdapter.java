@@ -29,7 +29,7 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.util.Log;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -71,8 +71,8 @@ public class KeyListAdapter extends HighlightQueryCursorAdapter
      */
     private void initIndex(Cursor cursor) {
         if (cursor != null) {
-            mIndexUserId = cursor.getColumnIndexOrThrow(KeychainContract.UserIds.USER_ID);
-            mIndexIsRevoked = cursor.getColumnIndexOrThrow(KeychainContract.Keys.IS_REVOKED);
+            mIndexUserId = cursor.getColumnIndexOrThrow(ApgContract.UserIds.USER_ID);
+            mIndexIsRevoked = cursor.getColumnIndexOrThrow(ApgContract.Keys.IS_REVOKED);
         }
     }
 

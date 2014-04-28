@@ -52,7 +52,7 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.DialogFragmentWorkaround;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.util.Log;
@@ -69,27 +69,6 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
     private Messenger mMessenger;
     private EditText mPassphraseEditText;
     private boolean mCanRequestFocus;
-
-    /**
-     * Shows passphrase dialog to cache a new passphrase the user enters for using it later for
-     * encryption. Based on mSecretKeyId it asks for a passphrase to open a private key or it asks
-     * for a symmetric passphrase
-     */
-    public static void show(FragmentActivity context, long keyId, Handler returnHandler) {
-        // Create a new Messenger for the communication back
-        Messenger messenger = new Messenger(returnHandler);
-
-        try {
-            PassphraseDialogFragment passphraseDialog = PassphraseDialogFragment.newInstance(context,
-                    messenger, keyId);
-
-            passphraseDialog.show(context.getSupportFragmentManager(), "passphraseDialog");
-        } catch (PgpGeneralException e) {
-            Log.d(Constants.TAG, "No passphrase for this secret key, encrypt directly!");
-            // send message to handler to start encryption directly
-            returnHandler.sendEmptyMessage(PassphraseDialogFragment.MESSAGE_OKAY);
-        }
-    }
 
     /**
      * Shows passphrase dialog to cache a new passphrase the user enters for using it later for
@@ -174,7 +153,7 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
                 ProviderHelper helper = new ProviderHelper(activity);
                 secretKey = helper.getPGPSecretKeyRing(secretKeyId).getSecretKey();
                 userId = (String) helper.getUnifiedData(secretKeyId,
-                        KeychainContract.KeyRings.USER_ID, ProviderHelper.FIELD_TYPE_STRING);
+                        ApgContract.KeyRings.USER_ID, ProviderHelper.FIELD_TYPE_STRING);
             } catch (ProviderHelper.NotFoundException e) {
                 alert.setTitle(R.string.title_key_not_found);
                 alert.setMessage(getString(R.string.key_not_found, secretKeyId));

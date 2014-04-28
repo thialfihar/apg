@@ -49,12 +49,12 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.UserIds;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.adapter.ViewKeyUserIdsAdapter;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -347,7 +347,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
         intent.setAction(ApgIntentService.ACTION_UPLOAD_KEYRING);
 
         // set data uri as path to keyring
-        Uri blobUri = KeychainContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
+        Uri blobUri = ApgContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
         intent.setData(blobUri);
 
         // fill values for this action
@@ -366,7 +366,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
                 // handle messages by standard ApgHandler first
                 super.handleMessage(message);
 
-                if (message.arg1 == KeychainIntentServiceHandler.MESSAGE_OKAY) {
+                if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                     AppMsg.makeText(CertifyKeyActivity.this, R.string.key_send_success,
                             AppMsg.STYLE_INFO).show();
 

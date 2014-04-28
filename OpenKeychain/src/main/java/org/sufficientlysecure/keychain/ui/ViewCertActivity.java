@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -44,9 +44,9 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.Certs;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract.Certs;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
 
@@ -148,10 +148,10 @@ public class ViewCertActivity extends ActionBarActivity
             try {
                 ProviderHelper providerHelper = new ProviderHelper(this);
                 PGPKeyRing signeeRing = providerHelper.getPGPKeyRing(
-                        KeychainContract.KeyRingData.buildPublicKeyRingUri(
+                        ApgContract.KeyRingData.buildPublicKeyRingUri(
                                 Long.toString(data.getLong(INDEX_MASTER_KEY_ID))));
                 PGPKeyRing signerRing = providerHelper.getPGPKeyRing(
-                        KeychainContract.KeyRingData.buildPublicKeyRingUri(
+                        ApgContract.KeyRingData.buildPublicKeyRingUri(
                                 Long.toString(sig.getKeyID())));
 
                 try {

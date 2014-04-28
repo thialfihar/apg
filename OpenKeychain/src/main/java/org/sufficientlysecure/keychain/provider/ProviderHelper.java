@@ -43,12 +43,12 @@ import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyProvider;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
-import org.thialfihar.android.apg.provider.KeychainContract.Certs;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.ApgContract.ApiApps;
+import org.thialfihar.android.apg.provider.ApgContract.Certs;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRingData;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.Keys;
+import org.thialfihar.android.apg.provider.ApgContract.UserIds;
 import org.thialfihar.android.apg.remote.AccountSettings;
 import org.thialfihar.android.apg.remote.AppSettings;
 import org.thialfihar.android.apg.util.IterableIterator;
@@ -352,7 +352,7 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         try {
-            mContentResolver.applyBatch(KeychainContract.CONTENT_AUTHORITY, operations);
+            mContentResolver.applyBatch(ApgContract.CONTENT_AUTHORITY, operations);
         } catch (RemoteException e) {
             Log.e(Constants.TAG, "applyBatch failed!", e);
         } catch (OperationApplicationException e) {
@@ -633,16 +633,16 @@ public class ProviderHelper implements PgpKeyProvider {
 
     private ContentValues contentValueForApiAccounts(AccountSettings accSettings) {
         ContentValues values = new ContentValues();
-        values.put(KeychainContract.ApiAccounts.ACCOUNT_NAME, accSettings.getAccountName());
-        values.put(KeychainContract.ApiAccounts.KEY_ID, accSettings.getKeyId());
-        values.put(KeychainContract.ApiAccounts.COMPRESSION, accSettings.getCompression());
-        values.put(KeychainContract.ApiAccounts.ENCRYPTION_ALGORITHM, accSettings.getEncryptionAlgorithm());
-        values.put(KeychainContract.ApiAccounts.HASH_ALORITHM, accSettings.getHashAlgorithm());
+        values.put(ApgContract.ApiAccounts.ACCOUNT_NAME, accSettings.getAccountName());
+        values.put(ApgContract.ApiAccounts.KEY_ID, accSettings.getKeyId());
+        values.put(ApgContract.ApiAccounts.COMPRESSION, accSettings.getCompression());
+        values.put(ApgContract.ApiAccounts.ENCRYPTION_ALGORITHM, accSettings.getEncryptionAlgorithm());
+        values.put(ApgContract.ApiAccounts.HASH_ALORITHM, accSettings.getHashAlgorithm());
         return values;
     }
 
     public void insertApiApp(AppSettings appSettings) {
-        mContentResolver.insert(KeychainContract.ApiApps.CONTENT_URI,
+        mContentResolver.insert(ApgContract.ApiApps.CONTENT_URI,
                 contentValueForApiApps(appSettings));
     }
 
@@ -670,9 +670,9 @@ public class ProviderHelper implements PgpKeyProvider {
         if (cur != null && cur.moveToFirst()) {
             settings = new AppSettings();
             settings.setPackageName(cur.getString(
-                    cur.getColumnIndex(KeychainContract.ApiApps.PACKAGE_NAME)));
+                    cur.getColumnIndex(ApgContract.ApiApps.PACKAGE_NAME)));
             settings.setPackageSignature(cur.getBlob(
-                    cur.getColumnIndex(KeychainContract.ApiApps.PACKAGE_SIGNATURE)));
+                    cur.getColumnIndex(ApgContract.ApiApps.PACKAGE_SIGNATURE)));
         }
 
         return settings;
@@ -686,15 +686,15 @@ public class ProviderHelper implements PgpKeyProvider {
             settings = new AccountSettings();
 
             settings.setAccountName(cur.getString(
-                    cur.getColumnIndex(KeychainContract.ApiAccounts.ACCOUNT_NAME)));
+                    cur.getColumnIndex(ApgContract.ApiAccounts.ACCOUNT_NAME)));
             settings.setKeyId(cur.getLong(
-                    cur.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID)));
+                    cur.getColumnIndex(ApgContract.ApiAccounts.KEY_ID)));
             settings.setCompression(cur.getInt(
-                    cur.getColumnIndexOrThrow(KeychainContract.ApiAccounts.COMPRESSION)));
+                    cur.getColumnIndexOrThrow(ApgContract.ApiAccounts.COMPRESSION)));
             settings.setHashAlgorithm(cur.getInt(
-                    cur.getColumnIndexOrThrow(KeychainContract.ApiAccounts.HASH_ALORITHM)));
+                    cur.getColumnIndexOrThrow(ApgContract.ApiAccounts.HASH_ALORITHM)));
             settings.setEncryptionAlgorithm(cur.getInt(
-                    cur.getColumnIndexOrThrow(KeychainContract.ApiAccounts.ENCRYPTION_ALGORITHM)));
+                    cur.getColumnIndexOrThrow(ApgContract.ApiAccounts.ENCRYPTION_ALGORITHM)));
         }
 
         return settings;
@@ -705,7 +705,7 @@ public class ProviderHelper implements PgpKeyProvider {
 
         Cursor cursor = mContentResolver.query(uri, null, null, null, null);
         if (cursor != null) {
-            int keyIdColumn = cursor.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID);
+            int keyIdColumn = cursor.getColumnIndex(ApgContract.ApiAccounts.KEY_ID);
             while (cursor.moveToNext()) {
                 keyIds.add(cursor.getLong(keyIdColumn));
             }

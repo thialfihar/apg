@@ -35,11 +35,9 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
 import org.thialfihar.android.apg.util.Log;
 
 /**
@@ -94,7 +92,7 @@ public class UploadKeyActivity extends ActionBarActivity {
         intent.setAction(ApgIntentService.ACTION_UPLOAD_KEYRING);
 
         // set data uri as path to keyring
-        Uri blobUri = KeychainContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
+        Uri blobUri = ApgContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
         intent.setData(blobUri);
 
         // fill values for this action

@@ -37,7 +37,7 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 

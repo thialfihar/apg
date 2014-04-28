@@ -145,7 +145,6 @@ public class ImportKeysQrCodeFragment extends Fragment {
             }
 
             break;
-        }
 
         default:
             super.onActivityResult(requestCode, resultCode, data);

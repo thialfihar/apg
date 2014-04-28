@@ -35,7 +35,7 @@ import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
 
@@ -75,7 +75,7 @@ public class ViewKeyActivityJB extends ViewKeyActivity implements CreateNdefMess
                         new AsyncTask<NfcAdapter, Void, Void>() {
                             protected Void doInBackground(NfcAdapter... adapter) {
                                 try {
-                                    Uri dataUri = KeychainContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
+                                    Uri dataUri = ApgContract.KeyRingData.buildPublicKeyRingUri(mDataUri);
                                     mSharedKeyringBytes = ProviderHelper.getPGPKeyRing(
                                             ViewKeyActivityJB.this, dataUri).getEncoded();
                                 } catch (IOException e) {

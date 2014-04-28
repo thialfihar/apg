@@ -74,6 +74,7 @@
     <string name="menu_create_key">Create key</string>
     <string name="menu_create_key_expert">Create key (expert)</string>
     <string name="menu_search">Search</string>
+    <string name="menu_import">Import</string>
     <string name="menu_import_from_key_server">Keyserver</string>
     <string name="menu_key_server">Keyserver…</string>
     <string name="menu_update_key">Update from keyserver</string>
@@ -474,16 +475,6 @@
     <string name="encrypt_content_edit_text_hint">Write message here to encrypt and/or sign…</string>
     <string name="decrypt_content_edit_text_hint">Enter ciphertext here to decrypt and/or verify…</string>
 
-    <!-- unsorted -->
-    <string name="permission_read_key_details_label">Read key details from APG.</string>
-    <string name="permission_read_key_details_description">Read key details of public and secret keys stored in APG, such as key ID and user IDs. The keys themselves can NOT be read.</string>
-    <string name="show_unknown_signatures">Show unknown signatures</string>
-    <string name="section_signer_id">Signer</string>
-    <string name="section_cert">Certificate Details</string>
-    <string name="label_user_id">User ID</string>
-    <string name="unknown_uid">&lt;unknown&gt;</string>
-    <string name="empty_certs">No certificates for this key</string>
-    <string name="section_uids_to_sign">User IDs to sign</string>
     <!-- certifications -->
     <string name="cert_default">default</string>
     <string name="cert_none">none</string>
@@ -496,6 +487,8 @@
     <string name="cert_verify_unavailable">key unavailable</string>
 
     <!-- unsorted -->
+    <string name="permission_read_key_details_label">Read key details from APG.</string>
+    <string name="permission_read_key_details_description">Read key details of public and secret keys stored in APG, such as key ID and user IDs. The keys themselves can NOT be read.</string>
     <string name="section_signer_id">Signer</string>
     <string name="section_cert">Certificate Details</string>
     <string name="label_user_id">User ID</string>

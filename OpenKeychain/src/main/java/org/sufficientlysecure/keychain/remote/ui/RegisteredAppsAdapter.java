@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.provider.ApgContract.ApiApps;
 
 public class RegisteredAppsAdapter extends CursorAdapter {
 

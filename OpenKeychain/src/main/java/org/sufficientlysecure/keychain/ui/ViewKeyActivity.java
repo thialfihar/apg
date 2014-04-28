@@ -49,7 +49,6 @@ import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ApgContract;
-import org.thialfihar.android.apg.provider.KeychainContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
 import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;

@@ -55,15 +55,13 @@ import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.PublicKeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
-import org.thialfihar.android.apg.util.KeychainServiceListener;
+import org.thialfihar.android.apg.util.ApgServiceListener;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
 import java.io.BufferedInputStream;
@@ -84,7 +82,7 @@ import java.util.List;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class ApgIntentService extends IntentService implements Progressable, KeychainServiceListener {
+public class ApgIntentService extends IntentService implements Progressable, ApgServiceListener {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";
@@ -698,7 +696,7 @@ public class ApgIntentService extends IntentService implements Progressable, Key
 
                 String selection = null;
                 if (!exportAll) {
-                    selection = KeychainDatabase.Tables.KEYS + "." + KeyRings.MASTER_KEY_ID + " IN( ";
+                    selection = ApgDatabase.Tables.KEYS + "." + KeyRings.MASTER_KEY_ID + " IN( ";
                     for (long l : masterKeyIds) {
                         selection += Long.toString(l) + ",";
                     }

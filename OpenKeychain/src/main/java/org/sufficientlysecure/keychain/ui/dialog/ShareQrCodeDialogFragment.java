@@ -34,8 +34,8 @@ import com.devspark.appmsg.AppMsg;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.QrCodeUtils;
@@ -118,7 +118,7 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
                 mText.setText(R.string.share_qr_code_dialog_start);
 
                 try {
-                    Uri uri = KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
+                    Uri uri = ApgContract.KeyRingData.buildPublicKeyRingUri(dataUri);
                     content = providerHelper.getKeyRingAsArmoredString(uri);
                 } catch (IOException e) {
                     Log.e(Constants.TAG, "error processing key!", e);

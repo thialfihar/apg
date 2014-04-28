@@ -38,8 +38,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.provider.ApgContract;
+import org.thialfihar.android.apg.provider.ApgContract.ApiApps;
 
 public class AppsListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -57,7 +57,7 @@ public class AppsListFragment extends ListFragment implements
                 String selectedPackageName = mAdapter.getItemPackageName(position);
                 // edit app settings
                 Intent intent = new Intent(getActivity(), AppSettingsActivity.class);
-                intent.setData(KeychainContract.ApiApps.buildByPackageNameUri(selectedPackageName));
+                intent.setData(ApgContract.ApiApps.buildByPackageNameUri(selectedPackageName));
                 startActivity(intent);
             }
         });

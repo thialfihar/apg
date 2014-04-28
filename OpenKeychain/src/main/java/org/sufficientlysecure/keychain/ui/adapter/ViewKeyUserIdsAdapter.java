@@ -32,8 +32,8 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract.Certs;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.ApgContract.Certs;
+import org.thialfihar.android.apg.provider.ApgContract.UserIds;
 
 import java.util.ArrayList;
 

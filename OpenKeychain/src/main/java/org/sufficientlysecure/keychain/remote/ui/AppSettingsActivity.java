@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.thialfihar.android.apg.remote;
+package org.thialfihar.android.apg.remote.ui;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -29,7 +29,7 @@ import android.view.MenuItem;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.ui.AccountsListFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -99,7 +99,7 @@ public class AppSettingsActivity extends ActionBarActivity {
         }
         setTitle(appName);
 
-        Uri accountsUri = appUri.buildUpon().appendPath(KeychainContract.PATH_ACCOUNTS).build();
+        Uri accountsUri = appUri.buildUpon().appendPath(ApgContract.PATH_ACCOUNTS).build();
         Log.d(Constants.TAG, "accountsUri: " + accountsUri);
         startListFragment(savedInstanceState, accountsUri);
     }

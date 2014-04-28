@@ -34,18 +34,17 @@ import org.spongycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.HkpKeyServer;
 import org.thialfihar.android.apg.pgp.KeyServer.AddKeyException;
+import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.KeyServer.AddKeyException;
-import org.thialfihar.android.apg.util.KeychainServiceListener;
+import org.thialfihar.android.apg.util.ApgServiceListener;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -57,7 +56,7 @@ public class PgpImportExport {
 
     private Context mContext;
     private Progressable mProgress;
-    private KeychainServiceListener mKeychainServiceListener;
+    private ApgServiceListener mApgServiceListener;
     private ProviderHelper mProviderHelper;
 
     public static final int RETURN_OK = 0;
@@ -73,12 +72,12 @@ public class PgpImportExport {
     }
 
     public PgpImportExport(Context context, Progressable progress,
-                KeychainServiceListener keychainListener) {
+                ApgServiceListener keychainListener) {
         super();
         this.mContext = context;
         this.mProgress = progress;
         this.mProviderHelper = new ProviderHelper(context);
-        this.mKeychainServiceListener = keychainListener;
+        this.mApgServiceListener = keychainListener;
     }
 
     public void updateProgress(int message, int current, int total) {
@@ -213,7 +212,7 @@ public class PgpImportExport {
                 // TODO: inform user?
             }
 
-            if (mKeychainServiceListener.hasServiceStopped()) {
+            if (mApgServiceListener.hasServiceStopped()) {
                 arOutStream.close();
                 return null;
             }
@@ -238,7 +237,7 @@ public class PgpImportExport {
                 // TODO: inform user?
             }
 
-            if (mKeychainServiceListener.hasServiceStopped()) {
+            if (mApgServiceListener.hasServiceStopped()) {
                 arOutStream.close();
                 return null;
             }

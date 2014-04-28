@@ -17,6 +17,6 @@
 
 package org.thialfihar.android.apg.util;
 
-public interface KeychainServiceListener {
+public interface ApgServiceListener {
     boolean hasServiceStopped();
 }

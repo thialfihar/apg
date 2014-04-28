@@ -46,6 +46,7 @@ import com.devspark.appmsg.AppMsg;
 
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -53,11 +54,13 @@ import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.service.KeychainIntentService;
-import org.thialfihar.android.apg.service.KeychainIntentServiceHandler;
+import org.thialfihar.android.apg.service.ApgIntentService;
+import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
@@ -292,7 +295,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             Log.d(Constants.TAG, "uri: " + mDataUri);
 
             try {
-                Uri secretUri = KeychainContract.KeyRingData.buildSecretKeyRingUri(mDataUri);
+                Uri secretUri = ApgContract.KeyRingData.buildSecretKeyRingUri(mDataUri);
                 mKeyRing = (PGPSecretKeyRing) new ProviderHelper(this).getPGPKeyRing(secretUri);
 
                 PGPSecretKey masterKey = mKeyRing.getSecretKey();
@@ -593,7 +596,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                         Intent data = new Intent();
 
                         // return uri pointing to new created key
-                        Uri uri = KeychainContract.KeyRings.buildPublicKeyRingsByKeyIdUri(
+                        Uri uri = ApgContract.KeyRings.buildPublicKeyRingsByKeyIdUri(
                                 String.valueOf(getMasterKeyId()));
                         data.setData(uri);
 

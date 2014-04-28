@@ -32,7 +32,7 @@ import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.Log;
 
@@ -161,7 +161,7 @@ public abstract class RemoteService extends Service {
         String currentPkg = getCurrentCallingPackage();
         Log.d(Constants.TAG, "accountName: " + accountName);
 
-        Uri uri = KeychainContract.ApiAccounts.buildByPackageAndAccountUri(currentPkg, accountName);
+        Uri uri = ApgContract.ApiAccounts.buildByPackageAndAccountUri(currentPkg, accountName);
 
         AccountSettings settings = mProviderHelper.getApiAccountSettings(uri);
 

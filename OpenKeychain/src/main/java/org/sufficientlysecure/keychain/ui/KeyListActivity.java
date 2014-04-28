@@ -27,8 +27,8 @@ import com.devspark.appmsg.AppMsg;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.ApgContract;
+import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.IOException;
@@ -82,9 +82,9 @@ public class KeyListActivity extends DrawerActivity {
 
             case R.id.menu_key_list_debug_read:
                 try {
-                    KeychainDatabase.debugRead(this);
+                    ApgDatabase.debugRead(this);
                     AppMsg.makeText(this, "Restored from backup", AppMsg.STYLE_CONFIRM).show();
-                    getContentResolver().notifyChange(KeychainContract.KeyRings.CONTENT_URI, null);
+                    getContentResolver().notifyChange(ApgContract.KeyRings.CONTENT_URI, null);
                 } catch(IOException e) {
                     Log.e(Constants.TAG, "IO Error", e);
                     AppMsg.makeText(this, "IO Error: " + e.getMessage(), AppMsg.STYLE_ALERT).show();
@@ -93,7 +93,7 @@ public class KeyListActivity extends DrawerActivity {
 
             case R.id.menu_key_list_debug_write:
                 try {
-                    KeychainDatabase.debugWrite(this);
+                    ApgDatabase.debugWrite(this);
                     AppMsg.makeText(this, "Backup successful", AppMsg.STYLE_CONFIRM).show();
                 } catch(IOException e) {
                     Log.e(Constants.TAG, "IO Error", e);

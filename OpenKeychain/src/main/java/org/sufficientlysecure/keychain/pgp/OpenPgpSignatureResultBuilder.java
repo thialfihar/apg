@@ -18,8 +18,8 @@
 package org.sufficientlysecure.keychain.pgp;
 
 import org.openintents.openpgp.OpenPgpSignatureResult;
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.util.Log;
 
 /**
  * This class can be used to build OpenPgpSignatureResult objects based on several checks.

@@ -33,11 +33,11 @@ import android.widget.ListView;
 
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.Keys;
+import org.thialfihar.android.apg.provider.ApgContract.UserIds;
+import org.thialfihar.android.apg.provider.ApgDatabase.Tables;
+import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
 
 public class SelectSecretKeyFragment extends ListFragment implements

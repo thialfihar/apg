@@ -37,8 +37,8 @@ import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
-import org.thialfihar.android.apg.provider.KeychainContract.ApiAccounts;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.ApiAccounts;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.ui.RemoteServiceActivity;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
@@ -167,7 +167,6 @@ public class OpenPgpService extends RemoteService {
                 InputData inputData = new InputData(is, inputLength);
 
                 // sign-only
-                    new PgpSignEncrypt.Builder(new ProviderHelper(getContext()), inputData, os,
                 PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(
                         new ProviderHelper(getContext()),
                         PgpHelper.getFullVersion(getContext()),
@@ -254,7 +253,7 @@ public class OpenPgpService extends RemoteService {
                 PgpSignEncrypt.Builder builder = new PgpSignEncrypt.Builder(
                         new ProviderHelper(getContext()),
                         PgpHelper.getFullVersion(getContext()),
-                        inputData, os, new ProviderHelper(this);
+                        inputData, os, new ProviderHelper(this));
                 builder.setEnableAsciiArmorOutput(asciiArmor)
                         .setCompressionId(accSettings.getCompression())
                         .setSymmetricEncryptionAlgorithm(accSettings.getEncryptionAlgorithm())

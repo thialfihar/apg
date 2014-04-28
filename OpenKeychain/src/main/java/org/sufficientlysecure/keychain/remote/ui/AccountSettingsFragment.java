@@ -33,7 +33,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.AccountSettings;
 import org.thialfihar.android.apg.ui.EditKeyActivity;
@@ -71,7 +71,7 @@ public class AccountSettingsFragment extends Fragment implements
         this.mAccSettings = accountSettings;
 
         mAccNameView.setText(accountSettings.getAccountName());
-        Uri keyUri = KeychainContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
+        Uri keyUri = ApgContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
             String.valueOf(accountSettings.getKeyId()));
         mSelectKeyFragment.selectKey(keyUri);
         mEncryptionAlgorithm.setSelection(mEncryptionAdapter.getPosition(accountSettings

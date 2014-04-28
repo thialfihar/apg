@@ -36,11 +36,9 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.provider.KeychainContract;
+import org.thialfihar.android.apg.provider.ApgContract;
 
 public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int REQUEST_CODE_SELECT_KEY = 0x00008882;
 
     private TextView mKeyUserId;
     private TextView mKeyUserIdRest;
@@ -60,8 +58,8 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
     //The Projection we will retrieve, Master Key ID is for convenience sake,
     //to avoid having to pass the Key Around
     final String[] PROJECTION = new String[] {
-            KeychainContract.Keys.MASTER_KEY_ID,
-            KeychainContract.UserIds.USER_ID
+            ApgContract.Keys.MASTER_KEY_ID,
+            ApgContract.UserIds.USER_ID
     };
     final int INDEX_MASTER_KEY_ID = 0;
     final int INDEX_USER_ID = 1;
@@ -133,7 +131,7 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
 
     //For AppSettingsFragment
     public void selectKey(long masterKeyId) {
-        Uri buildUri = KeychainContract.KeyRings.buildGenericKeyRingUri(String.valueOf(masterKeyId));
+        Uri buildUri = ApgContract.KeyRings.buildGenericKeyRingUri(String.valueOf(masterKeyId));
         mReceivedUri = buildUri;
         getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
@@ -147,7 +145,7 @@ public class SelectSecretKeyLayoutFragment extends Fragment implements LoaderMan
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = KeychainContract.KeyRings.buildUnifiedKeyRingUri(mReceivedUri);
+        Uri uri = ApgContract.KeyRings.buildUnifiedKeyRingUri(mReceivedUri);
         //We don't care about the Loader id
         return new CursorLoader(getActivity(), uri, PROJECTION, null, null, null);
     }

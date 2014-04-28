@@ -1,8 +1,8 @@
 apply plugin: 'android'
 
 dependencies {
-    compile 'com.android.support:support-v4:19.0.1'
-    compile 'com.android.support:appcompat-v7:19.0.1'
+    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:appcompat-v7:19.1.0'
     compile 'com.github.johnkil.android-appmsg:appmsg:1.2.0'
     compile 'se.emilsjolander:stickylistheaders:2.1.5'
     compile 'com.google.zxing:core:2.2'

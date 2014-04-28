@@ -32,8 +32,8 @@ import org.thialfihar.android.apg.BuildConfig;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.util.Log;
-import org.thialfihar.android.apg.util.ProgressDialogUpdater;
 
 import java.io.File;
 import java.io.FileNotFoundException;

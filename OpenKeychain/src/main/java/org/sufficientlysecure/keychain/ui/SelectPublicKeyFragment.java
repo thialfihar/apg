@@ -43,11 +43,11 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.ListFragmentWorkaround;
-import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
-import org.thialfihar.android.apg.provider.KeychainContract.Keys;
-import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
-import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
-import org.thialfihar.android.apg.provider.KeychainDatabase;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.Keys;
+import org.thialfihar.android.apg.provider.ApgContract.UserIds;
+import org.thialfihar.android.apg.provider.ApgDatabase.Tables;
+import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
 
 import java.util.Vector;
