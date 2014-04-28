@@ -783,7 +783,6 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
                         // get first object in block
                         Object obj;
                         if ((obj = objectFactory.nextObject()) != null) {
-                            Log.d(Constants.TAG, "Found class: " + obj.getClass());
 
                             if (obj instanceof PGPKeyRing) {
                                 downloadedKey = (PGPKeyRing) obj;
@@ -840,7 +839,6 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
                         // get first object in block
                         Object obj;
                         if ((obj = objectFactory.nextObject()) != null) {
-                            Log.d(Constants.TAG, "Found class: " + obj.getClass());
 
                             if (obj instanceof PGPKeyRing) {
                                 downloadedKey = (PGPKeyRing) obj;
