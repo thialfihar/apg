@@ -27,14 +27,12 @@ import android.view.View;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.AccountSettings;
 import org.thialfihar.android.apg.remote.AppSettings;
-import org.thialfihar.android.apg.remote.ui.AccountSettingsFragment;
 import org.thialfihar.android.apg.ui.SelectPublicKeyFragment;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.util.Log;
@@ -97,8 +95,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
             Log.d(Constants.TAG, "ACTION_REGISTER packageName: " + packageName);
 
             // Inflate a "Done"/"Cancel" custom action bar view
-            ActionBarHelper.setTwoButtonView(getSupportActionBar(), R.string.api_register_allow,
-                                                R.drawable.ic_action_done,
+            ActionBarHelper.setTwoButtonView(getSupportActionBar(),
+                    R.string.api_register_allow, R.drawable.ic_action_done,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -225,8 +223,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
             }
 
             // Inflate a "Done"/"Cancel" custom action bar view
-            ActionBarHelper.setTwoButtonView(getSupportActionBar(), R.string.btn_okay,
-                    R.drawable.ic_action_done,
+            ActionBarHelper.setTwoButtonView(getSupportActionBar(),
+                    R.string.btn_okay, R.drawable.ic_action_done,
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -279,8 +277,8 @@ public class RemoteServiceActivity extends ActionBarActivity {
             String text = "<font color=\"red\">" + errorMessage + "</font>";
 
             // Inflate a "Done" custom action bar view
-            ActionBarHelper.setOneButtonView(getSupportActionBar(), R.string.btn_okay,
-                    R.drawable.ic_action_done,
+            ActionBarHelper.setOneButtonView(getSupportActionBar(),
+                    R.string.btn_okay, R.drawable.ic_action_done,
                     new View.OnClickListener() {
 
                         @Override

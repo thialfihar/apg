@@ -40,7 +40,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.bcpg.sig.KeyFlags;
 import org.spongycastle.openpgp.PGPPublicKey;
-import org.spongycastle.openpgp.PGPSecretKey;
 
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Key;
@@ -56,20 +55,6 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
-    class ExpiryDatePickerDialog extends DatePickerDialog {
-        public ExpiryDatePickerDialog(Context context, OnDateSetListener callBack,
-                                      int year, int monthOfYear, int dayOfMonth) {
-            super(context, callBack, year, monthOfYear, dayOfMonth);
-        }
-
-        public void setTitle(CharSequence title) {
-            // set fixed title
-            // need to get the string manually here, else it'll look it up and call
-            // the CharSequence version again, resulting in an endless loop
-            super.setTitle(getContext().getString(R.string.expiry_date_dialog_title));
-        }
-    }
-
     private Key mKey;
 
     private EditorListener mEditorListener = null;
@@ -194,8 +179,8 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
                     // Hide calendarView in tablets because of the unix warparound bug.
                     dialog.getDatePicker().setCalendarViewShown(false);
                 }
-
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+
                     // will crash with IllegalArgumentException if we set a min date
                     // that is not before expiry
                     if (mCreatedDate != null && mCreatedDate.before(expiryDate)) {
@@ -281,10 +266,10 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
         }
 
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        cal.setTime(PgpKeyHelper.getCreationDate(key));
+        cal.setTime(key.getCreationDate());
         setCreatedDate(cal);
         cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Date expiryDate = PgpKeyHelper.getExpiryDate(key);
+        Date expiryDate = key.getExpiryDate();
         if (expiryDate == null) {
             setExpiryDate(null);
         } else {
@@ -380,3 +365,15 @@ public class KeyEditor extends LinearLayout implements Editor, OnClickListener {
     }
 }
 
+class ExpiryDatePickerDialog extends DatePickerDialog {
+
+    public ExpiryDatePickerDialog(Context context, OnDateSetListener callBack,
+                                  int year, int monthOfYear, int dayOfMonth) {
+        super(context, callBack, year, monthOfYear, dayOfMonth);
+    }
+
+    //Set permanent title.
+    public void setTitle(CharSequence title) {
+        super.setTitle(getContext().getString(R.string.expiry_date_dialog_title));
+    }
+}

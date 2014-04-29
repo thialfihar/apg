@@ -39,6 +39,8 @@ import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentVerifierBuilderProvider;
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.pgp.Key;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
@@ -187,6 +189,27 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         return result;
+    }
+
+    public KeyRing getKeyRing(Uri queryUri) {
+        Cursor cursor = mContentResolver.query(queryUri,
+                new String[]{KeyRingData.MASTER_KEY_ID, KeyRingData.KEY_RING_DATA},
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) do {
+            long masterKeyId = cursor.getLong(0);
+            byte[] data = cursor.getBlob(1);
+            if (data != null) {
+                cursor.close();
+                return KeyRing.decode(data);
+            }
+        } while (cursor.moveToNext());
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return null;
     }
 
     public PGPKeyRing getPGPKeyRing(Uri queryUri) throws NotFoundException {
@@ -733,5 +756,43 @@ public class ProviderHelper implements PgpKeyProvider {
         }
 
         return signature;
+    }
+
+    public KeyRing getPublicKeyRingByMasterKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildGenericKeyRingUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public KeyRing getSecretKeyRingByMasterKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildGenericKeyRingUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public KeyRing getPublicKeyRingByKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public KeyRing getSecretKeyRingByKeyId(long keyId) {
+        Uri queryUri = KeyRings.buildUnifiedKeyRingsFindBySubkeyUri(Long.toString(keyId));
+        return getKeyRing(queryUri);
+    }
+
+    public Key getPublicKeyByKeyId(long keyId) {
+        KeyRing keyRing = getPublicKeyRingByKeyId(keyId);
+        if (keyRing == null) {
+            return null;
+        }
+
+        return keyRing.getPublicKey(keyId);
+    }
+
+    public Key getSecretKeyByKeyId(long keyId) {
+        KeyRing keyRing = getSecretKeyRingByKeyId(keyId);
+        if (keyRing == null) {
+            return null;
+        }
+
+        return keyRing.getSecretKey(keyId);
     }
 }

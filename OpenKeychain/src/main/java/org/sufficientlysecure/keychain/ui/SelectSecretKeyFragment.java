@@ -31,13 +31,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
-import org.thialfihar.android.apg.provider.ApgContract.Keys;
-import org.thialfihar.android.apg.provider.ApgContract.UserIds;
-import org.thialfihar.android.apg.provider.ApgDatabase.Tables;
-import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.ui.adapter.SelectKeyCursorAdapter;
 
 public class SelectSecretKeyFragment extends ListFragment implements
@@ -92,7 +87,7 @@ public class SelectSecretKeyFragment extends ListFragment implements
                 Uri result = KeyRings.buildGenericKeyRingUri(String.valueOf(masterKeyId));
 
                 // return data to activity, which results in finishing it
-                mActivity.afterListSelection(result, userId);
+                mActivity.afterListSelection(result);
             }
         });
 

@@ -34,6 +34,7 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.remote.ui.RemoteServiceActivity;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
@@ -110,7 +111,7 @@ public abstract class RemoteService extends Service {
             Intent intent = new Intent(getBaseContext(), RemoteServiceActivity.class);
             intent.setAction(RemoteServiceActivity.ACTION_ERROR_MESSAGE);
             intent.putExtra(RemoteServiceActivity.EXTRA_ERROR_MESSAGE,
-                                getString(R.string.api_error_wrong_signature));
+                    getString(R.string.api_error_wrong_signature));
             intent.putExtra(RemoteServiceActivity.EXTRA_DATA, data);
 
             PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,

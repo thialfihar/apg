@@ -475,7 +475,7 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
                             @Override
                             public String getCachedPassphrase(long masterKeyId) {
                                 return PassphraseCacheService.getCachedPassphrase(
-                                        KeychainIntentService.this, masterKeyId);
+                                        ApgIntentService.this, masterKeyId);
                             }
                         },
                         inputData, outStream, new ProviderHelper(this));
@@ -906,7 +906,7 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
             message = e.getMessage();
         }
 
-        Log.e(Constants.TAG, "KeychainIntentService Exception: ", e);
+        Log.e(Constants.TAG, "ApgIntentService Exception: ", e);
 
         Bundle data = new Bundle();
         data.putString(ApgIntentServiceHandler.DATA_ERROR, message);

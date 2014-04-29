@@ -19,6 +19,7 @@ package org.thialfihar.android.apg.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +38,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRingData;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
@@ -50,8 +50,9 @@ import org.thialfihar.android.apg.util.Log;
 
 import java.util.Date;
 
+
 public class ViewKeyMainFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor>{
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_DATA_URI = "uri";
 
@@ -261,8 +262,8 @@ public class ViewKeyMainFragment extends Fragment implements
                         Date creationDate = new Date(data.getLong(INDEX_UNIFIED_CREATION) * 1000);
 
                         mCreation.setText(
-                            DateFormat.getDateFormat(
-                                getActivity().getApplicationContext()).format(creationDate));
+                                DateFormat.getDateFormat(getActivity().getApplicationContext()).format(
+                                        creationDate));
                     }
 
                     // get expiry date from EXPIRY
@@ -272,8 +273,8 @@ public class ViewKeyMainFragment extends Fragment implements
                         Date expiryDate = new Date(data.getLong(INDEX_UNIFIED_EXPIRY) * 1000);
 
                         mExpiry.setText(
-                            DateFormat.getDateFormat(
-                                getActivity().getApplicationContext()).format(expiryDate));
+                                DateFormat.getDateFormat(getActivity().getApplicationContext()).format(
+                                        expiryDate));
                     }
 
                     String algorithmStr = PgpKeyHelper.getAlgorithmInfo(
@@ -351,6 +352,5 @@ public class ViewKeyMainFragment extends Fragment implements
         signIntent.setData(dataUri);
         startActivity(signIntent);
     }
-
 
 }

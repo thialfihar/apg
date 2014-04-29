@@ -36,15 +36,15 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ContactHelper;
-import org.thialfihar.android.apg.pgp.Utils;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UserIdEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;
 
     private BootstrapButton mDeleteButton;
+    private RadioButton mIsMainUserId;
     private String mOriginalID;
     private EditText mName;
     private String mOriginalName;
@@ -52,20 +52,14 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
     private String mOriginalEmail;
     private EditText mComment;
     private String mOriginalComment;
+    private boolean mOriginallyMainUserID;
     private boolean mIsNewId;
-
-    // see http://www.regular-expressions.info/email.html
-    // RFC 2822 if we omit the syntax using double quotes and square brackets
-    // android.util.Patterns.EMAIL_ADDRESS is only available as of Android 2.2+
-    private static final Pattern EMAIL_PATTERN = Pattern
-        .compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" +
-                    "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
-                 Pattern.CASE_INSENSITIVE);
 
     public void setCanBeEdited(boolean canBeEdited) {
         if (!canBeEdited) {
             mDeleteButton.setVisibility(View.INVISIBLE);
             mName.setEnabled(false);
+            mIsMainUserId.setEnabled(false);
             mEmail.setEnabled(false);
             mComment.setEnabled(false);
         }
@@ -111,11 +105,12 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
 
         mDeleteButton = (BootstrapButton) findViewById(R.id.delete);
         mDeleteButton.setOnClickListener(this);
+        mIsMainUserId = (RadioButton) findViewById(R.id.isMainUserId);
+        mIsMainUserId.setOnClickListener(this);
 
         mName = (EditText) findViewById(R.id.name);
         mName.addTextChangedListener(mTextWatcher);
         mEmail = (AutoCompleteTextView) findViewById(R.id.email);
-        mEmail.addTextChangedListener(mTextWatcher);
         mComment = (EditText) findViewById(R.id.comment);
         mComment.addTextChangedListener(mTextWatcher);
 
@@ -124,9 +119,9 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mEmail.setAdapter(
                 new ArrayAdapter<String>
                         (this.getContext(), android.R.layout.simple_dropdown_item_1line,
-                                                ContactHelper.getMailAccounts(getContext())
+                                ContactHelper.getMailAccounts(getContext())
                         ));
-        mEmail.addTextChangedListener(new TextWatcher() {
+        mEmail.addTextChangedListener(new TextWatcher(){
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) { }
 
@@ -149,13 +144,16 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
                     // remove drawable if email is empty
                     mEmail.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
+                if (mEditorListener != null) {
+                    mEditorListener.onEdited();
+                }
             }
         });
 
         super.onFinishInflate();
     }
 
-    public void setValue(String userId, boolean isMainId, boolean isNewId) {
+    public void setValue(String userId, boolean isMainID, boolean isNewId) {
 
         mName.setText("");
         mOriginalName = "";
@@ -166,7 +164,7 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         mIsNewId = isNewId;
         mOriginalID = userId;
 
-        String[] result = Utils.splitUserId(userId);
+        String[] result = PgpKeyHelper.splitUserId(userId);
         if (result[0] != null) {
             mName.setText(result[0]);
             mOriginalName = result[0];
@@ -179,6 +177,9 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
             mComment.setText(result[2]);
             mOriginalComment = result[2];
         }
+
+        mOriginallyMainUserID = isMainID;
+        setIsMainUserId(isMainID);
     }
 
     public String getValue() {
@@ -198,18 +199,43 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
             // ok, empty one...
             return userId;
         }
-
+        //TODO: check gpg accepts an entirely empty ID packet. specs say this is allowed
         return userId;
     }
 
     public void onClick(View v) {
         final ViewGroup parent = (ViewGroup) getParent();
         if (v == mDeleteButton) {
+            boolean wasMainUserId = mIsMainUserId.isChecked();
             parent.removeView(this);
             if (mEditorListener != null) {
                 mEditorListener.onDeleted(this, mIsNewId);
             }
+            if (wasMainUserId && parent.getChildCount() > 0) {
+                UserIdEditor editor = (UserIdEditor) parent.getChildAt(0);
+                editor.setIsMainUserId(true);
+            }
+        } else if (v == mIsMainUserId) {
+            for (int i = 0; i < parent.getChildCount(); ++i) {
+                UserIdEditor editor = (UserIdEditor) parent.getChildAt(i);
+                if (editor == this) {
+                    editor.setIsMainUserId(true);
+                } else {
+                    editor.setIsMainUserId(false);
+                }
+            }
+            if (mEditorListener != null) {
+                mEditorListener.onEdited();
+            }
         }
+    }
+
+    public void setIsMainUserId(boolean value) {
+        mIsMainUserId.setChecked(value);
+    }
+
+    public boolean isMainUserId() {
+        return mIsMainUserId.isChecked();
     }
 
     public void setEditorListener(EditorListener listener) {
@@ -226,11 +252,17 @@ public class UserIdEditor extends LinearLayout implements Editor, OnClickListene
         return retval;
     }
 
-    public String getOriginalId() {
+    public  boolean getIsOriginallyMainUserID() {
+        return mOriginallyMainUserID;
+    }
+
+    public boolean primarySwapped() {
+        return (mOriginallyMainUserID != isMainUserId());
+    }
+
+    public String getOriginalID() {
         return mOriginalID;
     }
 
-    public boolean getIsNewID() {
-        return mIsNewId;
-    }
+    public boolean getIsNewID() { return mIsNewId; }
 }

@@ -37,12 +37,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ExportHelper;
@@ -116,7 +114,7 @@ public class ViewKeyActivity extends ActionBarActivity {
                 ViewKeyMainFragment.class, mainBundle, (selectedTab == 0));
 
         Bundle certBundle = new Bundle();
-        certBundle.putLong(ViewKeyCertsFragment.ARG_KEYRING_ROW_ID, rowId);
+        certBundle.putParcelable(ViewKeyCertsFragment.ARG_DATA_URI, mDataUri);
         mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.key_view_tab_certs)),
                 ViewKeyCertsFragment.class, certBundle, (selectedTab == 1));
     }
@@ -185,7 +183,7 @@ public class ViewKeyActivity extends ActionBarActivity {
                 new String[]{ApgContract.Keys.MASTER_KEY_ID, ApgContract.KeyRings.HAS_SECRET},
                 new int[]{ProviderHelper.FIELD_TYPE_INTEGER, ProviderHelper.FIELD_TYPE_INTEGER});
 
-        mExportHelper.showExportKeysDialog(
+        exportHelper.showExportKeysDialog(
                 new long[]{(Long) data.get(ApgContract.KeyRings.MASTER_KEY_ID)},
                 Constants.Path.APP_DIR_FILE,
                 ((Long) data.get(ApgContract.KeyRings.HAS_SECRET) == 1)
@@ -201,8 +199,8 @@ public class ViewKeyActivity extends ActionBarActivity {
     private void updateFromKeyserver(Uri dataUri, ProviderHelper providerHelper)
             throws ProviderHelper.NotFoundException {
         byte[] blob = (byte[]) providerHelper.getGenericData(
-                KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                KeychainContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+                ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
+                ApgContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
         String fingerprint = PgpKeyHelper.convertFingerprintToHex(blob);
 
         Intent queryIntent = new Intent(this, ImportKeysActivity.class);
@@ -217,8 +215,8 @@ public class ViewKeyActivity extends ActionBarActivity {
         String content = null;
         if (fingerprintOnly) {
             byte[] data = (byte[]) providerHelper.getGenericData(
-                    KeychainContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
-                    KeychainContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
+                    ApgContract.KeyRings.buildUnifiedKeyRingUri(dataUri),
+                    ApgContract.Keys.FINGERPRINT, ProviderHelper.FIELD_TYPE_BLOB);
             if (data != null) {
                 String fingerprint = PgpKeyHelper.convertFingerprintToHex(data);
                 content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;
@@ -230,7 +228,7 @@ public class ViewKeyActivity extends ActionBarActivity {
         } else {
             // get public keyring as ascii armored string
             try {
-                Uri uri = KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
+                Uri uri = ApgContract.KeyRingData.buildPublicKeyRingUri(dataUri);
                 content = providerHelper.getKeyRingAsArmoredString(uri);
 
                 // Android will fail with android.os.TransactionTooLargeException if key is too big
@@ -269,10 +267,12 @@ public class ViewKeyActivity extends ActionBarActivity {
 
     private void copyToClipboard(Uri dataUri, ProviderHelper providerHelper) {
         // get public keyring as ascii armored string
-        long masterKeyId = ProviderHelper.getMasterKeyId(this, dataUri);
-        KeyRing keyRing = mProvider.getPublicKeyRingByMasterKeyId(masterKeyId);
         String armoredKeyRing;
         try {
+            KeyRing keyRing = providerHelper.getKeyRing(dataUri);
+            if (keyRing == null) {
+                throw new ProviderHelper.NotFoundException();
+            }
             armoredKeyRing = keyRing.getArmoredEncoded(this);
         } catch (IOException e) {
             Log.e(Constants.TAG, "error processing key!", e);
@@ -372,7 +372,7 @@ public class ViewKeyActivity extends ActionBarActivity {
                             protected Void doInBackground(Void... unused) {
                                 try {
                                     Uri blobUri =
-                                            KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
+                                            ApgContract.KeyRingData.buildPublicKeyRingUri(dataUri);
                                     mNfcKeyringBytes = mProviderHelper.getPGPKeyRing(
                                             blobUri).getEncoded();
                                 } catch (IOException e) {

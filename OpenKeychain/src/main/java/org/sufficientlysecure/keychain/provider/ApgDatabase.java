@@ -28,13 +28,23 @@ public class ApgDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "apg";
     private static final int DATABASE_VERSION = 4;
 
-    public interface Tables {
+    public interface TablesOld {
         String KEY_RINGS = "key_rings";
         String KEYS = "keys";
         String USER_IDS = "user_ids";
         String API_APPS = "api_apps";
         String API_ACCOUNTS = "api_accounts";
         String CERTS = "certs";
+    }
+
+    public interface Tables {
+        String KEY_RINGS_PUBLIC = "keyrings_public";
+        String KEY_RINGS_SECRET = "keyrings_secret";
+        String KEYS = "keys";
+        String USER_IDS = "user_ids";
+        String CERTS = "certs";
+        String API_APPS = "api_apps";
+        String API_ACCOUNTS = "api_accounts";
     }
 
     ApgDatabase(Context context) {

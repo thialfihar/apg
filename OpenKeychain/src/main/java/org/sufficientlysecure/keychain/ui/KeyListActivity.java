@@ -53,11 +53,6 @@ public class KeyListActivity extends DrawerActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.key_list, menu);
 
-        if(Constants.DEBUG) {
-            menu.findItem(R.id.menu_key_list_debug_read).setVisible(true);
-            menu.findItem(R.id.menu_key_list_debug_write).setVisible(true);
-        }
-
         return true;
     }
 
@@ -78,27 +73,6 @@ public class KeyListActivity extends DrawerActivity {
 
             case R.id.menu_key_list_export:
                 mExportHelper.showExportKeysDialog(null, Constants.Path.APP_DIR_FILE, true);
-                return true;
-
-            case R.id.menu_key_list_debug_read:
-                try {
-                    ApgDatabase.debugRead(this);
-                    AppMsg.makeText(this, "Restored from backup", AppMsg.STYLE_CONFIRM).show();
-                    getContentResolver().notifyChange(ApgContract.KeyRings.CONTENT_URI, null);
-                } catch(IOException e) {
-                    Log.e(Constants.TAG, "IO Error", e);
-                    AppMsg.makeText(this, "IO Error: " + e.getMessage(), AppMsg.STYLE_ALERT).show();
-                }
-                return true;
-
-            case R.id.menu_key_list_debug_write:
-                try {
-                    ApgDatabase.debugWrite(this);
-                    AppMsg.makeText(this, "Backup successful", AppMsg.STYLE_CONFIRM).show();
-                } catch(IOException e) {
-                    Log.e(Constants.TAG, "IO Error", e);
-                    AppMsg.makeText(this, "IO Error: " + e.getMessage(), AppMsg.STYLE_ALERT).show();
-                }
                 return true;
 
             default:

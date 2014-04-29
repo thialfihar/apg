@@ -74,13 +74,13 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
      *
      * @param selectedUri
      */
-    public void afterListSelection(Uri selectedUri, String userId) {
+    public void afterListSelection(Uri selectedUri) {
         Intent data = new Intent();
         data.setData(selectedUri);
 
         long masterKeyId = Long.valueOf(selectedUri.getLastPathSegment());
         data.putExtra("keyId", masterKeyId);
-        data.putExtra("userId", (String) userId);
+        data.putExtra("userId", (String) "TODO");
         setResult(RESULT_OK, data);
         finish();
     }

@@ -36,8 +36,7 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.spongycastle.openpgp.PGPKeyFlags;
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.thialfihar.android.apg.Id;
+
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
@@ -63,10 +62,10 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
 
     private Choice mNewKeyAlgorithmChoice;
     private int mNewKeySize;
-    private boolean mCanBeEdited = true;
     private boolean mOldItemDeleted = false;
     private ArrayList<String> mDeletedIDs = new ArrayList<String>();
     private ArrayList<Key> mDeletedKeys = new ArrayList<Key>();
+    private boolean mCanBeEdited = true;
 
     private ActionBarActivity mActivity;
 
@@ -176,7 +175,7 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
             Editor editor = (Editor) mEditors.getChildAt(i);
             ret |= editor.needsSaving();
             if (mType == TYPE_USER_ID) {
-                ret |= true; // todo: be smarter about this... for now always true
+                ret |= ((UserIdEditor) editor).primarySwapped();
             }
         }
         return ret;
@@ -186,8 +185,8 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         boolean ret = false;
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             Editor editor = (Editor) mEditors.getChildAt(i);
-            if (mType == Id.type.user_id) {
-                ret |= true; // todo: fix this
+            if (mType == TYPE_USER_ID) {
+                ret |= ((UserIdEditor) editor).primarySwapped();
             }
         }
         return ret;
@@ -200,10 +199,9 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             Editor editor = (Editor) mEditors.getChildAt(i);
             if (mType == TYPE_USER_ID) {
-                /*if(((UserIdEditor)editor).getIsOriginallyMainUserID()) {
-                    return ((UserIdEditor)editor).getOriginalID();
-                }*/
-                // todo: this isn't right, it might be gone, how to get the user id?
+                if (((UserIdEditor) editor).getIsOriginallyMainUserID()) {
+                    return ((UserIdEditor) editor).getOriginalID();
+                }
             }
         }
         return null;
@@ -214,7 +212,11 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         if (mType == TYPE_USER_ID) {
             for (int i = 0; i < mEditors.getChildCount(); ++i) {
                 UserIdEditor editor = (UserIdEditor) mEditors.getChildAt(i);
-                orig.add(editor.getOriginalId());
+                if (editor.isMainUserId()) {
+                    orig.add(0, editor.getOriginalID());
+                } else {
+                    orig.add(editor.getOriginalID());
+                }
             }
             return orig;
         } else {
@@ -243,7 +245,11 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         ArrayList<Boolean> mList = new ArrayList<Boolean>();
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
             UserIdEditor editor = (UserIdEditor) mEditors.getChildAt(i);
-            mList.add(editor.getIsNewID());
+            if (editor.isMainUserId()) {
+                mList.add(0, editor.getIsNewID());
+            } else {
+                mList.add(editor.getIsNewID());
+            }
         }
         return mList;
     }
@@ -354,7 +360,8 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         String passphrase;
         if (mEditors.getChildCount() > 0) {
             Key masterKey = ((KeyEditor) mEditors.getChildAt(0)).getValue();
-            passphrase = PassphraseCacheService.getCachedPassphrase(mActivity, masterKey.getKeyId());
+            passphrase = PassphraseCacheService
+                    .getCachedPassphrase(mActivity, masterKey.getKeyId());
             isMasterKey = false;
         } else {
             passphrase = "";
@@ -410,12 +417,11 @@ public class SectionView extends LinearLayout implements OnClickListener, Editor
         KeyEditor view = (KeyEditor) mInflater.inflate(R.layout.edit_key_key_item,
                 mEditors, false);
         view.setEditorListener(SectionView.this);
-        boolean isMasterKey = (mEditors.getChildCount() == 0);
         int usage = 0;
         if (mEditors.getChildCount() == 0) {
             usage = PGPKeyFlags.CAN_CERTIFY;
         }
-        view.setValue(newKey, isMasterKey, usage, true);
+        view.setValue(newKey, newKey.isMasterKey(), usage, true);
         mEditors.addView(view);
         SectionView.this.updateEditorsVisible();
         if (mEditorListener != null) {

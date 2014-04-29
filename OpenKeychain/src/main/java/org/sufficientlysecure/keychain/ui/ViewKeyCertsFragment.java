@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -34,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import org.spongycastle.openpgp.PGPSignature;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
@@ -41,7 +43,6 @@ import org.thialfihar.android.apg.provider.ApgContract.Certs;
 import org.thialfihar.android.apg.provider.ApgDatabase.Tables;
 import org.thialfihar.android.apg.util.Log;
 
-import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -68,7 +69,7 @@ public class ViewKeyCertsFragment extends Fragment
                     + Certs.TYPE + " DESC, "
                     + Certs.SIGNER_UID + " ASC";
 
-    public static final String ARG_KEYRING_ROW_ID = "row_id";
+    public static final String ARG_DATA_URI = "data_uri";
 
     private StickyListHeadersListView mStickyList;
     private CertListAdapter mAdapter;
@@ -88,7 +89,7 @@ public class ViewKeyCertsFragment extends Fragment
 
         mStickyList = (StickyListHeadersListView) getActivity().findViewById(R.id.list);
 
-        if (!getArguments().containsKey(ARG_KEYRING_ROW_ID)) {
+        if (!getArguments().containsKey(ARG_DATA_URI)) {
             Log.e(Constants.TAG, "Data missing. Should be Uri of key!");
             getActivity().finish();
             return;
@@ -102,9 +103,8 @@ public class ViewKeyCertsFragment extends Fragment
         mStickyList.setFastScrollEnabled(true);
         mStickyList.setOnItemClickListener(this);
 
-        try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             mStickyList.setFastScrollAlwaysVisible(true);
-        } catch (ApiLevelTooLowException e) {
         }
 
         mStickyList.setEmptyView(getActivity().findViewById(R.id.empty));

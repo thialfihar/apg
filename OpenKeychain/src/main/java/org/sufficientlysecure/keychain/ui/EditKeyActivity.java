@@ -44,11 +44,7 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
-import org.spongycastle.openpgp.PGPSecretKey;
-import org.spongycastle.openpgp.PGPSecretKeyRing;
-
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.ExportHelper;
@@ -65,8 +61,8 @@ import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.service.SaveKeyringParcel;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.SetPassphraseDialogFragment;
-import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
 import org.thialfihar.android.apg.ui.widget.Editor;
+import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
 import org.thialfihar.android.apg.ui.widget.KeyEditor;
 import org.thialfihar.android.apg.ui.widget.SectionView;
 import org.thialfihar.android.apg.ui.widget.UserIdEditor;
@@ -92,8 +88,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     // EDIT
     private Uri mDataUri;
 
-    private ProviderHelper mProvider;
-
     private KeyRing mKeyRing = null;
 
     private SectionView mUserIdsView;
@@ -110,12 +104,12 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
     private CheckBox mNoPassphrase;
 
-    private Vector<String> mUserIds;
-    private Vector<Key> mKeys;
-    private Vector<Integer> mKeysUsages;
-    private boolean mMasterCanSign;
+    Vector<String> mUserIds;
+    Vector<Key> mKeys;
+    Vector<Integer> mKeysUsages;
+    boolean mMasterCanSign = true;
 
-    private ExportHelper mExportHelper;
+    ExportHelper mExportHelper;
 
     public boolean needsSaving() {
         mNeedsSaving = (mUserIdsView == null) ? false : mUserIdsView.needsSaving();
@@ -143,7 +137,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         super.onCreate(savedInstanceState);
 
         mExportHelper = new ExportHelper(this);
-        mProvider = new ProviderHelper(this);
 
         // Inflate a "Done"/"Cancel" custom action bar view
         ActionBarHelper.setTwoButtonView(getSupportActionBar(),
@@ -167,8 +160,6 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
         mUserIds = new Vector<String>();
         mKeys = new Vector<Key>();
         mKeysUsages = new Vector<Integer>();
-
-        mMasterCanSign = true;
 
         // Catch Intents opened from other apps
         Intent intent = getIntent();
@@ -224,7 +215,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
                     serviceIntent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
-                    // Message is received after generating is done in ApgService
+                    // Message is received after generating is done in ApgIntentService
                     ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(
                             this, getResources().getQuantityString(R.plurals.progress_generating, 1),
                             ProgressDialog.STYLE_HORIZONTAL, true,
@@ -241,7 +232,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
                         @Override
                         public void handleMessage(Message message) {
-                            // handle messages by standard ApgHandler first
+                            // handle messages by standard ApgIntentServiceHandler first
                             super.handleMessage(message);
 
                             if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
@@ -296,11 +287,14 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
             try {
                 Uri secretUri = ApgContract.KeyRingData.buildSecretKeyRingUri(mDataUri);
-                mKeyRing = (PGPSecretKeyRing) new ProviderHelper(this).getPGPKeyRing(secretUri);
+                mKeyRing = (KeyRing) new ProviderHelper(this).getKeyRing(secretUri);
+                if (mKeyRing == null) {
+                    throw new ProviderHelper.NotFoundException();
+                }
 
-                PGPSecretKey masterKey = mKeyRing.getSecretKey();
-                mMasterCanSign = PgpKeyHelper.isCertificationKey(mKeyRing.getSecretKey());
-                for (PGPSecretKey key : new IterableIterator<PGPSecretKey>(mKeyRing.getSecretKeys())) {
+                Key masterKey = new Key(mKeyRing.getSecretKeyRing().getSecretKey());
+                mMasterCanSign = PgpKeyHelper.isCertificationKey(mKeyRing.getSecretKeyRing().getSecretKey());
+                for (Key key : mKeyRing.getSecretKeys()) {
                     mKeys.add(key);
                     mKeysUsages.add(-1); // get usage when view is created
                 }
@@ -321,7 +315,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 buildLayout(false);
 
                 mCurrentPassphrase = "";
-                mIsPassphraseSet = PassphraseCacheService.hasPassphrase(mKeyRing);
+                mIsPassphraseSet = PassphraseCacheService.hasPassphrase(mKeyRing.getSecretKeyRing());
                 if (!mIsPassphraseSet) {
                     // check "no passphrase" checkbox and remove button
                     mNoPassphrase.setChecked(true);
@@ -333,6 +327,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                 Toast.makeText(this, R.string.error_no_secret_key_found, Toast.LENGTH_SHORT).show();
                 finish();
             }
+
         }
     }
 
@@ -444,7 +439,8 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
     public boolean isPassphraseSet() {
         if (mNoPassphrase.isChecked()) {
             return true;
-        } else if (mIsPassphraseSet || (mNewPassphrase != null && !mNewPassphrase.equals(""))) {
+        } else if ((mIsPassphraseSet)
+                || (mNewPassphrase != null && !mNewPassphrase.equals(""))) {
             return true;
         } else {
             return false;
@@ -585,18 +581,18 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
-            // Message is received after saving is done in ApgService
+            // Message is received after saving is done in ApgIntentService
             ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(this,
                     getString(R.string.progress_saving), ProgressDialog.STYLE_HORIZONTAL) {
                 public void handleMessage(Message message) {
-                    // handle messages by standard ApgHandler first
+                    // handle messages by standard ApgIntentServiceHandler first
                     super.handleMessage(message);
 
                     if (message.arg1 == ApgIntentServiceHandler.MESSAGE_OKAY) {
                         Intent data = new Intent();
 
                         // return uri pointing to new created key
-                        Uri uri = ApgContract.KeyRings.buildPublicKeyRingsByKeyIdUri(
+                        Uri uri = ApgContract.KeyRings.buildGenericKeyRingUri(
                                 String.valueOf(getMasterKeyId()));
                         data.setData(uri);
 
@@ -664,16 +660,26 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
         ViewGroup userIdEditors = userIdsView.getEditors();
 
+        boolean gotMainUserId = false;
         for (int i = 0; i < userIdEditors.getChildCount(); ++i) {
             UserIdEditor editor = (UserIdEditor) userIdEditors.getChildAt(i);
-            String userId = null;
+            String userId;
             userId = editor.getValue();
 
-            userIds.add(userId);
+            if (editor.isMainUserId()) {
+                userIds.add(0, userId);
+                gotMainUserId = true;
+            } else {
+                userIds.add(userId);
+            }
         }
 
         if (userIds.size() == 0) {
             throw new PgpGeneralException(getString(R.string.error_key_needs_a_user_id));
+        }
+
+        if (!gotMainUserId) {
+            throw new PgpGeneralException(getString(R.string.error_main_user_id_must_not_be_empty));
         }
 
         return userIds;

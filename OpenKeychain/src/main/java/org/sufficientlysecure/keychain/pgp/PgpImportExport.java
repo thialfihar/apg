@@ -42,7 +42,6 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.IterableIterator;
-import org.thialfihar.android.apg.util.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.util.ApgServiceListener;
 import org.thialfihar.android.apg.util.Log;
 

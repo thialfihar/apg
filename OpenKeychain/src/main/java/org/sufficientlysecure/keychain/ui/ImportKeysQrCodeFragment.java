@@ -126,30 +126,13 @@ public class ImportKeysQrCodeFragment extends Fragment {
                             .show();
                 }
 
-                // look if it is the whole key
-                String[] parts = scannedContent.split(",");
-                if (parts.length == 3) {
-                    importParts(parts);
-                    return;
-                }
-
-                // is this a full key encoded as qr code?
-                if (scannedContent.startsWith("-----BEGIN PGP")) {
-                    mImportActivity.loadCallback(scannedContent.getBytes(), null, null, null);
-                    return;
-                }
-
-                // fail...
-                Toast.makeText(getActivity(), R.string.import_qr_code_wrong, Toast.LENGTH_LONG)
-                        .show();
+                break;
             }
 
-            break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
 
-        default:
-            super.onActivityResult(requestCode, resultCode, data);
-
-            break;
+                break;
         }
     }
 
