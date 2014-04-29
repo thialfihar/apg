@@ -19,7 +19,10 @@ package org.thialfihar.android.apg.util;
 
 import org.thialfihar.android.apg.pgp.Progressable;
 
-/** This is a simple class that wraps a ProgressDialogUpdater, scaling the progress
+import org.sufficientlysecure.keychain.pgp.Progressable;
+
+/**
+ * This is a simple class that wraps a Progressable, scaling the progress
  * values into a specified range.
  */
 public class ProgressScaler implements Progressable {
@@ -35,7 +38,7 @@ public class ProgressScaler implements Progressable {
     }
 
     /**
-     * Set progressable by sending message to handler on UI thread
+     * Set progress of ProgressDialog by sending message to handler on UI thread
      */
     public void setProgress(String message, int progress, int max) {
         mWrapped.setProgress(message, mFrom + progress * (mTo - mFrom) / max, mMax);

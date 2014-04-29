@@ -59,8 +59,9 @@ import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.ApgServiceListener;
+import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
@@ -949,7 +950,7 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
      * Set progress of ProgressDialog by sending message to handler on UI thread
      */
     public void setProgress(String message, int progress, int max) {
-        Log.d(Constants.TAG, "Send message by setProgress with progressDialogUpdater=" + progress + ", max="
+        Log.d(Constants.TAG, "Send message by setProgress with progress=" + progress + ", max="
                 + max);
 
         Bundle data = new Bundle();

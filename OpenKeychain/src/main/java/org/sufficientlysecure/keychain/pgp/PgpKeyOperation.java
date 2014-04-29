@@ -65,11 +65,10 @@ import java.util.TimeZone;
  * <p/>
  * Note that no android specific stuff should be done here, ie no imports from com.android.
  * <p/>
- * All operations support progress reporting to a ProgressDialogUpdater passed on initialization.
+ * All operations support progress reporting to a Progressable passed on initialization.
  * This indicator may be null.
  */
 public class PgpKeyOperation {
-    private Context mContext;
     private Progressable mProgress;
 
     private static final int[] PREFERRED_SYMMETRIC_ALGORITHMS = new int[]{
@@ -82,10 +81,9 @@ public class PgpKeyOperation {
             CompressionAlgorithmTags.ZLIB, CompressionAlgorithmTags.BZIP2,
             CompressionAlgorithmTags.ZIP};
 
-    public PgpKeyOperation(Context context, Progressable progress) {
+    public PgpKeyOperation(Progressable progressable) {
         super();
-        this.mContext = context;
-        this.mProgress = progress;
+        this.mProgressable = progressable;
     }
 
     public void updateProgress(int message, int current, int total) {

@@ -30,7 +30,6 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
@@ -41,8 +40,10 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
-import org.thialfihar.android.apg.util.IterableIterator;
 import org.thialfihar.android.apg.util.ApgServiceListener;
+import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.util.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -56,6 +57,7 @@ public class PgpImportExport {
     private Context mContext;
     private Progressable mProgress;
     private ApgServiceListener mApgServiceListener;
+
     private ProviderHelper mProviderHelper;
 
     public static final int RETURN_OK = 0;
@@ -63,37 +65,37 @@ public class PgpImportExport {
     public static final int RETURN_BAD = -2;
     public static final int RETURN_UPDATED = 1;
 
-    public PgpImportExport(Context context, Progressable progress) {
+    public PgpImportExport(Context context, Progressable progressable) {
         super();
         this.mContext = context;
-        this.mProgress = progress;
+        this.mProgressable = progressable;
         this.mProviderHelper = new ProviderHelper(context);
     }
 
-    public PgpImportExport(Context context, Progressable progress,
+    public PgpImportExport(Context context, Progressable progressable,
                 ApgServiceListener keychainListener) {
         super();
         this.mContext = context;
-        this.mProgress = progress;
+        this.mProgressable = progressable;
         this.mProviderHelper = new ProviderHelper(context);
         this.mApgServiceListener = keychainListener;
     }
 
     public void updateProgress(int message, int current, int total) {
-        if (mProgress != null) {
-            mProgress.setProgress(message, current, total);
+        if (mProgressable != null) {
+            mProgressable.setProgress(message, current, total);
         }
     }
 
     public void updateProgress(String message, int current, int total) {
-        if (mProgress != null) {
-            mProgress.setProgress(message, current, total);
+        if (mProgressable != null) {
+            mProgressable.setProgress(message, current, total);
         }
     }
 
     public void updateProgress(int current, int total) {
-        if (mProgress != null) {
-            mProgress.setProgress(current, total);
+        if (mProgressable != null) {
+            mProgressable.setProgress(current, total);
         }
     }
 
