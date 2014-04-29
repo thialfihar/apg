@@ -202,7 +202,7 @@ public class PgpSignEncrypt {
          * @param encryptToSigner
          * @return
          */
-        public Builder encryptToSigner(boolean encryptToSigner) {
+        public Builder setEncryptToSigner(boolean encryptToSigner) {
             this.mEncryptToSigner = encryptToSigner;
             return this;
         }
@@ -213,7 +213,7 @@ public class PgpSignEncrypt {
          * @param cleartextInput
          * @return
          */
-        public Builder cleartextInput(boolean cleartextInput) {
+        public Builder setCleartextInput(boolean cleartextInput) {
             this.mCleartextInput = cleartextInput;
             return this;
         }

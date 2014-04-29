@@ -171,14 +171,14 @@ public class OpenPgpService extends RemoteService {
                         new ProviderHelper(getContext()),
                         PgpHelper.getFullVersion(getContext()),
                         inputData, os, new ProviderHelper(this));
-                builder.enableAsciiArmorOutput(asciiArmor)
-                        .signatureHashAlgorithm(accSettings.getHashAlgorithm())
-                        .signatureForceV3(false)
-                        .signatureMasterKeyId(accSettings.getKeyId())
-                        .signaturePassphrase(passphrase);
+                builder.setEnableAsciiArmorOutput(asciiArmor)
+                        .setSignatureHashAlgorithm(accSettings.getHashAlgorithm())
+                        .setSignatureForceV3(false)
+                        .setSignatureMasterKeyId(accSettings.getKeyId())
+                        .setSignaturePassphrase(passphrase);
 
                 // TODO: currently always assume cleartext input, no sign-only of binary currently!
-                builder.cleartextInput(true);
+                builder.setCleartextInput(true);
 
                 try {
                     builder.build().execute();
