@@ -769,8 +769,8 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
                 KeybaseKeyServer server = new KeybaseKeyServer();
                 for (ImportKeysListEntry entry : entries) {
                     // the keybase handle is in userId(1)
-                    String username = entry.getUserIds().get(1);
-                    byte[] downloadedKeyBytes = server.get(username).getBytes();
+                    String keybaseID = entry.getUserIds().get(1);
+                    byte[] downloadedKeyBytes = server.get(keybaseID).getBytes();
 
                     // create PGPKeyRing object based on downloaded armored key
                     PGPKeyRing downloadedKey = null;
