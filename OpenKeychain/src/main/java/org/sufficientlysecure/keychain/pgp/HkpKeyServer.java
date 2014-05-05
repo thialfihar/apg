@@ -35,7 +35,6 @@ import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -168,21 +167,6 @@ public class HkpKeyServer extends KeyServer {
     public HkpKeyServer(String host, short port) {
         mHost = host;
         mPort = port;
-    }
-
-    private static String readAll(InputStream in, String encoding) throws IOException {
-        ByteArrayOutputStream raw = new ByteArrayOutputStream();
-
-        byte buffer[] = new byte[1 << 16];
-        int n = 0;
-        while ((n = in.read(buffer)) != -1) {
-            raw.write(buffer, 0, n);
-        }
-
-        if (encoding == null) {
-            encoding = "utf8";
-        }
-        return raw.toString(encoding);
     }
 
     private String query(String request) throws QueryException, HttpError {
