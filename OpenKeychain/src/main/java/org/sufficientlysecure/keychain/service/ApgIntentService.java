@@ -40,10 +40,11 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.util.HkpKeyServer;
+import org.thialfihar.android.apg.keyimport.HkpKeyServer;
+import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
+import org.thialfihar.android.apg.keyimport.KeybaseKeyServer;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
-import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
@@ -61,7 +62,9 @@ import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.ApgServiceListener;
+import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.KeybaseKeyServer;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
@@ -84,7 +87,8 @@ import java.util.List;
  * data from the activities or other apps, queues these intents, executes them, and stops itself
  * after doing them.
  */
-public class ApgIntentService extends IntentService implements Progressable, ApgServiceListener {
+public class ApgIntentService extends IntentService
+        implements Progressable, PgpImportExport.ApgServiceListener {
 
     /* extras that can be given by intent */
     public static final String EXTRA_MESSENGER = "messenger";

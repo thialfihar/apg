@@ -16,9 +16,7 @@
  * limitations under the License.
  */
 
-package org.thialfihar.android.apg.util;
-
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
+package org.thialfihar.android.apg.keyimport;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

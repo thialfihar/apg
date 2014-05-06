@@ -23,8 +23,8 @@ import android.support.v4.content.AsyncTaskLoader;
 import org.spongycastle.openpgp.PGPKeyRing;
 import org.spongycastle.openpgp.PGPObjectFactory;
 import org.spongycastle.openpgp.PGPUtil;
-
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.PositionAwareInputStream;

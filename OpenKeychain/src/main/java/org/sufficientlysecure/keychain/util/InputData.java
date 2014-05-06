@@ -19,6 +19,9 @@ package org.thialfihar.android.apg.util;
 
 import java.io.InputStream;
 
+/**
+ * Wrapper to include size besides an InputStream
+ */
 public class InputData {
     private PositionAwareInputStream mInputStream;
     private long mSize;

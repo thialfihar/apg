@@ -15,12 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.thialfihar.android.apg.ui.adapter;
+package org.thialfihar.android.apg.ui.keyimport;
 
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.SparseArray;
 
 import org.spongycastle.bcpg.SignatureSubpacketTags;
 import org.spongycastle.openpgp.PGPKeyRing;

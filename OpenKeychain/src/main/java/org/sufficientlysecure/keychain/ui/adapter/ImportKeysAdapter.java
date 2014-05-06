@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 
 import java.util.ArrayList;

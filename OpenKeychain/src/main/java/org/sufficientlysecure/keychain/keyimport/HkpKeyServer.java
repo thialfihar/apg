@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.thialfihar.android.apg.util;
+package org.thialfihar.android.apg.keyimport;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

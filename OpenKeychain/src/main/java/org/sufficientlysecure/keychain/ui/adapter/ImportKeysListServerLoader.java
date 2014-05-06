@@ -21,6 +21,9 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.keyimport.HkpKeyServer;
+import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
+import org.thialfihar.android.apg.keyimport.KeyServer;
 import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.Log;
