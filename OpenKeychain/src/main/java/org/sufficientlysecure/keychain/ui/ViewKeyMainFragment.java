@@ -278,7 +278,7 @@ public class ViewKeyMainFragment extends Fragment implements
 
     private void editKey(Uri dataUri) {
         Intent editIntent = new Intent(getActivity(), EditKeyActivity.class);
-        editIntent.setData(KeychainContract.KeyRingData.buildSecretKeyRingUri(dataUri));
+        editIntent.setData(ApgContract.KeyRingData.buildSecretKeyRingUri(dataUri));
         editIntent.setAction(EditKeyActivity.ACTION_EDIT_KEY);
         startActivityForResult(editIntent, 0);
     }

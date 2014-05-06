@@ -365,9 +365,9 @@ public class ViewKeyActivity extends ActionBarActivity implements
     };
 
     static final String[] UNIFIED_PROJECTION = new String[]{
-            KeychainContract.KeyRings._ID,
-            KeychainContract.KeyRings.MASTER_KEY_ID,
-            KeychainContract.KeyRings.USER_ID,
+            ApgContract.KeyRings._ID,
+            ApgContract.KeyRings.MASTER_KEY_ID,
+            ApgContract.KeyRings.USER_ID,
 
     };
     static final int INDEX_UNIFIED_MASTER_KEY_ID = 1;
@@ -377,7 +377,7 @@ public class ViewKeyActivity extends ActionBarActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_ID_UNIFIED: {
-                Uri baseUri = KeychainContract.KeyRings.buildUnifiedKeyRingUri(mDataUri);
+                Uri baseUri = ApgContract.KeyRings.buildUnifiedKeyRingUri(mDataUri);
                 return new CursorLoader(this, baseUri, UNIFIED_PROJECTION, null, null, null);
             }
 

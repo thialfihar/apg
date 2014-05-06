@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -37,18 +37,18 @@ import android.widget.TextView;
 
 import com.devspark.appmsg.AppMsg;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.R;
-import org.sufficientlysecure.keychain.compatibility.ClipboardReflection;
-import org.sufficientlysecure.keychain.pgp.PgpKeyHelper;
-import org.sufficientlysecure.keychain.provider.KeychainContract;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
-import org.sufficientlysecure.keychain.provider.KeychainContract.Keys;
-import org.sufficientlysecure.keychain.provider.ProviderHelper;
-import org.sufficientlysecure.keychain.ui.dialog.ShareNfcDialogFragment;
-import org.sufficientlysecure.keychain.ui.dialog.ShareQrCodeDialogFragment;
-import org.sufficientlysecure.keychain.util.Log;
-import org.sufficientlysecure.keychain.util.QrCodeUtils;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.compatibility.ClipboardReflection;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.provider.ApgContract;
+import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
+import org.thialfihar.android.apg.provider.ApgContract.Keys;
+import org.thialfihar.android.apg.provider.ProviderHelper;
+import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;
+import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
+import org.thialfihar.android.apg.util.Log;
+import org.thialfihar.android.apg.util.QrCodeUtils;
 
 import java.io.IOException;
 
@@ -157,7 +157,7 @@ public class ViewKeyShareFragment extends Fragment implements
                 content = Constants.FINGERPRINT_SCHEME + ":" + fingerprint;
             } else {
                 // get public keyring as ascii armored string
-                Uri uri = KeychainContract.KeyRingData.buildPublicKeyRingUri(dataUri);
+                Uri uri = ApgContract.KeyRingData.buildPublicKeyRingUri(dataUri);
                 content = providerHelper.getKeyRingAsArmoredString(uri);
             }
 

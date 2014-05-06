@@ -32,6 +32,7 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.ui.AccountsListFragment;
+import org.thialfihar.android.apg.remote.AppSettings;
 import org.thialfihar.android.apg.util.Log;
 
 public class AppSettingsActivity extends ActionBarActivity {

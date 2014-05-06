@@ -1,4 +1,4 @@
-package org.sufficientlysecure.keychain;
+package org.thialfihar.android.apg;
 
 import org.junit.Before;
 import org.junit.After;
@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 
-import org.sufficientlysecure.keychain.pgp.*;
+import org.thialfihar.android.apg.pgp.*;
 import org.spongycastle.openpgp.*;
 
 @RunWith(RobolectricGradleTestRunner.class)

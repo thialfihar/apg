@@ -1,4 +1,4 @@
-package org.sufficientlysecure.keychain;
+package org.thialfihar.android.apg;
 
 import org.junit.runners.model.InitializationError;
 import org.robolectric.AndroidManifest;
@@ -7,7 +7,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.res.Fs;
 import org.robolectric.res.FsFile;
 
-import org.sufficientlysecure.keychain.KeychainApplication;
+import org.thialfihar.android.apg.KeychainApplication;
 
 public class RobolectricGradleTestRunner extends RobolectricTestRunner {
     public RobolectricGradleTestRunner(Class<?> testClass) throws InitializationError {

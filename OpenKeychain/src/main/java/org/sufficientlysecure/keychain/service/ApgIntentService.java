@@ -43,6 +43,7 @@ import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.pgp.HkpKeyServer;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
+import org.thialfihar.android.apg.pgp.KeyServer;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
@@ -60,9 +61,7 @@ import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.ApgServiceListener;
-import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
-import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.KeybaseKeyServer;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
@@ -797,7 +796,7 @@ public class ApgIntentService extends IntentService implements Progressable, Apg
                     entry.setBytes(downloadedKey.getEncoded());
                 }
 
-                Intent importIntent = new Intent(this, KeychainIntentService.class);
+                Intent importIntent = new Intent(this, ApgIntentService.class);
                 importIntent.setAction(ACTION_IMPORT_KEYRING);
                 Bundle importData = new Bundle();
                 importData.putParcelableArrayList(IMPORT_KEY_LIST, entries);

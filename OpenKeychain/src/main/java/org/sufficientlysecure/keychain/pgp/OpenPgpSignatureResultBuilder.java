@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.pgp;
+package org.thialfihar.android.apg.pgp;
 
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.thialfihar.android.apg.Constants;

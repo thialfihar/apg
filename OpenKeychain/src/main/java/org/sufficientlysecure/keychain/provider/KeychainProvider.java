@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.sufficientlysecure.keychain.provider;
+package org.thialfihar.android.apg.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -29,16 +29,16 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import org.sufficientlysecure.keychain.Constants;
-import org.sufficientlysecure.keychain.provider.KeychainContract.ApiAccounts;
-import org.sufficientlysecure.keychain.provider.KeychainContract.ApiApps;
-import org.sufficientlysecure.keychain.provider.KeychainContract.Certs;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRingData;
-import org.sufficientlysecure.keychain.provider.KeychainContract.KeyRings;
-import org.sufficientlysecure.keychain.provider.KeychainContract.Keys;
-import org.sufficientlysecure.keychain.provider.KeychainContract.UserIds;
-import org.sufficientlysecure.keychain.provider.KeychainDatabase.Tables;
-import org.sufficientlysecure.keychain.util.Log;
+import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiAccounts;
+import org.thialfihar.android.apg.provider.KeychainContract.ApiApps;
+import org.thialfihar.android.apg.provider.KeychainContract.Certs;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRingData;
+import org.thialfihar.android.apg.provider.KeychainContract.KeyRings;
+import org.thialfihar.android.apg.provider.KeychainContract.Keys;
+import org.thialfihar.android.apg.provider.KeychainContract.UserIds;
+import org.thialfihar.android.apg.provider.KeychainDatabase.Tables;
+import org.thialfihar.android.apg.util.Log;
 
 import java.util.Arrays;
 import java.util.Date;

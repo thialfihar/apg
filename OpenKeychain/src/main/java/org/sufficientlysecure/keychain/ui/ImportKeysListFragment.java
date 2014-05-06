@@ -39,7 +39,6 @@ import org.thialfihar.android.apg.ui.adapter.ImportKeysListKeybaseLoader;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListLoader;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListServerLoader;
 import org.thialfihar.android.apg.util.InputData;
-import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayInputStream;

@@ -359,7 +359,7 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
      */
     public void importKeys() {
         // Message is received after importing is done in ApgService
-        ApgIntentServiceHandler mSaveHandler = new ApgIntentServiceHandler(
+        ApgIntentServiceHandler saveHandler = new ApgIntentServiceHandler(
                 this,
                 getString(R.string.progress_importing),
                 ProgressDialog.STYLE_HORIZONTAL) {
@@ -424,11 +424,11 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
-            Messenger messenger = new Messenger(mSaveHandler);
+            Messenger messenger = new Messenger(saveHandler);
             intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
-            mSaveHandler.showProgressDialog(this);
+            saveHandler.showProgressDialog(this);
 
             // start service with intent
             startService(intent);
@@ -450,32 +450,32 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
             intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
-            Messenger messenger = new Messenger(mSaveHandler);
+            Messenger messenger = new Messenger(saveHandler);
             intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
-            mSaveHandler.showProgressDialog(this);
+            saveHandler.showProgressDialog(this);
 
             // start service with intent
             startService(intent);
         } else if (mListFragment.getKeybaseQuery() != null) {
             // Send all information needed to service to query keys in other thread
-            Intent intent = new Intent(this, KeychainIntentService.class);
+            Intent intent = new Intent(this, ApgIntentService.class);
 
-            intent.setAction(KeychainIntentService.ACTION_IMPORT_KEYBASE_KEYS);
+            intent.setAction(ApgIntentService.ACTION_IMPORT_KEYBASE_KEYS);
 
             // fill values for this action
             Bundle data = new Bundle();
 
             // get selected key entries
             ArrayList<ImportKeysListEntry> selectedEntries = mListFragment.getSelectedData();
-            data.putParcelableArrayList(KeychainIntentService.DOWNLOAD_KEY_LIST, selectedEntries);
+            data.putParcelableArrayList(ApgIntentService.DOWNLOAD_KEY_LIST, selectedEntries);
 
-            intent.putExtra(KeychainIntentService.EXTRA_DATA, data);
+            intent.putExtra(ApgIntentService.EXTRA_DATA, data);
 
             // Create a new Messenger for the communication back
             Messenger messenger = new Messenger(saveHandler);
-            intent.putExtra(KeychainIntentService.EXTRA_MESSENGER, messenger);
+            intent.putExtra(ApgIntentService.EXTRA_MESSENGER, messenger);
 
             // show progress dialog
             saveHandler.showProgressDialog(this);
