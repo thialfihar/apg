@@ -52,8 +52,8 @@ public class DecryptMessageFragment extends DecryptFragment {
     private boolean mLegacyMode = false;
     // view
     private EditText mMessage;
-    private BootstrapButton mDecryptButton;
-    private BootstrapButton mDecryptFromCLipboardButton;
+    private View mDecryptButton;
+    private View mDecryptFromCLipboardButton;
     private DecryptActivity mDecryptActivity;
 
     // model
@@ -77,8 +77,8 @@ public class DecryptMessageFragment extends DecryptFragment {
         View view = inflater.inflate(R.layout.decrypt_message_fragment, container, false);
 
         mMessage = (EditText) view.findViewById(R.id.message);
-        mDecryptButton = (BootstrapButton) view.findViewById(R.id.action_decrypt);
-        mDecryptFromCLipboardButton = (BootstrapButton) view.findViewById(R.id.action_decrypt_from_clipboard);
+        mDecryptButton = view.findViewById(R.id.action_decrypt);
+        mDecryptFromCLipboardButton = view.findViewById(R.id.action_decrypt_from_clipboard);
         mDecryptButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
