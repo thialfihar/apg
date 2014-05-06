@@ -2,6 +2,7 @@
 <resources>
 
     <color name="emphasis">#31b6e7</color>
+    <color name="emphasis_dark">#9933cc</color>
     <color name="bg_gray">#909090</color>
     <color name="tertiary_text_light">#808080</color>
     <color name="html_text_color">#ddd</color>
@@ -14,5 +15,6 @@
     <color name="result_orange">#ffffbb33</color>
     <color name="result_green">#ff99cc00</color>
     <color name="result_blue">#ff33b5e5</color>
+    <color name="result_purple">#aa66cc</color>
 
 </resources>
