@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.thialfihar.android.apg.pgp;
+package org.thialfihar.android.apg.util;
 
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 

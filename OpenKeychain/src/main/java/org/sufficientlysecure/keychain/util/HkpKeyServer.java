@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.thialfihar.android.apg.pgp;
+package org.thialfihar.android.apg.util;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

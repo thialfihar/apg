@@ -31,7 +31,6 @@ import com.devspark.appmsg.AppMsg;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.pgp.KeyServer;
 import org.thialfihar.android.apg.ui.adapter.AsyncTaskResultWrapper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysAdapter;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
@@ -39,6 +38,7 @@ import org.thialfihar.android.apg.ui.adapter.ImportKeysListKeybaseLoader;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListLoader;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListServerLoader;
 import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayInputStream;
