@@ -82,6 +82,7 @@ public class ViewKeyActivity extends ActionBarActivity implements
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
     private PagerTabStripAdapter mTabsAdapter;
+    private View mStatusDivider;
     private View mStatusRevoked;
     private View mStatusExpired;
 
@@ -425,6 +426,7 @@ public class ViewKeyActivity extends ActionBarActivity implements
 
                     // If this key is revoked, it cannot be used for anything!
                     if (data.getInt(INDEX_UNIFIED_IS_REVOKED) != 0) {
+                        mStatusDivider.setVisibility(View.VISIBLE);
                         mStatusRevoked.setVisibility(View.VISIBLE);
                         mStatusExpired.setVisibility(View.GONE);
                     } else {
@@ -432,8 +434,10 @@ public class ViewKeyActivity extends ActionBarActivity implements
 
                         Date expiryDate = new Date(data.getLong(INDEX_UNIFIED_EXPIRY) * 1000);
                         if (!data.isNull(INDEX_UNIFIED_EXPIRY) && expiryDate.before(new Date())) {
+                            mStatusDivider.setVisibility(View.VISIBLE);
                             mStatusExpired.setVisibility(View.VISIBLE);
                         } else {
+                            mStatusDivider.setVisibility(View.GONE);
                             mStatusExpired.setVisibility(View.GONE);
                         }
                     }
