@@ -126,7 +126,6 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
         if (ACTION_IMPORT_KEY_FROM_KEYSERVER_AND_RETURN.equals(getIntent().getAction())) {
             setTitle(R.string.nav_import);
         } else {
-            ActionBarHelper.setBackButton(this);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
 
             // set drop down navigation

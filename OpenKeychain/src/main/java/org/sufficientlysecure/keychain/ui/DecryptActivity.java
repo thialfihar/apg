@@ -70,9 +70,6 @@ public class DecryptActivity extends DrawerActivity {
 
         setContentView(R.layout.decrypt_activity);
 
-        // set actionbar without home button if called from another app
-        ActionBarHelper.setBackButton(this);
-
         initView();
 
         setupDrawerNavigation(savedInstanceState);
