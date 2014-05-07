@@ -43,6 +43,7 @@ import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.ui.RemoteServiceActivity;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.ui.ImportKeysActivity;
+import org.thialfihar.android.apg.ui.ViewKeyActivity;
 import org.thialfihar.android.apg.util.InputData;
 import org.thialfihar.android.apg.util.Log;
 
@@ -417,7 +418,15 @@ public class OpenPgpService extends RemoteService {
                 Intent result = new Intent();
                 result.putExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_SUCCESS);
 
-                // TODO: also return PendingIntent that opens the key view activity
+                // also return PendingIntent that opens the key view activity
+                Intent intent = new Intent(getBaseContext(), ViewKeyActivity.class);
+                intent.setData(KeyRings.buildGenericKeyRingUri(Long.toString(masterKeyId)));
+
+                PendingIntent pi = PendingIntent.getActivity(getBaseContext(), 0,
+                        intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
+
+                result.putExtra(OpenPgpApi.RESULT_INTENT, pi);
 
                 return result;
             } catch (ProviderHelper.NotFoundException e) {
