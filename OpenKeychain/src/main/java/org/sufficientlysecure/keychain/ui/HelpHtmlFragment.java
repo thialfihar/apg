@@ -68,7 +68,7 @@ public class HelpHtmlFragment extends Fragment {
         scroller.addView(text);
 
         // load html from raw resource (Parsing handled by HtmlTextView library)
-        text.setHtmlFromRawResource(getActivity(), mHtmlFile);
+        text.setHtmlFromRawResource(getActivity(), mHtmlFile, true);
 
         // no flickering when clicking textview for Android < 4
         text.setTextColor(getResources().getColor(R.color.html_text_color));
