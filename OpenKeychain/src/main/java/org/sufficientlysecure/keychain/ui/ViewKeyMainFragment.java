@@ -21,21 +21,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.R;import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRingData;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
@@ -49,12 +47,11 @@ import org.thialfihar.android.apg.util.Log;
 
 import java.util.Date;
 
-public class ViewKeyMainFragment extends Fragment implements
+public class ViewKeyMainFragment extends LoaderFragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ARG_DATA_URI = "uri";
 
-    private LinearLayout mContainer;
     private View mActionEdit;
     private View mActionEditDivider;
     private View mActionEncrypt;
@@ -74,10 +71,10 @@ public class ViewKeyMainFragment extends Fragment implements
     private Uri mDataUri;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.view_key_main_fragment, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup superContainer, Bundle savedInstanceState) {
+        View root = super.onCreateView(inflater, superContainer, savedInstanceState);
+        View view = inflater.inflate(R.layout.view_key_main_fragment, getContainer());
 
-        mContainer = (LinearLayout) view.findViewById(R.id.container);
         mUserIds = (ListView) view.findViewById(R.id.view_key_user_ids);
         mActionEdit = view.findViewById(R.id.view_key_action_edit);
         mActionEditDivider = view.findViewById(R.id.view_key_action_edit_divider);
@@ -85,7 +82,7 @@ public class ViewKeyMainFragment extends Fragment implements
         mActionCertify = view.findViewById(R.id.view_key_action_certify);
         mActionCertifyDivider = view.findViewById(R.id.view_key_action_certify_divider);
 
-        return view;
+        return root;
     }
 
     @Override
@@ -103,9 +100,6 @@ public class ViewKeyMainFragment extends Fragment implements
     }
 
     private void loadData(Uri dataUri) {
-        getActivity().setProgressBarIndeterminateVisibility(true);
-        mContainer.setVisibility(View.GONE);
-
         mDataUri = dataUri;
 
         Log.i(Constants.TAG, "mDataUri: " + mDataUri.toString());
@@ -147,6 +141,8 @@ public class ViewKeyMainFragment extends Fragment implements
     static final int INDEX_UNIFIED_HAS_ENCRYPT = 5;
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        setContentShown(false);
+
         switch (id) {
             case LOADER_ID_UNIFIED: {
                 Uri baseUri = KeyRings.buildUnifiedKeyRingUri(mDataUri);
@@ -223,8 +219,7 @@ public class ViewKeyMainFragment extends Fragment implements
                 break;
 
         }
-        getActivity().setProgressBarIndeterminateVisibility(false);
-        mContainer.setVisibility(View.VISIBLE);
+        setContentShown(true);
     }
 
     /**
