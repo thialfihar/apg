@@ -44,14 +44,17 @@ import android.widget.Toast;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.spongycastle.openpgp.PGPSecretKeyRing;
+
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.PgpConversionHelper;
-import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.Key;
 import org.thialfihar.android.apg.pgp.KeyRing;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
@@ -59,10 +62,11 @@ import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.service.ApgIntentServiceHandler;
 import org.thialfihar.android.apg.service.PassphraseCacheService;
 import org.thialfihar.android.apg.service.SaveKeyringParcel;
+import org.thialfihar.android.apg.ui.dialog.CustomAlertDialogBuilder;
 import org.thialfihar.android.apg.ui.dialog.PassphraseDialogFragment;
 import org.thialfihar.android.apg.ui.dialog.SetPassphraseDialogFragment;
-import org.thialfihar.android.apg.ui.widget.Editor;
 import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
+import org.thialfihar.android.apg.ui.widget.Editor;
 import org.thialfihar.android.apg.ui.widget.KeyEditor;
 import org.thialfihar.android.apg.ui.widget.SectionView;
 import org.thialfihar.android.apg.ui.widget.UserIdEditor;
@@ -506,7 +510,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
             int curID = 0;
             for (String userID : userIDs) {
                 if (userID.equals("") && (!userID.equals(originalIDs.get(curID)) || newIDs.get(curID))) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(
+                    CustomAlertDialogBuilder alert = new CustomAlertDialogBuilder(
                             EditKeyActivity.this);
 
                     alert.setIcon(R.drawable.ic_dialog_alert_holo_light);
@@ -529,7 +533,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                             }
                     );
                     alert.setCancelable(false);
-                    alert.create().show();
+                    alert.show();
                     return;
                 }
                 curID++;
@@ -619,7 +623,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
 
     private void cancelClicked() {
         if (needsSaving()) { //ask if we want to save
-            AlertDialog.Builder alert = new AlertDialog.Builder(
+            CustomAlertDialogBuilder alert = new CustomAlertDialogBuilder(
                     EditKeyActivity.this);
 
             alert.setIcon(R.drawable.ic_dialog_alert_holo_light);
@@ -642,7 +646,7 @@ public class EditKeyActivity extends ActionBarActivity implements EditorListener
                         }
                     });
             alert.setCancelable(false);
-            alert.create().show();
+            alert.show();
         } else {
             setResult(RESULT_CANCELED);
             finish();

@@ -17,7 +17,6 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -74,7 +73,7 @@ public class DeleteKeyDialogFragment extends DialogFragment {
 
         final long[] masterKeyIds = getArguments().getLongArray(ARG_DELETE_MASTER_KEY_IDS);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        CustomAlertDialogBuilder builder = new CustomAlertDialogBuilder(activity);
 
         // Setup custom View to display in AlertDialog
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -145,7 +144,7 @@ public class DeleteKeyDialogFragment extends DialogFragment {
             }
         });
 
-        return builder.create();
+        return builder.show();
     }
 
     /**

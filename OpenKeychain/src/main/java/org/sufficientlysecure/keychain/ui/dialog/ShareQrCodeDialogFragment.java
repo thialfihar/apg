@@ -17,7 +17,7 @@
 
 package org.thialfihar.android.apg.ui.dialog;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
@@ -73,7 +73,7 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
 
         Uri dataUri = getArguments().getParcelable(ARG_KEY_URI);
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        CustomAlertDialogBuilder alert = new CustomAlertDialogBuilder(getActivity());
         alert.setTitle(R.string.share_qr_code_dialog_title);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -107,7 +107,7 @@ public class ShareQrCodeDialogFragment extends DialogFragment {
             return null;
         }
 
-        return alert.create();
+        return alert.show();
     }
 
     private void setQrCode(String data) {

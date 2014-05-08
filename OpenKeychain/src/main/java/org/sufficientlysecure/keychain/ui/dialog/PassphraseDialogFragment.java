@@ -138,7 +138,7 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
         final long secretKeyId = getArguments().getLong(ARG_SECRET_KEY_ID);
         mMessenger = getArguments().getParcelable(ARG_MESSENGER);
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        CustomAlertDialogBuilder alert = new CustomAlertDialogBuilder(activity);
 
         alert.setTitle(R.string.title_authentication);
 
@@ -265,7 +265,7 @@ public class PassphraseDialogFragment extends DialogFragment implements OnEditor
         });
 
         mCanRequestFocus = true;
-        return alert.create();
+        return alert.show();
     }
 
     @Override
