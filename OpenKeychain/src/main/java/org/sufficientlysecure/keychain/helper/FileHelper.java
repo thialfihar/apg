@@ -115,17 +115,19 @@ public class FileHelper {
                         + uri.getPathSegments().toString());
 
         if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
-
+            String[] projection = {"_data"};
+            Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
             try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int columnIndex = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow("_data");
                     return cursor.getString(columnIndex);
                 }
             } catch (Exception e) {
                 // Eat it
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
             }
         } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();

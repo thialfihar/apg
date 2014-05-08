@@ -103,36 +103,38 @@ public class ProviderHelper implements PgpKeyProvider {
             throws NotFoundException {
         Cursor cursor = mContentResolver.query(uri, proj, null, null, null);
 
-        HashMap<String, Object> result = new HashMap<String, Object>(proj.length);
-        if (cursor != null && cursor.moveToFirst()) {
-            int pos = 0;
-            for (String p : proj) {
-                switch (types[pos]) {
-                    case FIELD_TYPE_NULL:
-                        result.put(p, cursor.isNull(pos));
-                        break;
-                    case FIELD_TYPE_INTEGER:
-                        result.put(p, cursor.getLong(pos));
-                        break;
-                    case FIELD_TYPE_FLOAT:
-                        result.put(p, cursor.getFloat(pos));
-                        break;
-                    case FIELD_TYPE_STRING:
-                        result.put(p, cursor.getString(pos));
-                        break;
-                    case FIELD_TYPE_BLOB:
-                        result.put(p, cursor.getBlob(pos));
-                        break;
+        try {
+            HashMap<String, Object> result = new HashMap<String, Object>(proj.length);
+            if (cursor != null && cursor.moveToFirst()) {
+                int pos = 0;
+                for (String p : proj) {
+                    switch (types[pos]) {
+                        case FIELD_TYPE_NULL:
+                            result.put(p, cursor.isNull(pos));
+                            break;
+                        case FIELD_TYPE_INTEGER:
+                            result.put(p, cursor.getLong(pos));
+                            break;
+                        case FIELD_TYPE_FLOAT:
+                            result.put(p, cursor.getFloat(pos));
+                            break;
+                        case FIELD_TYPE_STRING:
+                            result.put(p, cursor.getString(pos));
+                            break;
+                        case FIELD_TYPE_BLOB:
+                            result.put(p, cursor.getBlob(pos));
+                            break;
+                    }
+                    pos += 1;
                 }
-                pos += 1;
+            }
+
+            return result;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-
-        return result;
     }
 
     public Object getUnifiedData(long masterKeyId, String column, int type)
@@ -600,27 +602,29 @@ public class ProviderHelper implements PgpKeyProvider {
             }, inMasterKeyList, null, null);
         }
 
-        if (cursor != null) {
-            int masterIdCol = cursor.getColumnIndex(KeyRingData.MASTER_KEY_ID);
-            int dataCol = cursor.getColumnIndex(KeyRingData.KEY_RING_DATA);
-            if (cursor.moveToFirst()) {
-                do {
-                    Log.d(Constants.TAG, "masterKeyId: " + cursor.getLong(masterIdCol));
+        try {
+            if (cursor != null) {
+                int masterIdCol = cursor.getColumnIndex(KeyRingData.MASTER_KEY_ID);
+                int dataCol = cursor.getColumnIndex(KeyRingData.KEY_RING_DATA);
+                if (cursor.moveToFirst()) {
+                    do {
+                        Log.d(Constants.TAG, "masterKeyId: " + cursor.getLong(masterIdCol));
 
-                    byte[] data = cursor.getBlob(dataCol);
+                        byte[] data = cursor.getBlob(dataCol);
 
-                    // get actual keyring data blob and write it to ByteArrayOutputStream
-                    try {
-                        output.add(getKeyRingAsArmoredString(data));
-                    } catch (IOException e) {
-                        Log.e(Constants.TAG, "IOException", e);
-                    }
-                } while (cursor.moveToNext());
+                        // get actual keyring data blob and write it to ByteArrayOutputStream
+                        try {
+                            output.add(getKeyRingAsArmoredString(data));
+                        } catch (IOException e) {
+                            Log.e(Constants.TAG, "IOException", e);
+                        }
+                    } while (cursor.moveToNext());
+                }
             }
-        }
-
-        if (cursor != null) {
-            cursor.close();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         if (output.size() > 0) {
@@ -634,17 +638,19 @@ public class ProviderHelper implements PgpKeyProvider {
         Cursor cursor = mContentResolver.query(ApiApps.CONTENT_URI, null, null, null, null);
 
         ArrayList<String> packageNames = new ArrayList<String>();
-        if (cursor != null) {
-            int packageNameCol = cursor.getColumnIndex(ApiApps.PACKAGE_NAME);
-            if (cursor.moveToFirst()) {
-                do {
-                    packageNames.add(cursor.getString(packageNameCol));
-                } while (cursor.moveToNext());
+        try {
+            if (cursor != null) {
+                int packageNameCol = cursor.getColumnIndex(ApiApps.PACKAGE_NAME);
+                if (cursor.moveToFirst()) {
+                    do {
+                        packageNames.add(cursor.getString(packageNameCol));
+                    } while (cursor.moveToNext());
+                }
             }
-        }
-
-        if (cursor != null) {
-            cursor.close();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         return packageNames;
@@ -692,13 +698,19 @@ public class ProviderHelper implements PgpKeyProvider {
     public AppSettings getApiAppSettings(Uri uri) {
         AppSettings settings = null;
 
-        Cursor cur = mContentResolver.query(uri, null, null, null, null);
-        if (cur != null && cur.moveToFirst()) {
-            settings = new AppSettings();
-            settings.setPackageName(cur.getString(
-                    cur.getColumnIndex(ApgContract.ApiApps.PACKAGE_NAME)));
-            settings.setPackageSignature(cur.getBlob(
-                    cur.getColumnIndex(ApgContract.ApiApps.PACKAGE_SIGNATURE)));
+        Cursor cursor = mContentResolver.query(uri, null, null, null, null);
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                settings = new AppSettings();
+                settings.setPackageName(cursor.getString(
+                        cursor.getColumnIndex(KeychainContract.ApiApps.PACKAGE_NAME)));
+                settings.setPackageSignature(cursor.getBlob(
+                        cursor.getColumnIndex(KeychainContract.ApiApps.PACKAGE_SIGNATURE)));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         return settings;
@@ -707,20 +719,26 @@ public class ProviderHelper implements PgpKeyProvider {
     public AccountSettings getApiAccountSettings(Uri accountUri) {
         AccountSettings settings = null;
 
-        Cursor cur = mContentResolver.query(accountUri, null, null, null, null);
-        if (cur != null && cur.moveToFirst()) {
-            settings = new AccountSettings();
+        Cursor cursor = mContentResolver.query(accountUri, null, null, null, null);
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                settings = new AccountSettings();
 
-            settings.setAccountName(cur.getString(
-                    cur.getColumnIndex(ApgContract.ApiAccounts.ACCOUNT_NAME)));
-            settings.setKeyId(cur.getLong(
-                    cur.getColumnIndex(ApgContract.ApiAccounts.KEY_ID)));
-            settings.setCompression(cur.getInt(
-                    cur.getColumnIndexOrThrow(ApgContract.ApiAccounts.COMPRESSION)));
-            settings.setHashAlgorithm(cur.getInt(
-                    cur.getColumnIndexOrThrow(ApgContract.ApiAccounts.HASH_ALORITHM)));
-            settings.setEncryptionAlgorithm(cur.getInt(
-                    cur.getColumnIndexOrThrow(ApgContract.ApiAccounts.ENCRYPTION_ALGORITHM)));
+                settings.setAccountName(cursor.getString(
+                        cursor.getColumnIndex(KeychainContract.ApiAccounts.ACCOUNT_NAME)));
+                settings.setKeyId(cursor.getLong(
+                        cursor.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID)));
+                settings.setCompression(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(KeychainContract.ApiAccounts.COMPRESSION)));
+                settings.setHashAlgorithm(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(KeychainContract.ApiAccounts.HASH_ALORITHM)));
+                settings.setEncryptionAlgorithm(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(KeychainContract.ApiAccounts.ENCRYPTION_ALGORITHM)));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
         return settings;
@@ -730,10 +748,16 @@ public class ProviderHelper implements PgpKeyProvider {
         Set<Long> keyIds = new HashSet<Long>();
 
         Cursor cursor = mContentResolver.query(uri, null, null, null, null);
-        if (cursor != null) {
-            int keyIdColumn = cursor.getColumnIndex(ApgContract.ApiAccounts.KEY_ID);
-            while (cursor.moveToNext()) {
-                keyIds.add(cursor.getLong(keyIdColumn));
+        try {
+            if (cursor != null) {
+                int keyIdColumn = cursor.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID);
+                while (cursor.moveToNext()) {
+                    keyIds.add(cursor.getLong(keyIdColumn));
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
 
@@ -746,19 +770,19 @@ public class ProviderHelper implements PgpKeyProvider {
         String[] projection = new String[] {ApiApps.PACKAGE_SIGNATURE};
 
         Cursor cursor = mContentResolver.query(queryUri, projection, null, null, null);
+        try {
+            byte[] signature = null;
+            if (cursor != null && cursor.moveToFirst()) {
+                int signatureCol = 0;
 
-        byte[] signature = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            int signatureCol = 0;
-
-            signature = cursor.getBlob(signatureCol);
+                signature = cursor.getBlob(signatureCol);
+            }
+            return signature;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-
-        if (cursor != null) {
-            cursor.close();
-        }
-
-        return signature;
     }
 
     public KeyRing getPublicKeyRingByMasterKeyId(long keyId) {
