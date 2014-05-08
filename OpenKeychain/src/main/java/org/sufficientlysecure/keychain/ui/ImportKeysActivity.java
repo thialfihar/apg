@@ -88,7 +88,7 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
     private ImportKeysListFragment mListFragment;
     private String[] mNavigationStrings;
     private Fragment mCurrentFragment;
-    private BootstrapButton mImportButton;
+    private View mImportButton;
 
     private static final Class[] NAVIGATION_CLASSES = new Class[] {
             ImportKeysServerFragment.class,
@@ -113,7 +113,7 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
 
         setContentView(R.layout.import_keys_activity);
 
-        mImportButton = (BootstrapButton) findViewById(R.id.import_import);
+        mImportButton = findViewById(R.id.import_import);
         mImportButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

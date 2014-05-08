@@ -46,7 +46,7 @@ import org.thialfihar.android.apg.util.Log;
  * Sends the selected public key to a keyserver
  */
 public class UploadKeyActivity extends ActionBarActivity {
-    private BootstrapButton mUploadButton;
+    private View mUploadButton;
     private Spinner mKeyServerSpinner;
 
     private Uri mDataUri;
@@ -55,10 +55,10 @@ public class UploadKeyActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.key_server_export);
+        setContentView(R.layout.upload_key_activity);
 
-        mUploadButton = (BootstrapButton) findViewById(R.id.btn_export_to_server);
-        mKeyServerSpinner = (Spinner) findViewById(R.id.sign_key_keyserver);
+        mUploadButton = findViewById(R.id.upload_key_action_upload);
+        mKeyServerSpinner = (Spinner) findViewById(R.id.upload_key_keyserver);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, Preferences.getPreferences(this)
