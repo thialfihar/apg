@@ -370,10 +370,10 @@
   <string name="import_nfc_help_button">Hilfe</string>
   <string name="import_clipboard_button">Schlüssel aus der Zwischenablage einfügen</string>
   <!--Intent labels-->
-  <string name="intent_decrypt_file">Datei mit APG entschlüsseln</string>
-  <string name="intent_import_key">Schlüssel mit APG importieren</string>
-  <string name="intent_send_encrypt">Mit APG verschlüsseln</string>
-  <string name="intent_send_decrypt">Mit APG entschlüsseln</string>
+  <string name="intent_decrypt_file">Datei entschlüsseln mit APG</string>
+  <string name="intent_import_key">Schlüssel importieren mit APG</string>
+  <string name="intent_send_encrypt">Verschlüsseln mit APG</string>
+  <string name="intent_send_decrypt">Entschlüsseln mit APG</string>
   <!--Remote API-->
   <string name="api_no_apps">Keine registrierten Anwendungen vorhanden!\n\nAnwendungen können Zugriff auf APG anfordern. Nachdem Zugriff erlaubt wurde, werden diese hier aufgelistet.</string>
   <string name="api_settings_show_info">Erweiterte Informationen anzeigen</string>

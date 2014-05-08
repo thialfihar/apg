@@ -388,6 +388,7 @@
   <string name="api_settings_save">Guardar</string>
   <string name="api_settings_cancel">Cancelar</string>
   <string name="api_settings_revoke">Revocar acceso</string>
+  <string name="api_settings_start">Iniciar aplicación</string>
   <string name="api_settings_delete_account">Borrar cuenta</string>
   <string name="api_settings_package_name">Nombre de paquete</string>
   <string name="api_settings_package_signature">SHA-256 de firma de paquete</string>
