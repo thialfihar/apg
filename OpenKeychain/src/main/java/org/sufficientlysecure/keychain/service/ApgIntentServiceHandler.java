@@ -28,6 +28,8 @@ import android.widget.Toast;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
 
+import com.devspark.appmsg.AppMsg;
+
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
 
@@ -115,9 +117,9 @@ public class ApgIntentServiceHandler extends Handler {
 
                 // show error from service
                 if (data.containsKey(DATA_ERROR)) {
-                    Toast.makeText(mActivity,
+                    AppMsg.makeText(mActivity,
                             mActivity.getString(R.string.error_message, data.getString(DATA_ERROR)),
-                            Toast.LENGTH_SHORT).show();
+                            AppMsg.STYLE_ALERT).show();
                 }
 
                 break;
