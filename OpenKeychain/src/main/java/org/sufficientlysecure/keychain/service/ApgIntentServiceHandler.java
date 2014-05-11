@@ -25,8 +25,6 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
-import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.ui.dialog.ProgressDialogFragment;
 
 import com.devspark.appmsg.AppMsg;
 
