@@ -389,11 +389,10 @@
   <string name="api_settings_delete_account">Account löschen</string>
   <string name="api_settings_package_name">Paketname</string>
   <string name="api_settings_package_signature">SHA-256 der Paketsignatur</string>
-  <string name="api_register_text">Folgende Anwendung beantragt Zugriff auf APGs API.\nZugriff erlauben?\n\nVORSICHT: Sollten Sie nicht wissen, warum diese Anfrage erscheint, sollten Sie den Zugriff nicht erlauben! Sie können Zugriffe später über das Menü \'Registrierte Anwendungen\' widerrufen.</string>
   <string name="api_settings_accounts">Konten</string>
   <string name="api_settings_accounts_empty">Keine Accounts mit dieser App verknüpft.</string>
   <string name="api_create_account_text">Die Anwendung erfordert die Erstellung eines neuen Accounts. Bitte wähle einen existierenden Schlüssel oder erstelle einen neuen.\nAnwendungen sind auf die Nutzung der Schlüssel beschränkt, die du hier auswählst!</string>
-  <string name="api_register_text">Folgende Anwendung beantragt Zugriff auf OpenKeychains API.\nZugriff erlauben?\n\nVORSICHT: Sollten Sie nicht wissen, warum diese Anfrage erscheint, sollten Sie den Zugriff nicht erlauben! Sie können Zugriffe später über das Menü \'Registrierte Anwendungen\' widerrufen.</string>
+  <string name="api_register_text">Folgende Anwendung beantragt Zugriff auf APGs API.\nZugriff erlauben?\n\nVORSICHT: Sollten Sie nicht wissen, warum diese Anfrage erscheint, sollten Sie den Zugriff nicht erlauben! Sie können Zugriffe später über das Menü \'Registrierte Anwendungen\' widerrufen.</string>
   <string name="api_register_allow">Zugriff erlauben</string>
   <string name="api_register_disallow">Zugriff verbieten</string>
   <string name="api_register_error_select_key">Bitte einen Schlüssel auswählen!</string>
