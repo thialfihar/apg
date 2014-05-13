@@ -39,10 +39,13 @@ import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentVerifierBuilderProvider;
+
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.pgp.PublicKeyRing;
 import org.thialfihar.android.apg.provider.ApgContract.ApiApps;
 import org.thialfihar.android.apg.provider.ApgContract.Certs;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRingData;
@@ -230,6 +233,15 @@ public class ProviderHelper {
     public PGPSecretKeyRing getPGPSecretKeyRing(long masterKeyId) throws NotFoundException {
         Uri queryUri = KeyRingData.buildSecretKeyRingUri(Long.toString(masterKeyId));
         return (PGPSecretKeyRing) getPGPKeyRing(queryUri);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void saveKeyRing(KeyRing keyRing) throws IOException {
+        if (keyRing instanceof PublicKeyRing) {
+            saveKeyRing(keyRing.getPublicKeyRing());
+        } else {
+            saveKeyRing(keyRing.getSecretKeyRing());
+        }
     }
 
     /**
