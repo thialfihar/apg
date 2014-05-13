@@ -12,8 +12,8 @@ dependencies {
     compile project(':libs:bc:pg')
     compile project(':libs:bc:prov')
     compile project(':libs:HtmlTextView')
-    compile project(':OpenKeychain-API:libraries:openpgp-api-library')
-    compile project(':OpenKeychain-API:libraries:openkeychain-api-library')
+    compile project(':libs:openpgp-api-library')
+    compile project(':libs:openkeychain-api-library')
 }
 
 android {

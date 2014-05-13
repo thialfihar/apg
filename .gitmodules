@@ -7,3 +7,9 @@
 [submodule "libs/HtmlTextView"]
 	path = libs/HtmlTextView
 	url = git://github.com/thialfihar/html-textview
+[submodule "libs/openpgp-api-lib"]
+	path = libs/openpgp-api-lib
+	url = https://github.com/open-keychain/openpgp-api-lib.git
+[submodule "libs/openkeychain-api-lib"]
+	path = libs/openkeychain-api-lib
+	url = https://github.com/open-keychain/openkeychain-api-lib.git
