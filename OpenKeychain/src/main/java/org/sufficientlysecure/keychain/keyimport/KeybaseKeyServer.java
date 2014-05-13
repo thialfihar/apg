@@ -21,9 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.JWalk;
-import org.thialfihar.android.apg.util.KeyServer;
 import org.thialfihar.android.apg.util.Log;
 
 import java.net.HttpURLConnection;

@@ -19,7 +19,6 @@ package org.thialfihar.android.apg.remote.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -34,7 +33,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.remote.AccountSettings;
 import org.thialfihar.android.apg.ui.EditKeyActivity;
@@ -72,9 +70,7 @@ public class AccountSettingsFragment extends Fragment implements
         this.mAccSettings = accountSettings;
 
         mAccNameView.setText(accountSettings.getAccountName());
-        Uri keyUri = ApgContract.KeyRings.buildSecretKeyRingsByMasterKeyIdUri(
-            String.valueOf(accountSettings.getKeyId()));
-        mSelectKeyFragment.selectKey(keyUri);
+        mSelectKeyFragment.selectKey(accountSettings.getKeyId());
         mEncryptionAlgorithm.setSelection(mEncryptionAdapter.getPosition(accountSettings
                 .getEncryptionAlgorithm()));
         mHashAlgorithm.setSelection(mHashAdapter.getPosition(accountSettings.getHashAlgorithm()));

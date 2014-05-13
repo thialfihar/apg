@@ -1,11 +1,11 @@
-package org.sufficientlysecure.keychain.ui.dialog;
+package org.thialfihar.android.apg.ui.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 /** This class extends AlertDiaog.Builder, styling the header using emphasis color.
  * Note that this class is a huge hack, because dialog boxes aren't easily stylable.

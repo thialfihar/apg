@@ -1,4 +1,4 @@
-package org.sufficientlysecure.keychain.ui;
+package org.thialfihar.android.apg.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 
-import org.sufficientlysecure.keychain.R;
+import org.thialfihar.android.apg.R;
 
 /** This is a fragment helper class, which implements a generic
  * progressbar/container view.
@@ -16,7 +16,7 @@ import org.sufficientlysecure.keychain.R;
  * layout's root view, and ues getContainer() as root view of your subclass.
  * The layout shows a progress bar by default, and can be switched to the
  * actual contents by calling setContentShown().
- * 
+ *
  */
 public class LoaderFragment extends Fragment {
     private boolean mContentShown;

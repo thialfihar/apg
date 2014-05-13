@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.thialfihar.android.apg.ui.keyimport;
+package org.thialfihar.android.apg.keyimport;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -27,7 +27,6 @@ import org.spongycastle.openpgp.PGPPublicKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentVerifierBuilderProvider;
-
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.util.IterableIterator;
@@ -52,8 +51,9 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     public boolean secretKey;
     public String mPrimaryUserId;
 
-    private byte[] mBytes = new byte[] {};
     private boolean mSelected;
+
+    private byte[] mBytes = new byte[]{};
 
     public int describeContents() {
         return 0;
@@ -90,8 +90,8 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
             vr.bitStrength = source.readInt();
             vr.algorithm = source.readString();
             vr.secretKey = source.readByte() == 1;
-            vr.setSelected(source.readByte() == 1);
-            vr.setBytes(new byte[source.readInt()]);
+            vr.mSelected = source.readByte() == 1;
+            vr.mBytes = new byte[source.readInt()];
             source.readByteArray(vr.mBytes);
 
             return vr;
@@ -111,7 +111,7 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     }
 
     public void setBytes(byte[] bytes) {
-        mBytes = bytes;
+        this.mBytes = bytes;
     }
 
     public boolean isSelected() {
@@ -216,13 +216,13 @@ public class ImportKeysListEntry implements Serializable, Parcelable {
     public ImportKeysListEntry(Context context, PGPKeyRing pgpKeyRing) {
         // save actual key object into entry, used to import it later
         try {
-            mBytes = pgpKeyRing.getEncoded();
+            this.mBytes = pgpKeyRing.getEncoded();
         } catch (IOException e) {
             Log.e(Constants.TAG, "IOException on pgpKeyRing.getEncoded()", e);
         }
 
         // selected is default
-        mSelected = true;
+        this.mSelected = true;
 
         if (pgpKeyRing instanceof PGPSecretKeyRing) {
             secretKey = true;

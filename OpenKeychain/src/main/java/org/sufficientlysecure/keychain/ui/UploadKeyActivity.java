@@ -137,7 +137,7 @@ public class UploadKeyActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 Intent viewIntent = NavUtils.getParentActivityIntent(this);
-                viewIntent.setData(KeychainContract.KeyRings.buildGenericKeyRingUri(mDataUri));
+                viewIntent.setData(ApgContract.KeyRings.buildGenericKeyRingUri(mDataUri));
                 NavUtils.navigateUpTo(this, viewIntent);
                 return true;
             }

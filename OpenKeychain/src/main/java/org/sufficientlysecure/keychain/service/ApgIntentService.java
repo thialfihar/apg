@@ -60,12 +60,8 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.ApgServiceListener;
-import org.thialfihar.android.apg.util.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
-import org.thialfihar.android.apg.util.KeyServer;
-import org.thialfihar.android.apg.util.KeybaseKeyServer;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
@@ -538,7 +534,7 @@ public class ApgIntentService extends IntentService
                     newPassphrase = oldPassphrase;
                 }
 
-                long masterKeyId = saveParcel.keys.get(0).getKeyID();
+                long masterKeyId = saveParcel.keys.get(0).getKeyId();
 
                 /* Operation */
                 ProviderHelper providerHelper = new ProviderHelper(this);

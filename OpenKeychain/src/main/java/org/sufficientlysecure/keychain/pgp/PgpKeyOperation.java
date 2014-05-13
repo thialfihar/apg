@@ -114,7 +114,7 @@ public class PgpKeyOperation {
      */
 
     // TODO: key flags?
-    public PGPSecretKey createKey(int algorithmChoice, int keySize, String passphrase,
+    public Key createKey(int algorithmChoice, int keySize, String passphrase,
                                   boolean isMasterKey)
             throws NoSuchAlgorithmException, PGPException, NoSuchProviderException,
             PgpGeneralMsgIdException, InvalidAlgorithmParameterException {
@@ -183,7 +183,7 @@ public class PgpKeyOperation {
         return new PGPSecretKey(keyPair.getPrivateKey(), keyPair.getPublicKey(),
                 sha1Calc, isMasterKey, keyEncryptor);
 
-        return secKey;
+        return new Key(secKey);
     }
 
 

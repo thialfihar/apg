@@ -44,8 +44,8 @@ public abstract class KeyServer {
         private static final long serialVersionUID = -507574859137295530L;
     }
 
-    abstract List<ImportKeysListEntry> search(String query)
-        throws QueryException, TooManyResponses, InsufficientQuery;
+    abstract List<ImportKeysListEntry> search(String query) throws QueryException, TooManyResponses,
+            InsufficientQuery;
 
     abstract String get(String keyIdHex) throws QueryException;
 

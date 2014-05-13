@@ -24,8 +24,6 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
 import org.thialfihar.android.apg.keyimport.KeyServer;
 import org.thialfihar.android.apg.keyimport.KeybaseKeyServer;
-import org.thialfihar.android.apg.util.KeyServer;
-import org.thialfihar.android.apg.util.KeybaseKeyServer;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;

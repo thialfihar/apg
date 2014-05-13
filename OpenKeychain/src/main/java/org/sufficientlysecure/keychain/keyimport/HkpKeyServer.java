@@ -32,7 +32,6 @@ import org.apache.http.util.EntityUtils;
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.pgp.PgpHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
-import org.thialfihar.android.apg.ui.adapter.ImportKeysListEntry;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.IOException;
@@ -145,10 +144,8 @@ public class HkpKeyServer extends KeyServer {
 
     /**
      * @param hostAndPort may be just
-     *                    "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then
-     *                      it will
-     *                    connect using {@link #PORT_DEFAULT}. However, port may be specified after
-     *                      colon
+     *                    "<code>hostname</code>" (eg. "<code>pool.sks-keyservers.net</code>"), then it will
+     *                    connect using {@link #PORT_DEFAULT}. However, port may be specified after colon
      *                    ("<code>hostname:port</code>", eg. "<code>p80.pool.sks-keyservers.net:80</code>").
      */
     public HkpKeyServer(String hostAndPort) {
