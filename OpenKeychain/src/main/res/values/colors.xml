@@ -15,6 +15,6 @@
     <color name="result_orange">#ffffbb33</color>
     <color name="result_green">#ff99cc00</color>
     <color name="result_blue">#ff33b5e5</color>
-    <color name="result_purple">#aa66cc</color>
+    <color name="result_purple">#ff33b5e5</color>
 
 </resources>
