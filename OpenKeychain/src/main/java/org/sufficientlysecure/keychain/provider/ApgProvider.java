@@ -110,6 +110,12 @@ public class ApgProvider extends ContentProvider {
                 KEY_RINGS_FIND_BY_SUBKEY);
 
         /**
+         * legacy uri
+         * key_rings/public/emails/_
+         */
+        matcher.addURI(authority, "/key_rings/public/emails/*", KEY_RINGS_FIND_BY_EMAIL);
+
+        /**
          * list key_ring specifics
          *
          * <pre>

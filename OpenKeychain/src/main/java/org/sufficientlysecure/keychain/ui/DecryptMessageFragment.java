@@ -182,6 +182,8 @@ public class DecryptMessageFragment extends DecryptFragment {
                             intent.putExtra("signatureKeyId", signatureResult.getKeyId());
                             intent.putExtra("signatureSuccess",
                                 signatureResult.getStatus() ==
+                                    OpenPgpSignatureResult.SIGNATURE_SUCCESS_CERTIFIED ||
+                                signatureResult.getStatus() ==
                                     OpenPgpSignatureResult.SIGNATURE_SUCCESS_UNCERTIFIED);
                             intent.putExtra("signatureUnknown",
                                 signatureResult.getStatus() ==

@@ -25,6 +25,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import org.thialfihar.android.apg.R;
+import org.thialfihar.android.apg.provider.ApgContract;
+import org.thialfihar.android.apg.provider.ProviderHelper;
 
 public class SelectSecretKeyActivity extends ActionBarActivity {
 
@@ -79,10 +81,17 @@ public class SelectSecretKeyActivity extends ActionBarActivity {
         data.setData(selectedUri);
 
         long masterKeyId = Long.valueOf(selectedUri.getLastPathSegment());
+        String userId;
+        try {
+            userId = (String) new ProviderHelper(this).getUnifiedData(masterKeyId,
+                    ApgContract.KeyRings.USER_ID, ProviderHelper.FIELD_TYPE_STRING);
+        } catch (ProviderHelper.NotFoundException e) {
+            // not pretty, but shouldn't happen anyway
+            userId = "<unknown>";
+        }
         data.putExtra("keyId", masterKeyId);
-        data.putExtra("userId", (String) "TODO");
+        data.putExtra("userId", userId);
         setResult(RESULT_OK, data);
         finish();
     }
-
 }
