@@ -47,9 +47,9 @@ public abstract class KeyServer {
     abstract List<ImportKeysListEntry> search(String query) throws QueryException, TooManyResponses,
             InsufficientQuery;
 
-    abstract String get(String keyIdHex) throws QueryException;
+    abstract public String get(String keyIdHex) throws QueryException;
 
-    abstract void add(String armoredKey) throws AddKeyException;
+    abstract public void add(String armoredKey) throws AddKeyException;
 
     public static String readAll(InputStream in, String encoding) throws IOException {
         ByteArrayOutputStream raw = new ByteArrayOutputStream();
