@@ -30,19 +30,16 @@ import org.spongycastle.openpgp.PGPPublicKeyRing;
 import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
+
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.keyimport.HkpKeyServer;
-import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.KeyServer;
-import org.thialfihar.android.apg.keyimport.KeyServer.AddKeyException;
-import org.thialfihar.android.apg.pgp.Progressable;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
-import org.thialfihar.android.apg.util.ApgServiceListener;
+import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
+import org.thialfihar.android.apg.keyimport.KeyServer;
 import org.thialfihar.android.apg.util.IterableIterator;
+import org.thialfihar.android.apg.keyimport.KeyServer.AddKeyException;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -60,6 +57,7 @@ public class PgpImportExport {
 
     private Context mContext;
     private Progressable mProgressable;
+
     private ApgServiceListener mApgServiceListener;
 
     private ProviderHelper mProviderHelper;
@@ -76,13 +74,13 @@ public class PgpImportExport {
         this.mProviderHelper = new ProviderHelper(context);
     }
 
-    public PgpImportExport(Context context, Progressable progressable,
-                ApgServiceListener keychainListener) {
+    public PgpImportExport(Context context,
+                           Progressable progressable, ApgServiceListener apgListener) {
         super();
         this.mContext = context;
         this.mProgressable = progressable;
         this.mProviderHelper = new ProviderHelper(context);
-        this.mApgServiceListener = keychainListener;
+        this.mApgServiceListener = apgListener;
     }
 
     public void updateProgress(int message, int current, int total) {
@@ -103,25 +101,15 @@ public class PgpImportExport {
         }
     }
 
-    public boolean uploadKeyRingToServer(KeyServer server, PublicKeyRing keyRing) {
+    public boolean uploadKeyRingToServer(KeyServer server, PGPPublicKeyRing keyRing) {
         try {
-            server.add(keyRing.getArmoredEncoded(mContext));
+            server.add(new KeyRing(keyRing).getArmoredEncoded(mContext));
             return true;
         } catch (IOException e) {
             return false;
         } catch (AddKeyException e) {
             // TODO: tell the user?
             return false;
-        } finally {
-            try {
-                if (aos != null) {
-                    aos.close();
-                }
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-            }
         }
     }
 
@@ -258,7 +246,7 @@ public class PgpImportExport {
     }
 
     @SuppressWarnings("unchecked")
-    public int storeKeyRingInCache(PGPKeyRing keyring) {
+    public int storeKeyRingInCache(PGPKeyRing keyRing) {
         int status = RETURN_ERROR;
         try {
             if (keyRing instanceof PGPSecretKeyRing) {

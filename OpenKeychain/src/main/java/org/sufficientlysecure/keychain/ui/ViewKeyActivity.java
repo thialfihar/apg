@@ -47,16 +47,11 @@ import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
-import org.thialfihar.android.apg.compatibility.ClipboardReflection;
 import org.thialfihar.android.apg.helper.ExportHelper;
-import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.ui.adapter.PagerTabStripAdapter;
-import org.thialfihar.android.apg.ui.adapter.TabsAdapter;
-import org.thialfihar.android.apg.ui.dialog.ShareNfcDialogFragment;
-import org.thialfihar.android.apg.ui.dialog.ShareQrCodeDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.SlidingTabLayout;
 
@@ -379,6 +374,7 @@ public class ViewKeyActivity extends ActionBarActivity implements
             ApgContract.KeyRings.USER_ID,
             ApgContract.KeyRings.IS_REVOKED,
             ApgContract.KeyRings.EXPIRY,
+
     };
     static final int INDEX_UNIFIED_MASTER_KEY_ID = 1;
     static final int INDEX_UNIFIED_USER_ID = 2;

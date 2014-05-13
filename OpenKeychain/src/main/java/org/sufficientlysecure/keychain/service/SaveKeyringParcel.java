@@ -20,7 +20,8 @@ package org.thialfihar.android.apg.service;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.thialfihar.android.apg.pgp.Key;
+import org.spongycastle.openpgp.PGPSecretKey;
+import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,13 +34,13 @@ public class SaveKeyringParcel implements Parcelable {
     public boolean[] newIDs;
     public boolean primaryIDChanged;
     public boolean[] moddedKeys;
-    public ArrayList<Key> deletedKeys;
+    public ArrayList<PGPSecretKey> deletedKeys;
     public ArrayList<Calendar> keysExpiryDates;
     public ArrayList<Integer> keysUsages;
     public String newPassphrase;
     public String oldPassphrase;
     public boolean[] newKeys;
-    public ArrayList<Key> keys;
+    public ArrayList<PGPSecretKey> keys;
     public String originalPrimaryID;
 
     public SaveKeyringParcel() {}
@@ -51,13 +52,18 @@ public class SaveKeyringParcel implements Parcelable {
         newIDs = source.createBooleanArray();
         primaryIDChanged = source.readByte() != 0;
         moddedKeys = source.createBooleanArray();
-        deletedKeys = (ArrayList<Key>) source.readSerializable();
+        byte[] tmp = source.createByteArray();
+        if (tmp == null) {
+            deletedKeys = null;
+        } else {
+            deletedKeys = PgpConversionHelper.BytesToPGPSecretKeyList(tmp);
+        }
         keysExpiryDates = (ArrayList<Calendar>) source.readSerializable();
         keysUsages = source.readArrayList(Integer.class.getClassLoader());
         newPassphrase = source.readString();
         oldPassphrase = source.readString();
         newKeys = source.createBooleanArray();
-        keys = (ArrayList<Key>) source.readSerializable();
+        keys = PgpConversionHelper.BytesToPGPSecretKeyList(source.createByteArray());
         originalPrimaryID = source.readString();
     }
 
@@ -69,13 +75,17 @@ public class SaveKeyringParcel implements Parcelable {
         destination.writeBooleanArray(newIDs);
         destination.writeByte((byte) (primaryIDChanged ? 1 : 0));
         destination.writeBooleanArray(moddedKeys);
-        destination.writeSerializable(deletedKeys);
+        byte[] tmp = null;
+        if (deletedKeys.size() != 0) {
+            tmp = PgpConversionHelper.PGPSecretKeyArrayListToBytes(deletedKeys);
+        }
+        destination.writeByteArray(tmp);
         destination.writeSerializable(keysExpiryDates);
         destination.writeList(keysUsages);
         destination.writeString(newPassphrase);
         destination.writeString(oldPassphrase);
         destination.writeBooleanArray(newKeys);
-        destination.writeSerializable(keys);
+        destination.writeByteArray(PgpConversionHelper.PGPSecretKeyArrayListToBytes(keys));
         destination.writeString(originalPrimaryID);
     }
 

@@ -34,15 +34,15 @@ import org.spongycastle.openpgp.PGPSignature;
 import org.spongycastle.openpgp.PGPSignatureGenerator;
 import org.spongycastle.openpgp.PGPSignatureSubpacketGenerator;
 import org.spongycastle.openpgp.PGPV3SignatureGenerator;
+import org.spongycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.spongycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePBEKeyEncryptionMethodGenerator;
+import org.spongycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePGPDataEncryptorBuilder;
 import org.spongycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodGenerator;
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.Progressable;
-import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ApgContract;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.util.InputData;
@@ -67,8 +67,7 @@ public class PgpSignEncrypt {
     private ProviderHelper mProviderHelper;
     private String mVersionHeader;
     private InputData mData;
-    private OutputStream mOutputStream;
-    private PgpKeyProvider mKeyProvider;
+    private OutputStream mOutStream;
 
     private Progressable mProgressable;
     private boolean mEnableAsciiArmorOutput;
@@ -98,8 +97,7 @@ public class PgpSignEncrypt {
         this.mProviderHelper = builder.mProviderHelper;
         this.mVersionHeader = builder.mVersionHeader;
         this.mData = builder.mData;
-        this.mOutputStream = builder.mOutputStream;
-        this.mKeyProvider = builder.mKeyProvider;
+        this.mOutStream = builder.mOutStream;
 
         this.mProgressable = builder.mProgressable;
         this.mEnableAsciiArmorOutput = builder.mEnableAsciiArmorOutput;
@@ -120,8 +118,7 @@ public class PgpSignEncrypt {
         private ProviderHelper mProviderHelper;
         private String mVersionHeader;
         private InputData mData;
-        private OutputStream mOutputStream;
-        private PgpKeyProvider mKeyProvider;
+        private OutputStream mOutStream;
 
         // optional
         private Progressable mProgressable = null;
@@ -137,16 +134,14 @@ public class PgpSignEncrypt {
         private boolean mEncryptToSigner = false;
         private boolean mCleartextInput = false;
 
-        public Builder(ProviderHelper providerHelper, String versionHeader, InputData data,
-                       OutputStream outputStream, PgpKeyProvider keyProvider) {
+        public Builder(ProviderHelper providerHelper, String versionHeader, InputData data, OutputStream outStream) {
             this.mProviderHelper = providerHelper;
             this.mVersionHeader = versionHeader;
             this.mData = data;
-            this.mOutputStream = outputStream;
-            this.mKeyProvider = keyProvider;
+            this.mOutStream = outStream;
         }
 
-        public Builder setProgressable(Progressable progressable) {
+       public Builder setProgressable(Progressable progressable) {
             mProgressable = progressable;
             return this;
         }
@@ -274,16 +269,16 @@ public class PgpSignEncrypt {
         ArmoredOutputStream armorOut = null;
         OutputStream out;
         if (mEnableAsciiArmorOutput) {
-            armorOut = new ArmoredOutputStream(mOutputStream);
+            armorOut = new ArmoredOutputStream(mOutStream);
             armorOut.setHeader("Version", mVersionHeader);
             out = armorOut;
         } else {
-            out = mOutputStream;
+            out = mOutStream;
         }
 
         /* Get keys for signature generation for later usage */
-        Key signingKey = null;
-        KeyRing signingKeyRing = null;
+        PGPSecretKey signingKey = null;
+        PGPSecretKeyRing signingKeyRing = null;
         PGPPrivateKey signaturePrivateKey = null;
         String signingUserId = null;
         if (enableSignature) {
@@ -305,7 +300,9 @@ public class PgpSignEncrypt {
 
             updateProgress(R.string.progress_extracting_signature_key, 0, 100);
 
-            signaturePrivateKey = signingKey.extractPrivateKey(mSignaturePassphrase);
+            PBESecretKeyDecryptor keyDecryptor = new JcePBESecretKeyDecryptorBuilder().setProvider(
+                    Constants.BOUNCY_CASTLE_PROVIDER_NAME).build(mSignaturePassphrase.toCharArray());
+            signaturePrivateKey = signingKey.extractPrivateKey(keyDecryptor);
             if (signaturePrivateKey == null) {
                 throw new KeyExtractionException();
             }
@@ -356,7 +353,7 @@ public class PgpSignEncrypt {
 
             // content signer based on signing key algorithm and chosen hash algorithm
             JcaPGPContentSignerBuilder contentSignerBuilder = new JcaPGPContentSignerBuilder(
-                    signingKey.getAlgorithm(), mSignatureHashAlgorithm)
+                    signingKey.getPublicKey().getAlgorithm(), mSignatureHashAlgorithm)
                     .setProvider(Constants.BOUNCY_CASTLE_PROVIDER_NAME);
 
             int signatureType;
@@ -410,7 +407,7 @@ public class PgpSignEncrypt {
                     new byte[1 << 16]);
             updateProgress(R.string.progress_encrypting, 20, 100);
 
-            long mProgressable = 0;
+            long progress = 0;
             int n;
             byte[] buffer = new byte[1 << 16];
             InputStream in = mData.getInputStream();
@@ -426,9 +423,9 @@ public class PgpSignEncrypt {
                     }
                 }
 
-                mProgressable += n;
+                progress += n;
                 if (mData.getSize() != 0) {
-                    updateProgress((int) (20 + (95 - 20) * mProgressable / mData.getSize()), 100);
+                    updateProgress((int) (20 + (95 - 20) * progress / mData.getSize()), 100);
                 }
             }
 
@@ -542,7 +539,7 @@ public class PgpSignEncrypt {
         }
 
         out.close();
-        mOutputStream.close();
+        mOutStream.close();
 
         updateProgress(R.string.progress_done, 100, 100);
     }
@@ -565,12 +562,12 @@ public class PgpSignEncrypt {
             len--;
         }
 
-        final byte[] mData = pLine.substring(0, len).getBytes("UTF-8");
+        final byte[] data = pLine.substring(0, len).getBytes("UTF-8");
 
         if (pArmoredOutput != null) {
-            pArmoredOutput.write(mData);
+            pArmoredOutput.write(data);
         }
-        pSignatureGenerator.update(mData);
+        pSignatureGenerator.update(data);
     }
 
     private static void processLineV3(final String pLine, final ArmoredOutputStream pArmoredOutput,
@@ -591,12 +588,12 @@ public class PgpSignEncrypt {
             len--;
         }
 
-        final byte[] mData = pLine.substring(0, len).getBytes("UTF-8");
+        final byte[] data = pLine.substring(0, len).getBytes("UTF-8");
 
         if (pArmoredOutput != null) {
-            pArmoredOutput.write(mData);
+            pArmoredOutput.write(data);
         }
-        pSignatureGenerator.update(mData);
+        pSignatureGenerator.update(data);
     }
 
 }

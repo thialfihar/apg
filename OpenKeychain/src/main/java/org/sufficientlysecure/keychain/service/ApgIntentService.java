@@ -35,16 +35,10 @@ import org.spongycastle.openpgp.PGPSecretKey;
 import org.spongycastle.openpgp.PGPSecretKeyRing;
 import org.spongycastle.openpgp.PGPUtil;
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.FileHelper;
 import org.thialfihar.android.apg.helper.OtherHelper;
 import org.thialfihar.android.apg.helper.Preferences;
-import org.thialfihar.android.apg.keyimport.HkpKeyServer;
-import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.KeybaseKeyServer;
-import org.thialfihar.android.apg.pgp.Key;
-import org.thialfihar.android.apg.pgp.KeyRing;
 import org.thialfihar.android.apg.pgp.PgpConversionHelper;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerify;
 import org.thialfihar.android.apg.pgp.PgpDecryptVerifyResult;
@@ -54,14 +48,15 @@ import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyOperation;
 import org.thialfihar.android.apg.pgp.PgpSignEncrypt;
 import org.thialfihar.android.apg.pgp.Progressable;
-import org.thialfihar.android.apg.pgp.PublicKeyRing;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.pgp.exception.PgpGeneralMsgIdException;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
-import org.thialfihar.android.apg.util.ApgServiceListener;
+import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
+import org.thialfihar.android.apg.keyimport.HkpKeyServer;
 import org.thialfihar.android.apg.util.InputData;
+import org.thialfihar.android.apg.keyimport.KeybaseKeyServer;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
@@ -125,7 +120,6 @@ public class ApgIntentService extends IntentService
     public static final String ENCRYPT_USE_ASCII_ARMOR = "use_ascii_armor";
     public static final String ENCRYPT_ENCRYPTION_KEYS_IDS = "encryption_keys_ids";
     public static final String ENCRYPT_COMPRESSION_ID = "compression_id";
-    public static final String ENCRYPT_GENERATE_SIGNATURE = "generate_signature";
     public static final String ENCRYPT_MESSAGE_BYTES = "message_bytes";
     public static final String ENCRYPT_INPUT_FILE = "input_file";
     public static final String ENCRYPT_OUTPUT_FILE = "output_file";
@@ -193,7 +187,7 @@ public class ApgIntentService extends IntentService
     // export
     public static final String RESULT_EXPORT = "exported";
 
-    private Messenger mMessenger;
+    Messenger mMessenger;
 
     private boolean mIsCanceled;
 
@@ -237,8 +231,7 @@ public class ApgIntentService extends IntentService
         String action = intent.getAction();
 
         // executeServiceMethod action from extra bundle
-        if (ACTION_ENCRYPT_SIGN.equals(action) ||
-            "org.thialfihar.android.apg.intent.ENCRYPT_AND_RETURN".equals(action)) {
+        if (ACTION_ENCRYPT_SIGN.equals(action)) {
             try {
                 /* Input */
                 int target = data.getInt(TARGET);
@@ -249,7 +242,6 @@ public class ApgIntentService extends IntentService
                 boolean useAsciiArmor = data.getBoolean(ENCRYPT_USE_ASCII_ARMOR);
                 long encryptionKeyIds[] = data.getLongArray(ENCRYPT_ENCRYPTION_KEYS_IDS);
                 int compressionId = data.getInt(ENCRYPT_COMPRESSION_ID);
-                boolean generateSignature = data.getBoolean(ENCRYPT_GENERATE_SIGNATURE);
                 InputStream inStream;
                 long inLength;
                 InputData inputData;
@@ -321,38 +313,22 @@ public class ApgIntentService extends IntentService
                         new PgpSignEncrypt.Builder(
                                 new ProviderHelper(this),
                                 PgpHelper.getFullVersion(this),
-                                inputData, outStream, new ProviderHelper(this));
+                                inputData, outStream);
                 builder.setProgressable(this);
 
-                if (generateSignature) {
-                    Log.d(Constants.TAG, "generating signature...");
-                    builder.setEnableAsciiArmorOutput(useAsciiArmor)
-                        .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
-                        .setSignatureMasterKeyId(signatureKeyId)
-                        .setSignatureHashAlgorithm(
-                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
-                        .setSignaturePassphrase(
-                            PassphraseCacheService.getCachedPassphrase(this, signatureKeyId));
-
-                    builder.build().generateSignature();
-                } else {
-                    Log.d(Constants.TAG, "encrypt...");
-                    builder.setEnableAsciiArmorOutput(useAsciiArmor)
+                builder.setEnableAsciiArmorOutput(useAsciiArmor)
                         .setCompressionId(compressionId)
                         .setSymmetricEncryptionAlgorithm(
-                            Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
+                                Preferences.getPreferences(this).getDefaultEncryptionAlgorithm())
                         .setSignatureForceV3(Preferences.getPreferences(this).getForceV3Signatures())
                         .setEncryptionMasterKeyIds(encryptionKeyIds)
                         .setSymmetricPassphrase(symmetricPassphrase)
                         .setSignatureMasterKeyId(signatureKeyId)
                         .setEncryptToSigner(true)
                         .setSignatureHashAlgorithm(
-                            Preferences.getPreferences(this).getDefaultHashAlgorithm())
+                                Preferences.getPreferences(this).getDefaultHashAlgorithm())
                         .setSignaturePassphrase(
-                            PassphraseCacheService.getCachedPassphrase(this, signatureKeyId));
-
-                    builder.build().execute();
-                }
+                                PassphraseCacheService.getCachedPassphrase(this, signatureKeyId));
 
                 // this assumes that the bytes are cleartext (valid for current implementation!)
                 if (target == TARGET_BYTES) {
@@ -482,7 +458,7 @@ public class ApgIntentService extends IntentService
                                         ApgIntentService.this, masterKeyId);
                             }
                         },
-                        inputData, outStream, new ProviderHelper(this));
+                        inputData, outStream);
                 builder.setProgressable(this);
 
                 builder.setAllowSymmetricDecryption(true)
@@ -534,7 +510,7 @@ public class ApgIntentService extends IntentService
                     newPassphrase = oldPassphrase;
                 }
 
-                long masterKeyId = saveParcel.keys.get(0).getKeyId();
+                long masterKeyId = saveParcel.keys.get(0).getKeyID();
 
                 /* Operation */
                 ProviderHelper providerHelper = new ProviderHelper(this);
@@ -580,11 +556,13 @@ public class ApgIntentService extends IntentService
 
                 /* Operation */
                 PgpKeyOperation keyOperations = new PgpKeyOperation(new ProgressScaler(this, 0, 100, 100));
-                Key newKey = keyOperations.createKey(algorithm, keysize, passphrase, masterKey);
+                PGPSecretKey newKey = keyOperations.createKey(algorithm, keysize,
+                        passphrase, masterKey);
 
                 /* Output */
                 Bundle resultData = new Bundle();
-                resultData.putSerializable(RESULT_NEW_KEY, newKey);
+                resultData.putByteArray(RESULT_NEW_KEY,
+                        PgpConversionHelper.PGPSecretKeyToBytes(newKey));
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
 
@@ -597,27 +575,27 @@ public class ApgIntentService extends IntentService
             try {
                 /* Input */
                 String passphrase = data.getString(GENERATE_KEY_SYMMETRIC_PASSPHRASE);
-                ArrayList<Key> newKeys = new ArrayList<Key>();
+                ArrayList<PGPSecretKey> newKeys = new ArrayList<PGPSecretKey>();
                 ArrayList<Integer> keyUsageList = new ArrayList<Integer>();
 
                 /* Operation */
                 int keysTotal = 3;
                 int keysCreated = 0;
                 setProgress(
-                        getApplicationContext().getResources()
-                            .getQuantityString(R.plurals.progress_generating, keysTotal),
+                        getApplicationContext().getResources().
+                                getQuantityString(R.plurals.progress_generating, keysTotal),
                         keysCreated,
                         keysTotal);
                 PgpKeyOperation keyOperations = new PgpKeyOperation(new ProgressScaler(this, 0, 100, 100));
 
-                Key masterKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
+                PGPSecretKey masterKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
                         4096, passphrase, true);
                 newKeys.add(masterKey);
                 keyUsageList.add(KeyFlags.CERTIFY_OTHER);
                 keysCreated++;
                 setProgress(keysCreated, keysTotal);
 
-                Key subKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
+                PGPSecretKey subKey = keyOperations.createKey(Constants.choice.algorithm.rsa,
                         4096, passphrase, false);
                 newKeys.add(subKey);
                 keyUsageList.add(KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE);
@@ -637,7 +615,8 @@ public class ApgIntentService extends IntentService
                 /* Output */
 
                 Bundle resultData = new Bundle();
-                resultData.putSerializable(RESULT_NEW_KEY, newKeys);
+                resultData.putByteArray(RESULT_NEW_KEY,
+                        PgpConversionHelper.PGPSecretKeyArrayListToBytes(newKeys));
                 resultData.putIntegerArrayList(RESULT_KEY_USAGES, keyUsageList);
 
                 OtherHelper.logDebugBundle(resultData, "resultData");
@@ -725,13 +704,12 @@ public class ApgIntentService extends IntentService
                 }
 
                 PgpImportExport pgpImportExport = new PgpImportExport(this, this, this);
-
                 Bundle resultData = pgpImportExport
                         .exportKeyRings(publicMasterKeyIds, secretMasterKeyIds,
                                 new FileOutputStream(outputFile));
 
                 if (mIsCanceled) {
-                   new File(outputFile).delete();
+                    boolean isDeleted = new File(outputFile).delete();
                 }
 
                 sendMessageToHandler(ApgIntentServiceHandler.MESSAGE_OKAY, resultData);
@@ -748,12 +726,13 @@ public class ApgIntentService extends IntentService
                 /* Operation */
                 HkpKeyServer server = new HkpKeyServer(keyServer);
 
-                KeyRing keyRing = ProviderHelper.getKeyRing(this, dataUri);
-                if (keyRing != null) {
+                ProviderHelper providerHelper = new ProviderHelper(this);
+                PGPPublicKeyRing keyring = (PGPPublicKeyRing) providerHelper.getPGPKeyRing(dataUri);
+                if (keyring != null) {
                     PgpImportExport pgpImportExport = new PgpImportExport(this, null);
 
-                    boolean uploaded =
-                        pgpImportExport.uploadKeyRingToServer(server, new PublicKeyRing(keyRing));
+                    boolean uploaded = pgpImportExport.uploadKeyRingToServer(server,
+                            (PGPPublicKeyRing) keyring);
                     if (!uploaded) {
                         throw new PgpGeneralException("Unable to export key to selected server");
                     }
@@ -867,8 +846,8 @@ public class ApgIntentService extends IntentService
                     entry.setBytes(downloadedKey.getEncoded());
                 }
 
-                Intent importIntent = new Intent(this, ApgIntentService.class);
 
+                Intent importIntent = new Intent(this, ApgIntentService.class);
                 importIntent.setAction(ACTION_IMPORT_KEYRING);
                 Bundle importData = new Bundle();
                 importData.putParcelableArrayList(IMPORT_KEY_LIST, entries);
@@ -932,7 +911,6 @@ public class ApgIntentService extends IntentService
         if (this.mIsCanceled) {
             return;
         }
-
         // TODO: Implement a better exception handling here
         // contextualize the exception, if necessary
         String message;
@@ -971,7 +949,6 @@ public class ApgIntentService extends IntentService
         if (this.mIsCanceled) {
             return;
         }
-
         Message msg = Message.obtain();
         msg.arg1 = arg1;
         if (arg2 != null) {
