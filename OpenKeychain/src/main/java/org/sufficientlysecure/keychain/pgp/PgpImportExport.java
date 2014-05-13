@@ -57,7 +57,7 @@ import java.util.List;
 public class PgpImportExport {
 
     // TODO: is this really used?
-    public interface KeychainServiceListener {
+    public interface ApgServiceListener {
         boolean hasServiceStopped();
     }
 
