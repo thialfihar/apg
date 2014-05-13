@@ -69,7 +69,7 @@ import java.util.TimeZone;
  * This indicator may be null.
  */
 public class PgpKeyOperation {
-    private Progressable mProgress;
+    private Progressable mProgressable;
 
     private static final int[] PREFERRED_SYMMETRIC_ALGORITHMS = new int[]{
             SymmetricKeyAlgorithmTags.AES_256, SymmetricKeyAlgorithmTags.AES_192,
@@ -87,14 +87,14 @@ public class PgpKeyOperation {
     }
 
     public void updateProgress(int message, int current, int total) {
-        if (mProgress != null) {
-            mProgress.setProgress(message, current, total);
+        if (mProgressable != null) {
+            mProgressable.setProgress(message, current, total);
         }
     }
 
     public void updateProgress(int current, int total) {
-        if (mProgress != null) {
-            mProgress.setProgress(current, total);
+        if (mProgressable != null) {
+            mProgressable.setProgress(current, total);
         }
     }
 

@@ -142,7 +142,7 @@ public class PgpSignEncrypt {
             this.mProviderHelper = providerHelper;
             this.mVersionHeader = versionHeader;
             this.mData = data;
-            this.mOutStream = outStream;
+            this.mOutputStream = outputStream;
             this.mKeyProvider = keyProvider;
         }
 
@@ -276,7 +276,7 @@ public class PgpSignEncrypt {
         ArmoredOutputStream armorOut = null;
         OutputStream out;
         if (mEnableAsciiArmorOutput) {
-            armorOut = new ArmoredOutputStream(mOutStream);
+            armorOut = new ArmoredOutputStream(mOutputStream);
             armorOut.setHeader("Version", mVersionHeader);
             out = armorOut;
         } else {

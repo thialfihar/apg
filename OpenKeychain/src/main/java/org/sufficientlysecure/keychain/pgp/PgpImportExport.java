@@ -54,7 +54,7 @@ import java.util.List;
 public class PgpImportExport {
 
     private Context mContext;
-    private Progressable mProgress;
+    private Progressable mProgressable;
     private ApgServiceListener mApgServiceListener;
 
     private ProviderHelper mProviderHelper;
