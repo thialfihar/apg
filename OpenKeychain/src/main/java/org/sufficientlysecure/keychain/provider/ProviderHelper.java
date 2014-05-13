@@ -703,9 +703,9 @@ public class ProviderHelper implements PgpKeyProvider {
             if (cursor != null && cursor.moveToFirst()) {
                 settings = new AppSettings();
                 settings.setPackageName(cursor.getString(
-                        cursor.getColumnIndex(KeychainContract.ApiApps.PACKAGE_NAME)));
+                        cursor.getColumnIndex(ApgContract.ApiApps.PACKAGE_NAME)));
                 settings.setPackageSignature(cursor.getBlob(
-                        cursor.getColumnIndex(KeychainContract.ApiApps.PACKAGE_SIGNATURE)));
+                        cursor.getColumnIndex(ApgContract.ApiApps.PACKAGE_SIGNATURE)));
             }
         } finally {
             if (cursor != null) {
@@ -725,15 +725,15 @@ public class ProviderHelper implements PgpKeyProvider {
                 settings = new AccountSettings();
 
                 settings.setAccountName(cursor.getString(
-                        cursor.getColumnIndex(KeychainContract.ApiAccounts.ACCOUNT_NAME)));
+                        cursor.getColumnIndex(ApgContract.ApiAccounts.ACCOUNT_NAME)));
                 settings.setKeyId(cursor.getLong(
-                        cursor.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID)));
+                        cursor.getColumnIndex(ApgContract.ApiAccounts.KEY_ID)));
                 settings.setCompression(cursor.getInt(
-                        cursor.getColumnIndexOrThrow(KeychainContract.ApiAccounts.COMPRESSION)));
+                        cursor.getColumnIndexOrThrow(ApgContract.ApiAccounts.COMPRESSION)));
                 settings.setHashAlgorithm(cursor.getInt(
-                        cursor.getColumnIndexOrThrow(KeychainContract.ApiAccounts.HASH_ALORITHM)));
+                        cursor.getColumnIndexOrThrow(ApgContract.ApiAccounts.HASH_ALORITHM)));
                 settings.setEncryptionAlgorithm(cursor.getInt(
-                        cursor.getColumnIndexOrThrow(KeychainContract.ApiAccounts.ENCRYPTION_ALGORITHM)));
+                        cursor.getColumnIndexOrThrow(ApgContract.ApiAccounts.ENCRYPTION_ALGORITHM)));
             }
         } finally {
             if (cursor != null) {
@@ -750,7 +750,7 @@ public class ProviderHelper implements PgpKeyProvider {
         Cursor cursor = mContentResolver.query(uri, null, null, null, null);
         try {
             if (cursor != null) {
-                int keyIdColumn = cursor.getColumnIndex(KeychainContract.ApiAccounts.KEY_ID);
+                int keyIdColumn = cursor.getColumnIndex(ApgContract.ApiAccounts.KEY_ID);
                 while (cursor.moveToNext()) {
                     keyIds.add(cursor.getLong(keyIdColumn));
                 }
