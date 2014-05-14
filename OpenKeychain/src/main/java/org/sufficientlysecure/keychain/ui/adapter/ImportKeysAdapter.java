@@ -33,6 +33,7 @@ import android.widget.TextView;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
+import org.thialfihar.android.apg.util.Highlighter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -98,6 +99,7 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ImportKeysListEntry entry = mData.get(position);
+        Highlighter highlighter = new Highlighter(mActivity, entry.getQuery());
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -127,7 +129,7 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
                         + " " + userIdSplit[0]);
                 holder.mainUserId.setTextColor(Color.RED);
             } else {
-                holder.mainUserId.setText(userIdSplit[0]);
+                holder.mainUserId.setText(highlighter.highlight(userIdSplit[0]));
                 holder.mainUserId.setTextColor(Color.WHITE);
             }
         } else {
@@ -138,7 +140,7 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
         // email
         if (userIdSplit[1] != null) {
             holder.mainUserIdRest.setVisibility(View.VISIBLE);
-            holder.mainUserIdRest.setText(userIdSplit[1]);
+            holder.mainUserIdRest.setText(highlighter.highlight(userIdSplit[1]));
         } else {
             holder.mainUserIdRest.setVisibility(View.GONE);
         }
@@ -181,7 +183,7 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
                 String uid = it.next();
                 TextView uidView = (TextView) mInflater.inflate(
                         R.layout.import_keys_list_entry_user_id, null);
-                uidView.setText(uid);
+                uidView.setText(highlighter.highlight(uid));
                 holder.userIdsList.addView(uidView);
             }
         }

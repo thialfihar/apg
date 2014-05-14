@@ -33,7 +33,7 @@ import java.util.TimeZone;
 import java.util.WeakHashMap;
 
 public class KeybaseKeyServer extends KeyServer {
-
+    private String mQuery;
     private WeakHashMap<String, String> mKeyCache = new WeakHashMap<String, String>();
 
     @Override
@@ -45,6 +45,8 @@ public class KeybaseKeyServer extends KeyServer {
             // cut off "0x" if a user is searching for a key id
             query = query.substring(2);
         }
+
+        mQuery = query;
 
         JSONObject fromQuery = getFromKeybase("_/api/1.0/user/autocomplete.json?q=", query);
         try {
@@ -87,8 +89,9 @@ public class KeybaseKeyServer extends KeyServer {
     }
 
     private ImportKeysListEntry makeEntry(JSONObject match) throws QueryException, JSONException {
-
         final ImportKeysListEntry entry = new ImportKeysListEntry();
+        entry.setQuery(mQuery);
+
         String keybaseId = JWalk.getString(match, "components", "username", "val");
         String fullName = JWalk.getString(match, "components", "full_name", "val");
         String fingerprint = JWalk.getString(match, "components", "key_fingerprint", "val");
