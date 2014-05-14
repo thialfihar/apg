@@ -128,10 +128,10 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
                 holder.mainUserId.setTextColor(Color.RED);
             } else {
                 holder.mainUserId.setText(userIdSplit[0]);
-                holder.mainUserId.setTextColor(Color.BLACK);
+                holder.mainUserId.setTextColor(Color.WHITE);
             }
         } else {
-            holder.mainUserId.setTextColor(Color.BLACK);
+            holder.mainUserId.setTextColor(Color.WHITE);
             holder.mainUserId.setText(R.string.user_id_no_name);
         }
 

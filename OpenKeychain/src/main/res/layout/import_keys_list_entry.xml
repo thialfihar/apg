@@ -77,8 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="status"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#e00" />
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
                     android:id="@+id/algorithm"
