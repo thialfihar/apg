@@ -98,7 +98,6 @@ public class KeybaseKeyServer extends KeyServer {
         fingerprint = fingerprint.replace(" ", "").toUpperCase(); // not strictly necessary but doesn't hurt
         entry.setFingerprintHex(fingerprint);
 
-        // in anticipation of a full fingerprint, only use the last 16 chars as 64-bit key id
         entry.setKeyIdHex("0x" + fingerprint.substring(Math.max(0, fingerprint.length() - 16)));
         // store extra info, so we can query for the keybase id directly
         entry.setExtraData(keybaseId);
