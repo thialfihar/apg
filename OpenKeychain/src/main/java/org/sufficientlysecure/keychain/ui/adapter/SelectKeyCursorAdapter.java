@@ -19,6 +19,7 @@ package org.thialfihar.android.apg.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +32,16 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.provider.ApgContract.UserIds;
+import org.thialfihar.android.apg.util.Highlighter;
 
 import java.util.Date;
 
 /**
  * Yes this class is abstract!
  */
-abstract public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter {
+abstract public class SelectKeyCursorAdapter extends CursorAdapter {
 
+    private String mQuery;
     private LayoutInflater mInflater;
 
     protected int mIndexUserId, mIndexMasterKeyId, mIndexRevoked, mIndexExpiry;
@@ -47,6 +50,10 @@ abstract public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter
         super(context, c, flags);
         mInflater = LayoutInflater.from(context);
         initIndex(c);
+    }
+
+    public void setSearchQuery(String query) {
+        mQuery = query;
     }
 
     @Override
@@ -102,19 +109,20 @@ abstract public class SelectKeyCursorAdapter extends HighlightQueryCursorAdapter
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        Highlighter highlighter = new Highlighter(context, mQuery);
         ViewHolderItem h = (ViewHolderItem) view.getTag();
 
         String userId = cursor.getString(mIndexUserId);
         String[] userIdSplit = PgpKeyHelper.splitUserId(userId);
 
         if (userIdSplit[0] != null) {
-            h.mainUserId.setText(highlightSearchQuery(userIdSplit[0]));
+            h.mainUserId.setText(highlighter.highlight(userIdSplit[0]));
         } else {
             h.mainUserId.setText(R.string.user_id_no_name);
         }
         if (userIdSplit[1] != null) {
             h.mainUserIdRest.setVisibility(View.VISIBLE);
-            h.mainUserIdRest.setText(highlightSearchQuery(userIdSplit[1]));
+            h.mainUserIdRest.setText(highlighter.highlight(userIdSplit[1]));
         } else {
             h.mainUserIdRest.setVisibility(View.GONE);
         }

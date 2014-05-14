@@ -34,6 +34,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.ActionMode;
@@ -63,6 +64,7 @@ import org.thialfihar.android.apg.provider.ApgContract.KeyRingData;
 import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
+import org.thialfihar.android.apg.util.Highlighter;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.Date;
@@ -82,7 +84,7 @@ public class KeyListFragment extends LoaderFragment
     private KeyListAdapter mAdapter;
     private StickyListHeadersListView mStickyList;
 
-    private String mCurQuery;
+    private String mQuery;
     private SearchView mSearchView;
     // empty list layout
     private BootstrapButton mButtonEmptyCreate;
@@ -263,8 +265,8 @@ public class KeyListFragment extends LoaderFragment
         Uri baseUri = KeyRings.buildUnifiedKeyRingsUri();
         String where = null;
         String whereArgs[] = null;
-        if (mCurQuery != null) {
-            String[] words = mCurQuery.trim().split("\\s+");
+        if (mQuery != null) {
+            String[] words = mQuery.trim().split("\\s+");
             whereArgs = new String[words.length];
             for (int i = 0; i < words.length; ++i) {
                 if (where == null) {
@@ -286,7 +288,7 @@ public class KeyListFragment extends LoaderFragment
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Swap the new cursor in. (The framework will take care of closing the
         // old cursor once we return.)
-        mAdapter.setSearchQuery(mCurQuery);
+        mAdapter.setSearchQuery(mQuery);
         mAdapter.swapCursor(data);
 
         mStickyList.setAdapter(mAdapter);
@@ -388,7 +390,7 @@ public class KeyListFragment extends LoaderFragment
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                mCurQuery = null;
+                mQuery = null;
                 mSearchView.setQuery("", true);
                 getLoaderManager().restartLoader(0, null, KeyListFragment.this);
                 return true;
@@ -408,7 +410,7 @@ public class KeyListFragment extends LoaderFragment
         // Called when the action bar search text has changed.  Update
         // the search filter, and restart the loader to do a new query
         // with this filter.
-        mCurQuery = !TextUtils.isEmpty(s) ? s : null;
+        mQuery = !TextUtils.isEmpty(s) ? s : null;
         getLoaderManager().restartLoader(0, null, this);
         return true;
     }
@@ -416,7 +418,8 @@ public class KeyListFragment extends LoaderFragment
     /**
      * Implements StickyListHeadersAdapter from library
      */
-    private class KeyListAdapter extends HighlightQueryCursorAdapter implements StickyListHeadersAdapter {
+    private class KeyListAdapter extends CursorAdapter implements StickyListHeadersAdapter {
+        private String mQuery;
         private LayoutInflater mInflater;
 
         private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
@@ -425,6 +428,10 @@ public class KeyListFragment extends LoaderFragment
             super(context, c, flags);
 
             mInflater = LayoutInflater.from(context);
+        }
+
+        public void setSearchQuery(String query) {
+            mQuery = query;
         }
 
         @Override
@@ -465,18 +472,19 @@ public class KeyListFragment extends LoaderFragment
          */
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
+            Highlighter highlighter = new Highlighter(context, mQuery);
             ItemViewHolder h = (ItemViewHolder) view.getTag();
 
             { // set name and stuff, common to both key types
                 String userId = cursor.getString(INDEX_USER_ID);
                 String[] userIdSplit = PgpKeyHelper.splitUserId(userId);
                 if (userIdSplit[0] != null) {
-                    h.mMainUserId.setText(highlightSearchQuery(userIdSplit[0]));
+                    h.mMainUserId.setText(highlighter.highlight(userIdSplit[0]));
                 } else {
                     h.mMainUserId.setText(R.string.user_id_no_name);
                 }
                 if (userIdSplit[1] != null) {
-                    h.mMainUserIdRest.setText(highlightSearchQuery(userIdSplit[1]));
+                    h.mMainUserIdRest.setText(highlighter.highlight(userIdSplit[1]));
                     h.mMainUserIdRest.setVisibility(View.VISIBLE);
                 } else {
                     h.mMainUserIdRest.setVisibility(View.GONE);
