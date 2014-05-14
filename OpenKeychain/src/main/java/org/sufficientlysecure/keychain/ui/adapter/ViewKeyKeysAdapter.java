@@ -135,7 +135,7 @@ public class ViewKeyKeysAdapter extends CursorAdapter {
 
         boolean valid = true;
         if (cursor.getInt(mIndexRevokedKey) > 0) {
-            revokedKeyIcon.setVisibility(View.VISIBLE);
+            revokedKeyIcon.setVisibility(View.GONE);
 
             valid = false;
         } else {
