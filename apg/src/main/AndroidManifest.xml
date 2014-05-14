@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.thialfihar.android.apg"
     android:installLocation="auto"
     android:versionCode="11200"
@@ -58,6 +59,15 @@
                 android:value=".ui.KeyListActivity" />
         </activity>
         <activity
+            android:name=".ui.ViewCertActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:label="@string/title_view_cert"
+            android:parentActivityName=".ui.ViewKeyActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.ViewKeyActivity" />
+        </activity>
+        <activity
             android:name=".ui.SelectPublicKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_select_recipients"
@@ -85,7 +95,7 @@
             android:label="@string/title_encrypt"
             android:windowSoftInputMode="stateHidden">
 
-            <!-- Keychain's own Actions -->
+            <!-- APG's own Actions -->
             <!-- ENCRYPT with text as extra -->
             <intent-filter>
                 <action android:name="org.thialfihar.android.apg.intent.ENCRYPT" />
@@ -123,25 +133,25 @@
 
             <!--&lt;!&ndash; VIEW with mimeType: TODO (from email app)  &ndash;&gt;-->
             <!--<intent-filter android:label="@string/intent_import_key">-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
+            <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--<category android:name="android.intent.category.BROWSABLE" />-->
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
 
-                <!--&lt;!&ndash; mime type as defined in http://tools.ietf.org/html/rfc3156 &ndash;&gt;-->
-                <!--<data android:mimeType="application/pgp-signature" />-->
+            <!--&lt;!&ndash; mime type as defined in http://tools.ietf.org/html/rfc3156 &ndash;&gt;-->
+            <!--<data android:mimeType="application/pgp-signature" />-->
             <!--</intent-filter>-->
             <!--&lt;!&ndash; VIEW with mimeType: TODO (from email app)  &ndash;&gt;-->
             <!--<intent-filter android:label="@string/intent_import_key">-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
+            <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--<category android:name="android.intent.category.BROWSABLE" />-->
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
 
-                <!--&lt;!&ndash; mime type as defined in http://tools.ietf.org/html/rfc3156 &ndash;&gt;-->
-                <!--<data android:mimeType="application/pgp-encrypted" />-->
+            <!--&lt;!&ndash; mime type as defined in http://tools.ietf.org/html/rfc3156 &ndash;&gt;-->
+            <!--<data android:mimeType="application/pgp-encrypted" />-->
             <!--</intent-filter>-->
-            <!-- Keychain's own Actions -->
+            <!-- APG's own Actions -->
             <!-- DECRYPT with text as extra -->
             <intent-filter>
                 <action android:name="org.thialfihar.android.apg.intent.DECRYPT" />
@@ -217,11 +227,16 @@
         <activity
             android:name=".ui.UploadKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
-            android:label="@string/title_send_key" />
+            android:label="@string/title_send_key"
+            android:parentActivityName=".ui.ViewKeyActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.ViewKeyActivity" />
+        </activity>
         <activity
             android:name=".ui.PreferencesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
-            android:label="@string/title_preferences" >
+            android:label="@string/title_preferences">
             <intent-filter>
                 <action android:name="org.thialfihar.android.apg.ui.PREFS_GEN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -239,7 +254,12 @@
         <activity
             android:name=".ui.CertifyKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
-            android:label="@string/title_certify_key" />
+            android:label="@string/title_certify_key"
+            android:parentActivityName=".ui.ViewKeyActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.ViewKeyActivity" />
+        </activity>
         <activity
             android:name=".ui.ImportKeysActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
@@ -323,7 +343,7 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.asc" />
             </intent-filter>
-            <!-- Keychain's own Actions -->
+            <!-- APG's own Actions -->
             <!-- IMPORT_KEY with files TODO: does this work? -->
             <intent-filter android:label="@string/intent_import_key">
                 <action android:name="org.thialfihar.android.apg.intent.IMPORT_KEY" />
@@ -348,6 +368,9 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.KeyListActivity" />
         </activity>
         <activity
             android:name=".ui.HelpActivity"
@@ -359,65 +382,56 @@
             android:exported="false"
             android:process=":passphrase_cache" />
         <service
-            android:name="org.thialfihar.android.apg.service.ApgIntentService"
+            android:name=".service.ApgIntentService"
             android:exported="false" />
 
         <provider
-            android:name="org.thialfihar.android.apg.provider.ApgProvider"
+            android:name=".provider.ApgProvider"
             android:authorities="org.thialfihar.android.apg.provider"
             android:readPermission="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"
             android:exported="true"/>
 
         <!-- Internal classes of the remote APIs (not exported) -->
         <activity
-            android:name="org.thialfihar.android.apg.service.remote.RemoteServiceActivity"
+            android:name=".remote.ui.RemoteServiceActivity"
             android:exported="false"
-            android:label="@string/app_name" />
-        <!--android:launchMode="singleTop"-->
-        <!--android:process=":remote_api"-->
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:process=":remote_api" />
         <activity
-            android:name="org.thialfihar.android.apg.service.remote.RegisteredAppsListActivity"
+            android:name=".remote.ui.AppsListActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:exported="false"
             android:label="@string/title_api_registered_apps" />
         <activity
-            android:name="org.thialfihar.android.apg.service.remote.AppSettingsActivity"
+            android:name=".remote.ui.AppSettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
+            android:exported="false">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".remote.ui.AppsListActivity" />
+        </activity>
+        <activity
+            android:name=".remote.ui.AccountSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:exported="false" />
 
-        <!-- OpenPGP Remote API -->
+        <!-- OpenPGP Remote API, this service has explicitly no permission requirements
+             because we are using our own package based allow/disallow system -->
         <service
-            android:name="org.thialfihar.android.apg.service.remote.OpenPgpService"
+            android:name=".remote.OpenPgpService"
             android:enabled="true"
             android:exported="true"
-            android:process=":remote_api">
+            android:process=":remote_api"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="org.openintents.openpgp.IOpenPgpService" />
             </intent-filter>
-
-            <meta-data
-                android:name="api_version"
-                android:value="1" />
         </service>
 
-        <!-- Extended Remote API -->
-        <!--<service-->
-        <!--android:name="org.thialfihar.android.apg.service.remote.ExtendedApiService"-->
-        <!--android:enabled="true"-->
-        <!--android:exported="true"-->
-        <!--android:process=":remote_api">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="org.thialfihar.android.apg.service.remote.IExtendedApiService" />-->
-        <!--</intent-filter>-->
-        <!--</service>-->
-
-        <!-- TODO: authority! Make this API with content provider uris -->
-        <!-- <provider -->
-        <!-- android:name="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
-        <!-- android:authorities="org.thialfihar.android.apg.provider.KeychainServiceBlobProvider" -->
-        <!-- android:permission="org.thialfihar.android.apg.permission.ACCESS_API" /> -->
-
     </application>
+
     <permission android:name="org.thialfihar.android.apg.permission.READ_KEY_DETAILS"
                 android:protectionLevel="dangerous"
                 android:label="@string/permission_read_key_details_label"
