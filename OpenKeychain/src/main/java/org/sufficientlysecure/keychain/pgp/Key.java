@@ -443,7 +443,7 @@ public class Key implements Serializable {
             throw new IOException("could not decode Key: tag " + initialTag);
         }
 
-        BcKeyFingerprintCalculator fingerPrintCalculator = new BcKeyFingerprintCalculator();
+        BcKeyFingerprintCalculator fingerprintCalculator = new BcKeyFingerprintCalculator();
 
         switch (initialTag) {
         case PacketTags.PUBLIC_KEY: {
@@ -460,7 +460,7 @@ public class Key implements Serializable {
 
             try {
                 mPublicKey = new PGPPublicKey(pubPk, trustPk, keySigs, ids, idTrusts, idSigs,
-                                              fingerPrintCalculator);
+                                              fingerprintCalculator);
             } catch (PGPException e) {
                 throw new IOException("processing exception: " + e.toString());
             }
@@ -475,7 +475,7 @@ public class Key implements Serializable {
             List sigList = PGPKeyRing.readSignaturesAndTrust(pIn);
 
             try {
-                mPublicKey = new PGPPublicKey(pk, kTrust, sigList, fingerPrintCalculator);
+                mPublicKey = new PGPPublicKey(pk, kTrust, sigList, fingerprintCalculator);
             } catch (PGPException e) {
                 throw new IOException("processing exception: " + e.toString());
             }
@@ -502,7 +502,7 @@ public class Key implements Serializable {
 
             try {
                 mSecretKey = new PGPSecretKey(secret, new PGPPublicKey(secret.getPublicKeyPacket(),
-                                trust, keySigs, ids, idTrusts, idSigs, fingerPrintCalculator));
+                                trust, keySigs, ids, idTrusts, idSigs, fingerprintCalculator));
             } catch (PGPException e) {
                 throw new IOException("processing exception: " + e.toString());
             }
@@ -522,7 +522,7 @@ public class Key implements Serializable {
 
             try {
                 mSecretKey = new PGPSecretKey(sub, new PGPPublicKey(sub.getPublicKeyPacket(), subTrust,
-                                                sigList, fingerPrintCalculator));
+                                                sigList, fingerprintCalculator));
             } catch (PGPException e) {
                 throw new IOException("processing exception: " + e.toString());
             }

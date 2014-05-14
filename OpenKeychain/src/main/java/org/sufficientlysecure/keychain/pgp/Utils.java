@@ -32,21 +32,21 @@ public class Utils {
      * @return
      */
     public static String convertFingerprintToHex(byte[] fp, boolean chunked) {
-        String fingerPrint = "";
+        String fingerprint = "";
         for (int i = 0; i < fp.length; ++i) {
             if (chunked && i != 0 && i % 10 == 0) {
-                fingerPrint += "  ";
+                fingerprint += "  ";
             } else if (chunked && i != 0 && i % 2 == 0) {
-                fingerPrint += " ";
+                fingerprint += " ";
             }
             String chunk = Integer.toHexString((fp[i] + 256) % 256).toUpperCase(Locale.US);
             while (chunk.length() < 2) {
                 chunk = "0" + chunk;
             }
-            fingerPrint += chunk;
+            fingerprint += chunk;
         }
 
-        return fingerPrint;
+        return fingerprint;
 
     }
 
