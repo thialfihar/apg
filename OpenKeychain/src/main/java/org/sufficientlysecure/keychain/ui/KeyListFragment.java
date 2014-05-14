@@ -56,7 +56,6 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.devspark.appmsg.AppMsg;
 
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.Id;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ExportHelper;
 import org.thialfihar.android.apg.pgp.PgpKeyHelper;
@@ -66,12 +65,11 @@ import org.thialfihar.android.apg.ui.adapter.HighlightQueryCursorAdapter;
 import org.thialfihar.android.apg.ui.dialog.DeleteKeyDialogFragment;
 import org.thialfihar.android.apg.util.Log;
 
-import se.emilsjolander.stickylistheaders.ApiLevelTooLowException;
-import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
-
 import java.util.Date;
 import java.util.HashMap;
+
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 /**
  * Public key list with sticky list headers. It does _not_ extend ListFragment because it uses
@@ -141,22 +139,20 @@ public class KeyListFragment extends LoaderFragment
         mStickyList.setAreHeadersSticky(true);
         mStickyList.setDrawingListUnderStickyHeader(false);
         mStickyList.setFastScrollEnabled(true);
-        try {
-            mStickyList.setFastScrollAlwaysVisible(true);
-        } catch (ApiLevelTooLowException e) {
-        }
 
         /*
          * ActionBarSherlock does not support MultiChoiceModeListener. Thus multi-selection is only
          * available for Android >= 3.0
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mStickyList.setFastScrollAlwaysVisible(true);
+
             mStickyList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
             mStickyList.getWrappedList().setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    MenuInflater inflater = getActivity().getMenuInflater();
+                    android.view.MenuInflater inflater = getActivity().getMenuInflater();
                     inflater.inflate(R.menu.key_list_multi, menu);
                     return true;
                 }
@@ -268,8 +264,17 @@ public class KeyListFragment extends LoaderFragment
         String where = null;
         String whereArgs[] = null;
         if (mCurQuery != null) {
-            where = KeyRings.USER_ID + " LIKE ?";
-            whereArgs = new String[]{"%" + mCurQuery + "%"};
+            String[] words = mCurQuery.trim().split("\\s+");
+            whereArgs = new String[words.length];
+            for (int i = 0; i < words.length; ++i) {
+                if (where == null) {
+                    where = "";
+                } else {
+                    where += " AND ";
+                }
+                where += KeyRings.USER_ID + " LIKE ?";
+                whereArgs[i] = "%" + words[i] + "%";
+            }
         }
 
         // Now create and return a CursorLoader that will take care of
