@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.thialfihar.android.apg.Constants;
+import org.thialfihar.android.apg.pgp.PgpKeyHelper;
 import org.thialfihar.android.apg.util.JWalk;
 import org.thialfihar.android.apg.util.Log;
 
@@ -103,6 +104,10 @@ public class KeybaseKeyServer extends KeyServer {
         entry.setExtraData(keybaseId);
 
         // TODO: Fix; have suggested keybase provide this value to avoid search-time crypto calls
+        final int algorithmId = JWalk.getInt(match, "components", "key_fingerprint", "algo");
+        entry.setAlgorithm(PgpKeyHelper.getAlgorithmInfo(algorithmId));
+        final int bitStrength = JWalk.getInt(match, "components", "key_fingerprint", "nbits");
+        entry.setBitStrength(bitStrength);
         //entry.setBitStrength(4096);
         //entry.setAlgorithm("RSA");
 
