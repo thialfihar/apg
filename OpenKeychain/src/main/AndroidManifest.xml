@@ -11,15 +11,15 @@
         ===============
         - Last APG 1 version was 10900 (1.0.9 beta 00)
         - Keychain starting with versionCode 20000!
-        
+
         Association of file types to Keychain
         =====================================
         General remarks about file ending conventions:
-        - *.gpg for binary files 
+        - *.gpg for binary files
         - *.asc for ascii armored files The actual content can be anything.
-        
+
         The file ending only shows if it is binary or ascii encoded.
-        
+
         Remarks about the ugly android:pathPattern:
         - We are matching all files with a specific file ending.
         This is done in an ugly way because of Android limitations.
@@ -252,7 +252,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PreferencesKeyServerActivity"
+            android:name=".ui.PreferencesKeyserverActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_key_server_preference"
             android:windowSoftInputMode="stateHidden" />

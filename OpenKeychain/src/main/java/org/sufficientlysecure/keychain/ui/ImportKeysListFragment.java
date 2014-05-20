@@ -32,7 +32,7 @@ import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.Preferences;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.KeyServer;
+import org.thialfihar.android.apg.keyimport.Keyserver;
 import org.thialfihar.android.apg.ui.adapter.AsyncTaskResultWrapper;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysAdapter;
 import org.thialfihar.android.apg.ui.adapter.ImportKeysListKeybaseLoader;
@@ -60,7 +60,7 @@ public class ImportKeysListFragment extends ListFragment implements
     private byte[] mKeyBytes;
     private Uri mDataUri;
     private String mServerQuery;
-    private String mKeyServer;
+    private String mKeyserver;
     private String mKeybaseQuery;
 
     private static final int LOADER_ID_BYTES = 0;
@@ -83,8 +83,8 @@ public class ImportKeysListFragment extends ListFragment implements
         return mKeybaseQuery;
     }
 
-    public String getKeyServer() {
-        return mKeyServer;
+    public String getKeyserver() {
+        return mKeyserver;
     }
 
     public List<ImportKeysListEntry> getData() {
@@ -133,8 +133,8 @@ public class ImportKeysListFragment extends ListFragment implements
         mServerQuery = getArguments().getString(ARG_SERVER_QUERY);
 
         // TODO: this is used when scanning QR Code. Currently it simply uses keyserver nr 0
-        mKeyServer = Preferences.getPreferences(getActivity())
-                .getKeyServers()[0];
+        mKeyserver = Preferences.getPreferences(getActivity())
+                .getKeyservers()[0];
 
         if (mDataUri != null || mKeyBytes != null) {
             // Start out with a progress indicator.
@@ -146,7 +146,7 @@ public class ImportKeysListFragment extends ListFragment implements
             getLoaderManager().initLoader(LOADER_ID_BYTES, null, this);
         }
 
-        if (mServerQuery != null && mKeyServer != null) {
+        if (mServerQuery != null && mKeyserver != null) {
             // Start out with a progress indicator.
             setListShown(false);
 
@@ -184,7 +184,7 @@ public class ImportKeysListFragment extends ListFragment implements
         mKeyBytes = keyBytes;
         mDataUri = dataUri;
         mServerQuery = serverQuery;
-        mKeyServer = keyServer;
+        mKeyserver = keyServer;
         mKeybaseQuery = keybaseQuery;
 
         if (mKeyBytes != null || mDataUri != null) {
@@ -194,7 +194,7 @@ public class ImportKeysListFragment extends ListFragment implements
             getLoaderManager().restartLoader(LOADER_ID_BYTES, null, this);
         }
 
-        if (mServerQuery != null && mKeyServer != null) {
+        if (mServerQuery != null && mKeyserver != null) {
             // Start out with a progress indicator.
             setListShown(false);
 
@@ -218,7 +218,7 @@ public class ImportKeysListFragment extends ListFragment implements
                 return new ImportKeysListLoader(mActivity, inputData);
             }
             case LOADER_ID_SERVER_QUERY: {
-                return new ImportKeysListServerLoader(getActivity(), mServerQuery, mKeyServer);
+                return new ImportKeysListServerLoader(getActivity(), mServerQuery, mKeyserver);
             }
             case LOADER_ID_KEYBASE: {
                 return new ImportKeysListKeybaseLoader(getActivity(), mKeybaseQuery);
@@ -280,13 +280,13 @@ public class ImportKeysListFragment extends ListFragment implements
                                     mAdapter.getCount(), mAdapter.getCount()),
                             AppMsg.STYLE_INFO
                     ).show();
-                } else if (error instanceof KeyServer.InsufficientQuery) {
+                } else if (error instanceof Keyserver.InsufficientQuery) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_insufficient_query,
                             AppMsg.STYLE_ALERT).show();
-                } else if (error instanceof  KeyServer.QueryException) {
+                } else if (error instanceof  Keyserver.QueryException) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_query,
                             AppMsg.STYLE_ALERT).show();
-                } else if (error instanceof KeyServer.TooManyResponses) {
+                } else if (error instanceof Keyserver.TooManyResponses) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_too_many_responses,
                             AppMsg.STYLE_ALERT).show();
                 }
@@ -300,7 +300,7 @@ public class ImportKeysListFragment extends ListFragment implements
                                     mAdapter.getCount(), mAdapter.getCount()),
                             AppMsg.STYLE_INFO
                     ).show();
-                }  else if (error instanceof KeyServer.QueryException) {
+                }  else if (error instanceof Keyserver.QueryException) {
                     AppMsg.makeText(getActivity(), R.string.error_keyserver_query,
                             AppMsg.STYLE_ALERT).show();
                 }

@@ -80,7 +80,7 @@ public class ImportKeysServerFragment extends Fragment {
         // add keyservers to spinner
         mServerAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item, Preferences.getPreferences(getActivity())
-                .getKeyServers());
+                .getKeyservers());
         mServerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mServerSpinner.setAdapter(mServerAdapter);
         if (mServerAdapter.getCount() > 0) {

@@ -403,7 +403,7 @@ public class PgpKeyHelper {
     }
 
     /**
-     * TODO: Only used in HkpKeyServer. Get rid of this one!
+     * TODO: Only used in HkpKeyserver. Get rid of this one!
      */
     public static String getAlgorithmInfo(int algorithm) {
         return getAlgorithmInfo(null, algorithm, 0);

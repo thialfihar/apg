@@ -45,7 +45,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
     public static final int REQUEST_CODE_KEYSERVER_PREF = 0x00007005;
 
-    private PreferenceScreen mKeyServerPreference = null;
+    private PreferenceScreen mKeyserverPreference = null;
     private static Preferences sPreferences;
 
     @Override
@@ -66,17 +66,17 @@ public class PreferencesActivity extends PreferenceActivity {
             initializePassPassPhraceCacheTtl(
                     (IntegerListPreference) findPreference(Constants.Pref.PASSPHRASE_CACHE_TTL));
 
-            mKeyServerPreference = (PreferenceScreen) findPreference(Constants.Pref.KEY_SERVERS);
-            String servers[] = sPreferences.getKeyServers();
-            mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_keyservers,
+            mKeyserverPreference = (PreferenceScreen) findPreference(Constants.Pref.KEY_SERVERS);
+            String servers[] = sPreferences.getKeyservers();
+            mKeyserverPreference.setSummary(getResources().getQuantityString(R.plurals.n_keyservers,
                     servers.length, servers.length));
-            mKeyServerPreference
+            mKeyserverPreference
                     .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         public boolean onPreferenceClick(Preference preference) {
                             Intent intent = new Intent(PreferencesActivity.this,
-                                    PreferencesKeyServerActivity.class);
-                            intent.putExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS,
-                                    sPreferences.getKeyServers());
+                                    PreferencesKeyserverActivity.class);
+                            intent.putExtra(PreferencesKeyserverActivity.EXTRA_KEY_SERVERS,
+                                    sPreferences.getKeyservers());
                             startActivityForResult(intent, REQUEST_CODE_KEYSERVER_PREF);
                             return false;
                         }
@@ -136,9 +136,9 @@ public class PreferencesActivity extends PreferenceActivity {
                     return;
                 }
                 String servers[] = data
-                        .getStringArrayExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS);
-                sPreferences.setKeyServers(servers);
-                mKeyServerPreference.setSummary(getResources().getQuantityString(
+                        .getStringArrayExtra(PreferencesKeyserverActivity.EXTRA_KEY_SERVERS);
+                sPreferences.setKeyservers(servers);
+                mKeyserverPreference.setSummary(getResources().getQuantityString(
                         R.plurals.n_keyservers, servers.length, servers.length));
                 break;
             }
@@ -160,7 +160,7 @@ public class PreferencesActivity extends PreferenceActivity {
     /** This fragment shows the general preferences in android 3.0+ */
     public static class GeneralPrefsFragment extends PreferenceFragment {
 
-        private PreferenceScreen mKeyServerPreference = null;
+        private PreferenceScreen mKeyserverPreference = null;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -172,17 +172,17 @@ public class PreferencesActivity extends PreferenceActivity {
             initializePassPassPhraceCacheTtl(
                     (IntegerListPreference) findPreference(Constants.Pref.PASSPHRASE_CACHE_TTL));
 
-            mKeyServerPreference = (PreferenceScreen) findPreference(Constants.Pref.KEY_SERVERS);
-            String servers[] = sPreferences.getKeyServers();
-            mKeyServerPreference.setSummary(getResources().getQuantityString(R.plurals.n_keyservers,
+            mKeyserverPreference = (PreferenceScreen) findPreference(Constants.Pref.KEY_SERVERS);
+            String servers[] = sPreferences.getKeyservers();
+            mKeyserverPreference.setSummary(getResources().getQuantityString(R.plurals.n_keyservers,
                     servers.length, servers.length));
-            mKeyServerPreference
+            mKeyserverPreference
                     .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                         public boolean onPreferenceClick(Preference preference) {
                             Intent intent = new Intent(getActivity(),
-                                    PreferencesKeyServerActivity.class);
-                            intent.putExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS,
-                                    sPreferences.getKeyServers());
+                                    PreferencesKeyserverActivity.class);
+                            intent.putExtra(PreferencesKeyserverActivity.EXTRA_KEY_SERVERS,
+                                    sPreferences.getKeyservers());
                             startActivityForResult(intent, REQUEST_CODE_KEYSERVER_PREF);
                             return false;
                         }
@@ -197,9 +197,9 @@ public class PreferencesActivity extends PreferenceActivity {
                         return;
                     }
                     String servers[] = data
-                            .getStringArrayExtra(PreferencesKeyServerActivity.EXTRA_KEY_SERVERS);
-                    sPreferences.setKeyServers(servers);
-                    mKeyServerPreference.setSummary(getResources().getQuantityString(
+                            .getStringArrayExtra(PreferencesKeyserverActivity.EXTRA_KEY_SERVERS);
+                    sPreferences.setKeyservers(servers);
+                    mKeyserverPreference.setSummary(getResources().getQuantityString(
                             R.plurals.n_keyservers, servers.length, servers.length));
                     break;
                 }

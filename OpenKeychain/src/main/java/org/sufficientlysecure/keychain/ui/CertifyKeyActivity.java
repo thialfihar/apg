@@ -97,7 +97,7 @@ public class CertifyKeyActivity extends ActionBarActivity implements
         mSelectKeyserverSpinner = (Spinner) findViewById(R.id.upload_key_keyserver);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, Preferences.getPreferences(this)
-                    .getKeyServers()
+                    .getKeyservers()
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSelectKeyserverSpinner.setAdapter(adapter);

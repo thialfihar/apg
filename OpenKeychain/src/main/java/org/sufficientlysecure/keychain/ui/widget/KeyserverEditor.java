@@ -29,17 +29,17 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import org.thialfihar.android.apg.R;
 
-public class KeyServerEditor extends LinearLayout implements Editor, OnClickListener {
+public class KeyserverEditor extends LinearLayout implements Editor, OnClickListener {
     private EditorListener mEditorListener = null;
 
     BootstrapButton mDeleteButton;
     TextView mServer;
 
-    public KeyServerEditor(Context context) {
+    public KeyserverEditor(Context context) {
         super(context);
     }
 
-    public KeyServerEditor(Context context, AttributeSet attrs) {
+    public KeyserverEditor(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

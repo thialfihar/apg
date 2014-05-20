@@ -22,8 +22,8 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import org.thialfihar.android.apg.Constants;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.KeyServer;
-import org.thialfihar.android.apg.keyimport.KeybaseKeyServer;
+import org.thialfihar.android.apg.keyimport.Keyserver;
+import org.thialfihar.android.apg.keyimport.KeybaseKeyserver;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class ImportKeysListKeybaseLoader
      */
     private void queryServer(String query) {
 
-        KeybaseKeyServer server = new KeybaseKeyServer();
+        KeybaseKeyserver server = new KeybaseKeyserver();
         try {
             ArrayList<ImportKeysListEntry> searchResult = server.search(query);
 
@@ -94,11 +94,11 @@ public class ImportKeysListKeybaseLoader
 
             mEntryList.addAll(searchResult);
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, null);
-        } catch (KeyServer.InsufficientQuery e) {
+        } catch (Keyserver.InsufficientQuery e) {
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, e);
-        } catch (KeyServer.QueryException e) {
+        } catch (Keyserver.QueryException e) {
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, e);
-        } catch (KeyServer.TooManyResponses e) {
+        } catch (Keyserver.TooManyResponses e) {
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, e);
         }
 

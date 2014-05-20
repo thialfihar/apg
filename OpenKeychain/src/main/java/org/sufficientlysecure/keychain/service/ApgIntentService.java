@@ -54,9 +54,9 @@ import org.thialfihar.android.apg.provider.ApgContract.KeyRings;
 import org.thialfihar.android.apg.provider.ApgDatabase;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.HkpKeyServer;
+import org.thialfihar.android.apg.keyimport.HkpKeyserver;
 import org.thialfihar.android.apg.util.InputData;
-import org.thialfihar.android.apg.keyimport.KeybaseKeyServer;
+import org.thialfihar.android.apg.keyimport.KeybaseKeyserver;
 import org.thialfihar.android.apg.util.Log;
 import org.thialfihar.android.apg.util.ProgressScaler;
 
@@ -724,7 +724,7 @@ public class ApgIntentService extends IntentService
                 // and dataUri!
 
                 /* Operation */
-                HkpKeyServer server = new HkpKeyServer(keyServer);
+                HkpKeyserver server = new HkpKeyserver(keyServer);
 
                 ProviderHelper providerHelper = new ProviderHelper(this);
                 PGPPublicKeyRing keyring = (PGPPublicKeyRing) providerHelper.getPGPKeyRing(dataUri);
@@ -746,7 +746,7 @@ public class ApgIntentService extends IntentService
             ArrayList<ImportKeysListEntry> entries = data.getParcelableArrayList(DOWNLOAD_KEY_LIST);
 
             try {
-                KeybaseKeyServer server = new KeybaseKeyServer();
+                KeybaseKeyserver server = new KeybaseKeyserver();
                 for (ImportKeysListEntry entry : entries) {
                     // the keybase handle is in userId(1)
                     String keybaseId = entry.getExtraData();
@@ -797,7 +797,7 @@ public class ApgIntentService extends IntentService
                 String keyServer = data.getString(DOWNLOAD_KEY_SERVER);
 
                 // this downloads the keys and places them into the ImportKeysListEntry entries
-                HkpKeyServer server = new HkpKeyServer(keyServer);
+                HkpKeyserver server = new HkpKeyserver(keyServer);
 
                 for (ImportKeysListEntry entry : entries) {
                     // if available use complete fingerprint for get request

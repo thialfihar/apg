@@ -21,9 +21,9 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import org.thialfihar.android.apg.Constants;
-import org.thialfihar.android.apg.keyimport.HkpKeyServer;
+import org.thialfihar.android.apg.keyimport.HkpKeyserver;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.KeyServer;
+import org.thialfihar.android.apg.keyimport.Keyserver;
 import org.thialfihar.android.apg.util.Log;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class ImportKeysListServerLoader
     private Context mContext;
 
     private String mServerQuery;
-    private String mKeyServer;
+    private String mKeyserver;
 
     private ArrayList<ImportKeysListEntry> mEntryList = new ArrayList<ImportKeysListEntry>();
     private AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>> mEntryListWrapper;
@@ -42,7 +42,7 @@ public class ImportKeysListServerLoader
         super(context);
         mContext = context;
         mServerQuery = serverQuery;
-        mKeyServer = keyServer;
+        mKeyserver = keyServer;
     }
 
     @Override
@@ -57,9 +57,9 @@ public class ImportKeysListServerLoader
 
         if (mServerQuery.startsWith("0x") && mServerQuery.length() == 42) {
             Log.d(Constants.TAG, "This search is based on a unique fingerprint. Enforce a fingerprint check!");
-            queryServer(mServerQuery, mKeyServer, true);
+            queryServer(mServerQuery, mKeyserver, true);
         } else {
-            queryServer(mServerQuery, mKeyServer, false);
+            queryServer(mServerQuery, mKeyserver, false);
         }
 
         return mEntryListWrapper;
@@ -92,7 +92,7 @@ public class ImportKeysListServerLoader
      * Query keyserver
      */
     private void queryServer(String query, String keyServer, boolean enforceFingerprint) {
-        HkpKeyServer server = new HkpKeyServer(keyServer);
+        HkpKeyserver server = new HkpKeyserver(keyServer);
         try {
             ArrayList<ImportKeysListEntry> searchResult = server.search(query);
 
@@ -116,11 +116,11 @@ public class ImportKeysListServerLoader
                 mEntryList.addAll(searchResult);
             }
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, null);
-        } catch (KeyServer.InsufficientQuery e) {
+        } catch (Keyserver.InsufficientQuery e) {
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, e);
-        } catch (KeyServer.QueryException e) {
+        } catch (Keyserver.QueryException e) {
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, e);
-        } catch (KeyServer.TooManyResponses e) {
+        } catch (Keyserver.TooManyResponses e) {
             mEntryListWrapper = new AsyncTaskResultWrapper<ArrayList<ImportKeysListEntry>>(mEntryList, e);
         }
     }

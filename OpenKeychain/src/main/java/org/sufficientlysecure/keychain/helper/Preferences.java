@@ -140,7 +140,7 @@ public class Preferences {
         editor.commit();
     }
 
-    public String[] getKeyServers() {
+    public String[] getKeyservers() {
         String rawData = mSharedPreferences.getString(Constants.Pref.KEY_SERVERS,
                 Constants.Defaults.KEY_SERVERS);
         Vector<String> servers = new Vector<String>();
@@ -154,7 +154,7 @@ public class Preferences {
         return servers.toArray(chunks);
     }
 
-    public void setKeyServers(String[] value) {
+    public void setKeyservers(String[] value) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         String rawData = "";
         for (String v : value) {

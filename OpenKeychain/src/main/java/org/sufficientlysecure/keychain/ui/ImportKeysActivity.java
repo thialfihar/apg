@@ -439,7 +439,7 @@ public class ImportKeysActivity extends ActionBarActivity implements ActionBar.O
             // fill values for this action
             Bundle data = new Bundle();
 
-            data.putString(ApgIntentService.DOWNLOAD_KEY_SERVER, mListFragment.getKeyServer());
+            data.putString(ApgIntentService.DOWNLOAD_KEY_SERVER, mListFragment.getKeyserver());
 
             // get selected key entries
             ArrayList<ImportKeysListEntry> selectedEntries = mListFragment.getSelectedData();

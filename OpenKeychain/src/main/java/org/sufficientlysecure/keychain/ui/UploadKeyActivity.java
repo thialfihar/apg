@@ -47,7 +47,7 @@ import org.thialfihar.android.apg.util.Log;
  */
 public class UploadKeyActivity extends ActionBarActivity {
     private View mUploadButton;
-    private Spinner mKeyServerSpinner;
+    private Spinner mKeyserverSpinner;
 
     private Uri mDataUri;
 
@@ -58,16 +58,16 @@ public class UploadKeyActivity extends ActionBarActivity {
         setContentView(R.layout.upload_key_activity);
 
         mUploadButton = findViewById(R.id.upload_key_action_upload);
-        mKeyServerSpinner = (Spinner) findViewById(R.id.upload_key_keyserver);
+        mKeyserverSpinner = (Spinner) findViewById(R.id.upload_key_keyserver);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, Preferences.getPreferences(this)
-                .getKeyServers()
+                .getKeyservers()
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mKeyServerSpinner.setAdapter(adapter);
+        mKeyserverSpinner.setAdapter(adapter);
         if (adapter.getCount() > 0) {
-            mKeyServerSpinner.setSelection(0);
+            mKeyserverSpinner.setSelection(0);
         } else {
             mUploadButton.setEnabled(false);
         }
@@ -100,7 +100,7 @@ public class UploadKeyActivity extends ActionBarActivity {
         // fill values for this action
         Bundle data = new Bundle();
 
-        String server = (String) mKeyServerSpinner.getSelectedItem();
+        String server = (String) mKeyserverSpinner.getSelectedItem();
         data.putString(ApgIntentService.UPLOAD_KEY_SERVER, server);
 
         intent.putExtra(ApgIntentService.EXTRA_DATA, data);

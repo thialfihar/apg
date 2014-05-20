@@ -37,9 +37,9 @@ import org.thialfihar.android.apg.pgp.exception.PgpGeneralException;
 import org.thialfihar.android.apg.provider.ProviderHelper;
 import org.thialfihar.android.apg.service.ApgIntentService;
 import org.thialfihar.android.apg.keyimport.ImportKeysListEntry;
-import org.thialfihar.android.apg.keyimport.KeyServer;
+import org.thialfihar.android.apg.keyimport.Keyserver;
 import org.thialfihar.android.apg.util.IterableIterator;
-import org.thialfihar.android.apg.keyimport.KeyServer.AddKeyException;
+import org.thialfihar.android.apg.keyimport.Keyserver.AddKeyException;
 import org.thialfihar.android.apg.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -101,7 +101,7 @@ public class PgpImportExport {
         }
     }
 
-    public boolean uploadKeyRingToServer(KeyServer server, PGPPublicKeyRing keyRing) {
+    public boolean uploadKeyRingToServer(Keyserver server, PGPPublicKeyRing keyRing) {
         try {
             server.add(new KeyRing(keyRing).getArmoredEncoded(mContext));
             return true;

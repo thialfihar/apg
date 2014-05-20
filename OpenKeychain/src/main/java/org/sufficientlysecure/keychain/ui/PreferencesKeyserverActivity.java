@@ -31,11 +31,11 @@ import org.thialfihar.android.apg.R;
 import org.thialfihar.android.apg.helper.ActionBarHelper;
 import org.thialfihar.android.apg.ui.widget.Editor.EditorListener;
 import org.thialfihar.android.apg.ui.widget.Editor;
-import org.thialfihar.android.apg.ui.widget.KeyServerEditor;
+import org.thialfihar.android.apg.ui.widget.KeyserverEditor;
 
 import java.util.Vector;
 
-public class PreferencesKeyServerActivity extends ActionBarActivity implements OnClickListener,
+public class PreferencesKeyserverActivity extends ActionBarActivity implements OnClickListener,
         EditorListener {
 
     public static final String EXTRA_KEY_SERVERS = "key_servers";
@@ -83,7 +83,7 @@ public class PreferencesKeyServerActivity extends ActionBarActivity implements O
         String servers[] = intent.getStringArrayExtra(EXTRA_KEY_SERVERS);
         if (servers != null) {
             for (String serv : servers) {
-                KeyServerEditor view = (KeyServerEditor) mInflater.inflate(
+                KeyserverEditor view = (KeyserverEditor) mInflater.inflate(
                         R.layout.key_server_editor, mEditors, false);
                 view.setEditorListener(this);
                 view.setValue(serv);
@@ -102,7 +102,7 @@ public class PreferencesKeyServerActivity extends ActionBarActivity implements O
     }
 
     public void onClick(View v) {
-        KeyServerEditor view = (KeyServerEditor) mInflater.inflate(R.layout.key_server_editor,
+        KeyserverEditor view = (KeyserverEditor) mInflater.inflate(R.layout.key_server_editor,
                 mEditors, false);
         view.setEditorListener(this);
         mEditors.addView(view);
@@ -117,7 +117,7 @@ public class PreferencesKeyServerActivity extends ActionBarActivity implements O
         Intent data = new Intent();
         Vector<String> servers = new Vector<String>();
         for (int i = 0; i < mEditors.getChildCount(); ++i) {
-            KeyServerEditor editor = (KeyServerEditor) mEditors.getChildAt(i);
+            KeyserverEditor editor = (KeyserverEditor) mEditors.getChildAt(i);
             String tmp = editor.getValue();
             if (tmp.length() > 0) {
                 servers.add(tmp);
