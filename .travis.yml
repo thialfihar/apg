@@ -1,11 +1,13 @@
 language: android
+env:
+  matrix:
+    - ANDROID_TARGET=android-19
 android:
   components:
-   - build-tools-19.0.3
-   - android-19
-   - platform-tools
-   - extra-android-support
-   - extra-android-m2repository
+    - build-tools-19.0.3
+    - platform-tools
+    - extra-android-support
+    - extra-android-m2repository
 jdk: oraclejdk7
 before_install:
     - sudo apt-get update -qq
