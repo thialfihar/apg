@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:orientation="vertical"
-            android:background="@android:color/white" />
+            android:background="@color/openkeychain_white" />
 
         <View
             android:layout_width="match_parent"
@@ -48,14 +48,14 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:background="@android:color/white" />
+            android:background="@color/openkeychain_white" />
 
         <RelativeLayout
             android:id="@+id/import_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@android:color/white">
+            android:background="@color/openkeychain_white">
 
             <View
                 android:id="@+id/import_divider"

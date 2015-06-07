@@ -5,26 +5,26 @@
 
     <!-- green colors from OpenKeychain logo bottom right -->
     <!-- your app branding color for the app bar -->
-    <color name="primary">#7bad45</color>
+    <color name="primary">#268bd2</color>
     <!-- darker variant for the status bar and contextual app bars -->
-    <color name="primary_dark">#6c983d</color>
+    <color name="primary_dark">#166bb2</color>
     <!-- theme UI controls like checkboxes and text fields -->
-    <color name="accent">#2196F3</color>
+    <color name="accent">#268bd2</color>
 
     <!-- Other colors -->
 
-    <color name="black">#000000</color>
+    <color name="black">#e0e0e0</color>
 
-    <color name="primary_light">#C8E6C9</color>
+    <color name="primary_light">#C8C9E6</color>
     <color name="fab">@color/accent</color>
     <color name="fab_pressed">#1976D2</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#727272</color>
+    <color name="primary_text">#e0e0e0</color>
+    <color name="secondary_text">#b2b2b2</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
     <color name="transparent">#00FFFFFF</color>
 
-    <color name="header_text">#212121</color>
+    <color name="header_text">#a0a0a0</color>
     <!-- item selection, search highlight -->
     <color name="emphasis">@color/accent</color>
 
@@ -42,11 +42,11 @@
 
 
     <!-- floating action buttons -->
-    <color name="black_semi_transparent">#B2000000</color>
-    <color name="background">#e5e5e5</color>
+    <color name="black_semi_transparent">#80000000</color>
+    <color name="background">#252525</color>
     <color name="half_black">#808080</color>
-    <color name="white">#fafafa</color>
-    <color name="white_pressed">#f1f1f1</color>
+    <color name="white">#ffffff</color>
+    <color name="white_pressed">#808080</color>
 
     <!--
         http://www.google.com/design/spec/style/color.html#color-color-palette
@@ -64,4 +64,26 @@
     <color name="android_purple_light">#673ab7</color>
     <color name="android_purple_dark">#311b92</color>
 
+    <color name="openkeychain_white">#222222</color>
+    <color name="openkeychain_darker_gray">#333333</color>
+    <color name="drawer_text">#ffffff</color>
+    <color name="card_background">#404040</color>
+
+    <color name="material_drawer_primary">#2196F3</color>
+    <color name="material_drawer_primary_dark">#1976D2</color>
+    <color name="material_drawer_primary_light">#BBDEFB</color>
+    <color name="material_drawer_accent">#FF4081</color>
+
+    <color name="material_drawer_dark_background">#303030</color>
+    <!-- MaterialDrawer DEFAULT DARK text / items colors -->
+    <color name="material_drawer_dark_icons">#000</color>
+    <color name="material_drawer_dark_primary_text">#DEFFFFFF</color>
+    <color name="material_drawer_dark_primary_icon">#8AFFFFFF</color>
+    <color name="material_drawer_dark_secondary_text">#8AFFFFFF</color>
+    <color name="material_drawer_dark_hint_text">#42FFFFFF</color>
+    <color name="material_drawer_dark_divider">#1FFFFFFF</color>
+    <!-- MaterialDrawer DEFAULT DARK drawer colors -->
+    <color name="material_drawer_dark_selected">#202020</color>
+    <color name="material_drawer_dark_selected_text">@color/material_drawer_primary</color>
+    <color name="material_drawer_dark_header_selection_text">#FFF</color>
 </resources>

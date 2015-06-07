@@ -22,6 +22,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="8dp"
         android:visibility="gone"
-        android:textColor="@android:color/darker_gray" />
+        android:textColor="@color/openkeychain_darker_gray" />
 
 </RelativeLayout>

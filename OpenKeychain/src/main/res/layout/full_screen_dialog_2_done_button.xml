@@ -19,7 +19,7 @@
         android:gravity="center_vertical"
         android:paddingRight="20dp"
         android:filterTouchesWhenObscured="true"
-        style="@style/Widget.AppCompat.Light.ActionBar.TabText"
+        style="@style/Widget.AppCompat.ActionBar.TabText"
         android:textAllCaps="true"
         android:textSize="14sp"
         android:text="Done (set in-code!)" />

@@ -30,7 +30,7 @@
             android:background="?attr/colorPrimary"
             android:overScrollMode="always"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:popupTheme="@style/ThemeOverlay.AppCompat"
             tools:ignore="UnusedAttribute"
             android:transitionGroup="false"
             android:touchscreenBlocksFocus="false" />

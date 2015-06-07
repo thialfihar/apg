@@ -357,13 +357,13 @@ public class LogDisplayFragment extends ListFragment implements OnItemClickListe
                         ih.mSecondText.setText(getResources().getString(subEntry.mType.getMsgId(),
                                 subEntry.mParameters));
                     }
-                    ih.mSecondText.setTextColor(subEntry.mType.mLevel == LogLevel.DEBUG ? Color.GRAY : Color.BLACK);
+                    ih.mSecondText.setTextColor(subEntry.mType.mLevel == LogLevel.DEBUG ? Color.GRAY : Color.WHITE);
                     switch (subEntry.mType.mLevel) {
                         case DEBUG: ih.mSecondImg.setBackgroundColor(Color.GRAY); break;
-                        case INFO: ih.mSecondImg.setBackgroundColor(Color.BLACK); break;
+                        case INFO: ih.mSecondImg.setBackgroundColor(Color.WHITE); break;
                         case WARN: ih.mSecondImg.setBackgroundColor(getResources().getColor(R.color.android_orange_light)); break;
                         case ERROR: ih.mSecondImg.setBackgroundColor(getResources().getColor(R.color.android_red_light)); break;
-                        case START: ih.mSecondImg.setBackgroundColor(Color.BLACK); break;
+                        case START: ih.mSecondImg.setBackgroundColor(Color.WHITE); break;
                         case OK: ih.mSecondImg.setBackgroundColor(getResources().getColor(R.color.android_green_light)); break;
                         case CANCELLED: ih.mSecondImg.setBackgroundColor(getResources().getColor(R.color.android_red_light)); break;
                     }
@@ -388,13 +388,13 @@ public class LogDisplayFragment extends ListFragment implements OnItemClickListe
                         entry.mParameters));
             }
             convertView.setPadding((entry.mIndent) * dipFactor, 0, 0, 0);
-            ih.mText.setTextColor(entry.mType.mLevel == LogLevel.DEBUG ? Color.GRAY : Color.BLACK);
+            ih.mText.setTextColor(entry.mType.mLevel == LogLevel.DEBUG ? Color.GRAY : Color.WHITE);
             switch (entry.mType.mLevel) {
                 case DEBUG: ih.mImg.setBackgroundColor(Color.GRAY); break;
-                case INFO: ih.mImg.setBackgroundColor(Color.BLACK); break;
+                case INFO: ih.mImg.setBackgroundColor(Color.WHITE); break;
                 case WARN: ih.mImg.setBackgroundColor(getResources().getColor(R.color.android_orange_light)); break;
                 case ERROR: ih.mImg.setBackgroundColor(getResources().getColor(R.color.android_red_light)); break;
-                case START: ih.mImg.setBackgroundColor(Color.BLACK); break;
+                case START: ih.mImg.setBackgroundColor(Color.WHITE); break;
                 case OK: ih.mImg.setBackgroundColor(getResources().getColor(R.color.android_green_light)); break;
                 case CANCELLED: ih.mImg.setBackgroundColor(getResources().getColor(R.color.android_red_light)); break;
             }

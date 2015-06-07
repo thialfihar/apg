@@ -21,6 +21,6 @@
         android:minHeight="?attr/actionBarSize"
         android:background="@color/transparent"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:popupTheme="@style/ThemeOverlay.AppCompat"
         tools:ignore="UnusedAttribute" />
 </merge>

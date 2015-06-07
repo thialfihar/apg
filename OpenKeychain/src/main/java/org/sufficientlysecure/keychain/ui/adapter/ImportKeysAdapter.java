@@ -197,11 +197,11 @@ public class ImportKeysAdapter extends ArrayAdapter<ImportKeysListEntry> {
             if (entry.isSecretKey()) {
                 holder.mainUserId.setTextColor(Color.RED);
             } else {
-                holder.mainUserId.setTextColor(Color.BLACK);
+                holder.mainUserId.setTextColor(Color.WHITE);
             }
 
-            holder.mainUserIdRest.setTextColor(Color.BLACK);
-            holder.keyId.setTextColor(Color.BLACK);
+            holder.mainUserIdRest.setTextColor(Color.WHITE);
+            holder.keyId.setTextColor(Color.WHITE);
         }
 
         if (entry.getUserIds().size() == 1) {
