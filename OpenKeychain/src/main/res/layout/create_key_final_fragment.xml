@@ -131,7 +131,6 @@
                 android:text="@string/create_key_final_robot_text"
                 android:textColor="@color/android_green_light"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawableLeft="@drawable/create_key_robot"
                 android:drawablePadding="8dp" />
 
         </LinearLayout>
