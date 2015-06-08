@@ -17,7 +17,6 @@
  */
 
 package org.sufficientlysecure.keychain.provider;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -52,9 +51,8 @@ import java.io.IOException;
  * - BLOB. The value is a blob of data, stored exactly as it was input.
  */
 public class KeychainDatabase extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "openkeychain.db";
-    private static final int DATABASE_VERSION = 10;
-    static Boolean apgHack = false;
+    private static final String DATABASE_NAME = "apg";
+    private static final int DATABASE_VERSION = 4;
     private Context mContext;
 
     public interface Tables {
@@ -68,147 +66,114 @@ public class KeychainDatabase extends SQLiteOpenHelper {
         String API_ALLOWED_KEYS = "api_allowed_keys";
     }
 
-    private static final String CREATE_KEYRINGS_PUBLIC =
-            "CREATE TABLE IF NOT EXISTS keyrings_public ("
-                + KeyRingsColumns.MASTER_KEY_ID + " INTEGER PRIMARY KEY,"
-                + KeyRingsColumns.KEY_RING_DATA + " BLOB"
-            + ")";
-
-    private static final String CREATE_KEYRINGS_SECRET =
-            "CREATE TABLE IF NOT EXISTS keyrings_secret ("
-                    + KeyRingsColumns.MASTER_KEY_ID + " INTEGER PRIMARY KEY,"
-                    + KeyRingsColumns.KEY_RING_DATA + " BLOB,"
-                    + "FOREIGN KEY(" + KeyRingsColumns.MASTER_KEY_ID + ") "
-                        + "REFERENCES keyrings_public(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE"
-            + ")";
-
-    private static final String CREATE_KEYS =
-            "CREATE TABLE IF NOT EXISTS " + Tables.KEYS + " ("
-                + KeysColumns.MASTER_KEY_ID + " INTEGER, "
-                + KeysColumns.RANK + " INTEGER, "
-
-                + KeysColumns.KEY_ID + " INTEGER, "
-                + KeysColumns.KEY_SIZE + " INTEGER, "
-                + KeysColumns.KEY_CURVE_OID + " TEXT, "
-                + KeysColumns.ALGORITHM + " INTEGER, "
-                + KeysColumns.FINGERPRINT + " BLOB, "
-
-                + KeysColumns.CAN_CERTIFY + " INTEGER, "
-                + KeysColumns.CAN_SIGN + " INTEGER, "
-                + KeysColumns.CAN_ENCRYPT + " INTEGER, "
-                + KeysColumns.CAN_AUTHENTICATE + " INTEGER, "
-                + KeysColumns.IS_REVOKED + " INTEGER, "
-                + KeysColumns.HAS_SECRET + " INTEGER, "
-
-                + KeysColumns.CREATION + " INTEGER, "
-                + KeysColumns.EXPIRY + " INTEGER, "
-
-                + "PRIMARY KEY(" + KeysColumns.MASTER_KEY_ID + ", " + KeysColumns.RANK + "),"
-                + "FOREIGN KEY(" + KeysColumns.MASTER_KEY_ID + ") REFERENCES "
-                    + Tables.KEY_RINGS_PUBLIC + "(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE"
-            + ")";
-
-    private static final String CREATE_USER_PACKETS =
-            "CREATE TABLE IF NOT EXISTS " + Tables.USER_PACKETS + "("
-                + UserPacketsColumns.MASTER_KEY_ID + " INTEGER, "
-                + UserPacketsColumns.TYPE + " INT, "
-                + UserPacketsColumns.USER_ID + " TEXT, "
-                + UserPacketsColumns.ATTRIBUTE_DATA + " BLOB, "
-
-                + UserPacketsColumns.IS_PRIMARY + " INTEGER, "
-                + UserPacketsColumns.IS_REVOKED + " INTEGER, "
-                + UserPacketsColumns.RANK+ " INTEGER, "
-
-                + "PRIMARY KEY(" + UserPacketsColumns.MASTER_KEY_ID + ", " + UserPacketsColumns.RANK + "), "
-                + "FOREIGN KEY(" + UserPacketsColumns.MASTER_KEY_ID + ") REFERENCES "
-                    + Tables.KEY_RINGS_PUBLIC + "(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE"
-            + ")";
-
-    private static final String CREATE_CERTS =
-            "CREATE TABLE IF NOT EXISTS " + Tables.CERTS + "("
-                + CertsColumns.MASTER_KEY_ID + " INTEGER,"
-                + CertsColumns.RANK + " INTEGER, " // rank of certified uid
-
-                + CertsColumns.KEY_ID_CERTIFIER + " INTEGER, " // certifying key
-                + CertsColumns.TYPE + " INTEGER, "
-                + CertsColumns.VERIFIED + " INTEGER, "
-                + CertsColumns.CREATION + " INTEGER, "
-
-                + CertsColumns.DATA + " BLOB, "
-
-                + "PRIMARY KEY(" + CertsColumns.MASTER_KEY_ID + ", " + CertsColumns.RANK + ", "
-                    + CertsColumns.KEY_ID_CERTIFIER + "), "
-                + "FOREIGN KEY(" + CertsColumns.MASTER_KEY_ID + ") REFERENCES "
-                    + Tables.KEY_RINGS_PUBLIC + "(" + KeyRingsColumns.MASTER_KEY_ID + ") ON DELETE CASCADE,"
-                + "FOREIGN KEY(" + CertsColumns.MASTER_KEY_ID + ", " + CertsColumns.RANK + ") REFERENCES "
-                    + Tables.USER_PACKETS + "(" + UserPacketsColumns.MASTER_KEY_ID + ", " + UserPacketsColumns.RANK + ") ON DELETE CASCADE"
-            + ")";
-
-    private static final String CREATE_API_APPS =
-            "CREATE TABLE IF NOT EXISTS " + Tables.API_APPS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ApiAppsColumns.PACKAGE_NAME + " TEXT NOT NULL UNIQUE, "
-                + ApiAppsColumns.PACKAGE_CERTIFICATE + " BLOB"
-            + ")";
-
-    private static final String CREATE_API_APPS_ACCOUNTS =
-            "CREATE TABLE IF NOT EXISTS " + Tables.API_ACCOUNTS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ApiAppsAccountsColumns.ACCOUNT_NAME + " TEXT NOT NULL, "
-                + ApiAppsAccountsColumns.KEY_ID + " INTEGER, "
-                + ApiAppsAccountsColumns.ENCRYPTION_ALGORITHM + " INTEGER, "
-                + ApiAppsAccountsColumns.HASH_ALORITHM + " INTEGER, "
-                + ApiAppsAccountsColumns.COMPRESSION + " INTEGER, "
-                + ApiAppsAccountsColumns.PACKAGE_NAME + " TEXT NOT NULL, "
-
-                + "UNIQUE(" + ApiAppsAccountsColumns.ACCOUNT_NAME + ", "
-                    + ApiAppsAccountsColumns.PACKAGE_NAME + "), "
-                + "FOREIGN KEY(" + ApiAppsAccountsColumns.PACKAGE_NAME + ") REFERENCES "
-                    + Tables.API_APPS + "(" + ApiAppsColumns.PACKAGE_NAME + ") ON DELETE CASCADE"
-            + ")";
-
-    private static final String CREATE_API_APPS_ALLOWED_KEYS =
-            "CREATE TABLE IF NOT EXISTS " + Tables.API_ALLOWED_KEYS + " ("
-                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ApiAppsAllowedKeysColumns.KEY_ID + " INTEGER, "
-                + ApiAppsAllowedKeysColumns.PACKAGE_NAME + " TEXT NOT NULL, "
-
-                + "UNIQUE(" + ApiAppsAllowedKeysColumns.KEY_ID + ", "
-                + ApiAppsAllowedKeysColumns.PACKAGE_NAME + "), "
-                + "FOREIGN KEY(" + ApiAppsAllowedKeysColumns.PACKAGE_NAME + ") REFERENCES "
-                + Tables.API_APPS + "(" + ApiAppsAllowedKeysColumns.PACKAGE_NAME + ") ON DELETE CASCADE"
-                + ")";
-
     public KeychainDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
-
-        // make sure this is only done once, on the first instance!
-        boolean iAmIt = false;
-        synchronized (KeychainDatabase.class) {
-            if (!KeychainDatabase.apgHack) {
-                iAmIt = true;
-                KeychainDatabase.apgHack = true;
-            }
-        }
-        // if it's us, do the import
-        if (iAmIt) {
-            checkAndImportApg(context);
-        }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.w(Constants.TAG, "Creating database...");
 
-        db.execSQL(CREATE_KEYRINGS_PUBLIC);
-        db.execSQL(CREATE_KEYRINGS_SECRET);
-        db.execSQL(CREATE_KEYS);
-        db.execSQL(CREATE_USER_PACKETS);
-        db.execSQL(CREATE_CERTS);
-        db.execSQL(CREATE_API_APPS);
-        db.execSQL(CREATE_API_APPS_ACCOUNTS);
-        db.execSQL(CREATE_API_APPS_ALLOWED_KEYS);
+        db.execSQL("CREATE TABLE IF NOT EXISTS keyrings_public ("
+            + "master_key_id INTEGER PRIMARY KEY,"
+            + "key_ring_data BLOB "
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS keyrings_secret ("
+            + "master_key_id INTEGER PRIMARY KEY,"
+            + "key_ring_data BLOB, "
+            + "FOREIGN KEY(master_key_id) "
+                + "REFERENCES keyrings_public(master_key_id) ON DELETE CASCADE"
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS keys ("
+            + "master_key_id INTEGER, "
+            + "rank INTEGER, "
+
+            + "key_id INTEGER, "
+            + "key_size INTEGER, "
+            + "key_curve_oid TEXT, "
+            + "algorithm INTEGER, "
+            + "fingerprint BLOB, "
+
+            + "can_certify INTEGER, "
+            + "can_sign INTEGER, "
+            + "can_encrypt INTEGER, "
+            + "can_authenticate INTEGER, "
+            + "is_revoked INTEGER, "
+            + "has_secret INTEGER, "
+
+            + "creation INTEGER, "
+            + "expiry INTEGER, "
+
+            + "PRIMARY KEY(master_key_id, rank), "
+            + "FOREIGN KEY(master_key_id) REFERENCES "
+                + "keyrings_public(master_key_id) ON DELETE CASCADE "
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS user_packets("
+            + "master_key_id INTEGER, "
+            + "type INT, "
+            + "user_id TEXT, "
+            + "attribute_data BLOB, "
+
+            + "is_primary INTEGER, "
+            + "is_revoked INTEGER, "
+            + "rank INTEGER, "
+
+            + "PRIMARY KEY(master_key_id, rank), "
+            + "FOREIGN KEY(master_key_id) REFERENCES "
+                + "keyrings_public(master_key_id) ON DELETE CASCADE "
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS certs("
+            + "master_key_id INTEGER, "
+            + "rank INTEGER, " // rank of certified uid
+
+            + "key_id_certifier INTEGER, " // certifying key
+            + "type INTEGER, "
+            + "verified INTEGER, "
+            + "creation INTEGER, "
+
+            + "data BLOB, "
+
+            + "PRIMARY KEY(master_key_id, rank, key_id_certifier), "
+            + "FOREIGN KEY(master_key_id) REFERENCES "
+                + "keyrings_public(master_key_id) ON DELETE CASCADE, "
+            + "FOREIGN KEY(master_key_id, rank) REFERENCES "
+                + "user_packets(master_key_id, rank) ON DELETE CASCADE "
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS api_apps ("
+            + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "package_name TEXT NOT NULL UNIQUE, "
+            + "package_signature BLOB"
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS api_accounts ("
+            + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "account_name TEXT NOT NULL, "
+            + "key_id INTEGER, "
+            + "encryption_algorithm INTEGER, "
+            + "hash_algorithm INTEGER, "
+            + "compression INTEGER, "
+            + "package_name TEXT NOT NULL, "
+
+            + "UNIQUE(account_name, package_name), "
+            + "FOREIGN KEY(package_name) REFERENCES "
+                + "api_apps(package_name) ON DELETE CASCADE"
+        + ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS api_allowed_keys ("
+            + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "key_id INTEGER, "
+            + "package_name TEXT NOT NULL, "
+
+            + "UNIQUE(key_id, package_name), "
+            + "FOREIGN KEY(package_name) REFERENCES "
+            + "api_apps(package_name) ON DELETE CASCADE"
+        + ")");
     }
 
     @Override
@@ -224,57 +189,219 @@ public class KeychainDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(Constants.TAG, "Upgrading db from " + oldVersion + " to " + newVersion);
 
-        switch (oldVersion) {
-            case 1:
-                // add has_secret for all who are upgrading from a beta version
-                try {
-                    db.execSQL("ALTER TABLE keys ADD COLUMN has_secret INTEGER");
-                } catch (Exception e) {
-                    // never mind, the column probably already existed
-                }
-                // fall through
-            case 2:
-                // ECC support
-                try {
-                    db.execSQL("ALTER TABLE keys ADD COLUMN key_curve_oid TEXT");
-                } catch (Exception e) {
-                    // never mind, the column probably already existed
-                }
-                // fall through
-            case 3:
-                // better s2k detection, we need consolidate
-                // fall through
-            case 4:
-                try {
-                    db.execSQL("ALTER TABLE keys ADD COLUMN can_authenticate INTEGER");
-                } catch (Exception e) {
-                    // never mind, the column probably already existed
-                }
-                // fall through
-            case 5:
-                // do consolidate for 3.0 beta3
-                // fall through
-            case 6:
-                db.execSQL("ALTER TABLE user_ids ADD COLUMN type INTEGER");
-                db.execSQL("ALTER TABLE user_ids ADD COLUMN attribute_data BLOB");
-            case 7:
-                // consolidate
-            case 8:
-                // new table for allowed key ids in API
-                try {
-                    db.execSQL(CREATE_API_APPS_ALLOWED_KEYS);
-                } catch (Exception e) {
-                    // never mind, the column probably already existed
-                }
-            case 9:
-                // tbale name for user_ids changed to user_packets
-                db.execSQL("DROP TABLE IF EXISTS certs");
-                db.execSQL("DROP TABLE IF EXISTS user_ids");
-                db.execSQL(CREATE_USER_PACKETS);
-                db.execSQL(CREATE_CERTS);
-            case 10:
-                // do nothing here, just consolidate
+        // Upgrade from oldVersion through all cases to newest one
+        for (int version = oldVersion; version < newVersion; ++version) {
+            Log.w(Constants.TAG, "Upgrading database to version " + (version + 1));
 
+            switch (version) {
+                case 2:
+                    db.beginTransaction();
+                    try {
+                        // accounts aren't used anymore
+                        db.execSQL("DROP TABLE accounts");
+
+                        // rename old databases
+                        db.execSQL("ALTER TABLE key_rings RENAME TO orig_key_rings");
+                        db.execSQL("ALTER TABLE keys RENAME TO orig_keys");
+                        db.execSQL("ALTER TABLE user_ids RENAME TO orig_user_ids");
+
+                        db.execSQL("CREATE TABLE key_rings(" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "master_key_id INT64, " +
+                            "type INTEGER, " +
+                            "key_ring_data BLOB)");
+
+                        db.execSQL("CREATE TABLE keys(" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "key_ring_row_id INTEGER NOT NULL, " +
+                            "key_id INT64, " +
+                            "type INTEGER, " +
+                            "is_master_key INTEGER, " +
+                            "algorithm INTEGER, " +
+                            "key_size INTEGER, " +
+                            "can_certify INTEGER, " +
+                            "can_sign INTEGER, " +
+                            "can_encrypt INTEGER, " +
+                            "is_revoked INTEGER, " +
+                            "creation INTEGER, " +
+                            "expiry INTEGER, " +
+                            "rank INTEGER, " +
+                            "key_data BLOB," +
+                            "fingerprint BLOB, " +
+                            "FOREIGN KEY(key_ring_row_id) REFERENCES key_rings(_id) ON DELETE CASCADE)");
+
+                        db.execSQL("CREATE TABLE user_ids(" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "key_ring_row_id INTEGER NOT NULL, " +
+                            "user_id TEXT, " +
+                            "rank INTEGER, " +
+                            "FOREIGN KEY(key_ring_row_id) REFERENCES key_rings(_id) ON DELETE CASCADE)");
+
+                        db.execSQL("CREATE TABLE api_apps(" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "package_name TEXT UNIQUE, " +
+                            "package_signature BLOB, " +
+                            "key_id INT64, " +
+                            "encryption_algorithm INTEGER, " +
+                            "hash_algorithm INTEGER, " +
+                            "compression INTEGER)");
+
+                        // copy data
+                        db.execSQL("INSERT INTO key_rings(_id, master_key_id, type, key_ring_data) " +
+                                   "SELECT _id, c_master_key_id, c_type, c_key_ring_data " +
+                                   "FROM orig_key_rings");
+
+                        db.execSQL("INSERT INTO keys(_id, key_ring_row_id, key_id, type, is_master_key, " +
+                                    "algorithm, key_size, can_certify, can_sign, can_encrypt, " +
+                                    "is_revoked, creation, expiry, rank, key_data, " +
+                                    "fingerprint) " +
+                                   "SELECT _id, c_key_ring_id, c_key_id, c_type, c_is_master_key, " +
+                                    "c_algorithm, c_key_size, c_is_master_key, c_can_sign, c_can_encrypt, " +
+                                    "0, c_creation, c_expiry, 0, c_key_data, null " +
+                                   "FROM orig_keys");
+
+                        db.execSQL("INSERT INTO user_ids(_id, key_ring_row_id, user_id, rank) " +
+                                   "SELECT orig_user_ids._id, orig_keys.c_key_ring_id, c_user_id, " +
+                                        "orig_user_ids.c_rank " +
+                                   "FROM orig_user_ids JOIN orig_keys ON " +
+                                        "orig_keys._id = orig_user_ids.c_key_id");
+
+                        db.execSQL("UPDATE keys SET " +
+                                    "rank = (SELECT COUNT(1) FROM keys AS keys2 " +
+                                        "WHERE keys2.key_ring_row_id = keys.key_ring_row_id AND " +
+                                            "keys2._id < keys._id)");
+
+                        db.execSQL("UPDATE user_ids SET " +
+                                    "rank = (SELECT COUNT(1) FROM user_ids AS user_ids2 " +
+                                        "WHERE user_ids2.key_ring_row_id = user_ids.key_ring_row_id AND " +
+                                            "user_ids2._id < user_ids._id)");
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+                    break;
+
+            case 3:
+                db.beginTransaction();
+                try {
+                    db.execSQL("DROP TABLE IF EXISTS keys");
+                    db.execSQL("DROP TABLE IF EXISTS user_ids");
+                    db.execSQL("DROP TABLE IF EXISTS api_apps");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS keyrings_public ("
+                        + "master_key_id INTEGER PRIMARY KEY, "
+                        + "key_ring_data BLOB "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS keyrings_secret ("
+                        + "master_key_id INTEGER PRIMARY KEY, "
+                        + "key_ring_data BLOB, "
+                        + "FOREIGN KEY(master_key_id) "
+                            + "REFERENCES keyrings_public(master_key_id) ON DELETE CASCADE "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS keys ("
+                        + "master_key_id INTEGER, "
+                        + "rank INTEGER, "
+
+                        + "key_id INTEGER, "
+                        + "key_size INTEGER, "
+                        + "key_curve_oid TEXT, "
+                        + "algorithm INTEGER, "
+                        + "fingerprint BLOB, "
+
+                        + "can_certify INTEGER, "
+                        + "can_sign INTEGER, "
+                        + "can_encrypt INTEGER, "
+                        + "can_authenticate INTEGER, "
+                        + "is_revoked INTEGER, "
+                        + "has_secret INTEGER, "
+
+                        + "creation INTEGER, "
+                        + "expiry INTEGER, "
+
+                        + "PRIMARY KEY(master_key_id, rank), "
+                        + "FOREIGN KEY(master_key_id) REFERENCES "
+                            + "keyrings_public(master_key_id) ON DELETE CASCADE "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS user_packets ("
+                        + "master_key_id INTEGER, "
+                        + "type INT, "
+                        + "user_id TEXT, "
+                        + "attribute_data BLOB, "
+
+                        + "is_primary INTEGER, "
+                        + "is_revoked INTEGER, "
+                        + "rank INTEGER, "
+
+                        + "PRIMARY KEY(master_key_id, rank), "
+                        + "FOREIGN KEY(master_key_id) REFERENCES "
+                            + "keyrings_public(master_key_id) ON DELETE CASCADE "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS certs ("
+                        + "master_key_id INTEGER, "
+                        + "rank INTEGER, " // rank of certified uid
+
+                        + "key_id_certifier INTEGER, " // certifying key
+                        + "type INTEGER, "
+                        + "verified INTEGER, "
+                        + "creation INTEGER, "
+
+                        + "data BLOB, "
+
+                        + "PRIMARY KEY(master_key_id, rank, key_id_certifier), "
+                        + "FOREIGN KEY(master_key_id) REFERENCES "
+                            + "keyrings_public(master_key_id) ON DELETE CASCADE, "
+                        + "FOREIGN KEY(master_key_id, rank) REFERENCES "
+                            + "user_packets(master_key_id, rank) ON DELETE CASCADE "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS api_apps ("
+                        + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + "package_name TEXT NOT NULL UNIQUE, "
+                        + "package_signature BLOB "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS api_accounts ("
+                        + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + "account_name TEXT NOT NULL, "
+                        + "key_id INTEGER, "
+                        + "encryption_algorithm INTEGER, "
+                        + "hash_algorithm INTEGER, "
+                        + "compression INTEGER, "
+                        + "package_name TEXT NOT NULL, "
+
+                        + "UNIQUE(account_name, package_name), "
+                        + "FOREIGN KEY(package_name) REFERENCES "
+                            + "api_apps(package_name) ON DELETE CASCADE "
+                    + ")");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS api_allowed_keys ("
+                        + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + "key_id INTEGER, "
+                        + "package_name TEXT NOT NULL, "
+
+                        + "UNIQUE(key_id, package_name), "
+                        + "FOREIGN KEY(package_name) REFERENCES "
+                        + "api_apps(package_name) ON DELETE CASCADE "
+                    + ")");
+
+                    db.execSQL("INSERT INTO keyrings_public (master_key_id, key_ring_data) SELECT master_key_id, key_ring_data FROM key_rings WHERE type = 0");
+                    db.execSQL("INSERT INTO keyrings_secret (master_key_id, key_ring_data) SELECT master_key_id, key_ring_data FROM key_rings WHERE type = 1");
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                break;
+
+            default:
+                break;
+            }
         }
 
         // always do consolidate after upgrade
@@ -282,110 +409,6 @@ public class KeychainDatabase extends SQLiteOpenHelper {
         consolidateIntent.putExtra(ConsolidateDialogActivity.EXTRA_CONSOLIDATE_RECOVERY, false);
         consolidateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.getApplicationContext().startActivity(consolidateIntent);
-    }
-
-    /** This method tries to import data from a provided database.
-     *
-     * The sole assumptions made on this db are that there is a key_rings table
-     * with a key_ring_data, a master_key_id and a type column, the latter of
-     * which should be 1 for secret keys and 0 for public keys.
-     */
-    public void checkAndImportApg(Context context) {
-
-        boolean hasApgDb = false;
-        {
-            // It's the Java way =(
-            String[] dbs = context.databaseList();
-            for (String db : dbs) {
-                if (db.equals("apg.db")) {
-                    hasApgDb = true;
-                } else if (db.equals("apg_old.db")) {
-                    Log.d(Constants.TAG, "Found apg_old.db, delete it!");
-                    context.getDatabasePath("apg_old.db").delete();
-                }
-            }
-        }
-
-        if (!hasApgDb) {
-            return;
-        }
-
-        Log.d(Constants.TAG, "apg.db exists! Importing...");
-
-        SQLiteDatabase db = new SQLiteOpenHelper(context, "apg.db", null, 1) {
-            @Override
-            public void onCreate(SQLiteDatabase db) {
-                // should never happen
-                throw new AssertionError();
-            }
-            @Override
-            public void onDowngrade(SQLiteDatabase db, int old, int nu) {
-                // don't care
-            }
-            @Override
-            public void onUpgrade(SQLiteDatabase db, int old, int nu) {
-                // don't care either
-            }
-        }.getReadableDatabase();
-
-        Cursor cursor = null;
-        ProviderHelper providerHelper = new ProviderHelper(context);
-
-        try {
-            // we insert in two steps: first, all public keys that have secret keys
-            cursor = db.rawQuery("SELECT key_ring_data FROM key_rings WHERE type = 1 OR EXISTS ("
-                    + " SELECT 1 FROM key_rings d2 WHERE key_rings.master_key_id = d2.master_key_id"
-                    + " AND d2.type = 1) ORDER BY type ASC", null);
-            if (cursor != null) {
-                Log.d(Constants.TAG, "Importing " + cursor.getCount() + " secret keyrings from apg.db...");
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    cursor.moveToPosition(i);
-                    byte[] data = cursor.getBlob(0);
-                    try {
-                        UncachedKeyRing ring = UncachedKeyRing.decodeFromData(data);
-                        providerHelper.savePublicKeyRing(ring);
-                    } catch(PgpGeneralException e) {
-                        Log.e(Constants.TAG, "Error decoding keyring blob!");
-                    }
-                }
-            }
-            if (cursor != null) {
-                cursor.close();
-            }
-
-            // afterwards, insert all keys, starting with public keys that have secret keys, then
-            // secret keys, then all others. this order is necessary to ensure all certifications
-            // are recognized properly.
-            cursor = db.rawQuery("SELECT key_ring_data FROM key_rings ORDER BY (type = 0 AND EXISTS ("
-                    + " SELECT 1 FROM key_rings d2 WHERE key_rings.master_key_id = d2.master_key_id AND"
-                    + " d2.type = 1)) DESC, type DESC", null);
-            // import from old database
-            if (cursor != null) {
-                Log.d(Constants.TAG, "Importing " + cursor.getCount() + " keyrings from apg.db...");
-                for (int i = 0; i < cursor.getCount(); i++) {
-                    cursor.moveToPosition(i);
-                    byte[] data = cursor.getBlob(0);
-                    try {
-                        UncachedKeyRing ring = UncachedKeyRing.decodeFromData(data);
-                        providerHelper.savePublicKeyRing(ring);
-                    } catch(PgpGeneralException e) {
-                        Log.e(Constants.TAG, "Error decoding keyring blob!");
-                    }
-                }
-            }
-        } catch (IOException e) {
-            Log.e(Constants.TAG, "Error importing apg.db!", e);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-            if (db != null) {
-                db.close();
-            }
-        }
-
-        // delete old database
-        context.getDatabasePath("apg.db").delete();
     }
 
     private static void copy(File in, File out) throws IOException {

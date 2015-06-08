@@ -38,6 +38,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import org.sufficientlysecure.keychain.R;
 import org.sufficientlysecure.keychain.operations.results.OperationResult;
+import org.sufficientlysecure.keychain.provider.KeychainDatabase;
 import org.sufficientlysecure.keychain.remote.ui.AppsListFragment;
 import org.sufficientlysecure.keychain.ui.base.BaseNfcActivity;
 import org.sufficientlysecure.keychain.util.FabContainer;
@@ -113,6 +114,9 @@ public class MainActivity extends BaseNfcActivity implements FabContainer, OnBac
                 .withSelectedItem(-1)
                 .withSavedInstance(savedInstanceState)
                 .build();
+
+        // force DB migration
+        new KeychainDatabase(this).getReadableDatabase();
 
         // if this is the first time show first time activity
         Preferences prefs = Preferences.getPreferences(this);
