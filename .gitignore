@@ -35,3 +35,7 @@ pom.xml.*
 #OS Specific
 [Tt]humbs.db
 .DS_Store
+
+apg/src/main/assets
+apg/src/main/java
+apg/src/main/res
