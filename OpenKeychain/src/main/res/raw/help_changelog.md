@@ -1,5 +1,11 @@
 [//]: # (NOTE: Please put every sentence in its own line, Transifex puts every line in its own translation field!)
 
+## APG 2.0
+
+ * Merge OpenKeychain, making APG a fork of OpenKeychain 3.2
+
+# OpenKeychain
+
 ## 3.2
 
   * First version with full YubiKey support available from the user interface: Edit keys, bind YubiKey to keys,...

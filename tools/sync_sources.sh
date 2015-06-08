@@ -11,5 +11,7 @@ rsync -aru ../OpenKeychain/src/main/java/org/sufficientlysecure/keychain/./ src/
 find src/main -type f -exec perl -pi -e 's/sufficientlysecure[.]keychain(?![.]intents)/thialfihar.android.apg/g' {} \;
 find src/main/java -iname '*.java' -exec perl -pi -e 's/"OpenKeychain"/"APG"/g' {} \;
 find src/main/java -iname '*.java' -exec perl -pi -e 's/"Keychain"/"APG"/g' {} \;
-find src/main/res -type f ! -iname '*changelog*' ! -iname '*help*' -exec perl -pi -e 's/OpenKeychain/APG/g' {} \;
 find src/main/res -type f ! -iname '*help*' -exec perl -pi -e 's/OpenKeychain/APG/g' {} \;
+
+rm src/main/res/raw-*/help_changelog.md
+rm src/main/res/raw-*/help_about.md
