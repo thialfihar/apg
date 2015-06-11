@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    fitsSystemWindows and layout_marginTop from
+    https://medium.com/@ngdelamo/using-drawerlayout-the-material-way-i-716bba2b5705
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    android:layout_marginTop="@dimen/minus_statusbar_height"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,14 +13,8 @@
         android:id="@+id/toolbar_include"
         layout="@layout/toolbar_result_decrypt" />
 
-    <!--
-        fitsSystemWindows and layout_marginTop from
-        https://medium.com/@ngdelamo/using-drawerlayout-the-material-way-i-716bba2b5705
-    -->
     <LinearLayout
         android:layout_below="@id/toolbar_include"
-        android:fitsSystemWindows="true"
-        android:layout_marginTop="@dimen/minus_statusbar_height"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
