@@ -39,3 +39,7 @@ pom.xml.*
 apg/src/main/assets
 apg/src/main/java
 apg/src/main/res
+libs/k-9
+todo.txt
+db
+Makefile
