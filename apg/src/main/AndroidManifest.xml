@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.thialfihar.android.apg"
-    android:installLocation="auto"
-    android:versionCode="20000"
-    android:versionName="2.0.0">
+    android:installLocation="auto">
 
     <!--
         General remarks
@@ -50,9 +48,9 @@
         android:name="android.hardware.screen.portrait"
         android:required="false" />
 
-    <permission android:name="org.thialfihar.android.apg.WRITE_TEMPORARY_STORAGE" />
+    <permission android:name="${applicationId}.WRITE_TEMPORARY_STORAGE" />
 
-    <uses-permission android:name="org.thialfihar.android.apg.WRITE_TEMPORARY_STORAGE" />
+    <uses-permission android:name="${applicationId}.WRITE_TEMPORARY_STORAGE" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -69,14 +67,14 @@
 
     <!-- android:allowBackup="false": Don't allow backup over adb backup or other apps! -->
     <application
-        android:name=".KeychainApplication"
+        android:name="org.sufficientlysecure.keychain.KeychainApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ApgTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="org.sufficientlysecure.keychain.ui.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/app_name"
             android:launchMode="singleTop">
@@ -87,70 +85,70 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.CreateKeyActivity"
+            android:name="org.sufficientlysecure.keychain.ui.CreateKeyActivity"
             android:allowTaskReparenting="true"
             android:label="@string/title_manage_my_keys"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.EditKeyActivity"
+            android:name="org.sufficientlysecure.keychain.ui.EditKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_edit_key" />
         <!-- NOTE: Dont use configChanges for QR Code view! We use a different layout for landscape -->
         <activity
-            android:name=".ui.QrCodeViewActivity"
+            android:name="org.sufficientlysecure.keychain.ui.QrCodeViewActivity"
             android:label="@string/share_qr_code_dialog_title" />
         <activity
-            android:name=".ui.ViewKeyActivity"
+            android:name="org.sufficientlysecure.keychain.ui.ViewKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_key_details"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.org.thialfihar.android.apg.key" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.sufficientlysecure.keychain.key" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ViewCertActivity"
+            android:name="org.sufficientlysecure.keychain.ui.ViewCertActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_view_cert"
-            android:parentActivityName=".ui.ViewKeyActivity">
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.ViewKeyActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.ViewKeyActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.ViewKeyActivity" />
         </activity>
         <activity
-            android:name=".ui.SafeSlingerActivity"
+            android:name="org.sufficientlysecure.keychain.ui.SafeSlingerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_exchange_keys"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.EncryptFilesActivity"
+            android:name="org.sufficientlysecure.keychain.ui.EncryptFilesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_encrypt_files"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
 
             <!-- ENCRYPT_DATA with data Uri -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.action.ENCRYPT_DATA" />
+                <action android:name="org.sufficientlysecure.keychain.action.ENCRYPT_DATA" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
@@ -171,18 +169,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.EncryptTextActivity"
+            android:name="org.sufficientlysecure.keychain.ui.EncryptTextActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_encrypt_text"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
 
             <!-- ENCRYPT_TEXT with text as extra -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.action.ENCRYPT_TEXT" />
+                <action android:name="org.sufficientlysecure.keychain.action.ENCRYPT_TEXT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -197,18 +195,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.DecryptTextActivity"
+            android:name="org.sufficientlysecure.keychain.ui.DecryptTextActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_decrypt"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
 
             <!-- DECRYPT_TEXT with text as extra -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.action.DECRYPT_TEXT" />
+                <action android:name="org.sufficientlysecure.keychain.action.DECRYPT_TEXT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -223,14 +221,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.DecryptFilesActivity"
+            android:name="org.sufficientlysecure.keychain.ui.DecryptFilesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_decrypt"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.MainActivity"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
 
             <!-- VIEW with mimeTypes  -->
             <intent-filter android:label="@string/intent_send_decrypt">
@@ -261,7 +259,7 @@
             </intent-filter>
             <!-- DECRYPT_DATA with data Uri -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.action.DECRYPT_DATA" />
+                <action android:name="org.sufficientlysecure.keychain.action.DECRYPT_DATA" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -401,54 +399,54 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.UploadKeyActivity"
+            android:name="org.sufficientlysecure.keychain.ui.UploadKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_send_key"
-            android:parentActivityName=".ui.ViewKeyActivity">
+            android:parentActivityName="org.sufficientlysecure.keychain.ui.ViewKeyActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.ViewKeyActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.ViewKeyActivity" />
         </activity>
         <activity
-            android:name=".ui.ViewKeyAdvActivity"
+            android:name="org.sufficientlysecure.keychain.ui.ViewKeyAdvActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_advanced_key_info" />
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name="org.sufficientlysecure.keychain.ui.SettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_preferences">
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.ui.PREFS_GEN" />
+                <action android:name="org.sufficientlysecure.keychain.ui.PREFS_GEN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.ui.PREFS_ADV" />
+                <action android:name="org.sufficientlysecure.keychain.ui.PREFS_ADV" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SettingsKeyServerActivity"
+            android:name="org.sufficientlysecure.keychain.ui.SettingsKeyServerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_key_server_preference"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.CertifyKeyActivity"
+            android:name="org.sufficientlysecure.keychain.ui.CertifyKeyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_certify_key">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.CertifyFingerprintActivity"
+            android:name="org.sufficientlysecure.keychain.ui.CertifyFingerprintActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_certify_key">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.ImportKeysProxyActivity"
+            android:name="org.sufficientlysecure.keychain.ui.ImportKeysProxyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoDisplay"
@@ -471,7 +469,7 @@
             </intent-filter>
             <!-- IMPORT_KEY without mimeType to allow import with extras Bundle -->
             <intent-filter android:label="@string/intent_import_key">
-                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY_FROM_QR_CODE" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY_FROM_QR_CODE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -486,7 +484,7 @@
         </activity>
 
         <activity
-            android:name=".ui.ImportKeysActivity"
+            android:name="org.sufficientlysecure.keychain.ui.ImportKeysActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_import_keys"
             android:launchMode="singleTop">
@@ -645,7 +643,7 @@
 
             <!-- IMPORT_KEY with files TODO: does this work? -->
             <intent-filter android:label="@string/intent_import_key">
-                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -653,7 +651,7 @@
             </intent-filter>
             <!-- IMPORT_KEY with mimeType 'application/pgp-keys' -->
             <intent-filter>
-                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <!-- MIME type as defined in http://tools.ietf.org/html/rfc3156, section 7 -->
@@ -661,41 +659,41 @@
             </intent-filter>
             <!-- IMPORT_KEY without mimeType to allow import with extras Bundle -->
             <intent-filter android:label="@string/intent_import_key">
-                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY" />
-                <action android:name="org.thialfihar.android.apg.action.IMPORT_KEY_FROM_KEYSERVER" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY" />
+                <action android:name="org.sufficientlysecure.keychain.action.IMPORT_KEY_FROM_KEYSERVER" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.LogDisplayActivity"
+            android:name="org.sufficientlysecure.keychain.ui.LogDisplayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:label="@string/title_log_display" />
         <activity
-            android:name=".ui.ConsolidateDialogActivity"
+            android:name="org.sufficientlysecure.keychain.ui.ConsolidateDialogActivity"
             android:theme="@android:style/Theme.NoDisplay" />
         <activity
-            android:name=".ui.PassphraseDialogActivity"
+            android:name="org.sufficientlysecure.keychain.ui.PassphraseDialogActivity"
             android:theme="@android:style/Theme.NoDisplay" />
-        <activity android:name=".ui.PassphraseWizardActivity" />
+        <activity android:name="org.sufficientlysecure.keychain.ui.PassphraseWizardActivity" />
         <!--
         NOTE: singleTop is set to get NFC foreground dispatch to work.
               Then, all NFC intents will be broadcasted to onNewIntent() of this activity!
-              If more than one task stack of APG exists, the broadcast
+              If more than one task stack of OpenKeychain exists, the broadcast
               restarts the activity with onCreate() instead of calling onNewIntent().
               taskAffinity and allowTaskReparenting somehow prevents this from happening!
          -->
         <activity
-            android:name=".ui.NfcOperationActivity"
+            android:name="org.sufficientlysecure.keychain.ui.NfcOperationActivity"
             android:allowTaskReparenting="true"
             android:launchMode="singleTop"
             android:taskAffinity=":Nfc" />
 
         <!--<activity-->
-        <!--android:name=".ui.NfcIntentActivity"-->
+        <!--android:name="org.sufficientlysecure.keychain.ui.NfcIntentActivity"-->
         <!--android:launchMode="singleTop">-->
         <!--<intent-filter>-->
         <!--<action android:name="android.nfc.action.NDEF_DISCOVERED" />-->
@@ -706,64 +704,61 @@
         <!--</activity>-->
 
         <activity
-            android:name=".ui.HelpActivity"
+            android:name="org.sufficientlysecure.keychain.ui.HelpActivity"
             android:label="@string/title_help" />
 
         <!-- Internal services/content providers (not exported) -->
         <service
-            android:name=".service.PassphraseCacheService"
+            android:name="org.sufficientlysecure.keychain.service.PassphraseCacheService"
             android:exported="false"
             android:process=":passphrase_cache" />
         <service
-            android:name=".remote.CryptoInputParcelCacheService"
+            android:name="org.sufficientlysecure.keychain.remote.CryptoInputParcelCacheService"
             android:exported="false"
             android:process=":remote_api" />
         <service
-            android:name=".service.KeychainService"
-            android:exported="false" />
-        <service
-            android:name=".service.CloudImportService"
+            android:name="org.sufficientlysecure.keychain.service.KeychainService"
             android:exported="false" />
 
         <provider
-            android:name=".provider.KeychainProvider"
-            android:authorities="org.thialfihar.android.apg.provider"
+            android:name="org.sufficientlysecure.keychain.provider.KeychainProvider"
+            android:authorities="${applicationId}.provider"
             android:exported="false" />
 
         <!-- Internal classes of the remote APIs (not exported) -->
         <activity
-            android:name=".remote.ui.RemoteServiceActivity"
+            android:name="org.sufficientlysecure.keychain.remote.ui.RemoteServiceActivity"
             android:exported="false"
             android:label="@string/app_name"
             android:launchMode="singleTop" />
         <activity
-            android:name=".remote.ui.SelectSignKeyIdActivity"
+            android:name="org.sufficientlysecure.keychain.remote.ui.SelectSignKeyIdActivity"
             android:exported="false"
             android:label="@string/app_name"
             android:launchMode="singleTop" />
         <activity
-            android:name=".remote.ui.SelectAllowedKeysActivity"
+            android:name="org.sufficientlysecure.keychain.remote.ui.SelectAllowedKeysActivity"
             android:exported="false"
             android:label="@string/app_name"
             android:launchMode="singleTop" />
         <activity
-            android:name=".remote.ui.AppSettingsActivity"
+            android:name="org.sufficientlysecure.keychain.remote.ui.AppSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:exported="false">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="org.sufficientlysecure.keychain.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".remote.ui.AccountSettingsActivity"
+            android:name="org.sufficientlysecure.keychain.remote.ui.AccountSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|keyboard"
             android:exported="false" />
 
         <!-- OpenPGP Remote API, this service has explicitly no permission requirements
              because we are using our own package based allow/disallow system -->
         <service
-            android:name=".remote.OpenPgpService"
+            android:name="org.sufficientlysecure.keychain.remote.OpenPgpService"
             android:enabled="true"
             android:exported="true"
             android:process=":remote_api"
@@ -775,7 +770,7 @@
 
         <!-- Contact Sync services -->
         <service
-            android:name=".service.DummyAccountService"
+            android:name="org.sufficientlysecure.keychain.service.DummyAccountService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -786,7 +781,7 @@
         </service>
 
         <service
-            android:name=".service.ContactSyncAdapterService"
+            android:name="org.sufficientlysecure.keychain.service.ContactSyncAdapterService"
             android:exported="true"
             android:process=":sync"
             tools:ignore="ExportedService">
@@ -804,10 +799,10 @@
 
         <!-- Storage Provider for temporary decrypted files -->
         <provider
-            android:name=".provider.TemporaryStorageProvider"
-            android:authorities="org.thialfihar.android.apg.tempstorage"
+            android:name="org.sufficientlysecure.keychain.provider.TemporaryStorageProvider"
+            android:authorities="${applicationId}.tempstorage"
             android:exported="true"
-            android:writePermission="org.thialfihar.android.apg.WRITE_TEMPORARY_STORAGE" />
+            android:writePermission="${applicationId}.WRITE_TEMPORARY_STORAGE" />
 
     </application>
 
