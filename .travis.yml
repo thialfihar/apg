@@ -34,3 +34,8 @@ android:
 script:
     # - ./gradlew connectedAndroidTest
     - ./gradlew testDebug jacocoTestReport coveralls
+
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
